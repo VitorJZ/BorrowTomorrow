@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d11685b2dbe2a046a1cbc2e979e8346, type: 3}
+  m_Name: L03_L03_Corridor
+  m_EditorClassIdentifier: 
+  levelId: L03
+  sceneName: L03_Corridor
+  displayName: "\u697C\u4E0A\u56DE\u5ECA"
+  initialObjective: "\u53BB\u9601\u697C\uFF0C\u627E\u5230\u84DD\u8272\u94C1\u76AE\u76D2\u3002"
+  boundaryMin: 0
+  boundaryMax: 30
+  initialBoundary: 30
+  spawnId: spawn_corridor_in
+  exitRequiredFlags:
+  - PhotoRevealed
+  exitLockedHint: "\u9601\u697C\u95E8\u524D\u6709\u5F20\u7167\u7247\u3002"
+  hintGroups:
+  - stageKey: PhotoRevealed
+    hintLevel1: "\u5DE6\u8FB9\u7684\u5730\u677F\u7F3A\u4E86\u4E00\u6BB5\u3002"
+    hintLevel2: "\u53F3\u8FB9\u8E29\u677F\u80FD\u7528\uFF0C\u67DC\u5B50\u6321\u7740\u8DEF\u3002"
+    hintLevel3: "\u8FC7\u53BB\u5730\u677F\u63A5\u4E0A\u73B0\u5728\u8E0F\u677F\uFF0C\u518D\u8BA9\u67DC\u5B50\u56DE\u5230\u7A7A\u4F4D\u3002"

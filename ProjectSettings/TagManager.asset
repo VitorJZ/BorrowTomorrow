@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Player
+  - Ground
+  - Interactable
+  - Temporal
+  - KillZone
+  - Ladder
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Sky
+    uniqueID: 0
+    locked: 0
+  - name: FarBuildings
+    uniqueID: 796254580
+    locked: 0
+  - name: EraBackground
+    uniqueID: 1083173624
+    locked: 0
+  - name: ConstantStructure
+    uniqueID: 0
+    locked: 0
+  - name: EraPlatform
+    uniqueID: 345728629
+    locked: 0
+  - name: Characters
+    uniqueID: 751597202
+    locked: 0
+  - name: Foreground
+    uniqueID: 812909395
+    locked: 0
+  - name: BoundaryFx
+    uniqueID: 0
+    locked: 0

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d11685b2dbe2a046a1cbc2e979e8346, type: 3}
+  m_Name: L04_L04_Attic
+  m_EditorClassIdentifier: 
+  levelId: L04
+  sceneName: L04_Attic
+  displayName: "\u9601\u697C\u7A97\u5916"
+  initialObjective: "\u627E\u5230\u94C1\u76D2\u7684\u4F4D\u7F6E\uFF0C\u544A\u8BC9\u6653\u6653\u3002"
+  boundaryMin: 0
+  boundaryMax: 28
+  initialBoundary: 0
+  spawnId: spawn_attic_window
+  exitRequiredFlags:
+  - BoxLocated
+  exitLockedHint: "\u6811\u8FD8\u6CA1\u6709\u957F\u5230\u7A97\u8FB9\u3002"
+  hintGroups:
+  - stageKey: BoxLocated
+    hintLevel1: "\u5C0F\u65F6\u5019\u7684\u6811\u591F\u4E0D\u5230\u7A97\u6237\u3002"
+    hintLevel2: "\u6811\u8981\u957F\u5927\u3002"
+    hintLevel3: "\u628A\u8FB9\u754C\u62C9\u5230\u6811\u5E72\u5DE6\u8FB9\uFF0C\u8BA9\u6574\u68F5\u6811\u8FDB\u5165\u73B0\u5728\u3002"

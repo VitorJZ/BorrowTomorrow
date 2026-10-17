@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d11685b2dbe2a046a1cbc2e979e8346, type: 3}
+  m_Name: Epilogue_Epilogue
+  m_EditorClassIdentifier: 
+  levelId: Epilogue
+  sceneName: Epilogue
+  displayName: "\u4E24\u5929\u540E"
+  initialObjective: "\uFF08\u5C3E\u58F0\u6F14\u51FA\uFF09"
+  boundaryMin: 0
+  boundaryMax: 1
+  initialBoundary: 0
+  spawnId: spawn_epilogue
+  exitRequiredFlags: []
+  exitLockedHint: 
+  hintGroups: []
