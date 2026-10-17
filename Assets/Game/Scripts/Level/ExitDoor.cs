@@ -37,6 +37,7 @@ namespace BorrowTomorrow.Level
 
         [Tooltip("条件未满足时的对白 id；为空则直接用自语文本")]
         [SerializeField] private DialogueEntry lockedDialogue;
+        [SerializeField] private bool ignoreLevelConditions;
 
         public string InteractId => $"exit_{gameObject.scene.name}_{transform.root.name}_{GetInstanceID()}";
 
@@ -48,6 +49,7 @@ namespace BorrowTomorrow.Level
         {
             get
             {
+                if (ignoreLevelConditions) return true;
                 if (requiredFlagsOverride != null && requiredFlagsOverride.Length > 0)
                 {
                     StoryFlagStore flags = GameSession.Instance != null ? GameSession.Instance.StoryFlags : null;

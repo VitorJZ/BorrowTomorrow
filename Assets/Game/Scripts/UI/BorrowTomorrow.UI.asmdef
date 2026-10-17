@@ -4,7 +4,8 @@
     "references": [
         "BorrowTomorrow.Core",
         "BorrowTomorrow.TimeBoundary",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "BorrowTomorrow.Narrative"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

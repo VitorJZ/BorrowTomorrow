@@ -30,6 +30,7 @@ namespace BorrowTomorrow.Core.Data
 
         /// <summary>已触发剧情稳定 ID。</summary>
         public List<string> triggeredStoryIds = new List<string>();
+        public List<string> readDialogueIds = new List<string>();
 
         public SaveSettings settings = new SaveSettings();
     }

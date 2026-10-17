@@ -62,6 +62,7 @@ namespace BorrowTomorrow.EditorTools
             CreateMainMenuScene(font);
             CreateLevelScenes(catalog, whiteSprite, font, playerPrefab, friction, temporalDefPaths, dialoguePaths);
             SetBuildSceneList(catalog);
+            NarrativeInstaller.Install();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             Debug.Log("[ProjectScaffolder] 项目骨架搭建完成。");
@@ -324,49 +325,7 @@ namespace BorrowTomorrow.EditorTools
         /// </summary>
         private static Dictionary<string, string> CreateDialogueAssets()
         {
-            string dir = $"{DataDir}/Dialogue";
-            Directory.CreateDirectory(dir);
-
-            var specs = new (string id, string speaker, string text, string next, string[] setFlags)[]
-            {
-                ("gate_self_talk", "主角", "院子……和记忆里一样旧。", null, null),
-                ("bridge_self_talk", "主角", "对岸的台阶还在就好了。", null, null),
-                ("uniform_self", "主角", "袖口留了一寸。明年还能穿。", "uniform_kid", null),
-                ("uniform_kid", "童年林晓", "外婆，你怎么知道我明年长多高？", "uniform_gran", null),
-                ("uniform_gran", "年轻外婆", "不知道呀。先替你留一点。", null, new[] { StoryFlags.UniformRead }),
-                ("ledger_check", "主角", "账本：晓晓校服，不记钱。", null, null),
-                ("photo_back", "主角", "照片背面：1994年秋。妈妈和晓晓。树种下的第一年。", "photo_front", null),
-                ("photo_front", "主角", "翻过来——外婆和小女孩站在新栽的树旁。外婆的衣饰，和我身上的一模一样。", "photo_voice",
-                    new[] { StoryFlags.PhotoRevealed, StoryFlags.IdentityKnown }),
-                ("photo_voice", "成年林晓", "外婆，是我，晓晓。我三十七了。你不用再给我放袖口了。", null, null),
-                ("compartment_view", "主角", "高处的木板后面……好像有个蓝色的角。", null, null),
-                ("compartment_touch", "主角", "东边阁楼……窗户左上边。木板后头。蓝的。", null, new[] { StoryFlags.BoxLocated }),
-                ("epilogue_letter", "林晓", "（信）晓晓：这些布你小时候都喜欢，我给你留着。等你有了自己的家，带过去。", null,
-                    new[] { StoryFlags.EpilogueSeen }),
-            };
-
-            var map = new Dictionary<string, string>();
-            foreach (var spec in specs)
-            {
-                string path = $"{dir}/D_{spec.id}.asset";
-                DialogueEntry entry = AssetDatabase.LoadAssetAtPath<DialogueEntry>(path);
-                if (entry == null)
-                {
-                    entry = ScriptableObject.CreateInstance<DialogueEntry>();
-                    AssetDatabase.CreateAsset(entry, path);
-                }
-                entry.entryId = spec.id;
-                entry.speakerLabel = spec.speaker;
-                entry.subtitle = spec.text;
-                entry.nextId = spec.next;
-                entry.setFlags = spec.setFlags ?? Array.Empty<string>();
-                entry.requiredFlags = Array.Empty<string>();
-                entry.holdForConfirm = true;
-                entry.minDurationSeconds = 1.2f;
-                EditorUtility.SetDirty(entry);
-                map[spec.id] = path; // 只存路径：查找时惰性加载
-            }
-            return map;
+            return NarrativeInstaller.ImportDialogue();
         }
 
         // ---------------------------------------------------------------- 玩家预制体

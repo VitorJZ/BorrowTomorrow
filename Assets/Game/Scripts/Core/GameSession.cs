@@ -37,6 +37,7 @@ namespace BorrowTomorrow.Core
         public ILevelRoot ActiveRoom { get; private set; }
 
         public string CurrentObjective { get; private set; }
+        public System.Collections.Generic.HashSet<string> ReadDialogueIds { get; } = new System.Collections.Generic.HashSet<string>();
 
         /// <summary>关卡完成（进下一关或尾声）。</summary>
         public event System.Action<LevelDefinition> LevelCompleted;
@@ -124,6 +125,7 @@ namespace BorrowTomorrow.Core
         public void StartNewGame()
         {
             StoryFlags.Clear();
+            ReadDialogueIds.Clear();
             if (ServiceRegistry.TryGet<ICheckpointService>(out var checkpoints))
             {
                 checkpoints.RestoreFrom(null);
@@ -166,7 +168,15 @@ namespace BorrowTomorrow.Core
                 return;
             }
             StoryFlags.RestoreFrom(data.triggeredStoryIds);
+            ReadDialogueIds.Clear();
+            if (data.readDialogueIds != null) foreach (string id in data.readDialogueIds) ReadDialogueIds.Add(id);
             LevelDefinition target = FindLevel(data.currentLevelId);
+            // A save between reporting the location and loading the epilogue must resume at the handover.
+            if (target != null && target.levelId == "L04" && StoryFlags.HasFlag(StoryFlagIds.BoxLocated))
+            {
+                target = FindLevel("Epilogue");
+                data.checkpointId = null;
+            }
             if (target == null)
             {
                 Debug.LogError($"[GameSession] 存档引用了未知关卡 {data.currentLevelId}，改为新开局。");
@@ -264,6 +274,8 @@ namespace BorrowTomorrow.Core
         {
             StartCoroutine(TransitionRoutine(targetRoom, spawnId));
         }
+
+        public void AdoptRestoredRoom(ILevelRoot room) => ActiveRoom = room;
 
         private IEnumerator TransitionRoutine(ILevelRoot targetRoom, string spawnId)
         {
@@ -412,6 +424,7 @@ namespace BorrowTomorrow.Core
                 checkpoints.WriteTo(data);
             }
             data.triggeredStoryIds.AddRange(StoryFlags.AllFlags);
+            data.readDialogueIds.AddRange(ReadDialogueIds);
             if (ServiceRegistry.TryGet<ISaveService>(out var saveService))
             {
                 saveService.SaveProgress(data);

@@ -1,0 +1,586 @@
+[
+  {
+    "id": "EVT_L00_INTRO",
+    "title": "院门外开场",
+    "place": "L00_Gate 初始安全出生点，原稿 x=2。",
+    "trigger": "新游戏进入场景，场景与角色放置完成后启动。",
+    "guard": "IntroPlayed 未完成。",
+    "control": "锁定移动；按 E 逐屏继续，支持整段跳过。",
+    "visual": "先黑屏播放两句录音；末尾一声轻笑，底噪淡出。画面约 1.5 秒淡入：1994 年暖光中的院门外，主角为简化的成年女性轮廓，暗红针织外搭与深色长裤。前期不展示老年手部、主角姓名或病房，也不写外婆已故。",
+    "flags": [
+      "IntroPlayed"
+    ],
+    "objective": "OBJ_L00_FIND_BOX",
+    "result": "恢复操控，开始移动教学；到栅栏受阻时才教边界拖动。",
+    "replay": "正常流程仅一次；章节回放走独立模式。",
+    "lines": [
+      {
+        "id": "DLG_L00_INTRO_01",
+        "speaker": "磁带·童年林晓",
+        "source": "Tape",
+        "text": "我叫林晓，今年七岁。妈妈，我和外婆在院子里给你录磁带呢！",
+        "mode": "确认",
+        "cue": "磁带按键与底噪。长条目按自然停顿分屏。",
+        "voice": "vo_l00_intro_01",
+        "next": "DLG_L00_INTRO_02"
+      },
+      {
+        "id": "DLG_L00_INTRO_02",
+        "speaker": "磁带·童年林晓",
+        "source": "Tape",
+        "text": "外婆说，等我长大了，就能去很远的地方。",
+        "mode": "确认",
+        "cue": "尾音后轻笑，淡出录音底噪。",
+        "voice": "vo_l00_intro_02",
+        "next": "DLG_L00_INTRO_03"
+      },
+      {
+        "id": "DLG_L00_INTRO_03",
+        "speaker": "我",
+        "source": "Self",
+        "text": "老房子要腾空了……阁楼上那个蓝铁皮盒子，还没拿出来。",
+        "mode": "确认",
+        "cue": "淡入主角与院门。不说盒子留给谁。",
+        "voice": "vo_l00_intro_03",
+        "next": ""
+      }
+    ]
+  },
+  {
+    "id": "EVT_L00_DOG_ECHO",
+    "title": "阿黄的生活回声",
+    "place": "L00 穿过栅栏后的安全通路，触发点约 x=13.5；狗锚点约 x=14。",
+    "trigger": "首次经过；不抢占正在播放的主线。",
+    "guard": "IntroPlayed 已完成，DogEchoPlayed 未完成。",
+    "control": "不锁移动，自动播放。",
+    "visual": "阿黄处于过去态时看向主角、轻摇尾巴；现在态只有空狗窝与收好的食盆，仍播放录音。两个状态都可成立。若玩家回看过去，狗可做常规招呼动作，不重播剧情。不得为保证看见狗而强制改动玩家边界。",
+    "flags": [
+      "DogEchoPlayed"
+    ],
+    "objective": "保持",
+    "result": "录音正常结束后提交完成；若即将转场，按第 4 章协调播放。",
+    "replay": "完成后不再自动播放。",
+    "lines": [
+      {
+        "id": "DLG_L00_DOG_01",
+        "speaker": "磁带·童年林晓",
+        "source": "Tape",
+        "text": "外婆，阿黄又睡在你脚边。",
+        "mode": "自动",
+        "cue": "建议至少 3 秒且语音结束；只在过去态联动狗动作。",
+        "voice": "vo_l00_dog_01",
+        "next": ""
+      }
+    ]
+  },
+  {
+    "id": "EVT_L00_NOTICE",
+    "title": "可选腾空通知",
+    "place": "L00 现在态砖墙，约 x=6；与 A 确认实际节点。",
+    "trigger": "靠近按 E 查看。",
+    "guard": "IntroPlayed 已完成，通知所在物件当前可见。",
+    "control": "阅读时锁移动，可关闭。",
+    "visual": "只补充老屋即将腾空的背景；不承担必经理解。",
+    "flags": [
+      "NoticeRead"
+    ],
+    "objective": "保持",
+    "result": "关闭阅读后记录 NoticeRead，不改变出口。",
+    "replay": "可重复查看，不重设主线任务。",
+    "lines": [
+      {
+        "id": "DLG_L00_NOTICE_01",
+        "speaker": "腾空通知",
+        "source": "Note",
+        "text": "青石巷老宅移交告知：请于十月二十日前清空屋内旧物。",
+        "mode": "确认",
+        "cue": "纸张音效；具体日期不另做强制倒计时。",
+        "voice": "",
+        "next": ""
+      }
+    ]
+  },
+  {
+    "id": "EVT_L01B_HEIGHT_MARKS",
+    "title": "桂花树与身高刻线",
+    "place": "L01_Courtyard Room B，墙边安全平台；原稿 x=13 仅示意。",
+    "trigger": "首次进入范围后，等玩家在安全落点站稳再启动。",
+    "guard": "HeightMarksSeen 未完成；落地、未爬梯、未拖动边界。",
+    "control": "短暂锁移动，按 E 继续；不在攀爬中硬停角色。",
+    "visual": "墙上可读“晓晓，六岁”“晓晓，七岁”，旁边儿童画表现树枝通往阁楼窗口。两句录音后，镜头短暂上移至同一高窗再归位。刻线和画应在实际必经路线可见，不靠可选调查补齐。",
+    "flags": [
+      "HeightMarksSeen"
+    ],
+    "objective": "OBJ_L01B_CLIMB",
+    "result": "继续机关通行；若机关已走过，不重新要求搭路。",
+    "replay": "可按 E 只读复查最后一句和墙面；不重写任务。",
+    "lines": [
+      {
+        "id": "DLG_L01B_TREE_01",
+        "speaker": "磁带·童年林晓",
+        "source": "Tape",
+        "text": "等树长高了，长到楼上窗口，我就不用走楼梯了。",
+        "mode": "确认",
+        "cue": "磁带起音；镜头指向末关对应窗口。",
+        "voice": "vo_l01b_tree_01",
+        "next": "DLG_L01B_TREE_02"
+      },
+      {
+        "id": "DLG_L01B_TREE_02",
+        "speaker": "磁带·年轻外婆",
+        "source": "Tape",
+        "text": "树也要慢慢长。",
+        "mode": "确认",
+        "cue": "温和平实。",
+        "voice": "vo_l01b_tree_02",
+        "next": "DLG_L01B_TREE_03"
+      },
+      {
+        "id": "DLG_L01B_TREE_03",
+        "speaker": "我",
+        "source": "Self",
+        "text": "当年那么小一棵……现在树枝都快伸到窗边了。",
+        "mode": "确认",
+        "cue": "不指定是谁的腰，不暴露长辈视角。",
+        "voice": "vo_l01b_tree_03",
+        "next": ""
+      }
+    ]
+  },
+  {
+    "id": "EVT_L02_UNIFORM",
+    "title": "校服与花布",
+    "place": "L02_Sewing 完成外台谜题后进入的室内，缝纫桌校服。",
+    "trigger": "靠近桌面按 E 调查；本关出口须完成此事件。",
+    "guard": "UniformRead 未完成，玩家位于安全站位。",
+    "control": "锁移动，展示插画，按 E 继续。",
+    "visual": "外台解谜全程不加自语。室内展示 ILL_UNIFORM_CUFF：袖口内留一寸裕量，桌角清楚露出红底碎花布与浅蓝格子布。第 3 句录音结束后停顿约 1.2 秒，主角触摸花布，再说第 4 句。此处允许玩家猜中身份；不靠突然变老或改名确认。",
+    "flags": [
+      "UniformRead"
+    ],
+    "objective": "OBJ_L02_TO_CORRIDOR",
+    "result": "开放 L02 通往 L03 的出口，后续由 A 的出口逻辑执行。",
+    "replay": "已完成后可只读复查校服第 1 句；禁止顺链重播主线并重复完成。",
+    "lines": [
+      {
+        "id": "DLG_L02_UNIFORM_01",
+        "speaker": "我",
+        "source": "Self",
+        "text": "袖口留了一寸。明年还能穿。",
+        "mode": "确认",
+        "cue": "展示袖口特写。",
+        "voice": "vo_l02_uniform_01",
+        "next": "DLG_L02_UNIFORM_02"
+      },
+      {
+        "id": "DLG_L02_UNIFORM_02",
+        "speaker": "磁带·童年林晓",
+        "source": "Tape",
+        "text": "外婆，你怎么知道我明年长多高？",
+        "mode": "确认",
+        "cue": "磁带起音。",
+        "voice": "vo_l02_uniform_02",
+        "next": "DLG_L02_UNIFORM_03"
+      },
+      {
+        "id": "DLG_L02_UNIFORM_03",
+        "speaker": "磁带·年轻外婆",
+        "source": "Tape",
+        "text": "不知道呀。先替你留一点。",
+        "mode": "确认",
+        "cue": "录音淡出；下一句前短暂停顿。",
+        "voice": "vo_l02_uniform_03",
+        "next": "DLG_L02_UNIFORM_04"
+      },
+      {
+        "id": "DLG_L02_UNIFORM_04",
+        "speaker": "我",
+        "source": "Self",
+        "text": "……桌角那几块她喜欢的花布，我也拼成小被面，收进蓝铁盒了。",
+        "mode": "确认",
+        "cue": "同一条目可分两屏，保证主角与录音声音来源清楚。",
+        "voice": "vo_l02_uniform_04",
+        "next": ""
+      }
+    ]
+  },
+  {
+    "id": "EVT_L02_LEDGER",
+    "title": "可选缝补账本",
+    "place": "L02 室内桌角账本，位置待 A 确认。",
+    "trigger": "按 E 查看。",
+    "guard": "无主线阅读前置。",
+    "control": "锁移动阅读，可关闭。",
+    "visual": "显示账本，不添加主角穿针自语，以免可选物件在校服之前过早确认身份。",
+    "flags": [
+      "LedgerRead"
+    ],
+    "objective": "保持",
+    "result": "记录阅读，不改变出口。",
+    "replay": "可重复查看。",
+    "lines": [
+      {
+        "id": "DLG_L02_LEDGER_01",
+        "speaker": "缝补账本",
+        "source": "Note",
+        "text": "九月十二：张家裤脚锁边，一元五角。九月十五：晓晓校服，不记钱。",
+        "mode": "确认",
+        "cue": "物件文字，无须配音。",
+        "voice": "",
+        "next": ""
+      }
+    ]
+  },
+  {
+    "id": "EVT_L02_CLOTH",
+    "title": "可选整理衣物",
+    "place": "L02 室内木椅旁落地衣物，非通行物件。",
+    "trigger": "按 E 整理。",
+    "guard": "ClothTidyDone 未完成。",
+    "control": "只在需要时短暂锁移动完成动作。",
+    "visual": "主角拾起衣服，搭到椅背；只播放动作与 sfx_cloth_paper，无台词、无成就。",
+    "flags": [
+      "ClothTidyDone"
+    ],
+    "objective": "保持",
+    "result": "动作完成后切换装饰外观并提交；读档恢复椅背状态。",
+    "replay": "已整理后隐藏提示，不再触发。",
+    "lines": []
+  },
+  {
+    "id": "EVT_L02_EXIT_LOCKED",
+    "title": "未看校服的出口反馈",
+    "place": "L02 通往 L03 的出口门。",
+    "trigger": "玩家按 E 尝试开门。",
+    "guard": "UniformRead 未完成。",
+    "control": "单句提示，按 E 关闭。",
+    "visual": "使用出口的锁门对白入口，不在门上再叠放独立剧情交互物。",
+    "flags": [],
+    "objective": "保持",
+    "result": "出口维持关闭，不写完成标记。",
+    "replay": "条件未满足时可重复。",
+    "lines": [
+      {
+        "id": "DLG_LOCK_L02_01",
+        "speaker": "我",
+        "source": "Self",
+        "text": "先看看缝纫桌上的旧校服吧。",
+        "mode": "确认",
+        "cue": "调查后出口开放。",
+        "voice": "vo_lock_l02_01",
+        "next": ""
+      }
+    ]
+  },
+  {
+    "id": "EVT_L03_PHOTO_REVEAL",
+    "title": "照片与病房的身份确认",
+    "place": "L03_Corridor 通过回廊机关后，阁楼门旁照片，原稿约 x=28。",
+    "trigger": "按 E 调查；本关出口须完成此事件。",
+    "guard": "UniformRead 已完成，IdentityKnown 未完成，站位安全。",
+    "control": "锁移动，按 E 继续，支持整段跳过。",
+    "visual": "第 1 句照片背面 ILL_PHOTO_BACK；第 2 句翻到 ILL_PHOTO_FRONT，外婆衣饰与主角一致、晓晓校服与 L02 一致。第 3 句切 ILL_HANDS_OLD，苍老的手与同款袖口对应。第 4 至 7 句切 ILL_HOSPITAL_HOLD：成年林晓握着同一只手，床边磁带机正在播放。第 5 句明确现实在医院，第 7 句明确回忆位置后由晓晓实地去取。结束后淡回记忆中的阁楼门口，不把病房切镜表现为传送。",
+    "flags": [
+      "PhotoRevealed",
+      "IdentityKnown"
+    ],
+    "objective": "OBJ_L03_TELL_XIAOXIAO",
+    "result": "两个标记在整段完成或合法跳过后同时提交，开放阁楼门。",
+    "replay": "已完成后只读看照片和简短回顾；不重复解锁、覆盖目标或保存。",
+    "lines": [
+      {
+        "id": "DLG_L03_REVEAL_01",
+        "speaker": "照片背面的旧题字",
+        "source": "Note",
+        "text": "1994年秋，树种下的第一年。外婆与七岁的晓晓。——妈妈林敏摄。",
+        "mode": "确认",
+        "cue": "题字用清晰 UI 文字层，不把生成图片错字当正式文字。",
+        "voice": "",
+        "next": "DLG_L03_REVEAL_02"
+      },
+      {
+        "id": "DLG_L03_REVEAL_02",
+        "speaker": "我",
+        "source": "Self",
+        "text": "这件红毛衣……是我。晓晓那时候还这么小。",
+        "mode": "确认",
+        "cue": "标签仍为“我”；不使用“那个小姑娘才是晓晓”。",
+        "voice": "vo_l03_reveal_02",
+        "next": "DLG_L03_REVEAL_03"
+      },
+      {
+        "id": "DLG_L03_REVEAL_03",
+        "speaker": "林晓（现实）",
+        "source": "Reality",
+        "text": "外婆，是我，晓晓。我已经三十七了，你不用再给我放袖口了。",
+        "mode": "确认",
+        "cue": "先听见“外婆，是我”，再切换后续主角标签。",
+        "voice": "vo_l03_reveal_03",
+        "next": "DLG_L03_REVEAL_04"
+      },
+      {
+        "id": "DLG_L03_REVEAL_04",
+        "speaker": "我（外婆）",
+        "source": "Self",
+        "text": "总想着等你安顿好了，再把盒子给你。一拖，就一直收在老房子里了。",
+        "mode": "确认",
+        "cue": "不把三十年未交付简单归咎于一直搬家。",
+        "voice": "vo_l03_reveal_04",
+        "next": "DLG_L03_REVEAL_05"
+      },
+      {
+        "id": "DLG_L03_REVEAL_05",
+        "speaker": "林晓（现实）",
+        "source": "Reality",
+        "text": "我们在医院呢。我把小时候的录音带来了。你一直惦记那个蓝盒子，却想不起藏在哪儿。",
+        "mode": "确认",
+        "cue": "两至三屏阅读；病房画面与播放中的录音机保持可见。",
+        "voice": "vo_l03_reveal_05",
+        "next": "DLG_L03_REVEAL_06"
+      },
+      {
+        "id": "DLG_L03_REVEAL_06",
+        "speaker": "我（外婆）",
+        "source": "Self",
+        "text": "阁楼……那扇朝院子的窗。我再想想。",
+        "mode": "确认",
+        "cue": "仍只有大概区域；不提前说哪块木板。",
+        "voice": "vo_l03_reveal_06",
+        "next": "DLG_L03_REVEAL_07"
+      },
+      {
+        "id": "DLG_L03_REVEAL_07",
+        "speaker": "林晓（现实）",
+        "source": "Reality",
+        "text": "不着急，想起位置告诉我，我回老屋去拿。",
+        "mode": "确认",
+        "cue": "新增一条，明确回忆与现实取物的关系。结束后淡回老院。",
+        "voice": "vo_l03_reveal_07",
+        "next": ""
+      }
+    ]
+  },
+  {
+    "id": "EVT_L03_EXIT_LOCKED",
+    "title": "未看照片的出口反馈",
+    "place": "L03 通往 L04 的阁楼门。",
+    "trigger": "玩家按 E 尝试开门。",
+    "guard": "IdentityKnown 未完成。",
+    "control": "单句提示，按 E 关闭。",
+    "visual": "门与照片要有可区分的交互焦点，避免一直选中门。",
+    "flags": [],
+    "objective": "保持",
+    "result": "保持关闭，无完成标记。",
+    "replay": "条件未满足时可重复。",
+    "lines": [
+      {
+        "id": "DLG_LOCK_L03_01",
+        "speaker": "我",
+        "source": "Self",
+        "text": "先看看门边墙上的老照片吧。",
+        "mode": "确认",
+        "cue": "引导必经调查。",
+        "voice": "vo_lock_l03_01",
+        "next": ""
+      }
+    ]
+  },
+  {
+    "id": "EVT_L04_LOOK_NICHE",
+    "title": "窗台初看木板",
+    "place": "L04_Attic 恒定窗台观察点，约 x=24、y=3；不要要求远距离点中暗格。",
+    "trigger": "站稳后按 E，或进入范围后排队自动播放；两种入口共享一次性标记。",
+    "guard": "IdentityKnown 已完成，CompartmentSeen 未完成。",
+    "control": "短暂锁移动，按 E 继续。",
+    "visual": "抬头看到窗框附近几块木板，暂时辨认不出准确藏处。窗外有幼树或成年树，均不影响本句成立。不在此时明确右上方某块板。",
+    "flags": [
+      "CompartmentSeen"
+    ],
+    "objective": "OBJ_L04_APPROACH",
+    "result": "恢复操控；继续通过边界和树枝靠近暗格。",
+    "replay": "不再自动播放，可只读复查观察句。",
+    "lines": [
+      {
+        "id": "DLG_L04_LOOK_01",
+        "speaker": "我（外婆）",
+        "source": "Self",
+        "text": "是这扇窗……哪块木板来着？靠近些看看。",
+        "mode": "确认",
+        "cue": "替换原稿提前报出准确藏处的句子。",
+        "voice": "vo_l04_look_01",
+        "next": ""
+      }
+    ]
+  },
+  {
+    "id": "EVT_L04_TREE_GROWN",
+    "title": "看见长大的桂花树",
+    "place": "L04 树干锚点约 x=4；监听 A 已提交并应用的物件年代状态。",
+    "trigger": "观察窗台事件完成，且树当前为现在态时触发；若树已提前变为现在态，观察后补查状态。",
+    "guard": "IdentityKnown 与 CompartmentSeen 已完成，TreeGrownL04 未完成。",
+    "control": "不锁移动，自动播放，不截断重要对白。",
+    "visual": "边界扫过院落，衣物与过去生活声退去，树、风与鸟声留下。树枝整体由树干锚点切换，B 不启用或禁用碰撞体。",
+    "flags": [
+      "TreeGrownL04"
+    ],
+    "objective": "保持",
+    "result": "仅记录这句回声已播；不把树永久锁为现在态。",
+    "replay": "改变边界后不重复播放。",
+    "lines": [
+      {
+        "id": "DLG_L04_TREE_01",
+        "speaker": "我（外婆）",
+        "source": "Self",
+        "text": "长得这么高了。",
+        "mode": "自动",
+        "cue": "建议至少 2.5 秒且语音结束；可边走边听。",
+        "voice": "vo_l04_tree_01",
+        "next": ""
+      }
+    ]
+  },
+  {
+    "id": "EVT_L04_OPEN_NICHE",
+    "title": "确认暗格并报出位置",
+    "place": "沿成年树枝抵达暗格交互点，约 x=26、y=4.5。",
+    "trigger": "处于近距离调查范围，按 E。",
+    "guard": "IdentityKnown 与 CompartmentSeen 已完成，BoxLocated 未完成；当前通路由 A 的已提交机关状态提供。",
+    "control": "锁移动，按 E 继续；完成后保存并转场。",
+    "visual": "先展示 ILL_BOX_IN_NICHE：木板后蓝铁盒；不取进背包，不开盒提前看信。随后切病房 ILL_HOSPITAL_HOLD，外婆在现实说出位置，晓晓回应。方位以 A 确认的最终视角为准。",
+    "flags": [
+      "BoxLocated"
+    ],
+    "objective": "OBJ_COMPLETE",
+    "result": "完成与保存后进入 Epilogue；若保存后转场前退出，继续游戏须进入尾声入口。",
+    "replay": "主流程进入尾声，无原地重播。",
+    "lines": [
+      {
+        "id": "DLG_L04_BOX_01",
+        "speaker": "我（外婆）",
+        "source": "Reality",
+        "text": "东边阁楼……朝院子那扇窗，外头右上边。",
+        "mode": "确认",
+        "cue": "这是抵近确认后首次说出准确方位。",
+        "voice": "vo_l04_box_01",
+        "next": "DLG_L04_BOX_02"
+      },
+      {
+        "id": "DLG_L04_BOX_02",
+        "speaker": "我（外婆）",
+        "source": "Reality",
+        "text": "木板后头。蓝的。",
+        "mode": "确认",
+        "cue": "停顿清楚；木板与盒子画面可对应。",
+        "voice": "vo_l04_box_02",
+        "next": "DLG_L04_BOX_03"
+      },
+      {
+        "id": "DLG_L04_BOX_03",
+        "speaker": "林晓（现实）",
+        "source": "Reality",
+        "text": "我记住了。外婆，我去拿。",
+        "mode": "确认",
+        "cue": "保存后淡出，进入尾声。",
+        "voice": "vo_l04_box_03",
+        "next": ""
+      }
+    ]
+  },
+  {
+    "id": "EVT_EPILOGUE_MAIN",
+    "title": "两天后的真实交付",
+    "place": "Epilogue 病房床畔。",
+    "trigger": "场景与画面就绪后自动启动。",
+    "guard": "主流程要求 BoxLocated 已完成；回放模式不受通关标记阻止。",
+    "control": "无平台操作；除时间标题外按 E 阅读，可跳过整段。",
+    "visual": "先黑屏“两天后”。ILL_EPILOGUE_BOX_OPEN 显示真实盒子与现实中的林晓，打开后取出小被面与短信。ILL_EPILOGUE_LETTER 展开可读全文。第 5 句切 ILL_EPILOGUE_QUILT_LAP；第 6 句林晓盖上被面一角，第 7 句前外婆下意识抚平布角。第 8 句后手与布料停留约 3 秒再淡出。布面两种纹样必须对应 L02。",
+    "flags": [
+      "EpilogueSeen"
+    ],
+    "objective": "隐藏目标",
+    "result": "保存通关状态后进入制作名单；正常继续不再回 L04，章节回放可完整重看。",
+    "replay": "章节回放独立运行，不清空主存档。",
+    "lines": [
+      {
+        "id": "DLG_EPI_01",
+        "speaker": "字幕",
+        "source": "Title",
+        "text": "两天后",
+        "mode": "自动",
+        "cue": "黑屏居中约 2.5 秒；不归为旧信。",
+        "voice": "",
+        "next": "DLG_EPI_02"
+      },
+      {
+        "id": "DLG_EPI_02",
+        "speaker": "林晓（现实）",
+        "source": "Reality",
+        "text": "外婆，盒子从老房子拿回来了。你看，都在里头呢。",
+        "mode": "确认",
+        "cue": "明确实物已从真实老屋取回，不额外限定具体取回日期。",
+        "voice": "vo_epi_02",
+        "next": "DLG_EPI_03"
+      },
+      {
+        "id": "DLG_EPI_03",
+        "speaker": "旧信件",
+        "source": "Note",
+        "text": "晓晓：你说以后要去很远的地方，我不知道那里冬天冷不冷。这些布你小时候都喜欢，我给你留着。",
+        "mode": "确认",
+        "cue": "按信纸段落分屏，不压缩字号；可配年轻外婆读信画外音，不加磁带底噪。",
+        "voice": "",
+        "next": "DLG_EPI_04"
+      },
+      {
+        "id": "DLG_EPI_04",
+        "speaker": "旧信件",
+        "source": "Note",
+        "text": "等你有了自己的家，带过去。不用急着回来，把自己的日子过好。",
+        "mode": "确认",
+        "cue": "信件全文至此结束。",
+        "voice": "",
+        "next": "DLG_EPI_05"
+      },
+      {
+        "id": "DLG_EPI_05",
+        "speaker": "我（外婆）",
+        "source": "Reality",
+        "text": "你是谁家的孩子？",
+        "mode": "确认",
+        "cue": "自然询问，不表演成再次反转。",
+        "voice": "vo_epi_05",
+        "next": "DLG_EPI_06"
+      },
+      {
+        "id": "DLG_EPI_06",
+        "speaker": "林晓（现实）",
+        "source": "Reality",
+        "text": "我是晓晓。今天不赶路，我在这儿坐一会儿。",
+        "mode": "确认",
+        "cue": "盖被面，平静回答。",
+        "voice": "vo_epi_06",
+        "next": "DLG_EPI_07"
+      },
+      {
+        "id": "DLG_EPI_07",
+        "speaker": "我（外婆）",
+        "source": "Reality",
+        "text": "明天还来吗？",
+        "mode": "确认",
+        "cue": "手指抚平布角。",
+        "voice": "vo_epi_07",
+        "next": "DLG_EPI_08"
+      },
+      {
+        "id": "DLG_EPI_08",
+        "speaker": "林晓（现实）",
+        "source": "Reality",
+        "text": "来。",
+        "mode": "确认",
+        "cue": "停留后淡出制作名单。",
+        "voice": "vo_epi_08",
+        "next": ""
+      }
+    ]
+  }
+]

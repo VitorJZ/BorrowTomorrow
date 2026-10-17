@@ -26,45 +26,37 @@ namespace BorrowTomorrow.Narrative
 
         [Tooltip("关键剧情调查完成后是否可重复查看（可选项设 true）")]
         [SerializeField] private bool replayable = false;
+        [SerializeField] private DialogueEntry replayEntry;
 
         public string InteractId => interactId;
 
         public string InteractPrompt => prompt;
 
-        public bool CanInteract => entry != null && !IsCompleted;
+        public bool CanInteract => entry != null && (!IsCompleted || replayable)
+            && (IsCompleted || DialoguePlayer.RequirementsMet(entry.requiredFlags));
 
         private bool IsCompleted
         {
             get
             {
-                if (replayable || entry == null || entry.setFlags == null || entry.setFlags.Length == 0)
-                {
-                    return false;
-                }
-                GameSession session = GameSession.Instance;
-                if (session == null)
-                {
-                    return false;
-                }
-                foreach (string flag in entry.setFlags)
-                {
-                    if (!session.StoryFlags.HasFlag(flag))
-                    {
-                        return false;
-                    }
-                }
-                return true; // 关键标记已写入，不再重复（策划 12.1）
+                return DialoguePlayer.Completed(entry);
             }
         }
 
         public bool Interact()
         {
-            if (entry == null || IsCompleted)
+            if (!CanInteract)
             {
                 return false;
             }
             if (ServiceRegistry.TryGet<IDialogueService>(out var dialogue))
             {
+                if (dialogue.IsPlaying) return false;
+                if (IsCompleted && replayable && dialogue is DialoguePlayer player)
+                {
+                    player.PlayReadOnly(replayEntry != null ? replayEntry : entry);
+                    return true;
+                }
                 dialogue.Play(entry, priority);
                 return true;
             }

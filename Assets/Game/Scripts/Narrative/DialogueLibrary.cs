@@ -12,6 +12,7 @@ namespace BorrowTomorrow.Narrative
     {
         [Tooltip("全部对白条目（按 entryId 检索，nextId 串联）")]
         [SerializeField] private DialogueEntry[] entries = new DialogueEntry[0];
+        public System.Collections.Generic.IReadOnlyList<DialogueEntry> Entries => entries;
 
         private void Awake()
         {

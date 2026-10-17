@@ -41,5 +41,17 @@ namespace BorrowTomorrow.Core.Data
 
         [Tooltip("字幕停留秒数下限（配音时长不足时保底）")]
         public float minDurationSeconds = 1.2f;
+
+        [Header("完整剧情 v1.3")]
+        public string source;
+        public string eventId;
+        public string[] completionFlags;
+        public string objectiveAfter;
+        public Texture2D illustration;
+        public bool blackBackground;
+        public bool centeredTitle;
+        public float delayBefore;
+        public string sfxId;
+        public float endHoldSeconds;
     }
 }

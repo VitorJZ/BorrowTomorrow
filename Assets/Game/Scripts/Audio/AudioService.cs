@@ -45,6 +45,8 @@ namespace BorrowTomorrow.Audio
 
         public void OnBootInitialize()
         {
+            // Bootstrap initializes services from its Awake, before this component's own Awake.
+            EnsureSources();
             ServiceRegistry.Register<IAudioService>(this);
             ApplyVolumeSettings(ServiceRegistry.TryGet<ISaveService>(out var save)
                 ? save.LoadSettings()
@@ -71,6 +73,7 @@ namespace BorrowTomorrow.Audio
 
         private void EnsureSources()
         {
+            if (musicPastSource != null) return;
             AudioSource[] existing = GetComponents<AudioSource>();
             if (existing.Length >= 3)
             {
@@ -97,6 +100,17 @@ namespace BorrowTomorrow.Audio
 
         private void Update()
         {
+            bool wantsEpilogue = GameSession.Instance != null && GameSession.Instance.CurrentLevel != null
+                && GameSession.Instance.CurrentLevel.levelId == "Epilogue"
+                && GameSession.Instance.State.Phase != GamePhase.MainMenu;
+            if (wantsEpilogue && musicEpilogue != null && musicPastSource.clip != musicEpilogue)
+                SwitchToEpilogueMusic();
+            else if (!wantsEpilogue && musicPastSource.clip == musicEpilogue && musicPast != null)
+            {
+                musicPastSource.clip = musicPast;
+                musicPastSource.Play();
+                if (musicPresent != null) { musicPresentSource.clip = musicPresent; musicPresentSource.Play(); }
+            }
             // 平滑过渡双年代配器（策划 09）。
             float duckScale = ducking ? duckedVolumeScale : 1f;
             float pastTarget = pastMixTarget * settings.volumeMusic * duckScale;
@@ -114,6 +128,8 @@ namespace BorrowTomorrow.Audio
         /// <summary>按画面过去面积比例（0~1）混合双年代配器。</summary>
         public void SetEraMix(float pastAreaRatio)
         {
+            if (GameSession.Instance != null && GameSession.Instance.CurrentLevel != null
+                && GameSession.Instance.CurrentLevel.levelId == "Epilogue") return;
             pastMixTarget = Mathf.Clamp01(pastAreaRatio);
         }
 

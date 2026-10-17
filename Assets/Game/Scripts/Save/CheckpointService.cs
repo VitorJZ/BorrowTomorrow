@@ -56,6 +56,7 @@ namespace BorrowTomorrow.Save
         {
             GameSession session = GameSession.Instance;
             ILevelRoot room = ServiceRegistry.TryGet<ILevelRoot>(out ILevelRoot active) ? active : null;
+
             if (session == null || room == null)
             {
                 return;
@@ -137,6 +138,20 @@ namespace BorrowTomorrow.Save
 
             // 1) 边界与年代状态（玩家尚未放置，安全；策划 12.2：先恢复环境再放人）。
             ILevelRoot room = ServiceRegistry.TryGet<ILevelRoot>(out ILevelRoot active) ? active : null;
+            if (room != null && !string.IsNullOrEmpty(source.roomId) && room.RoomId != source.roomId)
+            {
+                foreach (var component in Object.FindObjectsOfType<MonoBehaviour>())
+                {
+                    if (component is ILevelRoot savedRoom && savedRoom.RoomId == source.roomId)
+                    {
+                        room.DeactivateRoom();
+                        savedRoom.ActivateRoom();
+                        room = savedRoom;
+                        session.AdoptRestoredRoom(room);
+                        break;
+                    }
+                }
+            }
             if (room != null)
             {
                 if (ServiceRegistry.TryGet<IBoundaryContext>(out var boundary))
@@ -154,6 +169,8 @@ namespace BorrowTomorrow.Save
 
                 // 3) 放置角色：优先安全出生点 ID（策划 12.2），无匹配则用捕获位置。
                 var spawn = room.FindSpawn(source.checkpointId);
+                if (!ServiceRegistry.TryGet<IPlayerContext>(out var existingPlayer) || !existingPlayer.IsPresent)
+                    room.PlacePlayer(source.checkpointId);
                 if (ServiceRegistry.TryGet<IPlayerContext>(out var player) && player.IsPresent)
                 {
                     if (spawn != null)

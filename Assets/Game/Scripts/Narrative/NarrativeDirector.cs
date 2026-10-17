@@ -55,7 +55,7 @@ namespace BorrowTomorrow.Narrative
             }
 
             StoryFlagStore flags = GameSession.Instance.StoryFlags;
-            if (IsAlreadySeen(entry, flags))
+            if (DialoguePlayer.Completed(entry) || !DialoguePlayer.RequirementsMet(entry.requiredFlags) || dialogue.IsPlaying)
             {
                 onCompleted?.Invoke();
                 return false; // 已读剧情标记保留，避免重复播放（策划 4.6）
