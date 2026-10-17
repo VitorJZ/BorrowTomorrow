@@ -52,3 +52,8 @@ Desktop.ini
 
 # 测试运行产物（本地临时验证，不入库）
 Docs/test-results-*.xml
+
+# ===== Codely CLI 工具链（本机生成，不入库）=====
+# manifest.json 引用的 cn.tuanjie.ai.generators 为 file:../.codely-cli 本地包，
+# 协作者需自行安装 Codely CLI 以获得同名扩展目录
+.codely-cli/
