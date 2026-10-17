@@ -126,17 +126,24 @@ namespace BorrowTomorrow.Level
             {
                 if (playerPrefab == null)
                 {
-                    Debug.LogError($"[LevelRoot] 场景中无玩家且未配置玩家预制体，无法放置。");
+                    Debug.LogError($"[PlacePlayer诊断] 房间 {roomId}：场景中无玩家且未配置玩家预制体，无法放置。");
                     return;
                 }
                 // 直接在出生点生成：避免 Instantiate(原点) + Rigidbody2D.position 赋值的时序差
                 // （Rigidbody2D.position 在下次物理步才应用，期间玩家可能被原点附近的碰撞体挤走）。
                 Instantiate(playerPrefab, target.Position, Quaternion.identity);
+                Debug.Log($"[PlacePlayer诊断] 房间 {roomId}：已实例化玩家于 {target.Position}（出生点 {target.SpawnId}）");
             }
 
-            if (ServiceRegistry.TryGet<IPlayerContext>(out var placed) && placed.IsPresent)
+            bool registered = ServiceRegistry.TryGet<IPlayerContext>(out var placed) && placed.IsPresent;
+            if (registered)
             {
                 placed.TeleportTo(target);
+            }
+            else
+            {
+                // 注册链路未通：OnEnable 应在实例化时注册 IPlayerContext，未注册说明玩家组件未激活或未挂载。
+                Debug.LogError($"[PlacePlayer诊断] 房间 {roomId}：玩家已生成但 IPlayerContext 未注册（检查 PlayerMotor2D.OnEnable 与层/激活状态）");
             }
         }
 

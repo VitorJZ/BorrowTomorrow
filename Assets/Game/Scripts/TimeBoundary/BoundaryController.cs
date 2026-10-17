@@ -29,6 +29,7 @@ namespace BorrowTomorrow.TimeBoundary
         private bool mouseDragging;
         private bool keyboardHeld;
         private float pendingTarget;
+        private float resolveRetryTimer;
 
         /// <summary>统一受阻提示（策划 4.5）。</summary>
         private const string BlockedMessage = "先到稳固的地方。";
@@ -73,6 +74,7 @@ namespace BorrowTomorrow.TimeBoundary
 
         private void Update()
         {
+            resolveRetryTimer = Mathf.Max(0f, resolveRetryTimer - Time.deltaTime);
             if (GameSession.Instance == null || GameSession.Instance.State.Phase != GamePhase.Playing)
             {
                 ForceEndAdjust();
@@ -265,12 +267,35 @@ namespace BorrowTomorrow.TimeBoundary
             }
         }
 
+        /// <summary>
+        /// 解析玩家上下文：注册表优先；注册表缺失时在场景内做一次回退查找（节流 0.5s）。
+        /// 回退仅用于消除注册时序依赖（策划 10.3 的"初始化期查找"，非每帧全场景查找）。
+        /// </summary>
         private void EnsurePlayerResolved()
         {
-            if (player == null || !ServiceRegistry.TryGet<IPlayerContext>(out player))
+            if (player != null && player.IsPresent)
             {
-                player = null;
+                return; // 已解析且仍有效
             }
+            if (ServiceRegistry.TryGet<IPlayerContext>(out player) && player.IsPresent)
+            {
+                return;
+            }
+            if (resolveRetryTimer > 0f)
+            {
+                return; // 节流窗口内不重复全场景查找
+            }
+            resolveRetryTimer = 0.5f;
+            foreach (var behaviour in FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+            {
+                if (behaviour is IPlayerContext candidate && candidate.IsPresent)
+                {
+                    player = candidate;
+                    Debug.LogWarning("[Boundary诊断] 注册表缺失 IPlayerContext，已通过场景回退查找解析（请检查玩家注册链路）");
+                    return;
+                }
+            }
+            player = null;
         }
 
         /// <summary>LevelRoot 激活房间时调用（策划 4.2：跨房间不共享数值）。</summary>
