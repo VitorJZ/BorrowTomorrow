@@ -85,6 +85,8 @@ namespace BorrowTomorrow.Level
             {
                 return;
             }
+            var room = GetComponentInParent<LevelRoot>();
+            if (room == null || !room.IsActiveRoom) return;
             HintGroup stage = FindActiveStage();
             if (stage == null)
             {

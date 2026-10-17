@@ -138,6 +138,22 @@ namespace BorrowTomorrow.Tests
             Assert.AreEqual(SafetyBlockReason.None, reason, "装饰物体不参与安全校验（策划 4.3）");
         }
 
+        [TestCase(4f, 0f, SafetyBlockReason.SupportRemoved)]
+        [TestCase(0f, -2f, SafetyBlockReason.SupportRemoved)]
+        [TestCase(0f, 0f, SafetyBlockReason.None)]
+        public void ReplacementPlatform_MustRemainUnderFeet(float x, float y, SafetyBlockReason expected)
+        {
+            var platform = BuildTemporalObject(0f, true, true);
+            SetPolicy(platform, BorrowTomorrow.Core.Data.SafetyPolicy.BlockIfSupportRemoved);
+            platform.transform.Find("Present").position = new Vector3(x, y, 0f);
+            platform.transform.Find("Present").gameObject.SetActive(false);
+            player.IsGroundedValue = true;
+            player.BodyBoundsValue = new Bounds(new Vector3(0f, 1f, 0f), Vector3.one);
+            player.GroundColliderValue = platform.transform.Find("Past").GetComponent<Collider2D>();
+            Assert.AreEqual(expected, TemporalSafetyResolver.Evaluate(new[] { platform },
+                BorrowTomorrow.Core.Data.Era.Present, player));
+        }
+
         private static void SetPolicy(TemporalObject target, BorrowTomorrow.Core.Data.SafetyPolicy policy)
         {
             var so = new SerializedObject(target);

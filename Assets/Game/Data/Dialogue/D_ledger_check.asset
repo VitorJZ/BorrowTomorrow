@@ -16,6 +16,8 @@ MonoBehaviour:
   speakerLabel: "\u4E3B\u89D2"
   subtitle: "\u8D26\u672C\uFF1A\u6653\u6653\u6821\u670D\uFF0C\u4E0D\u8BB0\u94B1\u3002"
   voiceClip: {fileID: 0}
+  illustration: {fileID: 0}
+  blackBackground: 0
   nextId: 
   requiredFlags: []
   setFlags: []

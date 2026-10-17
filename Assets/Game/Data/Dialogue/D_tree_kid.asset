@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f993672bdb89944b81673ee9b42134, type: 3}
+  m_Name: D_tree_kid
+  m_EditorClassIdentifier: 
+  entryId: tree_kid
+  speakerLabel: "\u7AE5\u5E74\u6797\u6653"
+  subtitle: "\u7B49\u6811\u957F\u9AD8\u4E86\uFF0C\u6211\u5C31\u4E0D\u7528\u8D70\u697C\u68AF\u4E86\u3002"
+  voiceClip: {fileID: 0}
+  illustration: {fileID: 2800000, guid: 4f9d69bf642ea9c47acf569e17642d22, type: 3}
+  blackBackground: 0
+  nextId: tree_gran
+  requiredFlags: []
+  setFlags: []
+  holdForConfirm: 1
+  minDurationSeconds: 1.2

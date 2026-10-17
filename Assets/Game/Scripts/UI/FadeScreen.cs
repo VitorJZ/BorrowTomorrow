@@ -25,12 +25,12 @@ namespace BorrowTomorrow.UI
 
         public void FadeOut(float seconds)
         {
-            Restart(0f, 1f, seconds <= 0f ? 0.01f : seconds);
+            Restart(image.color.a, 1f, seconds);
         }
 
         public void FadeIn(float seconds)
         {
-            Restart(1f, 0f, seconds <= 0f ? 0.01f : seconds);
+            Restart(image.color.a, 0f, seconds);
         }
 
         private void Restart(float from, float to, float seconds)
@@ -38,6 +38,12 @@ namespace BorrowTomorrow.UI
             if (running != null)
             {
                 StopCoroutine(running);
+            }
+            running = null;
+            if (seconds <= 0f)
+            {
+                SetAlpha(to);
+                return;
             }
             running = StartCoroutine(FadeRoutine(from, to, seconds));
         }

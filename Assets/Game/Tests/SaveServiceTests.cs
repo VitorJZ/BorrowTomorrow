@@ -105,6 +105,31 @@ namespace BorrowTomorrow.Tests
         }
 
         [Test]
+        public void CorruptedPrimaryWithoutBackup_ReportsCorruptionAndKeepsFile()
+        {
+            string path = System.IO.Path.Combine(originalDirectory, "progress.json");
+            System.IO.File.WriteAllText(path, "broken save");
+            Assert.AreEqual(SaveLoadResult.Corrupted, service.TryLoadProgress(out _));
+            Assert.AreEqual("broken save", System.IO.File.ReadAllText(path));
+        }
+
+        [Test]
+        public void BackupRecovery_PreservesHealthyBackupForRepeatedPrimaryFailure()
+        {
+            service.SaveProgress(new SaveData { currentLevelId = "L02" });
+            service.SaveProgress(new SaveData { currentLevelId = "L03" });
+            string primary = System.IO.Path.Combine(originalDirectory, "progress.json");
+            string backup = System.IO.Path.Combine(originalDirectory, "progress.backup.json");
+            string healthyBackup = System.IO.File.ReadAllText(backup);
+            System.IO.File.WriteAllText(primary, "broken once");
+            Assert.AreEqual(SaveLoadResult.UsedBackup, service.TryLoadProgress(out _));
+            Assert.AreEqual(healthyBackup, System.IO.File.ReadAllText(backup));
+            System.IO.File.WriteAllText(primary, "broken twice");
+            Assert.AreEqual(SaveLoadResult.UsedBackup, service.TryLoadProgress(out var restored));
+            Assert.AreEqual("L02", restored.currentLevelId);
+        }
+
+        [Test]
         public void Settings_SavedSeparatelyFromProgress()
         {
             var settings = new SaveSettings { volumeMaster = 0.5f, subtitlesEnabled = false };

@@ -19,6 +19,12 @@ namespace BorrowTomorrow.Core.Interfaces
         void ApplyVolumeSettings(SaveSettings settings);
     }
 
+    public interface IStoryPresentation
+    {
+        void ShowIllustration(UnityEngine.Texture2D texture, bool blackBackground = false);
+        void HideIllustration();
+    }
+
     /// <summary>对白播放服务。文字停留由玩家确认，配音可跳过（策划 5.5）。</summary>
     public interface IDialogueService
     {
@@ -77,6 +83,9 @@ namespace BorrowTomorrow.Core.Interfaces
     {
         /// <summary>采集当前空间快照并设为最近检查点。</summary>
         void Capture(string checkpointId);
+
+        /// <summary>过门时记录离开房间的边界，不改变最近安全检查点。</summary>
+        void RememberRoomBoundary(string roomId, float boundaryX);
 
         /// <summary>恢复最近检查点：按策划 12.2 顺序恢复边界、年代状态、机关与角色位置。</summary>
         void RestoreLatest();

@@ -33,6 +33,7 @@ namespace BorrowTomorrow.Audio
 
         private float pastMixTarget = 1f;
         private bool ducking;
+        private bool epilogueMusic;
         private SaveSettings settings = new SaveSettings();
 
         public int InitializeOrder => -40;
@@ -97,6 +98,23 @@ namespace BorrowTomorrow.Audio
 
         private void Update()
         {
+            bool shouldUseEpilogue = GameSession.Instance != null
+                && GameSession.Instance.CurrentLevel != null
+                && GameSession.Instance.CurrentLevel.levelId == "Epilogue"
+                && (GameSession.Instance.State.Phase == GamePhase.Playing || GameSession.Instance.State.Phase == GamePhase.Credits);
+            if (shouldUseEpilogue != epilogueMusic)
+            {
+                epilogueMusic = shouldUseEpilogue;
+                if (shouldUseEpilogue) SwitchToEpilogueMusic();
+                else
+                {
+                    musicPastSource.clip = musicPast;
+                    musicPresentSource.clip = musicPresent;
+                    if (musicPast != null) musicPastSource.Play();
+                    if (musicPresent != null) musicPresentSource.Play();
+                }
+            }
+            if (epilogueMusic) pastMixTarget = 1f;
             // 平滑过渡双年代配器（策划 09）。
             float duckScale = ducking ? duckedVolumeScale : 1f;
             float pastTarget = pastMixTarget * settings.volumeMusic * duckScale;
@@ -128,7 +146,7 @@ namespace BorrowTomorrow.Audio
                 // B 组尚未登记该 id 时静默跳过（灰盒期音效库为空，避免每次切换刷警告）。
                 return;
             }
-            float finalVolume = volume * settings.volumeMaster;
+            float finalVolume = volume; // AudioListener applies master volume once.
             if (atWorldPosition.HasValue && Camera.main != null)
             {
                 // 简单距离衰减（2D 横版无需 3D 空间化）。

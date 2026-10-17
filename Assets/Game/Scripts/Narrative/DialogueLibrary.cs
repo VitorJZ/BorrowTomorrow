@@ -23,6 +23,19 @@ namespace BorrowTomorrow.Narrative
             Core.ServiceRegistry.Unregister(this);
         }
 
+        public bool IsChainComplete(DialogueEntry first, Core.StoryFlagStore flags)
+        {
+            var visited = new System.Collections.Generic.HashSet<string>();
+            var last = first;
+            while (last != null && !string.IsNullOrEmpty(last.nextId))
+            {
+                if (!visited.Add(last.entryId)) return false;
+                last = Find(last.nextId);
+            }
+            return last != null && last.setFlags != null && last.setFlags.Length > 0
+                && last.setFlags.All(flags.HasFlag);
+        }
+
         public DialogueEntry Find(string entryId)
         {
             if (string.IsNullOrEmpty(entryId))

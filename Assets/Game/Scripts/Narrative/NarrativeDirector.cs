@@ -36,6 +36,23 @@ namespace BorrowTomorrow.Narrative
             ServiceRegistry.TryGet<IDialogueService>(out dialogue);
         }
 
+        private void Update()
+        {
+            var session = GameSession.Instance;
+            if (session == null || !session.State.IsPlayerControlAllowed || session.ActiveRoom == null
+                || dialogue == null || dialogue.IsPlaying) return;
+            string entry = null, flag = null;
+            switch (session.ActiveRoom.RoomId)
+            {
+                case "L00": entry = "intro_kid"; flag = StoryFlags.IntroPlayed; break;
+                case "L01B": entry = "tree_marks"; flag = StoryFlags.HeightMarksSeen; break;
+                case "L04": entry = "attic_tree"; flag = "AtticTreeSeen"; break;
+                case "Epilogue": entry = "epilogue_arrival"; flag = "EpilogueArrived"; break;
+            }
+            if (entry != null && !session.StoryFlags.HasFlag(flag) && library != null && library.Find(entry) != null)
+                PlayStory(entry, DialoguePriority.Story);
+        }
+
         /// <summary>
         /// 播放一段剧情。返回 false 表示已看过或前置不满足（未播放）。
         /// </summary>
@@ -43,43 +60,23 @@ namespace BorrowTomorrow.Narrative
         {
             if (library == null || dialogue == null || GameSession.Instance == null)
             {
-                onCompleted?.Invoke();
                 return false;
             }
             DialogueEntry entry = library.Find(entryId);
             if (entry == null)
             {
                 Debug.LogWarning($"[NarrativeDirector] 对白库中找不到 {entryId}。");
-                onCompleted?.Invoke();
                 return false;
             }
 
             StoryFlagStore flags = GameSession.Instance.StoryFlags;
-            if (IsAlreadySeen(entry, flags))
+            if (library.IsChainComplete(entry, flags))
             {
-                onCompleted?.Invoke();
                 return false; // 已读剧情标记保留，避免重复播放（策划 4.6）
             }
             dialogue.Play(entry, priority, onCompleted);
             return true;
         }
 
-        /// <summary>entry 拥有标记且全部已写入 → 视为已看过。</summary>
-        private static bool IsAlreadySeen(DialogueEntry entry, StoryFlagStore flags)
-        {
-            if (entry.setFlags == null || entry.setFlags.Length == 0)
-            {
-                return false;
-            }
-            bool allPresent = true;
-            foreach (string flag in entry.setFlags)
-            {
-                if (!flags.HasFlag(flag))
-                {
-                    allPresent = false;
-                }
-            }
-            return allPresent;
-        }
     }
 }

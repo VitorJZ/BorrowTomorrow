@@ -15,7 +15,9 @@ MonoBehaviour:
   entryId: uniform_kid
   speakerLabel: "\u7AE5\u5E74\u6797\u6653"
   subtitle: "\u5916\u5A46\uFF0C\u4F60\u600E\u4E48\u77E5\u9053\u6211\u660E\u5E74\u957F\u591A\u9AD8\uFF1F"
-  voiceClip: {fileID: 0}
+  voiceClip: {fileID: 8300000, guid: 1d7d5dd00324b6d49afb68d83e3165b5, type: 3}
+  illustration: {fileID: 2800000, guid: c3cab964b0f9ef443a5d8f2d49b20037, type: 3}
+  blackBackground: 0
   nextId: uniform_gran
   requiredFlags: []
   setFlags: []

@@ -62,6 +62,7 @@ namespace BorrowTomorrow.EditorTools
             CreateMainMenuScene(font);
             CreateLevelScenes(catalog, whiteSprite, font, playerPrefab, friction, temporalDefPaths, dialoguePaths);
             SetBuildSceneList(catalog);
+            StoryContentInstaller.Install();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             Debug.Log("[ProjectScaffolder] 项目骨架搭建完成。");
@@ -324,49 +325,7 @@ namespace BorrowTomorrow.EditorTools
         /// </summary>
         private static Dictionary<string, string> CreateDialogueAssets()
         {
-            string dir = $"{DataDir}/Dialogue";
-            Directory.CreateDirectory(dir);
-
-            var specs = new (string id, string speaker, string text, string next, string[] setFlags)[]
-            {
-                ("gate_self_talk", "主角", "院子……和记忆里一样旧。", null, null),
-                ("bridge_self_talk", "主角", "对岸的台阶还在就好了。", null, null),
-                ("uniform_self", "主角", "袖口留了一寸。明年还能穿。", "uniform_kid", null),
-                ("uniform_kid", "童年林晓", "外婆，你怎么知道我明年长多高？", "uniform_gran", null),
-                ("uniform_gran", "年轻外婆", "不知道呀。先替你留一点。", null, new[] { StoryFlags.UniformRead }),
-                ("ledger_check", "主角", "账本：晓晓校服，不记钱。", null, null),
-                ("photo_back", "主角", "照片背面：1994年秋。妈妈和晓晓。树种下的第一年。", "photo_front", null),
-                ("photo_front", "主角", "翻过来——外婆和小女孩站在新栽的树旁。外婆的衣饰，和我身上的一模一样。", "photo_voice",
-                    new[] { StoryFlags.PhotoRevealed, StoryFlags.IdentityKnown }),
-                ("photo_voice", "成年林晓", "外婆，是我，晓晓。我三十七了。你不用再给我放袖口了。", null, null),
-                ("compartment_view", "主角", "高处的木板后面……好像有个蓝色的角。", null, null),
-                ("compartment_touch", "主角", "东边阁楼……窗户左上边。木板后头。蓝的。", null, new[] { StoryFlags.BoxLocated }),
-                ("epilogue_letter", "林晓", "（信）晓晓：这些布你小时候都喜欢，我给你留着。等你有了自己的家，带过去。", null,
-                    new[] { StoryFlags.EpilogueSeen }),
-            };
-
-            var map = new Dictionary<string, string>();
-            foreach (var spec in specs)
-            {
-                string path = $"{dir}/D_{spec.id}.asset";
-                DialogueEntry entry = AssetDatabase.LoadAssetAtPath<DialogueEntry>(path);
-                if (entry == null)
-                {
-                    entry = ScriptableObject.CreateInstance<DialogueEntry>();
-                    AssetDatabase.CreateAsset(entry, path);
-                }
-                entry.entryId = spec.id;
-                entry.speakerLabel = spec.speaker;
-                entry.subtitle = spec.text;
-                entry.nextId = spec.next;
-                entry.setFlags = spec.setFlags ?? Array.Empty<string>();
-                entry.requiredFlags = Array.Empty<string>();
-                entry.holdForConfirm = true;
-                entry.minDurationSeconds = 1.2f;
-                EditorUtility.SetDirty(entry);
-                map[spec.id] = path; // 只存路径：查找时惰性加载
-            }
-            return map;
+            return StoryContentInstaller.CreateDialogueAssets();
         }
 
         // ---------------------------------------------------------------- 玩家预制体
@@ -478,29 +437,38 @@ namespace BorrowTomorrow.EditorTools
             LevelLayouts.SetObject(objectivePanel, "root", objectiveRoot);
             LevelLayouts.SetObject(objectivePanel, "objectiveText", objectiveText);
 
+            Anchor((RectTransform)objective.transform, Vector2.up, Vector2.up, new Vector2(32f, -96f));
+
             // 顶部年代把手（命中区 ≥44px，策划 5.3）：灰条背景 + 提示文字，让“可拖动”可被发现。
             var handle = CreateChild<UI.BoundaryHandle>(uiRoot.transform, "BoundaryHandle");
             Stretch((RectTransform)handle.transform, new Vector2(0f, 480f), new Vector2(160f, 64f));
+            Anchor((RectTransform)handle.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -20f));
             var handleImage = handle.AddComponent<Image>();
             handleImage.color = new Color(0.28f, 0.3f, 0.34f, 0.92f);
             Text handleLabel = MakeText(handle.transform, "HandleLabel", "拖动年代", font, 22,
                 TextAnchor.MiddleCenter, Vector2.zero, new Vector2(150f, 48f));
             handleLabel.color = Color.white;
-            MakeText(uiRoot.transform, "EraLabelPast", "1994 ◂", font, 24, TextAnchor.MiddleLeft,
+            Text eraLabelPast = MakeText(uiRoot.transform, "EraLabelPast", "1994 ◂", font, 24, TextAnchor.MiddleLeft,
                 new Vector2(-700f, 480f), new Vector2(120f, 40f));
             Text eraLabelFuture = MakeText(uiRoot.transform, "EraLabelPresent", "▸ 2024", font, 24, TextAnchor.MiddleRight,
                 new Vector2(700f, 480f), new Vector2(120f, 40f));
+            Anchor(eraLabelPast.rectTransform, Vector2.up, Vector2.up, new Vector2(32f, -24f));
+            Anchor(eraLabelFuture.rectTransform, Vector2.one, Vector2.one, new Vector2(-32f, -24f));
+            eraLabelPast.rectTransform.sizeDelta = eraLabelFuture.rectTransform.sizeDelta = new Vector2(140f, 44f);
             eraLabelFuture.color = new Color(0.2f, 0.35f, 0.3f);
 
             // 底部对白字幕（策划 5.4：最多两行）。
             var subtitle = CreateChild<UI.SubtitlePanel>(uiRoot.transform, "SubtitlePanel");
             Stretch((RectTransform)subtitle.transform, new Vector2(0f, -190f), new Vector2(1100f, 150f));
+            Anchor((RectTransform)subtitle.transform, new Vector2(0.5f, 0.32f), new Vector2(0.5f, 0.5f), Vector2.zero);
             GameObject subtitleRoot = CreateUIChild(subtitle.transform, "Root");
             Stretch((RectTransform)subtitleRoot.transform, Vector2.zero, Vector2.zero, true);
             Text speakerText = MakeText(subtitleRoot.transform, "SpeakerText", string.Empty, font, 24,
                 TextAnchor.MiddleLeft, new Vector2(0f, 45f), new Vector2(1000f, 40f));
             Text contentText = MakeText(subtitleRoot.transform, "ContentText", string.Empty, font, 30,
                 TextAnchor.UpperLeft, new Vector2(0f, -5f), new Vector2(1040f, 90f));
+            LayoutSubtitleText(speakerText.rectTransform, -12f, 34f);
+            LayoutSubtitleText(contentText.rectTransform, -54f, 84f);
             var subtitlePanel = subtitle.GetComponent<UI.SubtitlePanel>();
             LevelLayouts.SetObject(subtitlePanel, "root", subtitleRoot);
             LevelLayouts.SetObject(subtitlePanel, "speakerText", speakerText);
@@ -853,6 +821,22 @@ namespace BorrowTomorrow.EditorTools
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = anchoredPos;
             rect.sizeDelta = size;
+        }
+
+        private static void Anchor(RectTransform rect, Vector2 anchor, Vector2 pivot, Vector2 position)
+        {
+            rect.anchorMin = rect.anchorMax = anchor;
+            rect.pivot = pivot;
+            rect.anchoredPosition = position;
+        }
+
+        private static void LayoutSubtitleText(RectTransform rect, float y, float height)
+        {
+            rect.anchorMin = Vector2.up;
+            rect.anchorMax = Vector2.one;
+            rect.pivot = new Vector2(0.5f, 1f);
+            rect.anchoredPosition = new Vector2(0f, y);
+            rect.sizeDelta = new Vector2(-64f, height);
         }
 
         private static Text MakeText(Transform parent, string name, string content, Font font, int fontSize,
