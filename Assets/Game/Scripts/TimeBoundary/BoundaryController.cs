@@ -241,6 +241,13 @@ namespace BorrowTomorrow.TimeBoundary
         {
             committedB = value;
             OnBoundaryCommitted?.Invoke(committedB);
+            // 按过去面积比例驱动双年代配乐混合（策划 09：音乐混合参考过去面积比例，平滑过渡由 AudioService 负责）。
+            if (ServiceRegistry.TryGet<IAudioService>(out var audio))
+            {
+                float span = rangeMax - rangeMin;
+                float pastRatio = span > 0.001f ? Mathf.Clamp01((committedB - rangeMin) / span) : 0.5f;
+                audio.SetEraMix(pastRatio);
+            }
         }
 
         private void NotifyBlockedHud(string message)

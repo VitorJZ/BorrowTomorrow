@@ -14,8 +14,32 @@ namespace BorrowTomorrow.TimeBoundary
     public sealed class TemporalObjectRegistry : MonoBehaviour
     {
         private readonly List<TemporalObject> objects = new List<TemporalObject>();
+        private bool populatedFromHierarchy;
 
-        public IReadOnlyList<TemporalObject> Objects => objects;
+        /// <summary>
+        /// 本房间全部年代物体。首次访问时从层级惰性收集（编辑器模式下 AddComponent 不触发 Awake，
+        /// 也不依赖任何 Awake 顺序——策划 10.3：LevelRoot 初始化时物体必已就位）。
+        /// </summary>
+        public IReadOnlyList<TemporalObject> Objects
+        {
+            get
+            {
+                if (!populatedFromHierarchy)
+                {
+                    populatedFromHierarchy = true;
+                    // 去重：个别物体可能已在 Awake 中自行注册。
+                    foreach (TemporalObject found in GetComponentsInChildren<TemporalObject>(true))
+                    {
+                        if (!objects.Contains(found))
+                        {
+                            objects.Add(found);
+                        }
+                    }
+                }
+                objects.RemoveAll(o => o == null); // 清理运行期销毁的残留引用
+                return objects;
+            }
+        }
 
         public void Register(TemporalObject obj)
         {
@@ -33,7 +57,7 @@ namespace BorrowTomorrow.TimeBoundary
         /// <summary>按ObjectId查找（存档恢复与剧情引用）。</summary>
         public TemporalObject FindById(string objectId)
         {
-            return objects.FirstOrDefault(o => o.ObjectId == objectId);
+            return Objects.FirstOrDefault(o => o.ObjectId == objectId);
         }
 
         /// <summary>
@@ -44,7 +68,7 @@ namespace BorrowTomorrow.TimeBoundary
         {
             return BoundaryChangePlan.Build(
                 fromBoundary, toBoundary,
-                objects.Select(o => (o.AnchorX, o)));
+                Objects.Select(o => (o.AnchorX, o)));
         }
 
         /// <summary>

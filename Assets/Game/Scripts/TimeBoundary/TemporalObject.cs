@@ -56,6 +56,23 @@ namespace BorrowTomorrow.TimeBoundary
             registeredRegistry?.Unregister(this);
         }
 
+#if UNITY_EDITOR
+        /// <summary>
+        /// 编辑器脚手架专用：直接注入定义数据（直接字段赋值 + SetDirty，
+        /// 绕过 SerializedObject 修改；运行时不要调用）。
+        /// </summary>
+        public void EditorConfigure(TemporalObjectDefinition def)
+        {
+            definition = def;
+            if (def != null)
+            {
+                objectId = def.objectId;
+                anchorX = def.anchorX;
+            }
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
+
         /// <summary>当前年代状态。</summary>
         public Era CurrentEra => currentEra;
 
