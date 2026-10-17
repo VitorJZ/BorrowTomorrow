@@ -93,6 +93,12 @@ namespace BorrowTomorrow.Save
             latest = snapshot;
             roomBoundaryHistory[room.RoomId] = room.CurrentBoundary;
 
+            // 检查点音效（稳定 id，由 B 组在 SfxLibrary 登记）。
+            if (ServiceRegistry.TryGet<IAudioService>(out var audio))
+            {
+                audio.PlaySfx("checkpoint_touch");
+            }
+
             // 过检查点保存（策划 12.3）。
             session.SaveProgressNow();
         }
@@ -104,7 +110,15 @@ namespace BorrowTomorrow.Save
             pendingRestore = null;
             if (source == null)
             {
-                Debug.LogWarning("[CheckpointService] 没有可恢复的检查点。");
+                // 尚无检查点（如开局即跌落）：回落到关卡入口出生点，避免恢复空转死循环。
+                GameSession session = GameSession.Instance;
+                if (session != null && session.CurrentLevel != null
+                    && ServiceRegistry.TryGet<ILevelRoot>(out var entryRoom))
+                {
+                    Debug.LogWarning("[CheckpointService] 无检查点，回落到关卡入口出生点。");
+                    entryRoom.PlacePlayer(session.CurrentLevel.spawnId);
+                    session.SetObjective(session.CurrentLevel.initialObjective);
+                }
                 return;
             }
             ApplySnapshot(source);
