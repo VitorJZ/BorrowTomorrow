@@ -54,6 +54,23 @@ namespace BorrowTomorrow.EditorTools
 
         // ------------------------------------------------------------ 通用构建件
 
+        /// <summary>
+        /// 按世界尺寸渲染 Sprite。SpriteRenderer.size 在 Simple 绘制模式下不生效
+        /// （灰盒曾因此全部渲染成贴图原尺寸小点，画面全空白），故用 localScale 缩放。
+        /// </summary>
+        internal static void SizeSprite(SpriteRenderer renderer, Vector2 worldSize)
+        {
+            Vector2 native = renderer.sprite != null ? (Vector2)renderer.sprite.bounds.size : Vector2.one;
+            if (native.x < 0.001f || native.y < 0.001f)
+            {
+                return;
+            }
+            renderer.transform.localScale = new Vector3(
+                worldSize.x / native.x,
+                worldSize.y / native.y,
+                1f);
+        }
+
         /// <summary>灰盒盒子：SpriteRenderer + 可选 BoxCollider2D（可旋转）。</summary>
         internal static GameObject Box(RoomContext ctx, string name, Vector2 center, Vector2 size, Color color,
             string sortingLayer, string layerName, bool solid, bool oneWay = false, float angle = 0f)
@@ -71,7 +88,7 @@ namespace BorrowTomorrow.EditorTools
             renderer.sprite = ctx.White;
             renderer.color = color;
             renderer.sortingLayerName = sortingLayer;
-            renderer.size = size;
+            SizeSprite(renderer, size);
             if (solid)
             {
                 var collider = box.AddComponent<BoxCollider2D>();
@@ -195,7 +212,7 @@ namespace BorrowTomorrow.EditorTools
             renderer.sprite = ctx.White;
             renderer.color = new Color(0.95f, 0.85f, 0.3f, 0.85f);
             renderer.sortingLayerName = "EraPlatform";
-            renderer.size = size;
+            SizeSprite(renderer, size);
             var component = obj.AddComponent<NarrativeInteractable>();
             SetField(component, "interactId", id);
             SetField(component, "prompt", prompt);
@@ -281,7 +298,7 @@ namespace BorrowTomorrow.EditorTools
             barRenderer.sprite = ctx.White;
             barRenderer.color = new Color(0.55f, 0.38f, 0.22f);
             barRenderer.sortingLayerName = "EraPlatform";
-            barRenderer.size = new Vector2(0.18f, height);
+            SizeSprite(barRenderer, new Vector2(0.18f, height));
 
             // 横档（无碰撞，每 0.5 单位一根）。
             for (float y = bottomY + 0.3f; y < topY; y += 0.5f)
@@ -293,7 +310,7 @@ namespace BorrowTomorrow.EditorTools
                 rungRenderer.sprite = ctx.White;
                 rungRenderer.color = new Color(0.7f, 0.55f, 0.35f);
                 rungRenderer.sortingLayerName = "EraPlatform";
-                rungRenderer.size = new Vector2(0.55f, 0.07f);
+                SizeSprite(rungRenderer, new Vector2(0.55f, 0.07f));
             }
 
             // 攀爬触发区（梯顶超出平台面 0.7，便于爬出后落到相邻平台，策划 11.3）。
@@ -688,7 +705,7 @@ namespace BorrowTomorrow.EditorTools
             renderer.sprite = ctx.White;
             renderer.color = color;
             renderer.sortingLayerName = "EraPlatform";
-            renderer.size = size;
+            SizeSprite(renderer, size);
             if (solid)
             {
                 var collider = box.AddComponent<BoxCollider2D>();

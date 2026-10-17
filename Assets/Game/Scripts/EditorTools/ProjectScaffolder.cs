@@ -387,7 +387,7 @@ namespace BorrowTomorrow.EditorTools
             renderer.sprite = white;
             renderer.color = new Color(0.47f, 0.16f, 0.18f); // 策划 8.4：暗红针织外搭
             renderer.sortingLayerName = "Characters";
-            renderer.size = new Vector2(0.55f, 1.55f);
+            LevelLayouts.SizeSprite(renderer, new Vector2(0.55f, 1.55f));
 
             var motor = root.AddComponent<Player.PlayerMotor2D>();
             int groundLayer = LayerMask.NameToLayer("Ground");
@@ -497,6 +497,15 @@ namespace BorrowTomorrow.EditorTools
             // 全屏淡入淡出（策划 4.6）。
             var fadeObject = CreateChild<UI.FadeScreen>(uiRoot.transform, "FadeScreen");
             Stretch((RectTransform)fadeObject.transform, Vector2.zero, Vector2.zero, true);
+
+            // HudService 的面板接线（此前缺失导致淡入淡出/目标/字幕/把手/提示全部空转）。
+            LevelLayouts.SetObject(hud, "subtitlePanel", subtitle);
+            LevelLayouts.SetObject(hud, "objectivePanel", objective);
+            LevelLayouts.SetObject(hud, "interactionPrompt", prompt);
+            LevelLayouts.SetObject(hud, "boundaryHandle", handle);
+            LevelLayouts.SetObject(hud, "hintToast", toast);
+            LevelLayouts.SetObject(hud, "eraBadge", badge);
+            LevelLayouts.SetObject(hud, "fadeScreen", fadeObject);
 
             // 暂停提示（灰盒文字版；正式菜单由 B 组制作）。
             var pauseMenu = CreateChild<UI.PauseMenu>(uiRoot.transform, "PauseMenu");
@@ -722,6 +731,8 @@ namespace BorrowTomorrow.EditorTools
             renderer.color = new Color(1f, 1f, 1f, 0.06f);
             renderer.sortingLayerName = "EraBackground";
             renderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+            // 归一化为 1 局部单位 = 1 世界单位：TemporalVisualController 按 localScale.x 设遮罩宽度。
+            LevelLayouts.SizeSprite(renderer, Vector2.one);
             node.AddComponent<SpriteMask>();
             return node;
         }
