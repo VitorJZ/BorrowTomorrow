@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: D_epilogue_letter
   m_EditorClassIdentifier: 
   entryId: epilogue_letter
-  speakerLabel: "\u6797\u6653"
-  subtitle: "\uFF08\u4FE1\uFF09\u6653\u6653\uFF1A\u8FD9\u4E9B\u5E03\u4F60\u5C0F\u65F6\u5019\u90FD\u559C\u6B22\uFF0C\u6211\u7ED9\u4F60\u7559\u7740\u3002\u7B49\u4F60\u6709\u4E86\u81EA\u5DF1\u7684\u5BB6\uFF0C\u5E26\u8FC7\u53BB\u3002"
+  speakerLabel: "\u7ED9\u6653\u6653\u7684\u4FE1"
+  subtitle: "\u6653\u6653\uFF1A\n\u4F60\u8BF4\u4EE5\u540E\u8981\u53BB\u5F88\u8FDC\u7684\u5730\u65B9\uFF0C"
   voiceClip: {fileID: 0}
-  nextId: 
+  illustration: {fileID: 2800000, guid: fffe5068612c2954fa4b6726e5751f03, type: 3}
+  blackBackground: 0
+  nextId: epilogue_letter2
   requiredFlags: []
-  setFlags:
-  - EpilogueSeen
+  setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 1.2

@@ -15,11 +15,12 @@ MonoBehaviour:
   levelId: Epilogue
   sceneName: Epilogue
   displayName: "\u4E24\u5929\u540E"
-  initialObjective: "\uFF08\u5C3E\u58F0\u6F14\u51FA\uFF09"
+  initialObjective: "\u6253\u5F00\u94C1\u76D2\uFF0C\u966A\u5916\u5A46\u5750\u4E00\u4F1A\u513F\u3002"
   boundaryMin: 0
   boundaryMax: 1
   initialBoundary: 0
   spawnId: spawn_epilogue
-  exitRequiredFlags: []
-  exitLockedHint: 
+  exitRequiredFlags:
+  - EpilogueSeen
+  exitLockedHint: "\u5148\u6253\u5F00\u94C1\u76D2\uFF0C\u8BFB\u5B8C\u7559\u7ED9\u6653\u6653\u7684\u4FE1\u3002"
   hintGroups: []

@@ -48,6 +48,9 @@ namespace BorrowTomorrow.Level
 
         public bool IsActiveRoom { get; private set; }
 
+        private bool hasActivated;
+        private float rememberedBoundary;
+
         private void Awake()
         {
             IsActiveRoom = false;
@@ -81,6 +84,8 @@ namespace BorrowTomorrow.Level
             float initial = overrideBoundaryRange ? initialBoundary
                 : (definition != null ? definition.initialBoundary : 32f);
 
+            if (hasActivated) initial = rememberedBoundary;
+            hasActivated = true;
             if (boundaryController != null)
             {
                 boundaryController.RegisterAsActive();
@@ -105,6 +110,7 @@ namespace BorrowTomorrow.Level
         /// <summary>停用房间：注销服务（玩家与系统对象随之离开本房间）。</summary>
         public void DeactivateRoom()
         {
+            rememberedBoundary = CurrentBoundary;
             IsActiveRoom = false;
             GetComponent<LevelDirector>()?.DeactivateForRoom();
             if (ServiceRegistry.TryGet<ILevelRoot>(out var registered) && ReferenceEquals(registered, this))

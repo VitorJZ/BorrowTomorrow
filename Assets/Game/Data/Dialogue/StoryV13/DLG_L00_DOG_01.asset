@@ -16,6 +16,8 @@ MonoBehaviour:
   speakerLabel: "\u78C1\u5E26\xB7\u7AE5\u5E74\u6797\u6653"
   subtitle: "\u5916\u5A46\uFF0C\u963F\u9EC4\u53C8\u7761\u5728\u4F60\u811A\u8FB9\u3002"
   voiceClip: {fileID: 8300000, guid: 1868f064b85691040993d97cae5aafcb, type: 3}
+  illustration: {fileID: 0}
+  blackBackground: 0
   nextId: 
   requiredFlags:
   - IntroPlayed
@@ -29,8 +31,6 @@ MonoBehaviour:
   completionFlags:
   - DogEchoPlayed
   objectiveAfter: 
-  illustration: {fileID: 0}
-  blackBackground: 0
   centeredTitle: 0
   delayBefore: 0
   sfxId: sfx_tape_click

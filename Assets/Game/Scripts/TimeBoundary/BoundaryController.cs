@@ -97,7 +97,7 @@ namespace BorrowTomorrow.TimeBoundary
                 return;
             }
             if (input == null) ServiceRegistry.TryGet<IInputSource>(out input);
-            if (input != null && (GameSession.Instance.State.IsBoundaryAdjustAllowed || keyboardHeld))
+            if (input != null && CanProcessAdjustment())
             {
                 float nudge = input.BoundaryNudgeDirection;
                 if (Mathf.Abs(nudge) > 0.01f)
@@ -134,6 +134,10 @@ namespace BorrowTomorrow.TimeBoundary
 
         private bool TryBeginAdjust(ref bool sourceFlag)
         {
+            if (!CanProcessAdjustment())
+            {
+                return false;
+            }
             if (sourceFlag)
             {
                 return true;
@@ -164,6 +168,14 @@ namespace BorrowTomorrow.TimeBoundary
             session.State.SetSubState(PlayingSubState.AdjustingBoundary);
             OnAdjustStarted?.Invoke();
             return true;
+        }
+
+        private bool CanProcessAdjustment()
+        {
+            GameSession session = GameSession.Instance;
+            return session != null && session.State.Phase == GamePhase.Playing
+                && (session.State.IsBoundaryAdjustAllowed
+                    || (IsAdjusting && session.State.SubState == PlayingSubState.AdjustingBoundary));
         }
 
         private void MaybeEndAdjust()
@@ -200,6 +212,11 @@ namespace BorrowTomorrow.TimeBoundary
             if (!focused && IsAdjusting) ForceEndAdjust();
         }
 
+        private void OnDestroy()
+        {
+            ServiceRegistry.Unregister<IBoundaryContext>(this);
+        }
+
         private void OnDisable()
         {
             if (IsAdjusting) ForceEndAdjust();
@@ -211,7 +228,7 @@ namespace BorrowTomorrow.TimeBoundary
         /// </summary>
         public void RequestAdjustment(float targetBoundaryX)
         {
-            if (!mouseDragging || GameSession.Instance == null || GameSession.Instance.State.IsPaused)
+            if (!mouseDragging || !CanProcessAdjustment() || GameSession.Instance.State.IsPaused)
             {
                 return; // 只受理拖动中的把手输入，防止误触瞬移（策划 5.3）。
             }

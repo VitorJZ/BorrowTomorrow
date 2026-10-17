@@ -1,0 +1,395 @@
+{
+  "entries": [
+    {
+      "id": "intro_kid",
+      "speaker": "童年林晓",
+      "text": "我叫林晓，今年七岁。",
+      "next": "intro_far",
+      "voice": "",
+      "image": "",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": true
+    },
+    {
+      "id": "intro_far",
+      "speaker": "童年林晓",
+      "text": "外婆说，等我长大了，就能去很远的地方。",
+      "next": "intro_box",
+      "voice": "vo_l00_intro_02",
+      "image": "",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": true
+    },
+    {
+      "id": "intro_box",
+      "speaker": "主角",
+      "text": "还有个盒子……没给她。",
+      "next": "",
+      "voice": "",
+      "image": "",
+      "flags": [
+        "IntroPlayed"
+      ],
+      "holdForConfirm": true,
+      "blackBackground": true
+    },
+    {
+      "id": "gate_self_talk",
+      "speaker": "童年林晓",
+      "text": "外婆，阿黄又睡在你脚边。",
+      "next": "",
+      "voice": "vo_l00_dog_01",
+      "image": "",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "bridge_self_talk",
+      "speaker": "主角",
+      "text": "对岸的台阶还在就好了。",
+      "next": "",
+      "voice": "",
+      "image": "",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "tree_marks",
+      "speaker": "身高刻线",
+      "text": "晓晓，六岁\n晓晓，七岁",
+      "next": "tree_kid",
+      "voice": "",
+      "image": "DECOR_HeightMarksWall",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "tree_kid",
+      "speaker": "童年林晓",
+      "text": "等树长高了，我就不用走楼梯了。",
+      "next": "tree_gran",
+      "voice": "",
+      "image": "DECOR_HeightMarksWall",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "tree_gran",
+      "speaker": "年轻外婆",
+      "text": "树也要慢慢长。",
+      "next": "",
+      "voice": "vo_l01b_tree_02",
+      "image": "DECOR_HeightMarksWall",
+      "flags": [
+        "HeightMarksSeen"
+      ],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "uniform_self",
+      "speaker": "主角",
+      "text": "袖口留了一寸。明年还能穿。",
+      "next": "uniform_kid",
+      "voice": "vo_l02_uniform_01",
+      "image": "ILL_UNIFORM_CUFF",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "uniform_kid",
+      "speaker": "童年林晓",
+      "text": "外婆，你怎么知道我明年长多高？",
+      "next": "uniform_gran",
+      "voice": "vo_l02_uniform_02",
+      "image": "ILL_UNIFORM_CUFF",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "uniform_gran",
+      "speaker": "年轻外婆",
+      "text": "不知道呀。先替你留一点。",
+      "next": "",
+      "voice": "vo_l02_uniform_03",
+      "image": "ILL_UNIFORM_CUFF",
+      "flags": [
+        "UniformRead"
+      ],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "ledger_check",
+      "speaker": "主角",
+      "text": "账本：晓晓校服，不记钱。",
+      "next": "",
+      "voice": "",
+      "image": "",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "photo_back",
+      "speaker": "照片背面的旧题字",
+      "text": "1994年秋。妈妈和晓晓。树种下的第一年。",
+      "next": "photo_front",
+      "voice": "",
+      "image": "ILL_PHOTO_BACK",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "photo_front",
+      "speaker": "",
+      "text": "",
+      "next": "photo_voice",
+      "voice": "",
+      "image": "ILL_PHOTO_FRONT",
+      "flags": [],
+      "holdForConfirm": false,
+      "blackBackground": false
+    },
+    {
+      "id": "photo_voice",
+      "speaker": "成年林晓",
+      "text": "外婆，是我，晓晓。我三十七了。你不用再给我放袖口了。",
+      "next": "photo_hands",
+      "voice": "vo_l03_reveal_03",
+      "image": "ILL_PHOTO_FRONT",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "photo_hands",
+      "speaker": "",
+      "text": "",
+      "next": "photo_tape",
+      "voice": "",
+      "image": "ILL_HANDS_OLD",
+      "flags": [],
+      "holdForConfirm": false,
+      "blackBackground": false
+    },
+    {
+      "id": "photo_tape",
+      "speaker": "成年林晓",
+      "text": "我把小时候的录音带来了。",
+      "next": "photo_question",
+      "voice": "",
+      "image": "ILL_HOSPITAL_HOLD",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "photo_question",
+      "speaker": "成年林晓",
+      "text": "你一直说有个蓝盒子。是不是还在老房子里？",
+      "next": "",
+      "voice": "",
+      "image": "ILL_HOSPITAL_HOLD",
+      "flags": [
+        "PhotoRevealed",
+        "IdentityKnown"
+      ],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "attic_tree",
+      "speaker": "主角",
+      "text": "长得这么高了。",
+      "next": "",
+      "voice": "vo_l04_tree_01",
+      "image": "",
+      "flags": [
+        "AtticTreeSeen"
+      ],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "compartment_view",
+      "speaker": "主角",
+      "text": "高处的木板后面……好像有个蓝色的角。",
+      "next": "",
+      "voice": "",
+      "image": "",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "compartment_touch",
+      "speaker": "主角",
+      "text": "东边阁楼……窗户左上边。",
+      "next": "compartment_blue",
+      "voice": "",
+      "image": "ILL_BOX_IN_NICHE",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "compartment_blue",
+      "speaker": "主角",
+      "text": "木板后头。蓝的。",
+      "next": "compartment_reply",
+      "voice": "vo_l04_box_02",
+      "image": "ILL_BOX_IN_NICHE",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "compartment_reply",
+      "speaker": "成年林晓",
+      "text": "我记住了。外婆，我去拿。",
+      "next": "",
+      "voice": "vo_l04_box_03",
+      "image": "ILL_HOSPITAL_HOLD",
+      "flags": [
+        "BoxLocated"
+      ],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "epilogue_arrival",
+      "speaker": "",
+      "text": "两天后",
+      "next": "epilogue_real_box",
+      "voice": "",
+      "image": "BG_Epilogue_Ward",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "epilogue_real_box",
+      "speaker": "",
+      "text": "",
+      "next": "",
+      "voice": "",
+      "image": "ILL_EPILOGUE_BOX_OPEN",
+      "flags": [
+        "EpilogueArrived"
+      ],
+      "holdForConfirm": false,
+      "blackBackground": false
+    },
+    {
+      "id": "epilogue_letter",
+      "speaker": "给晓晓的信",
+      "text": "晓晓：\n你说以后要去很远的地方，",
+      "next": "epilogue_letter2",
+      "voice": "",
+      "image": "ILL_EPILOGUE_LETTER",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "epilogue_letter2",
+      "speaker": "给晓晓的信",
+      "text": "我不知道那里冬天冷不冷。\n这些布你小时候都喜欢，",
+      "next": "epilogue_letter3",
+      "voice": "",
+      "image": "ILL_EPILOGUE_LETTER",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "epilogue_letter3",
+      "speaker": "给晓晓的信",
+      "text": "我给你留着。\n等你有了自己的家，带过去。",
+      "next": "epilogue_letter4",
+      "voice": "",
+      "image": "ILL_EPILOGUE_LETTER",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "epilogue_letter4",
+      "speaker": "给晓晓的信",
+      "text": "不用急着回来，\n把自己的日子过好。",
+      "next": "epilogue_who",
+      "voice": "",
+      "image": "ILL_EPILOGUE_LETTER",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "epilogue_who",
+      "speaker": "外婆",
+      "text": "你是谁家的孩子？",
+      "next": "epilogue_xiaoxiao",
+      "voice": "vo_epi_05",
+      "image": "ILL_HOSPITAL_HOLD",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "epilogue_xiaoxiao",
+      "speaker": "林晓",
+      "text": "我是晓晓。今天不赶路，我在这儿坐一会儿。",
+      "next": "epilogue_quilt",
+      "voice": "vo_epi_06",
+      "image": "ILL_HOSPITAL_HOLD",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "epilogue_quilt",
+      "speaker": "",
+      "text": "",
+      "next": "epilogue_tomorrow",
+      "voice": "",
+      "image": "ILL_EPILOGUE_QUILT_LAP",
+      "flags": [],
+      "holdForConfirm": false,
+      "blackBackground": false
+    },
+    {
+      "id": "epilogue_tomorrow",
+      "speaker": "外婆",
+      "text": "明天还来吗？",
+      "next": "epilogue_yes",
+      "voice": "vo_epi_07",
+      "image": "ILL_EPILOGUE_QUILT_LAP",
+      "flags": [],
+      "holdForConfirm": true,
+      "blackBackground": false
+    },
+    {
+      "id": "epilogue_yes",
+      "speaker": "林晓",
+      "text": "来。",
+      "next": "",
+      "voice": "",
+      "image": "ILL_EPILOGUE_QUILT_LAP",
+      "flags": [
+        "EpilogueSeen"
+      ],
+      "holdForConfirm": true,
+      "blackBackground": false
+    }
+  ]
+}

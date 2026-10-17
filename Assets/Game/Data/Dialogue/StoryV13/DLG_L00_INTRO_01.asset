@@ -16,6 +16,8 @@ MonoBehaviour:
   speakerLabel: "\u78C1\u5E26\xB7\u7AE5\u5E74\u6797\u6653"
   subtitle: "\u6211\u53EB\u6797\u6653\uFF0C\u4ECA\u5E74\u4E03\u5C81\u3002\u5988\u5988\uFF0C\u6211\u548C\u5916\u5A46\u5728\u9662\u5B50\u91CC\u7ED9\u4F60\u5F55\u78C1\u5E26\u5462\uFF01"
   voiceClip: {fileID: 8300000, guid: c74f5116d2912ad41adc49ca2491df53, type: 3}
+  illustration: {fileID: 0}
+  blackBackground: 1
   nextId: DLG_L00_INTRO_02
   requiredFlags:
   - '!IntroPlayed'
@@ -27,8 +29,6 @@ MonoBehaviour:
   completionFlags:
   - IntroPlayed
   objectiveAfter: "\u53BB\u9601\u697C\uFF0C\u627E\u5230\u84DD\u8272\u94C1\u76AE\u76D2\u3002"
-  illustration: {fileID: 0}
-  blackBackground: 1
   centeredTitle: 0
   delayBefore: 0
   sfxId: sfx_tape_click

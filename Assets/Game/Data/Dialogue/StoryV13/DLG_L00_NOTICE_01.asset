@@ -16,6 +16,8 @@ MonoBehaviour:
   speakerLabel: "\u817E\u7A7A\u901A\u77E5"
   subtitle: "\u9752\u77F3\u5DF7\u8001\u5B85\u79FB\u4EA4\u544A\u77E5\uFF1A\u8BF7\u4E8E\u5341\u6708\u4E8C\u5341\u65E5\u524D\u6E05\u7A7A\u5C4B\u5185\u65E7\u7269\u3002"
   voiceClip: {fileID: 0}
+  illustration: {fileID: 0}
+  blackBackground: 0
   nextId: 
   requiredFlags: []
   setFlags:
@@ -27,8 +29,6 @@ MonoBehaviour:
   completionFlags:
   - NoticeRead
   objectiveAfter: 
-  illustration: {fileID: 0}
-  blackBackground: 0
   centeredTitle: 0
   delayBefore: 0
   sfxId: sfx_cloth_paper

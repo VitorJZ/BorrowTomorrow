@@ -16,6 +16,8 @@ MonoBehaviour:
   speakerLabel: "\u78C1\u5E26\xB7\u5E74\u8F7B\u5916\u5A46"
   subtitle: "\u6811\u4E5F\u8981\u6162\u6162\u957F\u3002"
   voiceClip: {fileID: 8300000, guid: 2b0f4658776a47f4885361b6d813a405, type: 3}
+  illustration: {fileID: 0}
+  blackBackground: 0
   nextId: DLG_L01B_TREE_03
   requiredFlags: []
   setFlags: []
@@ -25,8 +27,6 @@ MonoBehaviour:
   eventId: EVT_L01B_HEIGHT_MARKS
   completionFlags: []
   objectiveAfter: 
-  illustration: {fileID: 0}
-  blackBackground: 0
   centeredTitle: 0
   delayBefore: 0
   sfxId: sfx_tape_click

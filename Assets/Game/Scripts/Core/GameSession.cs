@@ -36,8 +36,15 @@ namespace BorrowTomorrow.Core
         /// <summary>当前活动房间根。</summary>
         public ILevelRoot ActiveRoom { get; private set; }
 
+        private readonly System.Collections.Generic.List<string> readDialogueIds = new System.Collections.Generic.List<string>();
+        public System.Collections.Generic.IReadOnlyList<string> ReadDialogueIds => readDialogueIds;
+
+        public void RecordDialogue(string id)
+        {
+            if (!string.IsNullOrEmpty(id) && !readDialogueIds.Contains(id)) readDialogueIds.Add(id);
+        }
+
         public string CurrentObjective { get; private set; }
-        public System.Collections.Generic.HashSet<string> ReadDialogueIds { get; } = new System.Collections.Generic.HashSet<string>();
 
         /// <summary>关卡完成（进下一关或尾声）。</summary>
         public event System.Action<LevelDefinition> LevelCompleted;
@@ -68,11 +75,13 @@ namespace BorrowTomorrow.Core
         private void HandleTimingState(PlayingSubState previous, PlayingSubState next)
         {
             Time.timeScale = State.IsPaused ? 0f : 1f;
+            AudioListener.pause = State.IsPaused;
         }
 
         private void HandleTimingPhase(GamePhase previous, GamePhase next)
         {
             Time.timeScale = State.IsPaused ? 0f : 1f;
+            AudioListener.pause = State.IsPaused;
         }
 
         private void OnStoryFlagAdded(string flagId)
@@ -96,6 +105,7 @@ namespace BorrowTomorrow.Core
                 State.SubStateChanged -= HandleTimingState;
                 State.PhaseChanged -= HandleTimingPhase;
                 Time.timeScale = 1f;
+                AudioListener.pause = false;
                 Instance = null;
             }
         }
@@ -124,8 +134,9 @@ namespace BorrowTomorrow.Core
         /// <summary>开始新游戏：清空剧情进度并从第一关开始。</summary>
         public void StartNewGame()
         {
+            if (loadRoutineRunning) return;
             StoryFlags.Clear();
-            ReadDialogueIds.Clear();
+            readDialogueIds.Clear();
             if (ServiceRegistry.TryGet<ICheckpointService>(out var checkpoints))
             {
                 checkpoints.RestoreFrom(null);
@@ -141,6 +152,7 @@ namespace BorrowTomorrow.Core
         /// <summary>继续游戏：读取存档并恢复到对应关卡与检查点。</summary>
         public void ContinueGame()
         {
+            if (loadRoutineRunning) return;
             if (!ServiceRegistry.TryGet<ISaveService>(out var save))
             {
                 Debug.LogError("[GameSession] SaveService 未装配。");
@@ -152,6 +164,9 @@ namespace BorrowTomorrow.Core
                 case SaveLoadResult.Loaded:
                 case SaveLoadResult.UsedBackup:
                     RestoreFromSave(data, result == SaveLoadResult.UsedBackup);
+                    break;
+                case SaveLoadResult.Corrupted:
+                    Debug.LogWarning("[GameSession] 存档损坏且无可用备份，等待玩家选择重新开始。");
                     break;
                 default:
                     // 存档缺失或不可用：从新游戏开始（策划 12.3）；损坏情况由菜单 UI 提供选择。
@@ -168,15 +183,23 @@ namespace BorrowTomorrow.Core
                 return;
             }
             StoryFlags.RestoreFrom(data.triggeredStoryIds);
-            ReadDialogueIds.Clear();
-            if (data.readDialogueIds != null) foreach (string id in data.readDialogueIds) ReadDialogueIds.Add(id);
+            readDialogueIds.Clear();
+            if (data.readDialogueIds != null)
+                foreach (string id in data.readDialogueIds) RecordDialogue(id);
             LevelDefinition target = FindLevel(data.currentLevelId);
-            // A save between reporting the location and loading the epilogue must resume at the handover.
+            // Preserve v1.3 handover when resuming between the final dialogue and scene transition.
             if (target != null && target.levelId == "L04" && StoryFlags.HasFlag(StoryFlagIds.BoxLocated))
             {
                 target = FindLevel("Epilogue");
+                data.currentLevelId = "Epilogue";
                 data.checkpointId = null;
+                data.checkpointRoomId = null;
+                data.hasCheckpointPosition = false;
+                data.roomBoundaries.Clear();
+                data.mechanismStates.Clear();
+                data.currentObjective = null;
             }
+
             if (target == null)
             {
                 Debug.LogError($"[GameSession] 存档引用了未知关卡 {data.currentLevelId}，改为新开局。");
@@ -191,7 +214,7 @@ namespace BorrowTomorrow.Core
             {
                 Debug.LogWarning("[GameSession] 主存档损坏，已从备份恢复。");
             }
-            CurrentObjective = data.currentObjective;
+            CurrentObjective = string.IsNullOrEmpty(data.currentObjective) ? target.initialObjective : data.currentObjective;
             LoadLevel(target, restoreCheckpoint: true);
         }
 
@@ -233,6 +256,12 @@ namespace BorrowTomorrow.Core
             }
 
             CurrentLevel = definition;
+            // Old-scene triggers may still run during fade-out; clear only after unloading it.
+            if (!restoreCheckpoint && ServiceRegistry.TryGet<ICheckpointService>(out var previousCheckpoints))
+            {
+                previousCheckpoints.RestoreFrom(null);
+            }
+
 
             // 等待房间根注册（LevelRoot 在 Awake/Start 中注册自身）。
             float timeout = 5f;
@@ -259,6 +288,8 @@ namespace BorrowTomorrow.Core
             {
                 root.PlacePlayer(definition.spawnId);
                 SetObjective(definition.initialObjective);
+                if (ServiceRegistry.TryGet<ICheckpointService>(out var entryCheckpoint))
+                    entryCheckpoint.Capture(definition.spawnId);
             }
 
             if (ServiceRegistry.TryGet<IHudService>(out var fadeInHud))
@@ -272,10 +303,9 @@ namespace BorrowTomorrow.Core
         /// <summary>同场景房间转场（如 L01 水渠房 → 树房）。策划 7.7：出口经 E 确认转场。</summary>
         public void TransitionToRoom(ILevelRoot targetRoom, string spawnId)
         {
-            StartCoroutine(TransitionRoutine(targetRoom, spawnId));
+            if (State.IsPlayerControlAllowed)
+                StartCoroutine(TransitionRoutine(targetRoom, spawnId));
         }
-
-        public void AdoptRestoredRoom(ILevelRoot room) => ActiveRoom = room;
 
         private IEnumerator TransitionRoutine(ILevelRoot targetRoom, string spawnId)
         {
@@ -290,10 +320,14 @@ namespace BorrowTomorrow.Core
             }
             yield return new WaitForSeconds(0.25f);
 
+            if (ActiveRoom != null && ServiceRegistry.TryGet<ICheckpointService>(out var history))
+                history.RememberRoomBoundary(ActiveRoom.RoomId, ActiveRoom.CurrentBoundary);
             ActiveRoom?.DeactivateRoom();
             ActiveRoom = targetRoom;
             targetRoom.ActivateRoom();
             targetRoom.PlacePlayer(spawnId);
+            if (ServiceRegistry.TryGet<ICheckpointService>(out var roomCheckpoint))
+                roomCheckpoint.Capture(spawnId);
 
             yield return new WaitForSeconds(0.1f); // 等物理与相机稳定
             if (hud != null)
@@ -301,6 +335,24 @@ namespace BorrowTomorrow.Core
                 hud.FadeIn(0.25f);
             }
             State.SetSubState(PlayingSubState.Free);
+        }
+
+        /// <summary>恢复空间快照前同步房间服务、相机和会话身份。</summary>
+        public ILevelRoot ActivateRoomForRestore(string roomId)
+        {
+            foreach (MonoBehaviour component in FindObjectsOfType<MonoBehaviour>(true))
+            {
+                if (!(component is ILevelRoot room) || room.RoomId != roomId
+                    || component.gameObject.scene != SceneManager.GetActiveScene()) continue;
+                if (!ReferenceEquals(ActiveRoom, room))
+                {
+                    ActiveRoom?.DeactivateRoom();
+                    ActiveRoom = room;
+                    room.ActivateRoom();
+                }
+                return room;
+            }
+            return string.IsNullOrEmpty(roomId) ? ActiveRoom : null;
         }
 
         /// <summary>关卡完成：保存进度并推进到下一关（末关进入尾声）。</summary>
@@ -329,6 +381,9 @@ namespace BorrowTomorrow.Core
             {
                 yield break; // 期间被暂停菜单等其他流程打断则不覆盖
             }
+            CurrentLevel = null;
+            ActiveRoom = null;
+            CurrentObjective = null;
             State.SetPhase(GamePhase.MainMenu);
             SceneManager.LoadScene(mainMenuSceneName);
         }
@@ -392,7 +447,7 @@ namespace BorrowTomorrow.Core
         /// </summary>
         public void ConfirmCheckpointRestore()
         {
-            if (State.Phase != GamePhase.Playing || State.SubState == PlayingSubState.Respawning)
+            if (!State.IsPlayerControlAllowed)
             {
                 return;
             }
@@ -402,7 +457,12 @@ namespace BorrowTomorrow.Core
         /// <summary>回主菜单（暂停菜单调用）。保存后再离开。</summary>
         public void ReturnToMainMenu()
         {
+            StopAllCoroutines();
+            loadRoutineRunning = false;
             SaveProgressNow();
+            CurrentLevel = null;
+            ActiveRoom = null;
+            CurrentObjective = null;
             State.SetPhase(GamePhase.MainMenu);
             SceneManager.LoadScene(mainMenuSceneName);
         }
@@ -424,7 +484,7 @@ namespace BorrowTomorrow.Core
                 checkpoints.WriteTo(data);
             }
             data.triggeredStoryIds.AddRange(StoryFlags.AllFlags);
-            data.readDialogueIds.AddRange(ReadDialogueIds);
+            data.readDialogueIds.AddRange(readDialogueIds);
             if (ServiceRegistry.TryGet<ISaveService>(out var saveService))
             {
                 saveService.SaveProgress(data);

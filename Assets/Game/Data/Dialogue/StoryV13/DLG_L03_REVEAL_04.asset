@@ -16,6 +16,8 @@ MonoBehaviour:
   speakerLabel: "\u6211\uFF08\u5916\u5A46\uFF09"
   subtitle: "\u603B\u60F3\u7740\u7B49\u4F60\u5B89\u987F\u597D\u4E86\uFF0C\u518D\u628A\u76D2\u5B50\u7ED9\u4F60\u3002\u4E00\u62D6\uFF0C\u5C31\u4E00\u76F4\u6536\u5728\u8001\u623F\u5B50\u91CC\u4E86\u3002"
   voiceClip: {fileID: 8300000, guid: 8c1e7868a55959140b8c1379e83aa3c9, type: 3}
+  illustration: {fileID: 2800000, guid: c847bad3c0eff1c4db883ce68bc27e75, type: 3}
+  blackBackground: 0
   nextId: DLG_L03_REVEAL_05
   requiredFlags: []
   setFlags: []
@@ -25,8 +27,6 @@ MonoBehaviour:
   eventId: EVT_L03_PHOTO_REVEAL
   completionFlags: []
   objectiveAfter: 
-  illustration: {fileID: 2800000, guid: c847bad3c0eff1c4db883ce68bc27e75, type: 3}
-  blackBackground: 0
   centeredTitle: 0
   delayBefore: 0
   sfxId: 

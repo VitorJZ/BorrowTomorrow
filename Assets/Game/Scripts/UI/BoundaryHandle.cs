@@ -25,9 +25,34 @@ namespace BorrowTomorrow.UI
         private bool subscribed;
         private RectTransform guide;
         private float mouseOffset;
+        private bool dragging;
+        private CanvasGroup presentation;
+        private bool visible;
+
+        public void SetPresentationVisible(bool value)
+        {
+            visible = value;
+            if (presentation == null) presentation = gameObject.AddComponent<CanvasGroup>();
+            presentation.alpha = value ? 1f : 0f;
+            presentation.blocksRaycasts = value;
+            presentation.interactable = value;
+            if (guide != null) guide.gameObject.SetActive(value);
+            if (!value && dragging) OnEndDrag(null);
+        }
+
+        public void ResetBinding()
+        {
+            OnEndDrag(null);
+            if (boundary != null && subscribed) boundary.OnBoundaryCommitted -= SyncHandleToBoundary;
+            boundary = null;
+            subscribed = false;
+            worldCamera = null;
+            SetPresentationVisible(false);
+        }
 
         private void Update()
         {
+            if (GameSession.Instance == null || GameSession.Instance.State.Phase != GamePhase.Playing) return;
             // 重新解析活动房间：双房间场景（L01）切换后注册表会换成新房间的控制器。
             if (ServiceRegistry.TryGet<IBoundaryContext>(out var found) && !ReferenceEquals(found, boundary))
             {
@@ -62,6 +87,7 @@ namespace BorrowTomorrow.UI
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (!visible || GameSession.Instance == null || !GameSession.Instance.State.IsBoundaryAdjustAllowed) return;
             if (boundary == null && !ServiceRegistry.TryGet<IBoundaryContext>(out boundary))
             {
                 return;
@@ -74,6 +100,7 @@ namespace BorrowTomorrow.UI
                 if (worldCamera != null)
                     mouseOffset = boundary.CommittedBoundary - worldCamera.ScreenToWorldPoint(eventData.position).x;
             }
+            dragging = true;
             // 冻结镜头跟随（策划 5.3：拖动时镜头保持不动）。
             if (ServiceRegistry.TryGet<ICameraRig>(out var cameraRig))
             {
@@ -83,7 +110,7 @@ namespace BorrowTomorrow.UI
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (boundary == null || worldCamera == null)
+            if (!dragging || boundary == null || worldCamera == null)
             {
                 return;
             }
@@ -98,6 +125,8 @@ namespace BorrowTomorrow.UI
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (!dragging) return;
+            dragging = false;
             if (boundary is BoundaryController controller)
             {
                 controller.EndMouseDrag();
@@ -146,6 +175,7 @@ namespace BorrowTomorrow.UI
                         image.color = new Color(0.85f, 0.58f, 0.2f, 0.5f);
                         image.raycastTarget = false;
                     }
+                    guide.gameObject.SetActive(visible);
                     guide.sizeDelta = new Vector2(2f, parent.rect.height * 0.84f);
                     guide.anchoredPosition = new Vector2(local.x, 0f);
                 }

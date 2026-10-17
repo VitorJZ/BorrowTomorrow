@@ -23,15 +23,82 @@ namespace BorrowTomorrow.UI
         [SerializeField] private FadeScreen fadeScreen;
         [SerializeField] private UnityEngine.UI.Text blockedToastText;
 
+        private CanvasGroup gameplayGroup;
+        private GameSession session;
+
         public int InitializeOrder => -60;
+
+        private void Awake()
+        {
+            // Keep panel behaviours running; hide their presentation without disabling timers.
+            var root = new GameObject("GameplayHud", typeof(RectTransform), typeof(CanvasGroup));
+            var rect = (RectTransform)root.transform;
+            rect.SetParent(transform, false);
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            rect.SetAsFirstSibling();
+            gameplayGroup = root.GetComponent<CanvasGroup>();
+            foreach (Transform child in new System.Collections.Generic.List<Transform>(GetChildren()))
+            {
+                if (child.GetComponent<SubtitlePanel>() != null || child.GetComponent<ObjectivePanel>() != null
+                    || child.GetComponent<InteractionPrompt>() != null || child.GetComponent<BoundaryHandle>() != null
+                    || child.GetComponent<HintToast>() != null || child.GetComponent<EraBadge>() != null
+                    || child.name == "EraLabelPast" || child.name == "EraLabelPresent" || child.name == "BlockedToast")
+                    child.SetParent(rect, false);
+            }
+            SetGameplayVisible(false);
+        }
+
+        private System.Collections.Generic.IEnumerable<Transform> GetChildren()
+        {
+            foreach (Transform child in transform) yield return child;
+        }
+
+        private void SetGameplayVisible(bool visible)
+        {
+            gameplayGroup.alpha = visible ? 1f : 0f;
+            gameplayGroup.interactable = visible;
+            gameplayGroup.blocksRaycasts = visible;
+        }
+
+        private void LateUpdate()
+        {
+            bool playing = session != null && session.State.Phase == GamePhase.Playing;
+            SetGameplayVisible(playing && !session.State.IsPaused);
+            if (boundaryHandle != null)
+                boundaryHandle.SetPresentationVisible(playing && !session.State.IsPaused
+                    && (session.State.SubState == PlayingSubState.Free
+                        || session.State.SubState == PlayingSubState.AdjustingBoundary));
+        }
+
+        private void HandlePhaseChanged(GamePhase previous, GamePhase next)
+        {
+            if (next == GamePhase.Playing) return;
+            SetGameplayVisible(false);
+            HideSubtitle();
+            HideObjective();
+            HideHint();
+            SetInteractionPrompt(false);
+            CancelInvoke(nameof(HideBlockedToast));
+            HideBlockedToast();
+            if (eraBadge != null) eraBadge.Hide();
+            if (boundaryHandle != null) boundaryHandle.ResetBinding();
+            if (next == GamePhase.MainMenu && fadeScreen != null) fadeScreen.FadeIn(0f);
+        }
 
         public void OnBootInitialize()
         {
             ServiceRegistry.Register<IHudService>(this);
+            session = GameSession.Instance;
+            if (session != null) session.State.PhaseChanged += HandlePhaseChanged;
+            HideSubtitle();
+            HideBlockedToast();
         }
 
         private void OnDestroy()
         {
+            if (session != null) session.State.PhaseChanged -= HandlePhaseChanged;
             ServiceRegistry.Unregister<IHudService>(this);
         }
 
@@ -63,8 +130,15 @@ namespace BorrowTomorrow.UI
         {
             if (subtitlePanel != null)
             {
+                if (ServiceRegistry.TryGet<ISaveService>(out var save))
+                    subtitlePanel.SetSubtitlesEnabled(save.LoadSettings().subtitlesEnabled);
                 subtitlePanel.Show(speakerLabel, text);
             }
+        }
+
+        public void SetSubtitlesEnabled(bool enabled)
+        {
+            if (subtitlePanel != null) subtitlePanel.SetSubtitlesEnabled(enabled);
         }
 
         public void HideSubtitle()

@@ -16,6 +16,8 @@ MonoBehaviour:
   speakerLabel: "\u6797\u6653\uFF08\u73B0\u5B9E\uFF09"
   subtitle: "\u6211\u8BB0\u4F4F\u4E86\u3002\u5916\u5A46\uFF0C\u6211\u53BB\u62FF\u3002"
   voiceClip: {fileID: 8300000, guid: 07033af62c6b4fc4c81bae550a23a173, type: 3}
+  illustration: {fileID: 2800000, guid: c847bad3c0eff1c4db883ce68bc27e75, type: 3}
+  blackBackground: 0
   nextId: 
   requiredFlags: []
   setFlags:
@@ -26,8 +28,6 @@ MonoBehaviour:
   eventId: EVT_L04_OPEN_NICHE
   completionFlags: []
   objectiveAfter: 
-  illustration: {fileID: 2800000, guid: c847bad3c0eff1c4db883ce68bc27e75, type: 3}
-  blackBackground: 0
   centeredTitle: 0
   delayBefore: 0
   sfxId: 

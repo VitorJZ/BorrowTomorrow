@@ -61,7 +61,7 @@ namespace BorrowTomorrow.TimeBoundary
                 bool checkSupport = policy == SafetyPolicy.BlockIfSupportRemoved || policy == SafetyPolicy.FullCheck;
                 if (checkSupport && player.IsGrounded && player.GroundCollider != null
                     && obj.IsSupporting(player.GroundCollider)
-                    && !obj.HasColliderIn(targetEra))
+                    && !obj.SupportsBodyIn(targetEra, player.BodyBounds))
                 {
                     return SafetyBlockReason.SupportRemoved;
                 }

@@ -16,6 +16,7 @@ namespace BorrowTomorrow.Narrative
         private AudioSource tapeSource;
         private DialogueEntry current;
         private DialogueEntry first;
+        private DialoguePriority currentPriority;
         private Action onCompleted;
         private readonly HashSet<string> pendingFlags = new HashSet<string>();
         private readonly HashSet<string> visited = new HashSet<string>();
@@ -64,14 +65,23 @@ namespace BorrowTomorrow.Narrative
         }
         public static bool Completed(DialogueEntry entry)
         {
-            if (entry == null || entry.completionFlags == null || entry.completionFlags.Length == 0) return false;
+            if (entry == null) return false;
+            if (entry.completionFlags == null || entry.completionFlags.Length == 0)
+                return GameSession.Instance != null && ServiceRegistry.TryGet<DialogueLibrary>(out var library)
+                    && library.IsChainComplete(entry, GameSession.Instance.StoryFlags);
             foreach (string flag in entry.completionFlags)
                 if (GameSession.Instance == null || !GameSession.Instance.StoryFlags.HasFlag(flag)) return false;
             return true;
         }
         public void Play(DialogueEntry entry, DialoguePriority priority, Action callback = null)
         {
-            if (entry == null || IsPlaying || !RequirementsMet(entry.requiredFlags)) return;
+            if (entry == null || !RequirementsMet(entry.requiredFlags)) return;
+            if (IsPlaying)
+            {
+                if (priority <= currentPriority) return;
+                End(false);
+            }
+            currentPriority = priority;
             Begin(entry, priority >= DialoguePriority.Story, false, callback);
         }
         public void PlayReadOnly(DialogueEntry entry)
@@ -112,7 +122,7 @@ namespace BorrowTomorrow.Narrative
         private void PresentLine()
         {
             presented = true;
-            GameSession.Instance?.ReadDialogueIds.Add(current.entryId);
+            GameSession.Instance?.RecordDialogue(current.entryId);
             if (current.source == "Tape" && tapeHiss != null)
             {
                 tapeSource.clip = tapeHiss;
@@ -151,7 +161,12 @@ namespace BorrowTomorrow.Narrative
                 if (!voicePaused) { voiceSource.Pause(); tapeSource.Pause(); voicePaused = true; }
                 return;
             }
-            if (voicePaused) { voiceSource.UnPause(); tapeSource.UnPause(); voicePaused = false; }
+            if (voicePaused)
+            {
+                if (ServiceRegistry.TryGet<ISaveService>(out var save)) voiceSource.volume = voiceVolume * save.LoadSettings().volumeVoice;
+                tapeSource.volume = voiceSource.volume * 0.045f;
+                voiceSource.UnPause(); tapeSource.UnPause(); voicePaused = false;
+            }
             timer += Time.deltaTime;
             if (endingTimer >= 0f)
             {
@@ -206,10 +221,13 @@ namespace BorrowTomorrow.Narrative
             {
                 var walked = new HashSet<string>();
                 DialogueEntry line = current;
-                while (line != null && walked.Add(line.entryId))
+                while (line != null)
                 {
+                    if (!walked.Add(line.entryId)) { End(false); return; }
                     if (line.setFlags != null) foreach (string flag in line.setFlags) pendingFlags.Add(flag);
-                    line = string.IsNullOrEmpty(line.nextId) ? null : FindNext(line.nextId);
+                    if (string.IsNullOrEmpty(line.nextId)) break;
+                    line = FindNext(line.nextId);
+                    if (line == null) { End(false); return; }
                 }
             }
             End(true);

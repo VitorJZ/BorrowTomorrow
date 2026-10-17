@@ -16,6 +16,8 @@ MonoBehaviour:
   speakerLabel: "\u6211\uFF08\u5916\u5A46\uFF09"
   subtitle: "\u957F\u5F97\u8FD9\u4E48\u9AD8\u4E86\u3002"
   voiceClip: {fileID: 8300000, guid: c13e94c8ce085f44c9e04c7ec5402845, type: 3}
+  illustration: {fileID: 0}
+  blackBackground: 0
   nextId: 
   requiredFlags:
   - IdentityKnown
@@ -30,8 +32,6 @@ MonoBehaviour:
   completionFlags:
   - TreeGrownL04
   objectiveAfter: 
-  illustration: {fileID: 0}
-  blackBackground: 0
   centeredTitle: 0
   delayBefore: 0
   sfxId: 

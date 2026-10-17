@@ -33,6 +33,7 @@ namespace BorrowTomorrow.Audio
 
         private float pastMixTarget = 1f;
         private bool ducking;
+        private bool epilogueMusic;
         private SaveSettings settings = new SaveSettings();
 
         public int InitializeOrder => -40;
@@ -45,7 +46,6 @@ namespace BorrowTomorrow.Audio
 
         public void OnBootInitialize()
         {
-            // Bootstrap initializes services from its Awake, before this component's own Awake.
             EnsureSources();
             ServiceRegistry.Register<IAudioService>(this);
             ApplyVolumeSettings(ServiceRegistry.TryGet<ISaveService>(out var save)
@@ -74,19 +74,10 @@ namespace BorrowTomorrow.Audio
         private void EnsureSources()
         {
             if (musicPastSource != null) return;
-            AudioSource[] existing = GetComponents<AudioSource>();
-            if (existing.Length >= 3)
-            {
-                musicPastSource = existing[0];
-                musicPresentSource = existing[1];
-                sfxSource = existing[2];
-            }
-            else
-            {
-                musicPastSource = gameObject.AddComponent<AudioSource>();
-                musicPresentSource = gameObject.AddComponent<AudioSource>();
-                sfxSource = gameObject.AddComponent<AudioSource>();
-            }
+            // Each bus owns its sources; dialogue/tape sources may already exist on SystemRoot.
+            musicPastSource = gameObject.AddComponent<AudioSource>();
+            musicPresentSource = gameObject.AddComponent<AudioSource>();
+            sfxSource = gameObject.AddComponent<AudioSource>();
             musicPastSource.playOnAwake = false;
             musicPresentSource.playOnAwake = false;
             sfxSource.playOnAwake = false;
@@ -100,17 +91,23 @@ namespace BorrowTomorrow.Audio
 
         private void Update()
         {
-            bool wantsEpilogue = GameSession.Instance != null && GameSession.Instance.CurrentLevel != null
+            bool shouldUseEpilogue = GameSession.Instance != null
+                && GameSession.Instance.CurrentLevel != null
                 && GameSession.Instance.CurrentLevel.levelId == "Epilogue"
-                && GameSession.Instance.State.Phase != GamePhase.MainMenu;
-            if (wantsEpilogue && musicEpilogue != null && musicPastSource.clip != musicEpilogue)
-                SwitchToEpilogueMusic();
-            else if (!wantsEpilogue && musicPastSource.clip == musicEpilogue && musicPast != null)
+                && (GameSession.Instance.State.Phase == GamePhase.Playing || GameSession.Instance.State.Phase == GamePhase.Credits);
+            if (shouldUseEpilogue != epilogueMusic)
             {
-                musicPastSource.clip = musicPast;
-                musicPastSource.Play();
-                if (musicPresent != null) { musicPresentSource.clip = musicPresent; musicPresentSource.Play(); }
+                epilogueMusic = shouldUseEpilogue;
+                if (shouldUseEpilogue) SwitchToEpilogueMusic();
+                else
+                {
+                    musicPastSource.clip = musicPast;
+                    musicPresentSource.clip = musicPresent;
+                    if (musicPast != null) musicPastSource.Play();
+                    if (musicPresent != null) musicPresentSource.Play();
+                }
             }
+            if (epilogueMusic) pastMixTarget = 1f;
             // 平滑过渡双年代配器（策划 09）。
             float duckScale = ducking ? duckedVolumeScale : 1f;
             float pastTarget = pastMixTarget * settings.volumeMusic * duckScale;
@@ -128,8 +125,6 @@ namespace BorrowTomorrow.Audio
         /// <summary>按画面过去面积比例（0~1）混合双年代配器。</summary>
         public void SetEraMix(float pastAreaRatio)
         {
-            if (GameSession.Instance != null && GameSession.Instance.CurrentLevel != null
-                && GameSession.Instance.CurrentLevel.levelId == "Epilogue") return;
             pastMixTarget = Mathf.Clamp01(pastAreaRatio);
         }
 
@@ -144,7 +139,7 @@ namespace BorrowTomorrow.Audio
                 // B 组尚未登记该 id 时静默跳过（灰盒期音效库为空，避免每次切换刷警告）。
                 return;
             }
-            float finalVolume = volume * settings.volumeMaster;
+            float finalVolume = volume; // AudioListener applies master volume once.
             if (atWorldPosition.HasValue && Camera.main != null)
             {
                 // 简单距离衰减（2D 横版无需 3D 空间化）。

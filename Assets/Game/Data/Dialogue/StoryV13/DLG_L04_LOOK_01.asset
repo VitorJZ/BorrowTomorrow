@@ -16,6 +16,8 @@ MonoBehaviour:
   speakerLabel: "\u6211\uFF08\u5916\u5A46\uFF09"
   subtitle: "\u662F\u8FD9\u6247\u7A97\u2026\u2026\u54EA\u5757\u6728\u677F\u6765\u7740\uFF1F\u9760\u8FD1\u4E9B\u770B\u770B\u3002"
   voiceClip: {fileID: 8300000, guid: ceab4058dacad3f4084a3358570a62de, type: 3}
+  illustration: {fileID: 0}
+  blackBackground: 0
   nextId: 
   requiredFlags:
   - IdentityKnown
@@ -29,8 +31,6 @@ MonoBehaviour:
   completionFlags:
   - CompartmentSeen
   objectiveAfter: "\u9760\u8FD1\u7A97\u8FB9\uFF0C\u786E\u8BA4\u94C1\u76D2\u85CF\u5904\u3002"
-  illustration: {fileID: 0}
-  blackBackground: 0
   centeredTitle: 0
   delayBefore: 0
   sfxId: 

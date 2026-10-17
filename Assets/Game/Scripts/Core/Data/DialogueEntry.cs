@@ -25,6 +25,11 @@ namespace BorrowTomorrow.Core.Data
         [Tooltip("配音文件；无配音降级版仅靠字幕讲清剧情（策划 09）")]
         public AudioClip voiceClip;
 
+        [Tooltip("本条演出插画；不参与玩法碰撞") ]
+        public Texture2D illustration;
+
+        public bool blackBackground;
+
         [Header("流转")]
         [Tooltip("下一条对白 id；为空表示本条结束")]
         public string nextId;
@@ -47,8 +52,6 @@ namespace BorrowTomorrow.Core.Data
         public string eventId;
         public string[] completionFlags;
         public string objectiveAfter;
-        public Texture2D illustration;
-        public bool blackBackground;
         public bool centeredTitle;
         public float delayBefore;
         public string sfxId;

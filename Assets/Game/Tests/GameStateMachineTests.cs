@@ -47,6 +47,23 @@ namespace BorrowTomorrow.Tests
                 "恢复后应回到进入暂停前的子状态（策划 10.6）");
         }
 
+        [TestCase(PlayingSubState.Paused)]
+        [TestCase(PlayingSubState.Cutscene)]
+        [TestCase(PlayingSubState.AdjustingBoundary)]
+        public void ReturnToMenu_ThenStartGame_ClearsPreviousSubState(PlayingSubState previous)
+        {
+            var machine = new GameStateMachine();
+            machine.SetPhase(GamePhase.MainMenu);
+            machine.SetPhase(GamePhase.Loading);
+            machine.SetPhase(GamePhase.Playing);
+            machine.SetSubState(previous);
+            machine.SetPhase(GamePhase.MainMenu);
+            Assert.AreEqual(PlayingSubState.Free, machine.SubState);
+            machine.SetPhase(GamePhase.Loading);
+            machine.SetPhase(GamePhase.Playing);
+            Assert.IsTrue(machine.IsPlayerControlAllowed);
+        }
+
         [Test]
         public void ControlLocked_WhileAdjustingOrPaused()
         {

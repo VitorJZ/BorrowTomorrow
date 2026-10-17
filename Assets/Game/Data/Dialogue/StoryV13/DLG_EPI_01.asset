@@ -16,6 +16,8 @@ MonoBehaviour:
   speakerLabel: "\u5B57\u5E55"
   subtitle: "\u4E24\u5929\u540E"
   voiceClip: {fileID: 0}
+  illustration: {fileID: 0}
+  blackBackground: 0
   nextId: DLG_EPI_02
   requiredFlags:
   - BoxLocated
@@ -28,8 +30,6 @@ MonoBehaviour:
   completionFlags:
   - EpilogueSeen
   objectiveAfter: HIDE
-  illustration: {fileID: 0}
-  blackBackground: 0
   centeredTitle: 1
   delayBefore: 0
   sfxId: 

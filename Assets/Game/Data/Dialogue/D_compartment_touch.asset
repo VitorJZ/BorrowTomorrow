@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entryId: compartment_touch
   speakerLabel: "\u4E3B\u89D2"
-  subtitle: "\u4E1C\u8FB9\u9601\u697C\u2026\u2026\u7A97\u6237\u5DE6\u4E0A\u8FB9\u3002\u6728\u677F\u540E\u5934\u3002\u84DD\u7684\u3002"
+  subtitle: "\u4E1C\u8FB9\u9601\u697C\u2026\u2026\u7A97\u6237\u5DE6\u4E0A\u8FB9\u3002"
   voiceClip: {fileID: 0}
-  nextId: 
+  illustration: {fileID: 2800000, guid: d4f8768e56aa10a4eaf0e7ecd9c39f7c, type: 3}
+  blackBackground: 0
+  nextId: compartment_blue
   requiredFlags: []
-  setFlags:
-  - BoxLocated
+  setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 1.2

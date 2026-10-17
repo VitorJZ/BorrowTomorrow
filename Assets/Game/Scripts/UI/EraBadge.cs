@@ -26,6 +26,13 @@ namespace BorrowTomorrow.UI
             root.SetActive(false);
         }
 
+        public void Hide()
+        {
+            if (running != null) StopCoroutine(running);
+            running = null;
+            if (root != null) root.SetActive(false);
+        }
+
         public void Flash(Era dominantEra)
         {
             if (running != null)

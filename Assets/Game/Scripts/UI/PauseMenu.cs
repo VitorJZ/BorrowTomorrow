@@ -100,23 +100,23 @@ namespace BorrowTomorrow.UI
             SaveSettings settings = save.LoadSettings();
             if (masterVolume != null)
             {
-                masterVolume.value = settings.volumeMaster;
+                masterVolume.SetValueWithoutNotify(settings.volumeMaster);
             }
             if (musicVolume != null)
             {
-                musicVolume.value = settings.volumeMusic;
+                musicVolume.SetValueWithoutNotify(settings.volumeMusic);
             }
             if (voiceVolume != null)
             {
-                voiceVolume.value = settings.volumeVoice;
+                voiceVolume.SetValueWithoutNotify(settings.volumeVoice);
             }
             if (subtitlesToggle != null)
             {
-                subtitlesToggle.isOn = settings.subtitlesEnabled;
+                subtitlesToggle.SetIsOnWithoutNotify(settings.subtitlesEnabled);
             }
             if (screenShakeToggle != null)
             {
-                screenShakeToggle.isOn = settings.screenShakeEnabled;
+                screenShakeToggle.SetIsOnWithoutNotify(settings.screenShakeEnabled);
             }
         }
 
@@ -149,6 +149,8 @@ namespace BorrowTomorrow.UI
                 settings.screenShakeEnabled = screenShakeToggle.isOn;
             }
             save.SaveSettings(settings);
+            if (ServiceRegistry.TryGet<IHudService>(out var hud) && hud is HudService concreteHud)
+                concreteHud.SetSubtitlesEnabled(settings.subtitlesEnabled);
             if (ServiceRegistry.TryGet<IAudioService>(out var audio))
             {
                 audio.ApplyVolumeSettings(settings);

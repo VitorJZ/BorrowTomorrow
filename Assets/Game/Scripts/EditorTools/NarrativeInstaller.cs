@@ -150,6 +150,8 @@ namespace BorrowTomorrow.EditorTools
         {
             if(scene.name=="Bootstrap")
             {
+                // One active presentation/trigger pipeline; retain legacy importer/assets for compatibility.
+                foreach(var legacy in All<StoryPresentation>(scene).ToArray())UnityEngine.Object.DestroyImmediate(legacy);
                 var library=All<DialogueLibrary>(scene).First();
                 Objects(library,"entries",map.Values.Distinct().Select(AssetDatabase.LoadAssetAtPath<DialogueEntry>).Cast<UnityEngine.Object>().ToArray());
                 var ui=All<HudService>(scene).First();

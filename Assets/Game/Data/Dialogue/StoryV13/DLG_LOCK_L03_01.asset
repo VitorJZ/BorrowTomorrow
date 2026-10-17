@@ -16,6 +16,8 @@ MonoBehaviour:
   speakerLabel: "\u6211"
   subtitle: "\u5148\u770B\u770B\u95E8\u8FB9\u5899\u4E0A\u7684\u8001\u7167\u7247\u5427\u3002"
   voiceClip: {fileID: 8300000, guid: c7ff8be5d8b25924080a9f65fb82d2b5, type: 3}
+  illustration: {fileID: 0}
+  blackBackground: 0
   nextId: 
   requiredFlags: []
   setFlags: []
@@ -25,8 +27,6 @@ MonoBehaviour:
   eventId: EVT_L03_EXIT_LOCKED
   completionFlags: []
   objectiveAfter: 
-  illustration: {fileID: 0}
-  blackBackground: 0
   centeredTitle: 0
   delayBefore: 0
   sfxId: 

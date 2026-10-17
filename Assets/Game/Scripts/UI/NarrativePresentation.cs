@@ -22,6 +22,8 @@ namespace BorrowTomorrow.UI
         private GameObject skip;
         private bool blocking;
         private bool credits;
+        private bool wasPaused;
+        private DialogueEntry displayed;
         private void Awake()
         {
             ServiceRegistry.Register<INarrativePresentation>(this);
@@ -56,6 +58,8 @@ namespace BorrowTomorrow.UI
             var session = GameSession.Instance;
             if (session == null) return;
             canvas.enabled = !session.State.IsPaused;
+            if (session.State.IsPaused) wasPaused = true;
+            else if (wasPaused) { wasPaused = false; ApplySubtitleSettings(); }
             if (session.State.Phase == GamePhase.Credits && !credits)
             {
                 credits = true;
@@ -68,6 +72,7 @@ namespace BorrowTomorrow.UI
         }
         public void Present(DialogueEntry entry, string text, bool locksControl, int page, int pages)
         {
+            displayed = entry;
             blocking = locksControl;
             panel.SetActive(true);
             bool image = entry.illustration != null;
@@ -93,8 +98,18 @@ namespace BorrowTomorrow.UI
             help.text = locksControl ? "E / 鼠标左键继续" + (pages > 1 ? "    " + page + " / " + pages : "") : string.Empty;
             next.SetActive(locksControl && entry.holdForConfirm && !isTitle);
             skip.SetActive(locksControl && !isTitle);
+            ApplySubtitleSettings();
         }
-        public void Close() { if (panel != null) panel.SetActive(false); }
+        private void ApplySubtitleSettings()
+        {
+            if (displayed == null || displayed.centeredTitle) return;
+            bool readableObject = displayed.source == "Note";
+            bool enabled = !ServiceRegistry.TryGet<ISaveService>(out var save) || save.LoadSettings().subtitlesEnabled;
+            // Object text remains readable even when spoken subtitles are disabled.
+            body.gameObject.SetActive(enabled || readableObject);
+            speaker.gameObject.SetActive(enabled || readableObject);
+        }
+        public void Close() { displayed = null; if (panel != null) panel.SetActive(false); }
         private T Node<T>(string name, Transform parent, Vector2 position, Vector2 size, bool stretch=false) where T : Component
         {
             var go = new GameObject(name, typeof(RectTransform)); go.transform.SetParent(parent,false);

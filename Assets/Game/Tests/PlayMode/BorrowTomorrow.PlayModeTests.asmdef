@@ -1,0 +1,17 @@
+{
+    "name": "BorrowTomorrow.PlayModeTests",
+    "references": [
+        "BorrowTomorrow.Core",
+        "BorrowTomorrow.Save",
+        "BorrowTomorrow.Level",
+        "BorrowTomorrow.Narrative",
+        "BorrowTomorrow.UI"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "autoReferenced": false
+}

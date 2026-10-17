@@ -33,9 +33,10 @@ namespace BorrowTomorrow.UI
             {
                 return;
             }
-            if (session.State.IsPaused)
+            if (!session.State.IsPlayerControlAllowed)
             {
-                return; // 暂停中不处理恢复
+                root.SetActive(false);
+                return; // 暂停和演出中清除确认，不留下跨状态的第二次确认
             }
 
             if (input.RespawnPressedThisFrame)
@@ -54,7 +55,7 @@ namespace BorrowTomorrow.UI
             else if (root.activeSelf)
             {
                 // Esc 或交互取消确认。
-                if (input.PausePressedThisFrame || input.InteractPressedThisFrame)
+                if (input.PausePressedThisFrame || input.ConsumeInteract())
                 {
                     root.SetActive(false);
                 }

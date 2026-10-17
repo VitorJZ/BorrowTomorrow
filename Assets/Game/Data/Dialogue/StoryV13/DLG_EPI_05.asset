@@ -16,6 +16,8 @@ MonoBehaviour:
   speakerLabel: "\u6211\uFF08\u5916\u5A46\uFF09"
   subtitle: "\u4F60\u662F\u8C01\u5BB6\u7684\u5B69\u5B50\uFF1F"
   voiceClip: {fileID: 8300000, guid: 125c756bf36792c4fa31bca9abaaf5a2, type: 3}
+  illustration: {fileID: 2800000, guid: 37a3af56d9c1e564fad688dfc062946d, type: 3}
+  blackBackground: 0
   nextId: DLG_EPI_06
   requiredFlags: []
   setFlags: []
@@ -25,8 +27,6 @@ MonoBehaviour:
   eventId: EVT_EPILOGUE_MAIN
   completionFlags: []
   objectiveAfter: 
-  illustration: {fileID: 2800000, guid: 37a3af56d9c1e564fad688dfc062946d, type: 3}
-  blackBackground: 0
   centeredTitle: 0
   delayBefore: 0
   sfxId: 

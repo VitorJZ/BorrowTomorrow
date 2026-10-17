@@ -83,15 +83,16 @@ namespace BorrowTomorrow.Core
             {
                 return;
             }
-            if (Phase == GamePhase.Playing && next == GamePhase.Loading)
-            {
-                // 离开 Playing 前先复位子状态，防止恢复后残留旧子状态。
-                SetSubStateInternal(PlayingSubState.Free);
-            }
             if (!phaseTransitions[Phase].Contains(next))
             {
                 UnityEngine.Debug.LogWarning($"[GameStateMachine] 非法阶段转换：{Phase} → {next}，已忽略。");
                 return;
+            }
+            if (Phase == GamePhase.Playing)
+            {
+                // 所有离开玩法的路径都清理子状态，包括暂停菜单返回主菜单。
+                pausedReturnSubState = PlayingSubState.Free;
+                SetSubStateInternal(PlayingSubState.Free);
             }
             GamePhase previous = Phase;
             Phase = next;
