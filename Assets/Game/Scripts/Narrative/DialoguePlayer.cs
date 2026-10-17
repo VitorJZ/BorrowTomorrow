@@ -63,6 +63,11 @@ namespace BorrowTomorrow.Narrative
             {
                 return;
             }
+            if (session.State.Phase != GamePhase.Playing)
+            {
+                if (IsPlaying) EndChain(false);
+                return;
+            }
             // 暂停时停止对白推进（策划 5.5：恢复后不丢句）。
             if (session.State.IsPaused)
             {
@@ -76,29 +81,17 @@ namespace BorrowTomorrow.Narrative
 
             lineTimer += Time.deltaTime;
 
+            bool confirmed = ServiceRegistry.TryGet<IInputSource>(out var input) && input.ConsumeInteract();
+            if (confirmed && !voiceFinished && voiceSource.isPlaying)
+            {
+                voiceSource.Stop();
+                voiceFinished = true;
+                return;
+            }
             bool voiceDone = voiceFinished || !voiceSource.isPlaying;
-            bool lineShownEnough = voiceDone && lineTimer >= MinLineDuration;
-            if (!lineShownEnough)
+            if (voiceDone && lineTimer >= MinLineDuration
+                && (confirmed || (current != null && !current.holdForConfirm)))
             {
-                return;
-            }
-
-            // 自动推进：holdForConfirm=false 的条目到时自动进入下一条（策划 5.5 仅确认模式才等玩家）。
-            if (current != null && !current.holdForConfirm)
-            {
-                Advance();
-                return;
-            }
-
-            if (ServiceRegistry.TryGet<IInputSource>(out var input) && input.ConsumeInteract())
-            {
-                if (!voiceFinished && voiceSource.isPlaying)
-                {
-                    // 第一次按 E：跳过配音，字幕完整显示等待确认（策划 5.5 配音可跳过）。
-                    voiceSource.Stop();
-                    voiceFinished = true;
-                    return;
-                }
                 Advance();
             }
         }
@@ -109,7 +102,6 @@ namespace BorrowTomorrow.Narrative
         {
             if (entry == null)
             {
-                onCompleted?.Invoke();
                 return;
             }
             GameSession session = GameSession.Instance;
@@ -122,7 +114,6 @@ namespace BorrowTomorrow.Narrative
                     {
                         if (!flags.HasFlag(required))
                         {
-                            onCompleted?.Invoke();
                             return;
                         }
                     }
@@ -132,14 +123,12 @@ namespace BorrowTomorrow.Narrative
             if (IsPlaying)
             {
                 // 策划 12.1：正在播放的句子不被环境触发器截断；
-                // 只有更高优先级能打断，打断时立即写入标记避免进度丢失。
+                // 更高优先级可打断，但未读内容不能写完成标记。
                 if (priority <= currentPriority)
                 {
-                    onCompleted?.Invoke(); // 低优先级直接跳过，不排队堆积
                     return;
                 }
-                FinishCurrentLine();
-                EndChain(); // 被更高优先级打断
+                EndChain(false); // 被更高优先级打断，不冒充完成
             }
 
             current = entry;
@@ -163,6 +152,10 @@ namespace BorrowTomorrow.Narrative
 
         private void BeginLine(DialogueEntry entry)
         {
+            if (ServiceRegistry.TryGet<IStoryPresentation>(out var presentation))
+                presentation.ShowIllustration(entry.illustration, entry.blackBackground);
+            if (ServiceRegistry.TryGet<ISaveService>(out var save))
+                voiceSource.volume = save.LoadSettings().volumeVoice;
             waitingForConfirm = entry.holdForConfirm;
             voiceFinished = entry.voiceClip == null;
             lineTimer = 0f;
@@ -195,6 +188,8 @@ namespace BorrowTomorrow.Narrative
                     return;
                 }
                 Debug.LogWarning($"[DialoguePlayer] 对白链断开：找不到 {current.nextId}。");
+                EndChain(false);
+                return;
             }
             EndChain();
         }
@@ -206,7 +201,24 @@ namespace BorrowTomorrow.Narrative
             {
                 return;
             }
-            FinishCurrentLine();
+            var visited = new System.Collections.Generic.HashSet<string>();
+            while (current != null)
+            {
+                if (!visited.Add(current.entryId))
+                {
+                    Debug.LogWarning("[DialoguePlayer] 对白链存在循环，取消跳过。");
+                    EndChain(false);
+                    return;
+                }
+                FinishCurrentLine();
+                if (string.IsNullOrEmpty(current.nextId)) break;
+                current = FindNext(current.nextId);
+                if (current == null)
+                {
+                    EndChain(false);
+                    return;
+                }
+            }
             EndChain();
         }
 
@@ -216,6 +228,7 @@ namespace BorrowTomorrow.Narrative
             {
                 return;
             }
+            GameSession.Instance?.RecordDialogue(current.entryId);
             // 展示完成（或合法跳过）即写入本条标记。
             if (GameSession.Instance != null && current.setFlags != null)
             {
@@ -227,8 +240,10 @@ namespace BorrowTomorrow.Narrative
             }
         }
 
-        private void EndChain()
+        private void EndChain(bool completed = true)
         {
+            voiceSource.Stop();
+            if (ServiceRegistry.TryGet<IStoryPresentation>(out var presentation)) presentation.HideIllustration();
             chainActive = false;
             IsPlaying = false;
             waitingForConfirm = false;
@@ -249,7 +264,11 @@ namespace BorrowTomorrow.Narrative
             }
             System.Action callback = currentOnCompleted;
             currentOnCompleted = null;
-            callback?.Invoke();
+            if (completed)
+            {
+                callback?.Invoke();
+                session?.SaveProgressNow();
+            }
         }
 
         private DialogueEntry FindNext(string nextId)

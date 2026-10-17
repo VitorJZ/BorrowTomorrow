@@ -27,23 +27,17 @@ namespace BorrowTomorrow.Core
             }
             DontDestroyOnLoad(gameObject);
 
-            // 全场景一次性收集系统组件（仅启动时，不做每帧查找，策划 10.3）。
-            var found = new List<IBootInitializable>();
-            foreach (MonoBehaviour behaviour in FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None))
-            {
-                if (behaviour is IBootInitializable initializable)
-                {
-                    found.Add(initializable);
-                }
-            }
-            foreach (IBootInitializable item in found.OrderBy(i => i.InitializeOrder))
-            {
-                item.OnBootInitialize();
-            }
         }
 
         private void Start()
         {
+            // 所有组件 Awake 完成后再初始化服务。否则有声资源首次接入时，
+            // AudioSource/存档目录等仍未就绪，早期无声灰盒掩盖了这个时序问题。
+            var found = new List<IBootInitializable>();
+            foreach (MonoBehaviour behaviour in FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                if (behaviour is IBootInitializable initializable) found.Add(initializable);
+            foreach (IBootInitializable item in found.OrderBy(i => i.InitializeOrder)) item.OnBootInitialize();
+
             GameSession.Instance.State.SetPhase(GamePhase.MainMenu);
             SceneManager.LoadScene(mainMenuSceneName);
         }

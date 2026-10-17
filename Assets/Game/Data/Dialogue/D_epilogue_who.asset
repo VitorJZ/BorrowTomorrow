@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f993672bdb89944b81673ee9b42134, type: 3}
+  m_Name: D_epilogue_who
+  m_EditorClassIdentifier: 
+  entryId: epilogue_who
+  speakerLabel: "\u5916\u5A46"
+  subtitle: "\u4F60\u662F\u8C01\u5BB6\u7684\u5B69\u5B50\uFF1F"
+  voiceClip: {fileID: 8300000, guid: 125c756bf36792c4fa31bca9abaaf5a2, type: 3}
+  illustration: {fileID: 2800000, guid: c847bad3c0eff1c4db883ce68bc27e75, type: 3}
+  blackBackground: 0
+  nextId: epilogue_xiaoxiao
+  requiredFlags: []
+  setFlags: []
+  holdForConfirm: 1
+  minDurationSeconds: 1.2

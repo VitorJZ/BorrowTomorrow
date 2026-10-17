@@ -37,23 +37,10 @@ namespace BorrowTomorrow.Narrative
         {
             get
             {
-                if (replayable || entry == null || entry.setFlags == null || entry.setFlags.Length == 0)
-                {
-                    return false;
-                }
-                GameSession session = GameSession.Instance;
-                if (session == null)
-                {
-                    return false;
-                }
-                foreach (string flag in entry.setFlags)
-                {
-                    if (!session.StoryFlags.HasFlag(flag))
-                    {
-                        return false;
-                    }
-                }
-                return true; // 关键标记已写入，不再重复（策划 12.1）
+                var session = GameSession.Instance;
+                return !replayable && entry != null && session != null
+                    && ServiceRegistry.TryGet<DialogueLibrary>(out var library)
+                    && library.IsChainComplete(entry, session.StoryFlags);
             }
         }
 

@@ -24,6 +24,7 @@ namespace BorrowTomorrow.UI
         {
             EnsureRoot();
             alpha = 0f;
+            root.SetActive(false);
         }
 
         private void Update()
@@ -62,6 +63,7 @@ namespace BorrowTomorrow.UI
             autoHideTimer = autoHideSeconds;
             alpha = 1f;
             ApplyText();
+            root.SetActive(!string.IsNullOrEmpty(text));
         }
 
         public void ShowPersistent(string text)
@@ -71,10 +73,14 @@ namespace BorrowTomorrow.UI
             autoHideTimer = -1f;
             alpha = 1f;
             ApplyText();
+            root.SetActive(!string.IsNullOrEmpty(text));
         }
 
         public void Hide()
         {
+            EnsureRoot();
+            root.SetActive(false);
+            alpha = 0f;
             currentObjective = null;
             persistent = false;
             autoHideTimer = -1f;

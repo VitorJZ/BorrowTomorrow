@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f993672bdb89944b81673ee9b42134, type: 3}
+  m_Name: D_intro_far
+  m_EditorClassIdentifier: 
+  entryId: intro_far
+  speakerLabel: "\u7AE5\u5E74\u6797\u6653"
+  subtitle: "\u5916\u5A46\u8BF4\uFF0C\u7B49\u6211\u957F\u5927\u4E86\uFF0C\u5C31\u80FD\u53BB\u5F88\u8FDC\u7684\u5730\u65B9\u3002"
+  voiceClip: {fileID: 8300000, guid: d6a2f359673dcb34ab4f24503f35a874, type: 3}
+  illustration: {fileID: 0}
+  blackBackground: 1
+  nextId: intro_box
+  requiredFlags: []
+  setFlags: []
+  holdForConfirm: 1
+  minDurationSeconds: 1.2

@@ -62,7 +62,8 @@ namespace BorrowTomorrow.Save
         public SaveLoadResult TryLoadProgress(out SaveData data)
         {
             data = null;
-            if (File.Exists(ProgressPath))
+            bool primaryExists = File.Exists(ProgressPath);
+            if (primaryExists)
             {
                 SaveLoadResult result = TryParseFile(ProgressPath, out data);
                 if (result == SaveLoadResult.Loaded)
@@ -85,7 +86,7 @@ namespace BorrowTomorrow.Save
                 }
                 return SaveLoadResult.Corrupted; // 备份也不可用：不静默覆盖唯一记录
             }
-            return SaveLoadResult.MissingSave;
+            return primaryExists ? SaveLoadResult.Corrupted : SaveLoadResult.MissingSave;
         }
 
         /// <summary>临时文件写入成功后替换正式文件，并保留一个可用备份（策划 12.3）。</summary>
@@ -104,12 +105,13 @@ namespace BorrowTomorrow.Save
                 File.WriteAllText(TempPath, json);
 
                 // 校验临时文件可回读后再提交，防止写一半损坏正式记录。
-                if (!File.Exists(TempPath))
+                if (TryParseFile(TempPath, out _) != SaveLoadResult.Loaded)
                 {
                     return false;
                 }
 
-                if (File.Exists(ProgressPath))
+                // A damaged primary must never replace the only healthy backup during recovery.
+                if (File.Exists(ProgressPath) && TryParseFile(ProgressPath, out _) == SaveLoadResult.Loaded)
                 {
                     File.Copy(ProgressPath, BackupPath, overwrite: true);
                 }

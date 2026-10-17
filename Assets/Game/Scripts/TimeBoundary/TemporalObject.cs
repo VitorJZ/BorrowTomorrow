@@ -233,6 +233,27 @@ namespace BorrowTomorrow.TimeBoundary
             return found;
         }
 
+        /// <summary>目标年代须在原脚底高度实际承接玩家，远处或更低的实体不算支撑。</summary>
+        public bool SupportsBodyIn(Era era, Bounds body)
+        {
+            GameObject root = era == Era.Past ? pastRoot : presentRoot;
+            if (root == null) return false;
+            foreach (BoxCollider2D box in root.GetComponentsInChildren<BoxCollider2D>(true))
+            {
+                if (!box.enabled || box.isTrigger) continue;
+                // 当前灰盒仅使用轴对齐盒形平台；不将斜面包围盒冒充平面支撑。
+                if (Mathf.Abs(Mathf.DeltaAngle(box.transform.eulerAngles.z, 0f)) > 0.01f) continue;
+                Vector3 center = box.transform.TransformPoint(box.offset);
+                Vector3 scale = box.transform.lossyScale;
+                float halfWidth = Mathf.Abs(box.size.x * scale.x) * 0.5f;
+                float top = center.y + Mathf.Abs(box.size.y * scale.y) * 0.5f;
+                if (Mathf.Abs(top - body.min.y) <= 0.12f
+                    && center.x + halfWidth > body.min.x + 0.02f
+                    && center.x - halfWidth < body.max.x - 0.02f) return true;
+            }
+            return false;
+        }
+
         /// <summary>玩家当前脚下的碰撞体是否属于本物体（支撑撤除检测）。</summary>
         public bool IsSupporting(Collider2D groundCollider)
         {

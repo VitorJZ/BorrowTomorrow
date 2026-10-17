@@ -13,10 +13,29 @@ namespace BorrowTomorrow.UI
         [SerializeField] private UnityEngine.UI.Text speakerText;
         [SerializeField] private UnityEngine.UI.Text contentText;
 
+        private int baseFontSize;
+        private bool subtitlesEnabled = true;
+        private bool hasContent;
+
+        public void SetSubtitlesEnabled(bool enabled)
+        {
+            subtitlesEnabled = enabled;
+            EnsureRoot();
+            root.SetActive(subtitlesEnabled && hasContent);
+        }
+
+        private void Awake()
+        {
+            EnsureRoot();
+            if (contentText != null) baseFontSize = contentText.fontSize;
+            Hide();
+        }
+
         public void Show(string speakerLabel, string text)
         {
             EnsureRoot();
-            root.SetActive(true);
+            hasContent = !string.IsNullOrEmpty(text);
+            root.SetActive(subtitlesEnabled && hasContent);
             if (speakerText != null)
             {
                 speakerText.text = string.IsNullOrEmpty(speakerLabel) ? string.Empty : speakerLabel;
@@ -30,10 +49,9 @@ namespace BorrowTomorrow.UI
 
         public void Hide()
         {
-            if (root != null)
-            {
-                root.SetActive(false);
-            }
+            EnsureRoot();
+            hasContent = false;
+            root.SetActive(false);
         }
 
         /// <summary>字幕字号缩放（设置界面无障碍选项）。</summary>
@@ -41,7 +59,7 @@ namespace BorrowTomorrow.UI
         {
             if (contentText != null)
             {
-                contentText.fontSize = Mathf.Max(10, Mathf.RoundToInt(contentText.fontSize * scale));
+                contentText.fontSize = Mathf.Max(10, Mathf.RoundToInt(baseFontSize * scale));
             }
         }
 

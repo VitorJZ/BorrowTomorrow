@@ -6,7 +6,8 @@
         "BorrowTomorrow.TimeBoundary",
         "BorrowTomorrow.Save",
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner"
+        "UnityEditor.TestRunner",
+        "BorrowTomorrow.Narrative"
     ],
     "includePlatforms": [
         "Editor"

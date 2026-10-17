@@ -37,6 +37,13 @@ namespace BorrowTomorrow.Core
         {
             if (services.TryGetValue(typeof(T), out object raw) && raw is T typed)
             {
+                // Interface references bypass Unity's destroyed-object null operator.
+                if (raw is UnityEngine.Object unityObject && unityObject == null)
+                {
+                    services.Remove(typeof(T));
+                    service = null;
+                    return false;
+                }
                 service = typed;
                 return true;
             }

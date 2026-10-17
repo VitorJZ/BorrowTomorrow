@@ -27,6 +27,7 @@ namespace BorrowTomorrow.Save
             public List<MechanismStateSnapshot> mechanisms = new List<MechanismStateSnapshot>();
             public List<RoomBoundarySnapshot> roomBoundaries = new List<RoomBoundarySnapshot>();
             public Vector2 fallbackPlayerPosition;
+            public bool hasPlayerPosition;
         }
 
         private Snapshot latest;
@@ -49,6 +50,11 @@ namespace BorrowTomorrow.Save
         private void OnDestroy()
         {
             ServiceRegistry.Unregister<ICheckpointService>(this);
+        }
+
+        public void RememberRoomBoundary(string roomId, float boundaryX)
+        {
+            if (!string.IsNullOrEmpty(roomId)) roomBoundaryHistory[roomId] = boundaryX;
         }
 
         /// <summary>采集当前空间快照并设为最近检查点。</summary>
@@ -90,9 +96,11 @@ namespace BorrowTomorrow.Save
             if (ServiceRegistry.TryGet<IPlayerContext>(out var player) && player.IsPresent)
             {
                 snapshot.fallbackPlayerPosition = player.Position;
+                snapshot.hasPlayerPosition = true;
             }
 
             latest = snapshot;
+            pendingRestore = null;
             roomBoundaryHistory[room.RoomId] = room.CurrentBoundary;
 
             // 检查点音效（稳定 id，由 B 组在 SfxLibrary 登记）。
@@ -120,7 +128,7 @@ namespace BorrowTomorrow.Save
                 {
                     Debug.LogWarning("[CheckpointService] 无检查点，回落到关卡入口出生点。");
                     entryRoom.PlacePlayer(session.CurrentLevel.spawnId);
-                    session.SetObjective(session.CurrentLevel.initialObjective);
+                    // Spatial recovery must preserve current story objective.
                 }
                 return;
             }
@@ -136,14 +144,26 @@ namespace BorrowTomorrow.Save
             }
 
             // 1) 边界与年代状态（玩家尚未放置，安全；策划 12.2：先恢复环境再放人）。
-            ILevelRoot room = ServiceRegistry.TryGet<ILevelRoot>(out ILevelRoot active) ? active : null;
+            foreach (var savedRoom in source.roomBoundaries)
+            {
+                var restoredRoom = session.ActivateRoomForRestore(savedRoom.roomId);
+                if (restoredRoom != null && ServiceRegistry.TryGet<IBoundaryContext>(out var restoredBoundary))
+                    restoredBoundary.ConfigureRoom(restoredBoundary.RangeMin, restoredBoundary.RangeMax,
+                        savedRoom.boundaryX, savedRoom.roomId);
+            }
+            ILevelRoot room = session.ActivateRoomForRestore(source.roomId);
+            if (room == null)
+            {
+                Debug.LogWarning($"[CheckpointService] 存档房间 {source.roomId} 不存在，回落到当前入口。");
+                session.ActiveRoom?.PlacePlayer(session.CurrentLevel.spawnId);
+                Capture(session.CurrentLevel.spawnId);
+                return;
+            }
             if (room != null)
             {
-                if (ServiceRegistry.TryGet<IBoundaryContext>(out var boundary))
+                if (source.roomBoundaries.Count > 0 && ServiceRegistry.TryGet<IBoundaryContext>(out var boundary))
                 {
-                    float boundaryX = source.roomId == room.RoomId ? source.boundaryX
-                        : (TryGetRoomBoundary(source.roomId, out float other) ? other : source.boundaryX);
-                    boundary.ConfigureRoom(boundary.RangeMin, boundary.RangeMax, boundaryX, room.RoomId);
+                    boundary.ConfigureRoom(boundary.RangeMin, boundary.RangeMax, source.boundaryX, room.RoomId);
                 }
 
                 // 2) 机关状态。
@@ -154,13 +174,14 @@ namespace BorrowTomorrow.Save
 
                 // 3) 放置角色：优先安全出生点 ID（策划 12.2），无匹配则用捕获位置。
                 var spawn = room.FindSpawn(source.checkpointId);
+                room.PlacePlayer(spawn != null ? source.checkpointId : session.CurrentLevel.spawnId);
                 if (ServiceRegistry.TryGet<IPlayerContext>(out var player) && player.IsPresent)
                 {
                     if (spawn != null)
                     {
                         player.TeleportTo(spawn);
                     }
-                    else
+                    else if (source.hasPlayerPosition)
                     {
                         player.TeleportToPosition(source.fallbackPlayerPosition);
                     }
@@ -168,31 +189,11 @@ namespace BorrowTomorrow.Save
             }
 
             // 4) 目标。
-            if (!string.IsNullOrEmpty(source.objective))
-            {
-                session.SetObjective(source.objective);
-            }
+            session.SetObjective(session.StoryFlags.HasFlag(StoryFlags.IdentityKnown)
+                && session.CurrentLevel != null && session.CurrentLevel.levelId != "Epilogue"
+                ? Objectives.TellXiaoxaoBoxLocation
+                : (!string.IsNullOrEmpty(session.CurrentObjective) ? session.CurrentObjective : source.objective));
             latest = source;
-        }
-
-        private bool TryGetRoomBoundary(string roomId, out float boundaryX)
-        {
-            if (roomBoundaryHistory.TryGetValue(roomId, out boundaryX))
-            {
-                return true;
-            }
-            if (pendingRestore != null)
-            {
-                foreach (RoomBoundarySnapshot snapshot in pendingRestore.roomBoundaries)
-                {
-                    if (snapshot.roomId == roomId)
-                    {
-                        boundaryX = snapshot.boundaryX;
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         /// <summary>把最近检查点写入存档数据（供 SaveService 序列化）。</summary>
@@ -202,10 +203,14 @@ namespace BorrowTomorrow.Save
             {
                 return;
             }
-            Snapshot source = latest ?? pendingRestore;
+            Snapshot source = pendingRestore ?? latest;
+            if (source != null && source.levelId != data.currentLevelId) source = null;
             if (source != null)
             {
                 data.checkpointId = source.checkpointId;
+                data.checkpointRoomId = source.roomId;
+                data.hasCheckpointPosition = source.hasPlayerPosition;
+                data.checkpointPosition = source.fallbackPlayerPosition;
                 data.roomBoundaries = new List<RoomBoundarySnapshot>(source.roomBoundaries);
                 data.mechanismStates = new List<MechanismStateSnapshot>(source.mechanisms);
             }
@@ -229,9 +234,12 @@ namespace BorrowTomorrow.Save
                 roomBoundaryHistory.Clear();
                 return;
             }
+            latest = null;
             pendingRestore = new Snapshot
             {
                 checkpointId = data.checkpointId,
+                fallbackPlayerPosition = data.checkpointPosition,
+                hasPlayerPosition = data.hasCheckpointPosition,
                 levelId = data.currentLevelId,
                 objective = data.currentObjective,
                 mechanisms = new List<MechanismStateSnapshot>(data.mechanismStates ?? new List<MechanismStateSnapshot>()),
@@ -248,6 +256,7 @@ namespace BorrowTomorrow.Save
 
         private static string FindRoomIdFrom(SaveData data)
         {
+            if (!string.IsNullOrEmpty(data.checkpointRoomId)) return data.checkpointRoomId;
             return data.roomBoundaries != null && data.roomBoundaries.Count > 0
                 ? data.roomBoundaries[data.roomBoundaries.Count - 1].roomId
                 : string.Empty;
@@ -255,9 +264,10 @@ namespace BorrowTomorrow.Save
 
         private static float FindBoundaryFrom(SaveData data)
         {
-            return data.roomBoundaries != null && data.roomBoundaries.Count > 0
-                ? data.roomBoundaries[data.roomBoundaries.Count - 1].boundaryX
-                : 0f;
+            if (data.roomBoundaries != null)
+                foreach (var room in data.roomBoundaries)
+                    if (room.roomId == FindRoomIdFrom(data)) return room.boundaryX;
+            return 0f;
         }
     }
 }

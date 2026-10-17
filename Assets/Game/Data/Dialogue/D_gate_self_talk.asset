@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: D_gate_self_talk
   m_EditorClassIdentifier: 
   entryId: gate_self_talk
-  speakerLabel: "\u4E3B\u89D2"
-  subtitle: "\u9662\u5B50\u2026\u2026\u548C\u8BB0\u5FC6\u91CC\u4E00\u6837\u65E7\u3002"
-  voiceClip: {fileID: 0}
+  speakerLabel: "\u7AE5\u5E74\u6797\u6653"
+  subtitle: "\u5916\u5A46\uFF0C\u963F\u9EC4\u53C8\u7761\u5728\u4F60\u811A\u8FB9\u3002"
+  voiceClip: {fileID: 8300000, guid: 1868f064b85691040993d97cae5aafcb, type: 3}
+  illustration: {fileID: 0}
+  blackBackground: 0
   nextId: 
   requiredFlags: []
   setFlags: []

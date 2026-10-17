@@ -44,9 +44,9 @@ namespace BorrowTomorrow.UI
             {
                 // 策划 12.3：无法解析时不静默覆盖唯一记录——损坏时提示后由玩家选择重新开始。
                 SaveLoadResult result = save.TryLoadProgress(out _);
-                if (result == SaveLoadResult.Corrupted && corruptedWarning != null)
+                if (result == SaveLoadResult.Corrupted)
                 {
-                    corruptedWarning.SetActive(true);
+                    ShowCorruptedWarning();
                     if (continueButton != null)
                     {
                         continueButton.interactable = false;
@@ -55,6 +55,28 @@ namespace BorrowTomorrow.UI
                 }
             }
             GameSession.Instance?.ContinueGame();
+        }
+
+        private void ShowCorruptedWarning()
+        {
+            if (corruptedWarning == null)
+            {
+                corruptedWarning = new GameObject("CorruptedSaveWarning", typeof(RectTransform), typeof(Text));
+                var rect = (RectTransform)corruptedWarning.transform;
+                rect.SetParent(transform, false);
+                rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
+                rect.anchoredPosition = new Vector2(0f, -200f);
+                rect.sizeDelta = new Vector2(900f, 80f);
+                var text = corruptedWarning.GetComponent<Text>();
+                var label = newGameButton != null ? newGameButton.GetComponentInChildren<Text>() : null;
+                text.font = label != null ? label.font : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                text.fontSize = 24;
+                text.alignment = TextAnchor.MiddleCenter;
+                text.color = new Color(1f, 0.9f, 0.75f);
+                text.raycastTarget = false;
+                text.text = "存档无法读取，且无可用备份。原文件已保留。\n请选择“开始新游戏”重新开始。";
+            }
+            corruptedWarning.SetActive(true);
         }
 
         /// <summary>开始新游戏（公开方法：供主菜单按钮 onClick 绑定）。</summary>

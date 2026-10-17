@@ -50,13 +50,12 @@ namespace BorrowTomorrow.Narrative
             {
                 return; // 已触发过，保留已读状态（策划 4.6）
             }
-            if (once)
-            {
-                session.StoryFlags.SetFlag(triggerFlag);
-            }
             if (ServiceRegistry.TryGet(out NarrativeDirector director))
             {
-                director.PlayStory(dialogueEntryId, priority);
+                director.PlayStory(dialogueEntryId, priority, () =>
+                {
+                    if (once && session != null) session.StoryFlags.SetFlag(triggerFlag);
+                });
             }
         }
     }

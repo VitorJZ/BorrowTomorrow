@@ -20,6 +20,11 @@ namespace BorrowTomorrow.Core.Data
 
         public string checkpointId;
 
+        // Optional v1 extensions: older saves fall back to their checkpoint spawn.
+        public string checkpointRoomId;
+        public bool hasCheckpointPosition;
+        public UnityEngine.Vector2 checkpointPosition;
+
         public string currentObjective;
 
         /// <summary>各房间边界位置（跨房间不共享数值，策划 4.2）。</summary>
@@ -30,6 +35,8 @@ namespace BorrowTomorrow.Core.Data
 
         /// <summary>已触发剧情稳定 ID。</summary>
         public List<string> triggeredStoryIds = new List<string>();
+
+        public List<string> readDialogueIds = new List<string>();
 
         public SaveSettings settings = new SaveSettings();
     }
