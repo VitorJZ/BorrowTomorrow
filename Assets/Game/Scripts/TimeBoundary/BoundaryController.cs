@@ -130,6 +130,13 @@ namespace BorrowTomorrow.TimeBoundary
             // 拖动只能在落地或站稳的情况下开始，爬梯和腾空时不能开始（策划 4.5）。
             if (player == null || !player.CanBeginBoundaryAdjustSafe())
             {
+                // 灰盒诊断：阻塞时输出玩家状态全分量（策划 15.4 调试叠层的临时实现）。
+                Debug.LogWarning(
+                    $"[Boundary诊断] 无法开始调整：player={(player != null ? "已注册" : "未注册")}" +
+                    $", present={(player?.IsPresent == true ? "在场" : "缺席")}" +
+                    $", grounded={(player?.IsGrounded == true ? "落地" : "悬空")}" +
+                    $", climbing={(player?.IsClimbingLadder == true ? "攀爬中" : "否")}" +
+                    $", pos={player?.Position}, groundCollider={(player?.GroundCollider != null ? player.GroundCollider.name : "无")}");
                 OnAdjustBlocked?.Invoke(BlockedMessage);
                 NotifyBlockedHud(BlockedMessage);
                 return false;
