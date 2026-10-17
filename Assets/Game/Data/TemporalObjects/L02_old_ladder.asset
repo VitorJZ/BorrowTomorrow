@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef3f796f35a3bb468d7661e0ac92eb6, type: 3}
   m_Name: L02_old_ladder
   m_EditorClassIdentifier: 
-  objectId: old_ladder
-  anchorX: 17
+  objectId: L02_old_ladder
+  anchorX: 13
   pastState:
-    stateId: old_ladder_past
+    stateId: ladder_intact
     sprite: {fileID: 0}
-    canStand: 1
-    blocksMovement: 1
+    canStand: 0
+    blocksMovement: 0
   presentState:
-    stateId: old_ladder_present
+    stateId: ladder_broken
     sprite: {fileID: 0}
     canStand: 0
     blocksMovement: 0
   safetyPolicy: 3
   anchorHysteresis: 0.05
-  switchSfxId: 
+  switchSfxId: temporal_switch

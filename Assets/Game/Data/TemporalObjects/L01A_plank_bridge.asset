@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ef3f796f35a3bb468d7661e0ac92eb6, type: 3}
-  m_Name: L04_courtyard_tree
+  m_Name: L01A_plank_bridge
   m_EditorClassIdentifier: 
-  objectId: courtyard_tree
-  anchorX: 4
+  objectId: L01A_plank_bridge
+  anchorX: 12
   pastState:
-    stateId: courtyard_tree_past
+    stateId: plank_solid
     sprite: {fileID: 0}
     canStand: 1
-    blocksMovement: 1
+    blocksMovement: 0
   presentState:
-    stateId: courtyard_tree_present
+    stateId: plank_rotten
     sprite: {fileID: 0}
     canStand: 0
     blocksMovement: 0
   safetyPolicy: 3
   anchorHysteresis: 0.05
-  switchSfxId: 
+  switchSfxId: temporal_switch

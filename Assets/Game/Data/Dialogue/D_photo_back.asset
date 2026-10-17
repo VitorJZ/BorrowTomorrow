@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f993672bdb89944b81673ee9b42134, type: 3}
+  m_Name: D_photo_back
+  m_EditorClassIdentifier: 
+  entryId: photo_back
+  speakerLabel: "\u4E3B\u89D2"
+  subtitle: "\u7167\u7247\u80CC\u9762\uFF1A1994\u5E74\u79CB\u3002\u5988\u5988\u548C\u6653\u6653\u3002\u6811\u79CD\u4E0B\u7684\u7B2C\u4E00\u5E74\u3002"
+  voiceClip: {fileID: 0}
+  nextId: photo_front
+  requiredFlags: []
+  setFlags: []
+  holdForConfirm: 1
+  minDurationSeconds: 1.2

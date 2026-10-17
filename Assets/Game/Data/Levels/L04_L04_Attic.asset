@@ -18,7 +18,7 @@ MonoBehaviour:
   initialObjective: "\u627E\u5230\u94C1\u76D2\u7684\u4F4D\u7F6E\uFF0C\u544A\u8BC9\u6653\u6653\u3002"
   boundaryMin: 0
   boundaryMax: 28
-  initialBoundary: 0
+  initialBoundary: 27
   spawnId: spawn_attic_window
   exitRequiredFlags:
   - BoxLocated

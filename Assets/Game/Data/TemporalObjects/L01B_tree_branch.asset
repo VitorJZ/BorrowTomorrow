@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ef3f796f35a3bb468d7661e0ac92eb6, type: 3}
-  m_Name: L01_plank_bridge
+  m_Name: L01B_tree_branch
   m_EditorClassIdentifier: 
-  objectId: plank_bridge
-  anchorX: 12
+  objectId: L01B_tree_branch
+  anchorX: 58
   pastState:
-    stateId: plank_bridge_past
-    sprite: {fileID: 0}
-    canStand: 1
-    blocksMovement: 1
-  presentState:
-    stateId: plank_bridge_present
+    stateId: sapling
     sprite: {fileID: 0}
     canStand: 0
     blocksMovement: 0
+  presentState:
+    stateId: adult_branch
+    sprite: {fileID: 0}
+    canStand: 1
+    blocksMovement: 0
   safetyPolicy: 3
   anchorHysteresis: 0.05
-  switchSfxId: 
+  switchSfxId: temporal_switch

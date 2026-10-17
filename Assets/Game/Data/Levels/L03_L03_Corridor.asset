@@ -18,7 +18,7 @@ MonoBehaviour:
   initialObjective: "\u53BB\u9601\u697C\uFF0C\u627E\u5230\u84DD\u8272\u94C1\u76AE\u76D2\u3002"
   boundaryMin: 0
   boundaryMax: 30
-  initialBoundary: 30
+  initialBoundary: 0
   spawnId: spawn_corridor_in
   exitRequiredFlags:
   - PhotoRevealed

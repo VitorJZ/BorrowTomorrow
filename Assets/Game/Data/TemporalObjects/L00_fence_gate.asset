@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef3f796f35a3bb468d7661e0ac92eb6, type: 3}
   m_Name: L00_fence_gate
   m_EditorClassIdentifier: 
-  objectId: fence_gate
+  objectId: L00_fence_gate
   anchorX: 10
   pastState:
-    stateId: fence_gate_past
-    sprite: {fileID: 0}
-    canStand: 1
-    blocksMovement: 1
-  presentState:
-    stateId: fence_gate_present
+    stateId: fence_full
     sprite: {fileID: 0}
     canStand: 0
-    blocksMovement: 0
+    blocksMovement: 1
+  presentState:
+    stateId: fence_gap
+    sprite: {fileID: 0}
+    canStand: 0
+    blocksMovement: 1
   safetyPolicy: 3
   anchorHysteresis: 0.05
-  switchSfxId: 
+  switchSfxId: temporal_switch
