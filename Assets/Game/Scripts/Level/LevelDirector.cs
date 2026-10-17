@@ -1,0 +1,57 @@
+using System.Linq;
+using BorrowTomorrow.Core;
+using BorrowTomorrow.Core.Data;
+using BorrowTomorrow.Core.Interfaces;
+
+namespace BorrowTomorrow.Level
+{
+    /// <summary>
+    /// 关卡导演（策划 10.4 LevelDirector）：本关目标、出口条件、提示阶段。
+    /// 挂在活动房间根下，注册为全局 ILevelContext。
+    /// </summary>
+    [UnityEngine.DisallowMultipleComponent]
+    public sealed class LevelDirector : UnityEngine.MonoBehaviour, ILevelContext
+    {
+        public LevelDefinition Definition { get; private set; }
+
+        /// <summary>出口条件未满足时的自语文本（策划 7.7：不使用无解释空气墙）。</summary>
+        public string ExitLockedHint => Definition != null ? Definition.exitLockedHint : string.Empty;
+
+        public bool ExitUnlocked
+        {
+            get
+            {
+                if (Definition == null || Definition.exitRequiredFlags == null)
+                {
+                    return true;
+                }
+                StoryFlagStore flags = GameSession.Instance != null ? GameSession.Instance.StoryFlags : null;
+                if (flags == null)
+                {
+                    return false;
+                }
+                return Definition.exitRequiredFlags.All(f => flags.HasFlag(f));
+            }
+        }
+
+        private void Start()
+        {
+            Definition = GetComponentInParent<LevelRoot>()?.Definition;
+            ServiceRegistry.Register<ILevelContext>(this);
+        }
+
+        private void OnDestroy()
+        {
+            ServiceRegistry.Unregister<ILevelContext>(this);
+        }
+
+        /// <summary>关卡完成（末关出口触发后调用）：保存并推进流程。</summary>
+        public void CompleteLevel()
+        {
+            if (GameSession.Instance != null)
+            {
+                GameSession.Instance.CompleteLevel();
+            }
+        }
+    }
+}
