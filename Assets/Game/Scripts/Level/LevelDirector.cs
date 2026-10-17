@@ -43,8 +43,20 @@ namespace BorrowTomorrow.Level
 
         private void Start()
         {
-            Definition = GetComponentInParent<LevelRoot>()?.Definition;
+            LevelRoot room = GetComponentInParent<LevelRoot>();
+            Definition = room != null ? room.Definition : null;
+            if (room != null && room.IsActiveRoom) ActivateForRoom(Definition);
+        }
+
+        public void ActivateForRoom(LevelDefinition definition)
+        {
+            Definition = definition;
             ServiceRegistry.Register<ILevelContext>(this);
+        }
+
+        public void DeactivateForRoom()
+        {
+            ServiceRegistry.Unregister<ILevelContext>(this);
         }
 
         private void OnDestroy()
@@ -60,6 +72,8 @@ namespace BorrowTomorrow.Level
             {
                 return;
             }
+            LevelRoot room = GetComponentInParent<LevelRoot>();
+            if (room == null || !room.IsActiveRoom) return;
             GameSession session = GameSession.Instance;
             if (session == null || session.State.Phase != GamePhase.Playing)
             {

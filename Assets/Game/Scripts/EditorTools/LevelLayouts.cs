@@ -174,6 +174,7 @@ namespace BorrowTomorrow.EditorTools
                 door.layer = layer;
             }
             var collider = door.AddComponent<BoxCollider2D>();
+            collider.isTrigger = true;
             collider.size = new Vector2(0.6f, 2.4f);
             var exit = door.AddComponent<ExitDoor>();
             SetField(exit, "prompt", prompt);
@@ -202,6 +203,7 @@ namespace BorrowTomorrow.EditorTools
                 obj.layer = layer;
             }
             var collider = obj.AddComponent<BoxCollider2D>();
+            collider.isTrigger = true;
             collider.size = size;
             var renderer = obj.AddComponent<SpriteRenderer>();
             renderer.sprite = ctx.White;
@@ -626,7 +628,9 @@ namespace BorrowTomorrow.EditorTools
         /// </summary>
         internal static List<SpawnPoint> BuildL04(RoomContext ctx)
         {
-            Box(ctx, "WindowPlatform", new Vector2(26f, 2.8f), new Vector2(9f, 0.4f), ConstantColor,
+            // Keep the standing/adjustment area outside the future branch bounds.
+            // The previous spawn was inside the underside of the high niche ledge.
+            Box(ctx, "WindowPlatform", new Vector2(20.5f, 2.8f), new Vector2(3f, 0.4f), ConstantColor,
                 "ConstantStructure", "Ground", true);
             Box(ctx, "WallL", new Vector2(0f, 3f), new Vector2(0.6f, 14f), WallColor, "ConstantStructure", "Ground", true);
             Box(ctx, "WallR", new Vector2(30.8f, 3f), new Vector2(0.6f, 14f), WallColor, "ConstantStructure", "Ground", true);
@@ -649,7 +653,7 @@ namespace BorrowTomorrow.EditorTools
                 new Color(0.42f, 0.5f, 0.38f), solid: false);
             BoxChild(ctx, treePresent.transform, "Trunk", new Vector2(4f, -3.5f), new Vector2(0.8f, 6f),
                 new Color(0.4f, 0.3f, 0.2f), solid: false);
-            SlopeChild(ctx, treePresent.transform, "BranchA", new Vector2(21.3f, 3.28f), new Vector2(23.4f, 3.91f), 0.35f);
+            SlopeChild(ctx, treePresent.transform, "BranchA", new Vector2(21.8f, 3.28f), new Vector2(23.4f, 3.91f), 0.35f);
             SlopeChild(ctx, treePresent.transform, "BranchB", new Vector2(23.4f, 3.91f), new Vector2(25.4f, 4.52f), 0.35f);
             SetObject(tree, "pastRoot", treePast);
             SetObject(tree, "presentRoot", treePresent);
@@ -658,11 +662,11 @@ namespace BorrowTomorrow.EditorTools
 
             var spawns = new List<SpawnPoint>
             {
-                Spawn(ctx, "spawn_attic_window", new Vector2(27.5f, 3.05f)),
-                Spawn(ctx, "cp_L04_window", new Vector2(24f, 3.05f)),
+                Spawn(ctx, "spawn_attic_window", new Vector2(20.3f, 3.05f)),
+                Spawn(ctx, "cp_L04_window", new Vector2(20.3f, 3.05f)),
             };
-            Checkpoint(ctx, "cp_L04_window", new Vector2(24f, 3.85f));
-            Narrative(ctx, "compartment_view", "抬头看暗格", new Vector2(22.3f, 3.6f), new Vector2(0.6f, 0.9f),
+            Checkpoint(ctx, "cp_L04_window", new Vector2(20.3f, 3.85f));
+            Narrative(ctx, "compartment_view", "抬头看暗格", new Vector2(20.7f, 3.6f), new Vector2(0.6f, 0.9f),
                 "compartment_view", DialoguePriority.Ambient, replayable: true);
             Narrative(ctx, "compartment_touch", "触摸暗格", new Vector2(26.5f, 4.95f), new Vector2(0.9f, 0.7f),
                 "compartment_touch", DialoguePriority.Story, replayable: false);
@@ -675,9 +679,9 @@ namespace BorrowTomorrow.EditorTools
             Box(ctx, "Ground", new Vector2(8f, -0.5f), new Vector2(18f, 1f), new Color(0.9f, 0.88f, 0.82f),
                 "ConstantStructure", "Ground", true);
             Box(ctx, "Bed", new Vector2(3f, 0.6f), new Vector2(2.4f, 1.2f), new Color(0.85f, 0.87f, 0.82f),
-                "ConstantStructure", "Ground", true);
+                "ConstantStructure", "Ground", false);
             Box(ctx, "Table", new Vector2(7f, 0.5f), new Vector2(1.4f, 1f), new Color(0.75f, 0.72f, 0.65f),
-                "ConstantStructure", "Ground", true);
+                "ConstantStructure", "Ground", false);
             Box(ctx, "WallL", new Vector2(0f, 2f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
             Box(ctx, "WallR", new Vector2(15.7f, 2f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
 

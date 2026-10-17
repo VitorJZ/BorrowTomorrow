@@ -64,6 +64,8 @@ namespace BorrowTomorrow.Player
         private int ladderZoneCount;
         private bool wasGrounded;
         private float cachedGravityScale;
+        private readonly Collider2D[] groundHits = new Collider2D[24];
+        private readonly Collider2D[] ladderHits = new Collider2D[24];
 
         /// <summary>是否落地（本物理步）。</summary>
         public bool IsGrounded { get; private set; }
@@ -122,7 +124,8 @@ namespace BorrowTomorrow.Player
         {
             if (input == null)
             {
-                return;
+                ServiceRegistry.TryGet<IInputSource>(out input);
+                if (input == null) return;
             }
             // 跳跃预输入与离地宽容计时（策划 6.2）。
             if (input.JumpPressedThisFrame && IsControlAllowed)
@@ -173,7 +176,8 @@ namespace BorrowTomorrow.Player
             body.velocity = new Vector2(controlAllowed ? move * moveSpeed : 0f, body.velocity.y);
 
             // 进入攀爬：在梯子区内按上下键（策划 11.3：梯子用 Trigger 与攀爬状态控制）。
-            if (controlAllowed && !IsClimbingLadder && ladderZoneCount > 0 && Mathf.Abs(climb) > 0.1f)
+            if (controlAllowed && Mathf.Abs(climb) > 0.1f && !(IsGrounded && climb < 0f)
+                && IsInsideLadderZone())
             {
                 IsClimbingLadder = true;
                 body.gravityScale = 0f;
@@ -193,6 +197,15 @@ namespace BorrowTomorrow.Player
 
         private void UpdateClimbing(bool controlAllowed, float climb, float move)
         {
+            // At a landing, horizontal movement must release the ladder so that
+            // the player can stand on the permanent platform and adjust time.
+            if (controlAllowed && Mathf.Abs(move) > 0.1f && FindSupport() != null)
+            {
+                ExitLadder(false);
+                body.velocity = new Vector2(move * moveSpeed, 0f);
+                DetectGround();
+                return;
+            }
             // 攀爬中暂停重力（策划 11.3）；横向允许微调，方便爬出梯顶落到相邻平台。
             body.gravityScale = 0f;
             float vertical = controlAllowed ? climb * climbSpeed : 0f;
@@ -201,7 +214,7 @@ namespace BorrowTomorrow.Player
 
             // 跳离梯子或脱离梯区后恢复正常重力。
             bool jumpOff = controlAllowed && jumpBufferTimer > 0f;
-            if (jumpOff || ladderZoneCount <= 0)
+            if (jumpOff || !IsInsideLadderZone())
             {
                 ExitLadder(jumpOff);
             }
@@ -228,11 +241,46 @@ namespace BorrowTomorrow.Player
             }
             // 探测盒以脚底为基准：中心在脚底稍下方（drop），跨过脚底与地面接触缝隙。
             // Simple 重载按项目"查询命中触发器"设置工作——梯子 Trigger 已隔离在 Ladder 层外（见 LadderContent）。
-            Vector2 feet = (Vector2)transform.position + capsule.offset - Vector2.up * (capsule.size.y * 0.5f);
-            Vector2 origin = feet + Vector2.down * groundProbeDrop;
-            Collider2D hit = Physics2D.OverlapBox(origin, groundProbeSize, 0f, groundMask);
+            Collider2D hit = body.velocity.y > 0.2f ? null : FindSupport();
             IsGrounded = hit != null;
             GroundCollider = hit;
+        }
+
+        private Vector2 Feet => new Vector2(capsule.bounds.center.x, capsule.bounds.min.y);
+
+        private Collider2D FindSupport()
+        {
+            Vector2 feet = Feet;
+            var filter = new ContactFilter2D { useTriggers = false, useLayerMask = true, layerMask = groundMask };
+            int count = Physics2D.OverlapBox(feet + Vector2.down * groundProbeDrop,
+                groundProbeSize, 0f, filter, groundHits);
+            Collider2D best = null;
+            float distance = float.MaxValue;
+            for (int i = 0; i < count; i++)
+            {
+                Collider2D hit = groundHits[i];
+                if (hit == null || hit == capsule || hit.attachedRigidbody == body || hit.isTrigger) continue;
+                Vector2 nearest = hit.ClosestPoint(feet);
+                // A side wall, or the underside of a one-way landing, is not support.
+                if (nearest.y > feet.y + 0.08f) continue;
+                if (hit.usedByEffector && hit.bounds.max.y > feet.y + 0.12f) continue;
+                float d = (nearest - feet).sqrMagnitude;
+                if (d < distance) { best = hit; distance = d; }
+            }
+            return best;
+        }
+
+        private bool IsInsideLadderZone()
+        {
+            Bounds bounds = capsule.bounds;
+            var filter = new ContactFilter2D { useTriggers = true, useLayerMask = false };
+            int count = Physics2D.OverlapBox(bounds.center, bounds.size * 0.9f, 0f, filter, ladderHits);
+            for (int i = 0; i < count; i++)
+            {
+                Collider2D hit = ladderHits[i];
+                if (hit != null && hit.isTrigger && hit.GetComponentInParent<LadderZone>() != null) return true;
+            }
+            return false;
         }
 
         private void UpdateFootsteps(bool controlAllowed)
@@ -308,13 +356,18 @@ namespace BorrowTomorrow.Player
             jumpBufferTimer = 0f;
             coyoteTimer = 0f;
             footstepTimer = 0f;
+            ladderZoneCount = 0;
+            IsGrounded = false;
+            GroundCollider = null;
+            Physics2D.SyncTransforms();
         }
 
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = IsGrounded ? Color.green : Color.red;
-            Vector2 capsuleCenter = (Vector2)transform.position + capsule.offset;
-            Vector2 origin = capsuleCenter + Vector2.down * (capsule.size.y * 0.5f + groundProbeDrop - groundProbeSize.y * 0.5f);
+            CapsuleCollider2D shape = capsule != null ? capsule : GetComponent<CapsuleCollider2D>();
+            if (shape == null) return;
+            Vector2 origin = new Vector2(shape.bounds.center.x, shape.bounds.min.y - groundProbeDrop);
             Gizmos.DrawWireCube(origin, groundProbeSize);
         }
     }

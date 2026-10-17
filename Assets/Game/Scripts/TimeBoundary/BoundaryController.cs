@@ -75,6 +75,11 @@ namespace BorrowTomorrow.TimeBoundary
         private void Update()
         {
             resolveRetryTimer = Mathf.Max(0f, resolveRetryTimer - Time.deltaTime);
+            if (!ServiceRegistry.TryGet<IBoundaryContext>(out var active) || !ReferenceEquals(active, this))
+            {
+                if (IsAdjusting) ForceEndAdjust();
+                return;
+            }
             if (GameSession.Instance == null || GameSession.Instance.State.Phase != GamePhase.Playing)
             {
                 ForceEndAdjust();
@@ -82,7 +87,17 @@ namespace BorrowTomorrow.TimeBoundary
             }
 
             // 键盘 Q/R 调整（策划 5.1）。
-            if (input != null && GameSession.Instance.State.IsBoundaryAdjustAllowed)
+            if (GameSession.Instance.State.IsPaused) return;
+            if (!IsAdjusting && GameSession.Instance.State.SubState == PlayingSubState.AdjustingBoundary)
+                GameSession.Instance.State.SetSubState(PlayingSubState.Free);
+            if (GameSession.Instance.State.SubState != PlayingSubState.Free
+                && GameSession.Instance.State.SubState != PlayingSubState.AdjustingBoundary)
+            {
+                ForceEndAdjust();
+                return;
+            }
+            if (input == null) ServiceRegistry.TryGet<IInputSource>(out input);
+            if (input != null && (GameSession.Instance.State.IsBoundaryAdjustAllowed || keyboardHeld))
             {
                 float nudge = input.BoundaryNudgeDirection;
                 if (Mathf.Abs(nudge) > 0.01f)
@@ -125,7 +140,9 @@ namespace BorrowTomorrow.TimeBoundary
             }
             EnsurePlayerResolved();
             GameSession session = GameSession.Instance;
-            if (session == null || !session.State.IsBoundaryAdjustAllowed)
+            if (session == null || session.State.IsPaused
+                || (!session.State.IsBoundaryAdjustAllowed && !IsAdjusting)
+                || !ServiceRegistry.TryGet<IBoundaryContext>(out var active) || !ReferenceEquals(active, this))
             {
                 return false;
             }
@@ -159,19 +176,33 @@ namespace BorrowTomorrow.TimeBoundary
                     session.State.SetSubState(PlayingSubState.Free);
                 }
                 OnAdjustEnded?.Invoke();
+                if (ServiceRegistry.TryGet<ICameraRig>(out var camera)) camera.SetFollowFrozen(false);
             }
         }
 
         private void ForceEndAdjust()
         {
+            bool wasAdjusting = IsAdjusting;
             mouseDragging = false;
             keyboardHeld = false;
+            if (!wasAdjusting) return;
             GameSession session = GameSession.Instance;
             if (session != null && session.State.SubState == PlayingSubState.AdjustingBoundary)
             {
                 session.State.SetSubState(PlayingSubState.Free);
             }
             OnAdjustEnded?.Invoke();
+            if (ServiceRegistry.TryGet<ICameraRig>(out var camera)) camera.SetFollowFrozen(false);
+        }
+
+        private void OnApplicationFocus(bool focused)
+        {
+            if (!focused && IsAdjusting) ForceEndAdjust();
+        }
+
+        private void OnDisable()
+        {
+            if (IsAdjusting) ForceEndAdjust();
         }
 
         /// <summary>
@@ -180,7 +211,7 @@ namespace BorrowTomorrow.TimeBoundary
         /// </summary>
         public void RequestAdjustment(float targetBoundaryX)
         {
-            if (!mouseDragging)
+            if (!mouseDragging || GameSession.Instance == null || GameSession.Instance.State.IsPaused)
             {
                 return; // 只受理拖动中的把手输入，防止误触瞬移（策划 5.3）。
             }
@@ -215,7 +246,7 @@ namespace BorrowTomorrow.TimeBoundary
                 return;
             }
             float clamped = Mathf.Clamp(targetX, rangeMin, rangeMax);
-            if (Mathf.Abs(clamped - committedB) < BoundaryChangePlan.Epsilon * 0.5f)
+            if (Mathf.Abs(clamped - committedB) < 0.000001f)
             {
                 return;
             }

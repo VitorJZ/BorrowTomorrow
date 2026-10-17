@@ -480,11 +480,12 @@ namespace BorrowTomorrow.EditorTools
 
             // 顶部年代把手（命中区 ≥44px，策划 5.3）：灰条背景 + 提示文字，让“可拖动”可被发现。
             var handle = CreateChild<UI.BoundaryHandle>(uiRoot.transform, "BoundaryHandle");
-            Stretch((RectTransform)handle.transform, new Vector2(0f, 480f), new Vector2(420f, 48f));
+            Stretch((RectTransform)handle.transform, new Vector2(0f, 480f), new Vector2(160f, 64f));
             var handleImage = handle.AddComponent<Image>();
             handleImage.color = new Color(0.28f, 0.3f, 0.34f, 0.92f);
-            MakeText(handle.transform, "HandleLabel", "◂ 拖动调整时间边界 ▸", font, 22,
-                TextAnchor.MiddleCenter, Vector2.zero, new Vector2(400f, 40f));
+            Text handleLabel = MakeText(handle.transform, "HandleLabel", "拖动年代", font, 22,
+                TextAnchor.MiddleCenter, Vector2.zero, new Vector2(150f, 48f));
+            handleLabel.color = Color.white;
             MakeText(uiRoot.transform, "EraLabelPast", "1994 ◂", font, 24, TextAnchor.MiddleLeft,
                 new Vector2(-700f, 480f), new Vector2(120f, 40f));
             Text eraLabelFuture = MakeText(uiRoot.transform, "EraLabelPresent", "▸ 2024", font, 24, TextAnchor.MiddleRight,
@@ -609,9 +610,7 @@ namespace BorrowTomorrow.EditorTools
             Button newGameButton = MakeButton(menu.transform, "开始新游戏", font, new Vector2(0f, -20f));
             Button quitButton = MakeButton(menu.transform, "退出游戏", font, new Vector2(0f, -100f));
 
-            UnityEventTools.AddPersistentListener(continueButton.onClick, menuUi.OnContinue);
-            UnityEventTools.AddPersistentListener(newGameButton.onClick, menuUi.OnNewGame);
-            UnityEventTools.AddPersistentListener(quitButton.onClick, menuUi.QuitGame);
+            // MainMenuUi.Start binds each button once at runtime.
 
             LevelLayouts.SetObject(menuUi, "continueButton", continueButton);
             LevelLayouts.SetObject(menuUi, "newGameButton", newGameButton);

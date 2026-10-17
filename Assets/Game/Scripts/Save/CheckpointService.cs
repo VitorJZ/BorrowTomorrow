@@ -20,6 +20,7 @@ namespace BorrowTomorrow.Save
         private sealed class Snapshot
         {
             public string checkpointId;
+            public string levelId;
             public string roomId;
             public float boundaryX;
             public string objective;
@@ -63,6 +64,7 @@ namespace BorrowTomorrow.Save
             var snapshot = new Snapshot
             {
                 checkpointId = checkpointId,
+                levelId = session.CurrentLevel != null ? session.CurrentLevel.levelId : string.Empty,
                 roomId = room.RoomId,
                 boundaryX = room.CurrentBoundary,
                 objective = session.CurrentObjective,
@@ -108,7 +110,8 @@ namespace BorrowTomorrow.Save
         {
             Snapshot source = pendingRestore ?? latest;
             pendingRestore = null;
-            if (source == null)
+            if (source == null || (GameSession.Instance != null && GameSession.Instance.CurrentLevel != null
+                && source.levelId != GameSession.Instance.CurrentLevel.levelId))
             {
                 // 尚无检查点（如开局即跌落）：回落到关卡入口出生点，避免恢复空转死循环。
                 GameSession session = GameSession.Instance;
@@ -229,6 +232,7 @@ namespace BorrowTomorrow.Save
             pendingRestore = new Snapshot
             {
                 checkpointId = data.checkpointId,
+                levelId = data.currentLevelId,
                 objective = data.currentObjective,
                 mechanisms = new List<MechanismStateSnapshot>(data.mechanismStates ?? new List<MechanismStateSnapshot>()),
                 roomBoundaries = new List<RoomBoundarySnapshot>(data.roomBoundaries ?? new List<RoomBoundarySnapshot>()),

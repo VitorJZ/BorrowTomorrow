@@ -18,6 +18,8 @@ namespace BorrowTomorrow.Level
 
         [Tooltip("垂直跟随死区（角色小幅上下移动时相机不动）")]
         [SerializeField] private float verticalDeadZone = 0.4f;
+        [Tooltip("灰盒阶段显示整个谜题房间，确保初始位于房间边缘的时间把手仍在屏幕内")]
+        [SerializeField] private bool frameEntireRoom = true;
 
         private Camera ownedCamera;
         private Rect roomBounds;
@@ -41,6 +43,13 @@ namespace BorrowTomorrow.Level
 
         private void LateUpdate()
         {
+            if (frameEntireRoom && ownedCamera != null && roomBounds.width > 0f)
+            {
+                ownedCamera.orthographicSize = Mathf.Max(roomBounds.height * 0.5f,
+                    roomBounds.width / (2f * Mathf.Max(0.1f, ownedCamera.aspect))) + 0.35f;
+                transform.position = new Vector3(roomBounds.center.x, roomBounds.center.y, cameraZ);
+                return;
+            }
             if (followFrozen || !ServiceRegistry.TryGet<IPlayerContext>(out var player) || !player.IsPresent)
             {
                 return;

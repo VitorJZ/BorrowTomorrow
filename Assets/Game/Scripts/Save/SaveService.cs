@@ -28,6 +28,14 @@ namespace BorrowTomorrow.Save
         private void Awake()
         {
             saveDirectory = Path.Combine(Application.persistentDataPath, "BorrowTomorrow");
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+            if (Array.Exists(Environment.GetCommandLineArgs(), a => a == "--verify-playable"))
+            {
+                string output = Environment.GetEnvironmentVariable("BORROWTOMORROW_WALKTHROUGH_OUTPUT");
+                saveDirectory = Path.Combine(string.IsNullOrEmpty(output) ? Application.temporaryCachePath : output,
+                    "WalkthroughSave");
+            }
+#endif
             Directory.CreateDirectory(saveDirectory);
         }
 

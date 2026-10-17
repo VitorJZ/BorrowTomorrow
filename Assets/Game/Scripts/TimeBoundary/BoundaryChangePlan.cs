@@ -46,8 +46,8 @@ namespace BorrowTomorrow.TimeBoundary
             }
 
             IEnumerable<(float anchorX, T payload)> crossed = direction > 0
-                ? anchors.Where(a => a.anchorX > fromBoundary + Epsilon && a.anchorX <= toBoundary + Epsilon)
-                : anchors.Where(a => a.anchorX < fromBoundary - Epsilon && a.anchorX >= toBoundary - Epsilon);
+                ? anchors.Where(a => a.anchorX >= fromBoundary && a.anchorX <= toBoundary)
+                : anchors.Where(a => a.anchorX <= fromBoundary && a.anchorX >= toBoundary);
 
             IOrderedEnumerable<(float anchorX, T payload)> ordered = direction > 0
                 ? crossed.OrderBy(a => a.anchorX)

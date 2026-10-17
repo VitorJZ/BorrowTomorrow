@@ -51,6 +51,10 @@ namespace BorrowTomorrow.Level
         private void Awake()
         {
             IsActiveRoom = false;
+        }
+
+        private void Start()
+        {
             if (initiallyActive)
             {
                 ActivateRoom();
@@ -70,6 +74,7 @@ namespace BorrowTomorrow.Level
         {
             IsActiveRoom = true;
             ServiceRegistry.Register<ILevelRoot>(this);
+            GetComponent<LevelDirector>()?.ActivateForRoom(definition);
 
             float min = overrideBoundaryRange ? boundaryMin : (definition != null ? definition.boundaryMin : 0f);
             float max = overrideBoundaryRange ? boundaryMax : (definition != null ? definition.boundaryMax : 32f);
@@ -101,6 +106,7 @@ namespace BorrowTomorrow.Level
         public void DeactivateRoom()
         {
             IsActiveRoom = false;
+            GetComponent<LevelDirector>()?.DeactivateForRoom();
             if (ServiceRegistry.TryGet<ILevelRoot>(out var registered) && ReferenceEquals(registered, this))
             {
                 ServiceRegistry.Unregister<ILevelRoot>(this);

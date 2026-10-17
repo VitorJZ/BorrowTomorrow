@@ -36,9 +36,13 @@ namespace BorrowTomorrow.TimeBoundary
 
         private Era currentEra = Era.Past;
         private TemporalObjectRegistry registeredRegistry;
+        private readonly System.Collections.Generic.Dictionary<SpriteRenderer, Color> originalColors =
+            new System.Collections.Generic.Dictionary<SpriteRenderer, Color>();
 
         private void Awake()
         {
+            foreach (SpriteRenderer renderer in GetComponentsInChildren<SpriteRenderer>(true))
+                originalColors[renderer] = renderer.color;
             // 注册到所在房间的注册表（策划 10.3：LevelRoot 汇集本房间 TemporalObjects）。
             registeredRegistry = GetComponentInParent<TemporalObjectRegistry>();
             if (registeredRegistry == null)
@@ -98,7 +102,7 @@ namespace BorrowTomorrow.TimeBoundary
             {
                 return currentEra;
             }
-            return boundaryX < AnchorX ? Era.Past : Era.Present;
+            return AnchorX < boundaryX ? Era.Past : Era.Present;
         }
 
         /// <summary>
@@ -107,11 +111,13 @@ namespace BorrowTomorrow.TimeBoundary
         /// </summary>
         public void ApplyEra(Era era, bool immediate = false)
         {
-            if (era == currentEra && IsRootActive(era))
-            {
-                return;
-            }
+            // Always set both roots. On first load both may be active even when
+            // currentEra already equals Past; checking only the Past root left
+            // future platforms enabled in a supposedly all-past room.
             currentEra = era;
+            StopAllCoroutines();
+            foreach (var pair in originalColors)
+                if (pair.Key != null) pair.Key.color = pair.Value;
             if (pastRoot != null)
             {
                 pastRoot.SetActive(era == Era.Past);
@@ -163,7 +169,7 @@ namespace BorrowTomorrow.TimeBoundary
                     if (r != null)
                     {
                         Color c = r.color;
-                        c.a = alpha;
+                        c.a = (originalColors.TryGetValue(r, out var original) ? original.a : 1f) * alpha;
                         r.color = c;
                     }
                 }
@@ -174,7 +180,7 @@ namespace BorrowTomorrow.TimeBoundary
                 if (r != null)
                 {
                     Color c = r.color;
-                    c.a = 1f;
+                    c.a = originalColors.TryGetValue(r, out var original) ? original.a : 1f;
                     r.color = c;
                 }
             }
@@ -188,7 +194,9 @@ namespace BorrowTomorrow.TimeBoundary
             {
                 return false;
             }
-            return root.GetComponentsInChildren<Collider2D>(true).Length > 0;
+            foreach (Collider2D collider in root.GetComponentsInChildren<Collider2D>(true))
+                if (!collider.isTrigger && collider.enabled) return true;
+            return false;
         }
 
         /// <summary>
@@ -204,27 +212,25 @@ namespace BorrowTomorrow.TimeBoundary
                 return false;
             }
             Collider2D[] colliders = root.GetComponentsInChildren<Collider2D>(true);
-            if (colliders.Length == 0)
+            bool found = false;
+            foreach (Collider2D collider in colliders)
             {
-                // 无碰撞的装饰年代：用渲染范围兜底（不参与通行时无影响）。
-                SpriteRenderer[] renderers = root.GetComponentsInChildren<SpriteRenderer>(true);
-                if (renderers.Length == 0)
+                if (collider.isTrigger || !collider.enabled) continue;
+                Bounds configured = collider.bounds;
+                // Inactive colliders report empty bounds. Inspect their configured
+                // geometry without briefly enabling an obstacle inside the player.
+                if (collider is BoxCollider2D box)
                 {
-                    return false;
+                    Vector2 half = box.size * 0.5f;
+                    configured = new Bounds(box.transform.TransformPoint(box.offset + new Vector2(-half.x, -half.y)), Vector3.zero);
+                    configured.Encapsulate(box.transform.TransformPoint(box.offset + new Vector2(half.x, -half.y)));
+                    configured.Encapsulate(box.transform.TransformPoint(box.offset + new Vector2(-half.x, half.y)));
+                    configured.Encapsulate(box.transform.TransformPoint(box.offset + new Vector2(half.x, half.y)));
                 }
-                bounds = renderers[0].bounds;
-                for (int i = 1; i < renderers.Length; i++)
-                {
-                    bounds.Encapsulate(renderers[i].bounds);
-                }
-                return true;
+                if (!found) { bounds = configured; found = true; }
+                else bounds.Encapsulate(configured);
             }
-            bounds = colliders[0].bounds;
-            for (int i = 1; i < colliders.Length; i++)
-            {
-                bounds.Encapsulate(colliders[i].bounds);
-            }
-            return true;
+            return found;
         }
 
         /// <summary>玩家当前脚下的碰撞体是否属于本物体（支撑撤除检测）。</summary>

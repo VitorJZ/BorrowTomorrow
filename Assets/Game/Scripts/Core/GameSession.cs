@@ -60,6 +60,18 @@ namespace BorrowTomorrow.Core
         {
             // 订阅剧情标记：关键标记写入后触发即时保存（策划 12.3：重要演出结束保存）。
             StoryFlags.FlagAdded += OnStoryFlagAdded;
+            State.SubStateChanged += HandleTimingState;
+            State.PhaseChanged += HandleTimingPhase;
+        }
+
+        private void HandleTimingState(PlayingSubState previous, PlayingSubState next)
+        {
+            Time.timeScale = State.IsPaused ? 0f : 1f;
+        }
+
+        private void HandleTimingPhase(GamePhase previous, GamePhase next)
+        {
+            Time.timeScale = State.IsPaused ? 0f : 1f;
         }
 
         private void OnStoryFlagAdded(string flagId)
@@ -79,6 +91,10 @@ namespace BorrowTomorrow.Core
         {
             if (Instance == this)
             {
+                StoryFlags.FlagAdded -= OnStoryFlagAdded;
+                State.SubStateChanged -= HandleTimingState;
+                State.PhaseChanged -= HandleTimingPhase;
+                Time.timeScale = 1f;
                 Instance = null;
             }
         }
@@ -223,6 +239,7 @@ namespace BorrowTomorrow.Core
             }
 
             // 加载顺序遵循策划 12.2：场景 → 边界与年代状态 → 机关 → 角色 → 目标 → 允许输入。
+            ActiveRoom = root;
             if (restoreCheckpoint && ServiceRegistry.TryGet<ICheckpointService>(out var checkpoints)
                 && checkpoints.HasCheckpoint)
             {

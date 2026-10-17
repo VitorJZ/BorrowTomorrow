@@ -68,7 +68,9 @@ namespace BorrowTomorrow.TimeBoundary
         {
             return BoundaryChangePlan.Build(
                 fromBoundary, toBoundary,
-                Objects.Select(o => (o.AnchorX, o)));
+                Objects.Where(o => toBoundary > fromBoundary
+                        ? o.CurrentEra == Era.Present : o.CurrentEra == Era.Past)
+                    .Select(o => (o.AnchorX + (toBoundary > fromBoundary ? o.Hysteresis : -o.Hysteresis), o)));
         }
 
         /// <summary>
@@ -77,9 +79,9 @@ namespace BorrowTomorrow.TimeBoundary
         /// </summary>
         public void ResetToBoundary(float boundaryX, bool immediate = true)
         {
-            foreach (TemporalObject obj in objects)
+            foreach (TemporalObject obj in Objects)
             {
-                Era era = boundaryX < obj.AnchorX ? Era.Past : Era.Present;
+                Era era = obj.AnchorX < boundaryX ? Era.Past : Era.Present;
                 obj.ApplyEra(era, immediate);
             }
         }

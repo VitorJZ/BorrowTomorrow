@@ -3,6 +3,7 @@ using BorrowTomorrow.Core.Interfaces;
 using BorrowTomorrow.TimeBoundary;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace BorrowTomorrow.UI
 {
@@ -22,6 +23,8 @@ namespace BorrowTomorrow.UI
 
         private IBoundaryContext boundary;
         private bool subscribed;
+        private RectTransform guide;
+        private float mouseOffset;
 
         private void Update()
         {
@@ -45,10 +48,16 @@ namespace BorrowTomorrow.UI
 
         private void OnDestroy()
         {
+            if (guide != null) Destroy(guide.gameObject);
             if (boundary != null && subscribed)
             {
                 boundary.OnBoundaryCommitted -= SyncHandleToBoundary;
             }
+        }
+
+        private void LateUpdate()
+        {
+            if (boundary != null) SyncHandleToBoundary(boundary.CommittedBoundary);
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -61,6 +70,9 @@ namespace BorrowTomorrow.UI
             if (boundary is BoundaryController controller)
             {
                 controller.BeginMouseDrag();
+                if (!controller.IsAdjusting) return;
+                if (worldCamera != null)
+                    mouseOffset = boundary.CommittedBoundary - worldCamera.ScreenToWorldPoint(eventData.position).x;
             }
             // 冻结镜头跟随（策划 5.3：拖动时镜头保持不动）。
             if (ServiceRegistry.TryGet<ICameraRig>(out var cameraRig))
@@ -77,7 +89,11 @@ namespace BorrowTomorrow.UI
             }
             // 鼠标屏幕位置 → 当前房间世界坐标（策划 5.3），约束在房间范围内由控制器完成。
             Vector3 world = worldCamera.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, 0f));
-            boundary.RequestAdjustment(world.x);
+            float target = world.x + mouseOffset;
+            float margin = ((RectTransform)transform).rect.width * GetComponentInParent<Canvas>().scaleFactor * 0.5f;
+            if (eventData.position.x <= margin) target = boundary.RangeMin;
+            else if (eventData.position.x >= Screen.width - margin) target = boundary.RangeMax;
+            boundary.RequestAdjustment(target);
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -103,16 +119,36 @@ namespace BorrowTomorrow.UI
                 return;
             }
             float clamped = Mathf.Clamp(committed, boundary.RangeMin, boundary.RangeMax);
-            float t = boundary.RangeMax > boundary.RangeMin
-                ? (clamped - boundary.RangeMin) / (boundary.RangeMax - boundary.RangeMin)
-                : 0.5f;
             // 把手水平位置映射到屏幕宽度（UI 锚点自定，这里用像素）。
             RectTransform parent = transform.parent as RectTransform;
             if (parent != null)
             {
-                float width = parent.rect.width;
-                ((RectTransform)transform).anchoredPosition = new Vector2(
-                    (t - 0.5f) * width, ((RectTransform)transform).anchoredPosition.y);
+                RectTransform handle = (RectTransform)transform;
+                Canvas canvas = GetComponentInParent<Canvas>();
+                Camera uiCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+                    ? canvas.worldCamera : null;
+                Vector3 screen = worldCamera.WorldToScreenPoint(new Vector3(clamped, 0f, 0f));
+                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, screen, uiCamera, out var local))
+                {
+                    float anchorX = Mathf.Lerp(parent.rect.xMin, parent.rect.xMax,
+                        (handle.anchorMin.x + handle.anchorMax.x) * 0.5f);
+                    float half = handle.rect.width * 0.5f;
+                    float handleX = Mathf.Clamp(local.x, parent.rect.xMin + half, parent.rect.xMax - half);
+                    handle.anchoredPosition = new Vector2(handleX - anchorX, handle.anchoredPosition.y);
+                    if (guide == null)
+                    {
+                        var go = new GameObject("CommittedBoundaryGuide", typeof(RectTransform), typeof(Image));
+                        guide = (RectTransform)go.transform;
+                        guide.SetParent(parent, false);
+                        guide.SetAsFirstSibling();
+                        guide.anchorMin = guide.anchorMax = new Vector2(0.5f, 0.5f);
+                        var image = go.GetComponent<Image>();
+                        image.color = new Color(0.85f, 0.58f, 0.2f, 0.5f);
+                        image.raycastTarget = false;
+                    }
+                    guide.sizeDelta = new Vector2(2f, parent.rect.height * 0.84f);
+                    guide.anchoredPosition = new Vector2(local.x, 0f);
+                }
             }
         }
     }
