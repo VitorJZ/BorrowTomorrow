@@ -7,7 +7,7 @@
 
 - 仓库根：项目根目录（`BorrowTomorrow/`，与 `Assets/`、`ProjectSettings/`、`Packages/` 同级）。
 - `.gitignore`：忽略 `Library/ Temp/ Obj/ Logs/ UserSettings/ Build*/ *.csproj *.sln` 等（团结/Unity 标准）。
-- **必须提交**：`Assets/`（含每个文件与目录的 `.meta`）、`Packages/manifest.json`、`ProjectSettings/`、`Docs/`。
+- **必须提交**：`Assets/`（含每个文件与目录的 `.meta`）、`Packages/manifest.json` 与 `Packages/packages-lock.json`、`ProjectSettings/`、`Docs/`。
 
 ## 2. .meta 文件规则（重要）
 
@@ -64,7 +64,7 @@ docs(guide): 补充场景搭建指南的防绕关清单
 ## 5. 场景与 Prefab 冲突规避（策划 13.2）
 
 - **同一关卡场景约定唯一主要编辑者**；其他人要改场景时先在群里登记。
-- 场景无法文本级合并。改动场景时：先 pull → 改 → 立即 push；发现冲突时以"主要编辑者版本"为准，重做小改动。
+- 场景 YAML 的同文件并发修改易冲突；改动前登记整份场景的编辑权。冲突由主要编辑者整合双方改动并核对引用，不直接丢弃另一方内容。
 - 能放 Prefab 的内容（年代物体、出口、检查点）都做成 Prefab（`Assets/Game/Prefabs/`），场景只留实例与覆盖值——Prefab 是 YAML 可读、冲突概率低。
 - 大的关卡搭建提交前先在编辑器内运行一次本关。
 
@@ -72,13 +72,15 @@ docs(guide): 补充场景搭建指南的防绕关清单
 
 1. `git pull origin dev`；
 2. 在自己的 feature 分支上工作（编辑器内操作 Assets）；
-3. 运行 Test Runner（EditMode）全绿；
+3. 运行与改动相关的检查；机制改动跑核心测试并验证受影响关卡，纯文档修改核对引用与一致性；
 4. 提交（`Assets` 变更与 `.meta` 成对）；
 5. push 并向 `dev` 发起合并请求，说明改了哪个模块、影响哪些关卡。
 
 ## 7. 首次拉取后 checklist
 
-- [ ] 团结 Hub 安装 **1.10.4** 编辑器（`tuanjie.exe editors list-releases` 可查）；
+- [ ] 团结 Hub 安装 **1.10.4** 编辑器（以团队锁定版本及 `ProjectSettings/ProjectVersion.txt` 为准）；
 - [ ] 用 1.10.4 打开项目（版本不符禁止打开，避免 ProjectVersion 变更）；
-- [ ] 首次打开后菜单 **BorrowTomorrow → 一键搭建项目骨架** 不需要运行（已生成），但可用来校验（幂等）；
+- [ ] 首次打开后菜单 **BorrowTomorrow → 一键搭建项目骨架** 不需要运行（已生成），**也不要用它校验**：它会重写生成场景与数据，重建应在隔离副本验证差异；
 - [ ] 从 `Assets/Game/Scenes/Bootstrap.scene` 进入 Play 验证。
+
+- [ ] 核对 `manifest.json` 的本地 Codely 依赖安装方式；缺少本地包时先补齐开发环境。开发辅助工具不得成为玩家离线运行的依赖。
