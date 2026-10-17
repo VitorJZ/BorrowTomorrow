@@ -37,7 +37,8 @@ namespace BorrowTomorrow.UI
             }
         }
 
-        private void OnContinue()
+        /// <summary>继续游戏（公开方法：供主菜单按钮 onClick 绑定）。</summary>
+        public void OnContinue()
         {
             if (ServiceRegistry.TryGet<ISaveService>(out var save))
             {
@@ -56,12 +57,14 @@ namespace BorrowTomorrow.UI
             GameSession.Instance?.ContinueGame();
         }
 
-        private void OnNewGame()
+        /// <summary>开始新游戏（公开方法：供主菜单按钮 onClick 绑定）。</summary>
+        public void OnNewGame()
         {
             GameSession.Instance?.StartNewGame();
         }
 
-        private void QuitGame()
+        /// <summary>退出游戏（公开方法：供主菜单按钮 onClick 绑定）。</summary>
+        public void QuitGame()
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;

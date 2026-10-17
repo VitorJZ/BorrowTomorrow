@@ -9,7 +9,7 @@ namespace BorrowTomorrow.UI
     public sealed class InteractionPrompt : MonoBehaviour
     {
         [SerializeField] private GameObject root;
-        [SerializeField] private TMPro.TMP_Text hintText;
+        [SerializeField] private UnityEngine.UI.Text hintText;
         [SerializeField] private RectTransform followRoot;
         [Tooltip("投影到屏幕边缘内缩（像素）")]
         [SerializeField] private float screenEdgePadding = 60f;

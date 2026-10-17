@@ -9,7 +9,7 @@ namespace BorrowTomorrow.UI
     public sealed class HintToast : MonoBehaviour
     {
         [SerializeField] private GameObject root;
-        [SerializeField] private TMPro.TMP_Text hintText;
+        [SerializeField] private UnityEngine.UI.Text hintText;
         [Tooltip("每条提示显示时长（秒）")]
         [SerializeField] private float displaySeconds = 5f;
 

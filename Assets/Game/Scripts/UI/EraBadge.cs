@@ -12,7 +12,7 @@ namespace BorrowTomorrow.UI
     public sealed class EraBadge : MonoBehaviour
     {
         [SerializeField] private GameObject root;
-        [SerializeField] private TMPro.TMP_Text badgeText;
+        [SerializeField] private UnityEngine.UI.Text badgeText;
         [SerializeField] private float displaySeconds = 1.8f;
 
         private Coroutine running;

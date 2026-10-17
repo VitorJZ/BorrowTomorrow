@@ -25,14 +25,16 @@ namespace BorrowTomorrow.UI
 
         private void Update()
         {
-            if (boundary == null && ServiceRegistry.TryGet<IBoundaryContext>(out var found))
+            // 重新解析活动房间：双房间场景（L01）切换后注册表会换成新房间的控制器。
+            if (ServiceRegistry.TryGet<IBoundaryContext>(out var found) && !ReferenceEquals(found, boundary))
             {
-                boundary = found;
-                if (!subscribed)
+                if (boundary != null && subscribed)
                 {
-                    boundary.OnBoundaryCommitted += SyncHandleToBoundary;
-                    subscribed = true;
+                    boundary.OnBoundaryCommitted -= SyncHandleToBoundary;
                 }
+                boundary = found;
+                boundary.OnBoundaryCommitted += SyncHandleToBoundary;
+                subscribed = true;
                 SyncHandleToBoundary(boundary.CommittedBoundary);
             }
             if (worldCamera == null)

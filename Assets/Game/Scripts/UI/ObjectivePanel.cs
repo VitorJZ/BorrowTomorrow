@@ -12,7 +12,7 @@ namespace BorrowTomorrow.UI
     public sealed class ObjectivePanel : MonoBehaviour
     {
         [SerializeField] private GameObject root;
-        [SerializeField] private TMPro.TMP_Text objectiveText;
+        [SerializeField] private UnityEngine.UI.Text objectiveText;
         [SerializeField] private float fadeSeconds = 0.6f;
 
         private string currentObjective;
