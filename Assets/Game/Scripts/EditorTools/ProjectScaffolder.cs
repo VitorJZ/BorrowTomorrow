@@ -473,13 +473,23 @@ namespace BorrowTomorrow.EditorTools
             Stretch((RectTransform)objectiveRoot.transform, Vector2.zero, Vector2.zero, true);
             Text objectiveText = MakeText(objectiveRoot.transform, "ObjectiveText", string.Empty, font, 28,
                 TextAnchor.MiddleLeft, new Vector2(0f, 0f), new Vector2(600f, 80f));
-            LevelLayouts.SetObject(objective, "root", objectiveRoot);
-            LevelLayouts.SetObject(objective, "objectiveText", objectiveText);
+            // 接线 target 必须是组件（GameObject 上的 SerializedObject 找不到组件字段，会静默写 0）。
+            var objectivePanel = objective.GetComponent<UI.ObjectivePanel>();
+            LevelLayouts.SetObject(objectivePanel, "root", objectiveRoot);
+            LevelLayouts.SetObject(objectivePanel, "objectiveText", objectiveText);
 
-            // 顶部年代把手（命中区 ≥44px，策划 5.3）。
+            // 顶部年代把手（命中区 ≥44px，策划 5.3）：灰条背景 + 提示文字，让“可拖动”可被发现。
             var handle = CreateChild<UI.BoundaryHandle>(uiRoot.transform, "BoundaryHandle");
-            ((RectTransform)handle.transform).sizeDelta = new Vector2(240, 44);
-            ((RectTransform)handle.transform).anchoredPosition = new Vector2(0f, 480f);
+            Stretch((RectTransform)handle.transform, new Vector2(0f, 480f), new Vector2(420f, 48f));
+            var handleImage = handle.AddComponent<Image>();
+            handleImage.color = new Color(0.28f, 0.3f, 0.34f, 0.92f);
+            MakeText(handle.transform, "HandleLabel", "◂ 拖动调整时间边界 ▸", font, 22,
+                TextAnchor.MiddleCenter, Vector2.zero, new Vector2(400f, 40f));
+            MakeText(uiRoot.transform, "EraLabelPast", "1994 ◂", font, 24, TextAnchor.MiddleLeft,
+                new Vector2(-700f, 480f), new Vector2(120f, 40f));
+            Text eraLabelFuture = MakeText(uiRoot.transform, "EraLabelPresent", "▸ 2024", font, 24, TextAnchor.MiddleRight,
+                new Vector2(700f, 480f), new Vector2(120f, 40f));
+            eraLabelFuture.color = new Color(0.2f, 0.35f, 0.3f);
 
             // 底部对白字幕（策划 5.4：最多两行）。
             var subtitle = CreateChild<UI.SubtitlePanel>(uiRoot.transform, "SubtitlePanel");
@@ -490,9 +500,10 @@ namespace BorrowTomorrow.EditorTools
                 TextAnchor.MiddleLeft, new Vector2(0f, 45f), new Vector2(1000f, 40f));
             Text contentText = MakeText(subtitleRoot.transform, "ContentText", string.Empty, font, 30,
                 TextAnchor.UpperLeft, new Vector2(0f, -5f), new Vector2(1040f, 90f));
-            LevelLayouts.SetObject(subtitle, "root", subtitleRoot);
-            LevelLayouts.SetObject(subtitle, "speakerText", speakerText);
-            LevelLayouts.SetObject(subtitle, "contentText", contentText);
+            var subtitlePanel = subtitle.GetComponent<UI.SubtitlePanel>();
+            LevelLayouts.SetObject(subtitlePanel, "root", subtitleRoot);
+            LevelLayouts.SetObject(subtitlePanel, "speakerText", speakerText);
+            LevelLayouts.SetObject(subtitlePanel, "contentText", contentText);
 
             // 交互 E 提示（底部中间）。
             var prompt = CreateChild<UI.InteractionPrompt>(uiRoot.transform, "InteractionPrompt");
@@ -501,8 +512,9 @@ namespace BorrowTomorrow.EditorTools
             Stretch((RectTransform)promptRoot.transform, Vector2.zero, Vector2.zero, true);
             Text promptText = MakeText(promptRoot.transform, "PromptText", string.Empty, font, 24,
                 TextAnchor.MiddleCenter, new Vector2(0f, 0f), new Vector2(380f, 46f));
-            LevelLayouts.SetObject(prompt, "root", promptRoot);
-            LevelLayouts.SetObject(prompt, "hintText", promptText);
+            var promptPanel = prompt.GetComponent<UI.InteractionPrompt>();
+            LevelLayouts.SetObject(promptPanel, "root", promptRoot);
+            LevelLayouts.SetObject(promptPanel, "hintText", promptText);
 
             // 提示气泡（策划 12.4）。
             var toast = CreateChild<UI.HintToast>(uiRoot.transform, "HintToast");
@@ -511,8 +523,9 @@ namespace BorrowTomorrow.EditorTools
             Stretch((RectTransform)toastRoot.transform, Vector2.zero, Vector2.zero, true);
             Text toastText = MakeText(toastRoot.transform, "HintText", string.Empty, font, 24,
                 TextAnchor.MiddleCenter, new Vector2(0f, 0f), new Vector2(680f, 46f));
-            LevelLayouts.SetObject(toast, "root", toastRoot);
-            LevelLayouts.SetObject(toast, "hintText", toastText);
+            var toastPanel = toast.GetComponent<UI.HintToast>();
+            LevelLayouts.SetObject(toastPanel, "root", toastRoot);
+            LevelLayouts.SetObject(toastPanel, "hintText", toastText);
 
             // 年代角标（策划 4.2：过门转场后重新标清两侧年代）。
             var badge = CreateChild<UI.EraBadge>(uiRoot.transform, "EraBadge");
@@ -521,8 +534,9 @@ namespace BorrowTomorrow.EditorTools
             Stretch((RectTransform)badgeRoot.transform, Vector2.zero, Vector2.zero, true);
             Text badgeText = MakeText(badgeRoot.transform, "BadgeText", string.Empty, font, 40,
                 TextAnchor.MiddleCenter, new Vector2(0f, 0f), new Vector2(280f, 66f));
-            LevelLayouts.SetObject(badge, "root", badgeRoot);
-            LevelLayouts.SetObject(badge, "badgeText", badgeText);
+            var badgePanel = badge.GetComponent<UI.EraBadge>();
+            LevelLayouts.SetObject(badgePanel, "root", badgeRoot);
+            LevelLayouts.SetObject(badgePanel, "badgeText", badgeText);
 
             // 边界受阻提示（策划 4.5：先到稳固的地方）。
             Text blockedText = MakeText(uiRoot.transform, "BlockedToast", string.Empty, font, 26,
@@ -549,7 +563,8 @@ namespace BorrowTomorrow.EditorTools
             Stretch((RectTransform)pauseRoot.transform, Vector2.zero, Vector2.zero, true);
             MakeText(pauseRoot.transform, "PauseLabel", "已暂停（按 Esc 继续）", font, 30,
                 TextAnchor.MiddleCenter, new Vector2(0f, 0f), new Vector2(540f, 60f));
-            LevelLayouts.SetObject(pauseMenu, "root", pauseRoot);
+            var pausePanel = pauseMenu.GetComponent<UI.PauseMenu>();
+            LevelLayouts.SetObject(pausePanel, "root", pauseRoot);
 
             // 恢复确认框（策划 4.6/5.1）。
             var resumeDialog = CreateChild<UI.ResumeConfirmDialog>(uiRoot.transform, "ResumeConfirmDialog");
@@ -558,7 +573,8 @@ namespace BorrowTomorrow.EditorTools
             Stretch((RectTransform)resumeRoot.transform, Vector2.zero, Vector2.zero, true);
             MakeText(resumeRoot.transform, "ConfirmLabel", "按 Backspace 再次确认恢复检查点；按 E 取消", font, 24,
                 TextAnchor.MiddleCenter, new Vector2(0f, 0f), new Vector2(620f, 100f));
-            LevelLayouts.SetObject(resumeDialog, "root", resumeRoot);
+            var resumePanel = resumeDialog.GetComponent<UI.ResumeConfirmDialog>();
+            LevelLayouts.SetObject(resumePanel, "root", resumeRoot);
 
             // 事件系统挂在系统根下：随 DontDestroyOnLoad 常驻（策划 10.3：重开关卡不重复创建）。
             var eventSystem = new GameObject("EventSystem");

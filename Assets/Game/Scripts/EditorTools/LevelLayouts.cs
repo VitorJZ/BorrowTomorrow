@@ -55,13 +55,14 @@ namespace BorrowTomorrow.EditorTools
         // ------------------------------------------------------------ 通用构建件
 
         /// <summary>
-        /// 按世界尺寸渲染 Sprite。用 Tiled 绘制模式 + renderer.size：
-        /// SpriteRenderer.size 仅在 Tiled/Sliced 模式下生效（Simple 模式下灰盒曾全部渲染成贴图原尺寸小点）；
-        /// 不能用 localScale 缩放——那会把同一物体上的 BoxCollider2D 一起放大（玩家曾被巨型地面碰撞体弹飞）。
+        /// 按世界尺寸渲染 Sprite。用 Sliced 绘制模式 + renderer.size：
+        /// Simple 模式下 size 不生效（灰盒曾全部渲染成贴图原尺寸小点）；
+        /// Tiled 模式按贴图尺寸生成真实网格（4×4 贴图铺 700×25 瓦片 ≈ 7 万顶点报错）；
+        /// Sliced 对零边框纯色贴图就是一次拉伸，恒定 4 顶点，且不影响同物体上的碰撞体。
         /// </summary>
         internal static void SizeSprite(SpriteRenderer renderer, Vector2 worldSize)
         {
-            renderer.drawMode = SpriteDrawMode.Tiled;
+            renderer.drawMode = SpriteDrawMode.Sliced;
             renderer.size = worldSize;
         }
 
