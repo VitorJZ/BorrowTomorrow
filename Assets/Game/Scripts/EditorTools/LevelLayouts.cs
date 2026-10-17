@@ -55,20 +55,14 @@ namespace BorrowTomorrow.EditorTools
         // ------------------------------------------------------------ 通用构建件
 
         /// <summary>
-        /// 按世界尺寸渲染 Sprite。SpriteRenderer.size 在 Simple 绘制模式下不生效
-        /// （灰盒曾因此全部渲染成贴图原尺寸小点，画面全空白），故用 localScale 缩放。
+        /// 按世界尺寸渲染 Sprite。用 Tiled 绘制模式 + renderer.size：
+        /// SpriteRenderer.size 仅在 Tiled/Sliced 模式下生效（Simple 模式下灰盒曾全部渲染成贴图原尺寸小点）；
+        /// 不能用 localScale 缩放——那会把同一物体上的 BoxCollider2D 一起放大（玩家曾被巨型地面碰撞体弹飞）。
         /// </summary>
         internal static void SizeSprite(SpriteRenderer renderer, Vector2 worldSize)
         {
-            Vector2 native = renderer.sprite != null ? (Vector2)renderer.sprite.bounds.size : Vector2.one;
-            if (native.x < 0.001f || native.y < 0.001f)
-            {
-                return;
-            }
-            renderer.transform.localScale = new Vector3(
-                worldSize.x / native.x,
-                worldSize.y / native.y,
-                1f);
+            renderer.drawMode = SpriteDrawMode.Tiled;
+            renderer.size = worldSize;
         }
 
         /// <summary>灰盒盒子：SpriteRenderer + 可选 BoxCollider2D（可旋转）。</summary>

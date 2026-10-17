@@ -125,26 +125,44 @@ namespace BorrowTomorrow.EditorTools
 
         // ---------------------------------------------------------------- 基础资产
 
-        /// <summary>生成 1×1 白色矩形 Sprite（灰盒与遮罩通用）。</summary>
+        /// <summary>生成 1×1 白色矩形 Sprite（灰盒与遮罩通用）。
+        /// FullRect 网格 + Repeat 环绕 + Point 采样：支持 Tiled 平铺且拉伸数百倍边缘依旧锐利不糊。
+        /// 导入器属性与 TextureImporterSettings 在 Tuanjie 批处理下均不持久化 wrap/meshType，
+        /// 故直接改写 .meta 文本后重新导入。</summary>
         private static string EnsureWhiteRectSprite()
         {
             Directory.CreateDirectory(ArtUiDir);
             string path = $"{ArtUiDir}/WhiteRect.png";
-            if (File.Exists(path))
+            string metaPath = path + ".meta";
+            if (!File.Exists(path))
             {
-                return path;
+                var texture = new Texture2D(4, 4);
+                Color[] pixels = Enumerable.Repeat(Color.white, 16).ToArray();
+                texture.SetPixels(pixels);
+                texture.Apply();
+                File.WriteAllBytes(path, texture.EncodeToPNG());
+                UnityEngine.Object.DestroyImmediate(texture);
+                AssetDatabase.ImportAsset(path);
             }
-            var texture = new Texture2D(4, 4);
-            Color[] pixels = Enumerable.Repeat(Color.white, 16).ToArray();
-            texture.SetPixels(pixels);
-            texture.Apply();
-            File.WriteAllBytes(path, texture.EncodeToPNG());
-            UnityEngine.Object.DestroyImmediate(texture);
-            AssetDatabase.ImportAsset(path);
-            var importer = (TextureImporter)AssetImporter.GetAtPath(path);
-            importer.textureType = TextureImporterType.Sprite;
-            importer.filterMode = FilterMode.Bilinear;
-            importer.SaveAndReimport();
+
+            // 直接改写 meta：filterMode 0=Point；wrapU/V/W 1=Repeat；spriteMeshType 1=FullRect。
+            if (File.Exists(metaPath))
+            {
+                string meta = File.ReadAllText(metaPath);
+                string patched = meta
+                    .Replace("filterMode: 0", "filterMode: 0")
+                    .Replace("filterMode: 1", "filterMode: 0")
+                    .Replace("filterMode: 2", "filterMode: 0")
+                    .Replace("wrapU: 0", "wrapU: 1")
+                    .Replace("wrapV: 0", "wrapV: 1")
+                    .Replace("wrapW: 0", "wrapW: 1")
+                    .Replace("spriteMeshType: 0", "spriteMeshType: 1");
+                if (patched != meta)
+                {
+                    File.WriteAllText(metaPath, patched);
+                    AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+                }
+            }
             return path;
         }
 
@@ -436,6 +454,8 @@ namespace BorrowTomorrow.EditorTools
             SetObjectArray(library, "entries", dialogueEntries);
 
             // 常驻 UI 根（策划 10.3：系统根随 Bootstrap 常驻，重开关卡不重复创建）。
+            // 结构约定：面板组件所在 GO 永远保持激活，可被显隐的是其 Root 子物体——
+            // 组件自我 SetActive(false) 会导致协程/Update/Start 订阅全部停摆（灰盒曾因此无文字、角标协程报错）。
             var uiRoot = new GameObject("UICanvas");
             uiRoot.transform.SetParent(systemRoot.transform);
             var canvas = uiRoot.AddComponent<Canvas>();
@@ -449,8 +469,11 @@ namespace BorrowTomorrow.EditorTools
             // 左上目标（策划 5.4）。
             var objective = CreateChild<UI.ObjectivePanel>(uiRoot.transform, "ObjectivePanel");
             Stretch((RectTransform)objective.transform, new Vector2(-560f, 470f), new Vector2(640f, 90f));
-            Text objectiveText = MakeText(objective.transform, "ObjectiveText", string.Empty, font, 28,
+            GameObject objectiveRoot = CreateUIChild(objective.transform, "Root");
+            Stretch((RectTransform)objectiveRoot.transform, Vector2.zero, Vector2.zero, true);
+            Text objectiveText = MakeText(objectiveRoot.transform, "ObjectiveText", string.Empty, font, 28,
                 TextAnchor.MiddleLeft, new Vector2(0f, 0f), new Vector2(600f, 80f));
+            LevelLayouts.SetObject(objective, "root", objectiveRoot);
             LevelLayouts.SetObject(objective, "objectiveText", objectiveText);
 
             // 顶部年代把手（命中区 ≥44px，策划 5.3）。
@@ -461,32 +484,44 @@ namespace BorrowTomorrow.EditorTools
             // 底部对白字幕（策划 5.4：最多两行）。
             var subtitle = CreateChild<UI.SubtitlePanel>(uiRoot.transform, "SubtitlePanel");
             Stretch((RectTransform)subtitle.transform, new Vector2(0f, -190f), new Vector2(1100f, 150f));
-            Text speakerText = MakeText(subtitle.transform, "SpeakerText", string.Empty, font, 24,
+            GameObject subtitleRoot = CreateUIChild(subtitle.transform, "Root");
+            Stretch((RectTransform)subtitleRoot.transform, Vector2.zero, Vector2.zero, true);
+            Text speakerText = MakeText(subtitleRoot.transform, "SpeakerText", string.Empty, font, 24,
                 TextAnchor.MiddleLeft, new Vector2(0f, 45f), new Vector2(1000f, 40f));
-            Text contentText = MakeText(subtitle.transform, "ContentText", string.Empty, font, 30,
+            Text contentText = MakeText(subtitleRoot.transform, "ContentText", string.Empty, font, 30,
                 TextAnchor.UpperLeft, new Vector2(0f, -5f), new Vector2(1040f, 90f));
+            LevelLayouts.SetObject(subtitle, "root", subtitleRoot);
             LevelLayouts.SetObject(subtitle, "speakerText", speakerText);
             LevelLayouts.SetObject(subtitle, "contentText", contentText);
 
             // 交互 E 提示（底部中间）。
             var prompt = CreateChild<UI.InteractionPrompt>(uiRoot.transform, "InteractionPrompt");
             Stretch((RectTransform)prompt.transform, new Vector2(0f, 90f), new Vector2(400f, 50f));
-            Text promptText = MakeText(prompt.transform, "PromptText", string.Empty, font, 24,
+            GameObject promptRoot = CreateUIChild(prompt.transform, "Root");
+            Stretch((RectTransform)promptRoot.transform, Vector2.zero, Vector2.zero, true);
+            Text promptText = MakeText(promptRoot.transform, "PromptText", string.Empty, font, 24,
                 TextAnchor.MiddleCenter, new Vector2(0f, 0f), new Vector2(380f, 46f));
+            LevelLayouts.SetObject(prompt, "root", promptRoot);
             LevelLayouts.SetObject(prompt, "hintText", promptText);
 
             // 提示气泡（策划 12.4）。
             var toast = CreateChild<UI.HintToast>(uiRoot.transform, "HintToast");
             Stretch((RectTransform)toast.transform, new Vector2(0f, 160f), new Vector2(700f, 50f));
-            Text toastText = MakeText(toast.transform, "HintText", string.Empty, font, 24,
+            GameObject toastRoot = CreateUIChild(toast.transform, "Root");
+            Stretch((RectTransform)toastRoot.transform, Vector2.zero, Vector2.zero, true);
+            Text toastText = MakeText(toastRoot.transform, "HintText", string.Empty, font, 24,
                 TextAnchor.MiddleCenter, new Vector2(0f, 0f), new Vector2(680f, 46f));
+            LevelLayouts.SetObject(toast, "root", toastRoot);
             LevelLayouts.SetObject(toast, "hintText", toastText);
 
             // 年代角标（策划 4.2：过门转场后重新标清两侧年代）。
             var badge = CreateChild<UI.EraBadge>(uiRoot.transform, "EraBadge");
             Stretch((RectTransform)badge.transform, new Vector2(0f, 380f), new Vector2(300f, 70f));
-            Text badgeText = MakeText(badge.transform, "BadgeText", string.Empty, font, 40,
+            GameObject badgeRoot = CreateUIChild(badge.transform, "Root");
+            Stretch((RectTransform)badgeRoot.transform, Vector2.zero, Vector2.zero, true);
+            Text badgeText = MakeText(badgeRoot.transform, "BadgeText", string.Empty, font, 40,
                 TextAnchor.MiddleCenter, new Vector2(0f, 0f), new Vector2(280f, 66f));
+            LevelLayouts.SetObject(badge, "root", badgeRoot);
             LevelLayouts.SetObject(badge, "badgeText", badgeText);
 
             // 边界受阻提示（策划 4.5：先到稳固的地方）。
@@ -498,7 +533,7 @@ namespace BorrowTomorrow.EditorTools
             var fadeObject = CreateChild<UI.FadeScreen>(uiRoot.transform, "FadeScreen");
             Stretch((RectTransform)fadeObject.transform, Vector2.zero, Vector2.zero, true);
 
-            // HudService 的面板接线（此前缺失导致淡入淡出/目标/字幕/把手/提示全部空转）。
+            // HudService 的面板接线。
             LevelLayouts.SetObject(hud, "subtitlePanel", subtitle);
             LevelLayouts.SetObject(hud, "objectivePanel", objective);
             LevelLayouts.SetObject(hud, "interactionPrompt", prompt);
@@ -510,14 +545,20 @@ namespace BorrowTomorrow.EditorTools
             // 暂停提示（灰盒文字版；正式菜单由 B 组制作）。
             var pauseMenu = CreateChild<UI.PauseMenu>(uiRoot.transform, "PauseMenu");
             Stretch((RectTransform)pauseMenu.transform, new Vector2(0f, 0f), new Vector2(560f, 160f));
-            MakeText(pauseMenu.transform, "PauseLabel", "已暂停（按 Esc 继续）", font, 30,
+            GameObject pauseRoot = CreateUIChild(pauseMenu.transform, "Root");
+            Stretch((RectTransform)pauseRoot.transform, Vector2.zero, Vector2.zero, true);
+            MakeText(pauseRoot.transform, "PauseLabel", "已暂停（按 Esc 继续）", font, 30,
                 TextAnchor.MiddleCenter, new Vector2(0f, 0f), new Vector2(540f, 60f));
+            LevelLayouts.SetObject(pauseMenu, "root", pauseRoot);
 
             // 恢复确认框（策划 4.6/5.1）。
             var resumeDialog = CreateChild<UI.ResumeConfirmDialog>(uiRoot.transform, "ResumeConfirmDialog");
             Stretch((RectTransform)resumeDialog.transform, new Vector2(0f, 0f), new Vector2(640f, 120f));
-            MakeText(resumeDialog.transform, "ConfirmLabel", "按 Backspace 再次确认恢复检查点；按 E 取消", font, 24,
+            GameObject resumeRoot = CreateUIChild(resumeDialog.transform, "Root");
+            Stretch((RectTransform)resumeRoot.transform, Vector2.zero, Vector2.zero, true);
+            MakeText(resumeRoot.transform, "ConfirmLabel", "按 Backspace 再次确认恢复检查点；按 E 取消", font, 24,
                 TextAnchor.MiddleCenter, new Vector2(0f, 0f), new Vector2(620f, 100f));
+            LevelLayouts.SetObject(resumeDialog, "root", resumeRoot);
 
             // 事件系统挂在系统根下：随 DontDestroyOnLoad 常驻（策划 10.3：重开关卡不重复创建）。
             var eventSystem = new GameObject("EventSystem");
@@ -731,8 +772,13 @@ namespace BorrowTomorrow.EditorTools
             renderer.color = new Color(1f, 1f, 1f, 0.06f);
             renderer.sortingLayerName = "EraBackground";
             renderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
-            // 归一化为 1 局部单位 = 1 世界单位：TemporalVisualController 按 localScale.x 设遮罩宽度。
-            LevelLayouts.SizeSprite(renderer, Vector2.one);
+            // 归一化为 1 局部单位 = 1 世界单位：本物体无碰撞体，transform 缩放安全；
+            // TemporalVisualController 以 localScale.x 设遮罩宽度，SpriteMask 形状跟随 transform 缩放最可靠。
+            Vector2 native = (Vector2)white.bounds.size;
+            if (native.x > 0.001f && native.y > 0.001f)
+            {
+                node.transform.localScale = new Vector3(1f / native.x, 1f / native.y, 1f);
+            }
             node.AddComponent<SpriteMask>();
             return node;
         }
@@ -765,6 +811,15 @@ namespace BorrowTomorrow.EditorTools
                 child.AddComponent<RectTransform>();
             }
             child.AddComponent<T>();
+            return child;
+        }
+
+        /// <summary>面板的显隐容器子物体：组件所在 GO 保持常激活，root 指向本子物体。</summary>
+        private static GameObject CreateUIChild(Transform parent, string name)
+        {
+            var child = new GameObject(name);
+            child.transform.SetParent(parent, false);
+            child.AddComponent<RectTransform>();
             return child;
         }
 
