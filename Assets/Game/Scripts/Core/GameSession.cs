@@ -3,6 +3,9 @@ using BorrowTomorrow.Core.Data;
 using BorrowTomorrow.Core.Interfaces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+// 本类的 StoryFlags 属性（StoryFlagStore 类型）遮蔽了同名的常量类，
+// 类内引用常量时用本别名（如 StoryFlagIds.IdentityKnown）。
+using StoryFlagIds = BorrowTomorrow.Core.StoryFlags;
 
 namespace BorrowTomorrow.Core
 {
@@ -56,7 +59,20 @@ namespace BorrowTomorrow.Core
         public void OnBootInitialize()
         {
             // 订阅剧情标记：关键标记写入后触发即时保存（策划 12.3：重要演出结束保存）。
-            StoryFlags.FlagAdded += _ => { if (State.Phase == GamePhase.Playing) { SaveProgressNow(); } };
+            StoryFlags.FlagAdded += OnStoryFlagAdded;
+        }
+
+        private void OnStoryFlagAdded(string flagId)
+        {
+            // 身份揭示完成后切换任务文本（策划 3.6：任务改为“找到铁盒的位置，告诉晓晓。”）。
+            if (flagId == StoryFlagIds.IdentityKnown)
+            {
+                SetObjective(Objectives.TellXiaoxaoBoxLocation);
+            }
+            if (State.Phase == GamePhase.Playing)
+            {
+                SaveProgressNow();
+            }
         }
 
         private void OnDestroy()
@@ -74,9 +90,16 @@ namespace BorrowTomorrow.Core
             {
                 return;
             }
-            if (input.PausePressedThisFrame && !State.IsPaused)
+            if (input.PausePressedThisFrame)
             {
-                State.EnterPause();
+                if (State.IsPaused)
+                {
+                    State.ExitPause(); // Esc 再按一次恢复（灰盒期无暂停菜单按钮时的退路）
+                }
+                else
+                {
+                    State.EnterPause();
+                }
             }
             // 恢复确认框由 UI 呈现并再次确认（策划 4.6），此处只负责状态受理。
         }
@@ -163,6 +186,13 @@ namespace BorrowTomorrow.Core
             ActiveRoom = null;
             State.SetPhase(GamePhase.Loading);
 
+            // 转场淡出（FadeScreen 由 HUD 提供，策划 4.6 转场共用的淡入淡出层）。
+            if (ServiceRegistry.TryGet<IHudService>(out var fadeHud))
+            {
+                fadeHud.FadeOut(0.35f);
+            }
+            yield return new WaitForSeconds(0.35f);
+
             AsyncOperation op = SceneManager.LoadSceneAsync(definition.sceneName);
             if (op == null)
             {
@@ -204,6 +234,10 @@ namespace BorrowTomorrow.Core
                 SetObjective(definition.initialObjective);
             }
 
+            if (ServiceRegistry.TryGet<IHudService>(out var fadeInHud))
+            {
+                fadeInHud.FadeIn(0.5f);
+            }
             State.SetPhase(GamePhase.Playing);
             loadRoutineRunning = false;
         }
@@ -221,11 +255,22 @@ namespace BorrowTomorrow.Core
                 yield break;
             }
             State.SetSubState(PlayingSubState.Cutscene); // 转场期间暂停主动操作
+            if (ServiceRegistry.TryGet<IHudService>(out var hud))
+            {
+                hud.FadeOut(0.25f);
+            }
+            yield return new WaitForSeconds(0.25f);
+
             ActiveRoom?.DeactivateRoom();
             ActiveRoom = targetRoom;
             targetRoom.ActivateRoom();
             targetRoom.PlacePlayer(spawnId);
-            yield return null; // 等一帧让物理与相机稳定
+
+            yield return new WaitForSeconds(0.1f); // 等物理与相机稳定
+            if (hud != null)
+            {
+                hud.FadeIn(0.25f);
+            }
             State.SetSubState(PlayingSubState.Free);
         }
 
@@ -241,9 +286,22 @@ namespace BorrowTomorrow.Core
             }
             else
             {
+                // 末关（尾声）完成：进入制作名单，短暂停留后回到主菜单（策划 10.6）。
                 Debug.Log("[GameSession] 已完成最后一个关卡，进入制作名单。");
                 State.SetPhase(GamePhase.Credits);
+                StartCoroutine(ReturnFromCreditsRoutine());
             }
+        }
+
+        private IEnumerator ReturnFromCreditsRoutine()
+        {
+            yield return new WaitForSeconds(4f);
+            if (State.Phase != GamePhase.Credits)
+            {
+                yield break; // 期间被暂停菜单等其他流程打断则不覆盖
+            }
+            State.SetPhase(GamePhase.MainMenu);
+            SceneManager.LoadScene(mainMenuSceneName);
         }
 
         /// <summary>设置当前目标并广播到 HUD（策划 5.4：左上一行目标）。</summary>

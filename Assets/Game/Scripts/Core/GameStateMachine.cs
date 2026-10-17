@@ -70,6 +70,7 @@ namespace BorrowTomorrow.Core
                 {
                     GamePhase.Loading,   // 下一关 / 重开
                     GamePhase.Epilogue,  // 末关结束
+                    GamePhase.Credits,   // 尾声完成进入制作名单（策划 10.6）
                     GamePhase.MainMenu,  // 返回主菜单
                 },
                 [GamePhase.Epilogue] = new HashSet<GamePhase> { GamePhase.Credits, GamePhase.MainMenu },
