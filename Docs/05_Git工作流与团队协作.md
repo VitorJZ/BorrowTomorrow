@@ -31,6 +31,8 @@ main          稳定线：随时可打开可玩；只接受 dev 的合并与修�
 - 生命周期：从 `dev` 拉出 → 完成自测 → 合回 `dev`；里程碑（策划 14 章 A–E）验收后 `dev → main` 打 tag（`milestone-A` …）。
 - 长期分支每天 rebase/merge `dev`，避免场景合并冲突堆积。
 
+**模块认领（两人）**：A 认领 Core / Player / TimeBoundary / Level / EditorTools / Tests；B 认领 Narrative / Audio / Save / UI。认领总表、每模块任务清单与场景编辑登记表见 **[09_双人分工与模块开发指南](09_双人分工与模块开发指南.md)**。
+
 ## 4. 提交规范
 
 格式：`<类型>(<模块>): <一句话说明>`
