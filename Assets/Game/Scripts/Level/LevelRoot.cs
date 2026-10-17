@@ -89,6 +89,12 @@ namespace BorrowTomorrow.Level
             {
                 cameraRig.SetRoomBounds(cameraBounds);
             }
+            // 过门转场后重新标清两侧年代（策划 4.2）：按房间中线相对边界的年代给角标。
+            if (ServiceRegistry.TryGet<IHudService>(out var hud) && boundaryController != null)
+            {
+                float midX = (min + max) * 0.5f;
+                hud.FlashEraBadge(boundaryController.EraAtAnchor(midX));
+            }
         }
 
         /// <summary>停用房间：注销服务（玩家与系统对象随之离开本房间）。</summary>

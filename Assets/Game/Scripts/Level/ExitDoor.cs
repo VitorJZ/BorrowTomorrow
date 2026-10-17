@@ -76,6 +76,12 @@ namespace BorrowTomorrow.Level
                 return true; // 消耗输入但不开门
             }
 
+            // 开门音效（稳定 id，由 B 组在 SfxLibrary 登记，策划 09 声音清单“门轴”）。
+            if (ServiceRegistry.TryGet<IAudioService>(out var audio))
+            {
+                audio.PlaySfx("door_open", transform.position);
+            }
+
             switch (mode)
             {
                 case TransitionMode.SameSceneRoom:
