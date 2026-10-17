@@ -58,8 +58,6 @@ namespace BorrowTomorrow.Player
         private CapsuleCollider2D capsule;
 
         private IInputSource input;
-        private ContactFilter2D groundFilter;
-        private Collider2D[] groundProbeResults;
         private float coyoteTimer;
         private float jumpBufferTimer;
         private float footstepTimer;
@@ -86,14 +84,8 @@ namespace BorrowTomorrow.Player
             body.freezeRotation = true; // 冻结 Z 旋转（策划 11.3）
             cachedGravityScale = fallAcceleration / Mathf.Abs(Physics2D.gravity.y);
             body.gravityScale = cachedGravityScale;
-            // 地面探测不命中触发器：避免把梯子 Trigger 当成支撑（策划 11.3）。
-            groundFilter = new ContactFilter2D
-            {
-                useTriggers = false,
-                useLayerMask = true,
-                layerMask = groundMask,
-            };
-            groundProbeResults = new Collider2D[1];
+            // 地面探测走 Simple 重载 + layerMask（Ground|Temporal）。
+            // 梯子 Trigger 在独立的 Ladder 层上，不在该掩码内——不会把攀爬 Trigger 当成支撑（策划 11.3）。
         }
 
         private BorrowTomorrow.Player.PlayerContext registeredContext;
@@ -234,13 +226,11 @@ namespace BorrowTomorrow.Player
                 GroundCollider = null;
                 return;
             }
-            // 探测盒以胶囊底部为基准（origin 是脚底，不是胶囊中心）。
-            Vector2 capsuleCenter = (Vector2)transform.position + capsule.offset;
-            Vector2 origin = capsuleCenter + Vector2.down * (capsule.size.y * 0.5f + groundProbeDrop - groundProbeSize.y * 0.5f);
-            // 单结果查询没有 ContactFilter 重载，用结果数组 + 不命中触发器的过滤器（策划 11.3：梯子 Trigger 不是支撑）。
-            groundProbeResults[0] = null;
-            int hitCount = Physics2D.OverlapBox(origin, groundProbeSize, 0f, groundFilter, groundProbeResults);
-            Collider2D hit = hitCount > 0 ? groundProbeResults[0] : null;
+            // 探测盒以脚底为基准：中心在脚底稍下方（drop），跨过脚底与地面接触缝隙。
+            // Simple 重载按项目"查询命中触发器"设置工作——梯子 Trigger 已隔离在 Ladder 层外（见 LadderContent）。
+            Vector2 feet = (Vector2)transform.position + capsule.offset - Vector2.up * (capsule.size.y * 0.5f);
+            Vector2 origin = feet + Vector2.down * groundProbeDrop;
+            Collider2D hit = Physics2D.OverlapBox(origin, groundProbeSize, 0f, groundMask);
             IsGrounded = hit != null;
             GroundCollider = hit;
         }

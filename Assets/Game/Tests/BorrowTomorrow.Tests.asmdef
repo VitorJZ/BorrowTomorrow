@@ -4,7 +4,9 @@
     "references": [
         "BorrowTomorrow.Core",
         "BorrowTomorrow.TimeBoundary",
-        "BorrowTomorrow.Save"
+        "BorrowTomorrow.Save",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
     ],
     "includePlatforms": [
         "Editor"

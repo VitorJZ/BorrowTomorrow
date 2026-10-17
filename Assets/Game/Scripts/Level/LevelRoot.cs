@@ -129,7 +129,9 @@ namespace BorrowTomorrow.Level
                     Debug.LogError($"[LevelRoot] 场景中无玩家且未配置玩家预制体，无法放置。");
                     return;
                 }
-                Instantiate(playerPrefab);
+                // 直接在出生点生成：避免 Instantiate(原点) + Rigidbody2D.position 赋值的时序差
+                // （Rigidbody2D.position 在下次物理步才应用，期间玩家可能被原点附近的碰撞体挤走）。
+                Instantiate(playerPrefab, target.Position, Quaternion.identity);
             }
 
             if (ServiceRegistry.TryGet<IPlayerContext>(out var placed) && placed.IsPresent)

@@ -309,9 +309,15 @@ namespace BorrowTomorrow.EditorTools
             }
 
             // 攀爬触发区（梯顶超出平台面 0.7，便于爬出后落到相邻平台，策划 11.3）。
+            // 触发器放独立的 Ladder 层：地面探测掩码（Ground|Temporal）不含它，玩家贴梯悬空不会被误判为落地。
             var zone = new GameObject("LadderZone");
             zone.transform.SetParent(eraChild.transform, false);
             zone.transform.localPosition = new Vector3(centerX, midY, 0f) - (Vector3)parentWorld;
+            int ladderLayer = LayerMask.NameToLayer("Ladder");
+            if (ladderLayer >= 0)
+            {
+                zone.layer = ladderLayer;
+            }
             var trigger = zone.AddComponent<BoxCollider2D>();
             trigger.isTrigger = true;
             trigger.size = new Vector2(0.8f, height);
