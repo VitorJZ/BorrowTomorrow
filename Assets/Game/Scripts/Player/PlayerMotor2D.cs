@@ -28,6 +28,9 @@ namespace BorrowTomorrow.Player
         [Tooltip("梯子攀爬速度")]
         [SerializeField] private float climbSpeed = 3f;
 
+        [Tooltip("攀爬中允许的横向微调速度（便于爬出梯顶落到平台）")]
+        [SerializeField] private float climbHorizontalSpeed = 1.2f;
+
         [Header("容错（策划 6.2）")]
         [Tooltip("离地后仍可起跳的宽容时间（秒）")]
         [SerializeField] private float coyoteTime = 0.1f;
@@ -36,21 +39,30 @@ namespace BorrowTomorrow.Player
         [SerializeField] private float jumpBufferTime = 0.12f;
 
         [Header("检测")]
-        [Tooltip("可站立表面层")]
+        [Tooltip("可站立表面层（Ground + Temporal）")]
         [SerializeField] private LayerMask groundMask = ~0;
 
-        [Tooltip("脚下检测盒中心相对胶囊底部中心的偏移")]
-        [SerializeField] private Vector2 groundCheckOffset = new Vector2(0f, -0.05f);
+        [Tooltip("脚下探测盒中心相对胶囊底部中心再向下的偏移")]
+        [SerializeField] private float groundProbeDrop = 0.03f;
 
-        [Tooltip("脚下检测盒尺寸")]
-        [SerializeField] private Vector2 groundCheckSize = new Vector2(0.5f, 0.15f);
+        [Tooltip("脚下探测盒尺寸")]
+        [SerializeField] private Vector2 groundProbeSize = new Vector2(0.5f, 0.12f);
+
+        [Header("音效（稳定 id，由 B 组在 SfxLibrary 登记，策划 09）")]
+        [SerializeField] private string footstepSfxId = "player_footstep";
+        [SerializeField] private float footstepInterval = 0.34f;
+        [SerializeField] private string landSfxId = "player_land";
+        [SerializeField] private string jumpSfxId = "player_jump";
 
         private Rigidbody2D body;
         private CapsuleCollider2D capsule;
 
         private IInputSource input;
+        private ContactFilter2D groundFilter;
+        private Collider2D[] groundProbeResults;
         private float coyoteTimer;
         private float jumpBufferTimer;
+        private float footstepTimer;
         private int ladderZoneCount;
         private bool wasGrounded;
         private float cachedGravityScale;
@@ -74,6 +86,14 @@ namespace BorrowTomorrow.Player
             body.freezeRotation = true; // 冻结 Z 旋转（策划 11.3）
             cachedGravityScale = fallAcceleration / Mathf.Abs(Physics2D.gravity.y);
             body.gravityScale = cachedGravityScale;
+            // 地面探测不命中触发器：避免把梯子 Trigger 当成支撑（策划 11.3）。
+            groundFilter = new ContactFilter2D
+            {
+                useTriggers = false,
+                useLayerMask = true,
+                layerMask = groundMask,
+            };
+            groundProbeResults = new Collider2D[1];
         }
 
         private BorrowTomorrow.Player.PlayerContext registeredContext;
@@ -135,43 +155,57 @@ namespace BorrowTomorrow.Player
 
             if (IsClimbingLadder)
             {
-                UpdateClimbing(controlAllowed, climb);
+                UpdateClimbing(controlAllowed, climb, move);
             }
             else
             {
-                UpdateWalking(controlAllowed, move);
+                UpdateWalking(controlAllowed, move, climb);
             }
+
+            UpdateFootsteps(controlAllowed);
 
             if (wasGrounded != IsGrounded)
             {
                 if (IsGrounded)
                 {
                     Landed?.Invoke();
+                    PlaySfx(landSfxId);
                 }
                 wasGrounded = IsGrounded;
             }
         }
 
-        private void UpdateWalking(bool controlAllowed, float move)
+        private void UpdateWalking(bool controlAllowed, float move, float climb)
         {
             // 水平移动。
             body.velocity = new Vector2(controlAllowed ? move * moveSpeed : 0f, body.velocity.y);
 
-            // 跳跃：需要落地或离地宽容（策划 4.5：拖动/腾空时不能开始，但这里是主动跳跃）。
-            if (controlAllowed && jumpBufferTimer > 0f && coyoteTimer > 0f && !IsClimbingLadder)
+            // 进入攀爬：在梯子区内按上下键（策划 11.3：梯子用 Trigger 与攀爬状态控制）。
+            if (controlAllowed && !IsClimbingLadder && ladderZoneCount > 0 && Mathf.Abs(climb) > 0.1f)
+            {
+                IsClimbingLadder = true;
+                body.gravityScale = 0f;
+                body.velocity = Vector2.zero;
+                return;
+            }
+
+            // 跳跃：需要落地或离地宽容（策划 4.5：腾空时不能开始拖动，但主动跳跃允许）。
+            if (controlAllowed && jumpBufferTimer > 0f && coyoteTimer > 0f)
             {
                 body.velocity = new Vector2(body.velocity.x, jumpVelocity);
                 jumpBufferTimer = 0f;
                 coyoteTimer = 0f;
+                PlaySfx(jumpSfxId);
             }
         }
 
-        private void UpdateClimbing(bool controlAllowed, float climb)
+        private void UpdateClimbing(bool controlAllowed, float climb, float move)
         {
-            // 攀爬中暂停重力（策划 11.3），锁水平位移防止脱轨。
+            // 攀爬中暂停重力（策划 11.3）；横向允许微调，方便爬出梯顶落到相邻平台。
             body.gravityScale = 0f;
             float vertical = controlAllowed ? climb * climbSpeed : 0f;
-            body.velocity = new Vector2(0f, vertical);
+            float horizontal = controlAllowed ? move * climbHorizontalSpeed : 0f;
+            body.velocity = new Vector2(horizontal, vertical);
 
             // 跳离梯子或脱离梯区后恢复正常重力。
             bool jumpOff = controlAllowed && jumpBufferTimer > 0f;
@@ -200,10 +234,42 @@ namespace BorrowTomorrow.Player
                 GroundCollider = null;
                 return;
             }
-            Vector2 origin = (Vector2)transform.TransformPoint(capsule.offset) + groundCheckOffset;
-            Collider2D hit = Physics2D.OverlapBox(origin, groundCheckSize, 0f, groundMask);
+            // 探测盒以胶囊底部为基准（origin 是脚底，不是胶囊中心）。
+            Vector2 capsuleCenter = (Vector2)transform.position + capsule.offset;
+            Vector2 origin = capsuleCenter + Vector2.down * (capsule.size.y * 0.5f + groundProbeDrop - groundProbeSize.y * 0.5f);
+            // 单结果查询没有 ContactFilter 重载，用结果数组 + 不命中触发器的过滤器（策划 11.3：梯子 Trigger 不是支撑）。
+            groundProbeResults[0] = null;
+            int hitCount = Physics2D.OverlapBox(origin, groundProbeSize, 0f, groundFilter, groundProbeResults);
+            Collider2D hit = hitCount > 0 ? groundProbeResults[0] : null;
             IsGrounded = hit != null;
             GroundCollider = hit;
+        }
+
+        private void UpdateFootsteps(bool controlAllowed)
+        {
+            if (!controlAllowed || !IsGrounded || Mathf.Abs(body.velocity.x) < 0.2f)
+            {
+                footstepTimer = 0.12f; // 起步后很快响第一声
+                return;
+            }
+            footstepTimer -= Time.fixedDeltaTime;
+            if (footstepTimer <= 0f)
+            {
+                footstepTimer = footstepInterval;
+                PlaySfx(footstepSfxId);
+            }
+        }
+
+        private static void PlaySfx(string sfxId)
+        {
+            if (string.IsNullOrEmpty(sfxId))
+            {
+                return;
+            }
+            if (ServiceRegistry.TryGet<IAudioService>(out var audio))
+            {
+                audio.PlaySfx(sfxId);
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -230,10 +296,6 @@ namespace BorrowTomorrow.Player
         {
             get
             {
-                if (ServiceRegistry.TryGet(out IInputSource _) == false)
-                {
-                    return false;
-                }
                 return GameSession.Instance != null
                     && GameSession.Instance.State.IsPlayerControlAllowed
                     && !GameSession.Instance.State.IsPaused;
@@ -255,13 +317,15 @@ namespace BorrowTomorrow.Player
             body.gravityScale = cachedGravityScale;
             jumpBufferTimer = 0f;
             coyoteTimer = 0f;
+            footstepTimer = 0f;
         }
 
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = IsGrounded ? Color.green : Color.red;
-            Vector2 origin = transform.position + (Vector3)groundCheckOffset;
-            Gizmos.DrawWireCube(origin, groundCheckSize);
+            Vector2 capsuleCenter = (Vector2)transform.position + capsule.offset;
+            Vector2 origin = capsuleCenter + Vector2.down * (capsule.size.y * 0.5f + groundProbeDrop - groundProbeSize.y * 0.5f);
+            Gizmos.DrawWireCube(origin, groundProbeSize);
         }
     }
 }
