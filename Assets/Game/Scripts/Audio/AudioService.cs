@@ -125,7 +125,7 @@ namespace BorrowTomorrow.Audio
             }
             if (!sfxLibrary.TryGetClip(sfxId, out AudioClip clip, out float volume))
             {
-                Debug.LogWarning($"[AudioService] 未知音效 id：{sfxId}");
+                // B 组尚未登记该 id 时静默跳过（灰盒期音效库为空，避免每次切换刷警告）。
                 return;
             }
             float finalVolume = volume * settings.volumeMaster;
