@@ -12,9 +12,10 @@ namespace BorrowTomorrow.Narrative
     /// 排队规则（策划 12.1）：一句对白播放期间不允许被环境触发器截断；
     /// 高优先级可打断低优先级，低优先级在忙碌时直接跳过。
     /// 文字停留由玩家确认，配音可以跳过，标记仍正常写入（策划 5.5）。
+    /// 执行顺序先于 PlayerInteractor：同一帧 E 优先推进对白（ConsumeInteract 消费式）。
     /// </summary>
     [RequireComponent(typeof(AudioSource))]
-    [DefaultExecutionOrder(-40)]
+    [DefaultExecutionOrder(-60)]
     public sealed class DialoguePlayer : MonoBehaviour, IDialogueService, IBootInitializable
     {
         [Tooltip("语音默认音量")]
@@ -79,6 +80,13 @@ namespace BorrowTomorrow.Narrative
             bool lineShownEnough = voiceDone && lineTimer >= MinLineDuration;
             if (!lineShownEnough)
             {
+                return;
+            }
+
+            // 自动推进：holdForConfirm=false 的条目到时自动进入下一条（策划 5.5 仅确认模式才等玩家）。
+            if (current != null && !current.holdForConfirm)
+            {
+                Advance();
                 return;
             }
 
@@ -169,10 +177,10 @@ namespace BorrowTomorrow.Narrative
             }
         }
 
-        /// <summary>推进当前台词（玩家确认或自动）。</summary>
+        /// <summary>推进当前台词（玩家确认或自动到时）。</summary>
         public void Advance()
         {
-            if (!IsPlaying || waitingForConfirm == false)
+            if (!IsPlaying)
             {
                 return;
             }

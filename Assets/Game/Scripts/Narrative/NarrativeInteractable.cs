@@ -71,6 +71,17 @@ namespace BorrowTomorrow.Narrative
             return false;
         }
 
+#if UNITY_EDITOR
+        /// <summary>编辑器脚手架专用：直接注入对白条目（直接字段赋值 + SetDirty；运行时不要调用）。</summary>
+        public void EditorConfigure(DialogueEntry dialogueEntry, DialoguePriority dialoguePriority, bool replayableFlag)
+        {
+            entry = dialogueEntry;
+            priority = dialoguePriority;
+            replayable = replayableFlag;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
+
         private void OnDrawGizmos()
         {
             Gizmos.color = new Color(0.95f, 0.85f, 0.3f, 0.7f);
