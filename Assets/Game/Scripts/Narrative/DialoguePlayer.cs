@@ -123,6 +123,10 @@ namespace BorrowTomorrow.Narrative
         {
             presented = true;
             GameSession.Instance?.RecordDialogue(current.entryId);
+            if (ServiceRegistry.TryGet<ICharacterArt>(out var character)
+                && (current.entryId == "DLG_L02_UNIFORM_01" || current.entryId == "DLG_L03_REVEAL_01"
+                    || current.entryId == "DLG_L04_LOOK_01" || current.entryId == "DLG_L04_BOX_01"))
+                character.PlayGesture("Interact");
             if (current.source == "Tape" && tapeHiss != null)
             {
                 tapeSource.clip = tapeHiss;

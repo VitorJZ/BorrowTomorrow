@@ -124,6 +124,7 @@ namespace BorrowTomorrow.EditorTools
             }
             AssetDatabase.SaveAssets();
             EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");
+            if(File.Exists("Assets/Game/Data/Art/enabled.json"))ArtInstaller.Install();
             Debug.Log("[NarrativeInstaller] Full v1.3 narrative installed without rebuilding existing puzzle geometry.");
         }
         public static void InstallAndBuild()

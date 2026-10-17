@@ -10,6 +10,7 @@ namespace BorrowTomorrow.UI
     public sealed class NarrativeJournal : MonoBehaviour
     {
         public Font font;
+        public Sprite journalSkin;
         private Canvas canvas;
         private GameObject panel;
         private Text text;
@@ -24,12 +25,14 @@ namespace BorrowTomorrow.UI
             hint=Label(go.transform,"J 查看已读对白",new Vector2(700,-495),new Vector2(400,40),22);
             panel=new GameObject("Records",typeof(RectTransform));panel.transform.SetParent(go.transform,false);var rt=panel.GetComponent<RectTransform>();rt.anchorMin=Vector2.zero;rt.anchorMax=Vector2.one;rt.offsetMin=rt.offsetMax=Vector2.zero;
             var bg=panel.AddComponent<Image>();bg.color=new Color(.06f,.055f,.045f,.98f);
+            if(journalSkin!=null){bg.sprite=journalSkin;bg.color=Color.white;}
             Label(panel.transform,"已读对白    ·    J 关闭",new Vector2(0,455),new Vector2(1640,70),34);
             var view=Rect(panel.transform,"Viewport",new Vector2(0,-10),new Vector2(1640,790));view.gameObject.AddComponent<RectMask2D>();
             scroll=view.gameObject.AddComponent<ScrollRect>();scroll.viewport=view;scroll.horizontal=false;
             var content=Rect(view,"Content",Vector2.zero,new Vector2(1600,790));content.anchorMin=new Vector2(0,1);content.anchorMax=new Vector2(1,1);content.pivot=new Vector2(.5f,1);
             text=content.gameObject.AddComponent<Text>();text.font=font;text.fontSize=28;text.lineSpacing=1.35f;text.color=new Color(.94f,.9f,.82f);text.horizontalOverflow=HorizontalWrapMode.Wrap;text.verticalOverflow=VerticalWrapMode.Overflow;text.raycastTarget=false;
             scroll.content=content;panel.SetActive(false);
+            if(journalSkin!=null){text.color=new Color(.2f,.12f,.07f);foreach(var heading in panel.GetComponentsInChildren<Text>(true))heading.color=new Color(.2f,.12f,.07f);}
         }
         private void Update()
         {

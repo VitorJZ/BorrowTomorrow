@@ -10,6 +10,9 @@ namespace BorrowTomorrow.UI
     public sealed class NarrativePresentation : MonoBehaviour, INarrativePresentation
     {
         public Font font;
+        public Sprite subtitleSkin;
+        public Sprite buttonSkin;
+        public Texture2D creditsBackground;
         private Canvas canvas;
         private GameObject panel;
         private Image backdrop;
@@ -44,12 +47,20 @@ namespace BorrowTomorrow.UI
             picture.raycastTarget = false;
             var box = Node<Image>("ReadingPanel", panel.transform, new Vector2(0,-405), new Vector2(1780,230));
             box.color = new Color(0.075f,0.065f,0.055f,0.96f); box.raycastTarget = false;
+            if (subtitleSkin != null) { box.sprite = subtitleSkin; box.color = Color.white; }
             speaker = Label("Speaker",new Vector2(-10,-323),new Vector2(1640,45),27,TextAnchor.MiddleLeft);
             body = Label("Subtitle",new Vector2(-10,-407),new Vector2(1640,112),34,TextAnchor.UpperLeft);
             title = Label("Title",Vector2.zero,new Vector2(1200,160),52,TextAnchor.MiddleCenter);
             help = Label("ContinueHint",new Vector2(-300,-493),new Vector2(1000,34),22,TextAnchor.MiddleLeft);
             next = Button("继续",new Vector2(520,-493),() => { if (ServiceRegistry.TryGet<IDialogueService>(out var d)) d.Advance(); });
             skip = Button("跳过本段",new Vector2(740,-493),() => { if (ServiceRegistry.TryGet<IDialogueService>(out var d)) d.SkipCurrent(); });
+            if(subtitleSkin!=null)
+            {
+                speaker.rectTransform.anchoredPosition=new Vector2(-645,-405);speaker.rectTransform.sizeDelta=new Vector2(330,160);
+                speaker.alignment=TextAnchor.MiddleCenter;
+                body.rectTransform.anchoredPosition=new Vector2(300,-395);body.rectTransform.sizeDelta=new Vector2(1050,122);
+                help.rectTransform.anchoredPosition=new Vector2(80,-493);help.rectTransform.sizeDelta=new Vector2(620,34);
+            }
             panel.SetActive(false);
         }
         private void OnDestroy() => ServiceRegistry.Unregister<INarrativePresentation>(this);
@@ -63,8 +74,15 @@ namespace BorrowTomorrow.UI
             if (session.State.Phase == GamePhase.Credits && !credits)
             {
                 credits = true;
+                panel.transform.Find("ReadingPanel").gameObject.SetActive(false);
                 panel.SetActive(true); backdrop.color = Color.black; backdrop.raycastTarget = true;
                 picture.gameObject.SetActive(false); speaker.gameObject.SetActive(false); body.gameObject.SetActive(false);
+                if (creditsBackground != null)
+                {
+                    picture.texture = creditsBackground; picture.rectTransform.anchoredPosition = Vector2.zero;
+                    picture.rectTransform.sizeDelta = new Vector2(1920,1080); picture.color = new Color(.55f,.55f,.55f,1);
+                    picture.gameObject.SetActive(true);
+                }
                 next.SetActive(false); skip.SetActive(false); help.gameObject.SetActive(false); title.gameObject.SetActive(true);
                 title.text = "借一点明天\n\n谢谢你陪外婆走过这段回忆。";
             }
@@ -83,6 +101,7 @@ namespace BorrowTomorrow.UI
             if (image)
             {
                 picture.texture = entry.illustration;
+                picture.color = Color.white; picture.rectTransform.anchoredPosition = new Vector2(0,110);
                 float ratio = (float)entry.illustration.width / entry.illustration.height;
                 Vector2 size = ratio > 1380f/720f ? new Vector2(1380,1380/ratio) : new Vector2(720*ratio,720);
                 picture.rectTransform.sizeDelta = size;
@@ -93,6 +112,7 @@ namespace BorrowTomorrow.UI
             panel.transform.Find("ReadingPanel").gameObject.SetActive(!isTitle);
             speaker.text = entry.speakerLabel;
             speaker.color = entry.source == "Tape" ? new Color(0.96f,0.77f,0.43f) : entry.source == "Reality" ? new Color(0.65f,0.86f,0.94f) : Color.white;
+            if(subtitleSkin!=null) speaker.color=entry.source=="Reality"?new Color(.1f,.25f,.29f):new Color(.3f,.17f,.07f);
             body.text = text;
             help.gameObject.SetActive(!isTitle);
             help.text = locksControl ? "E / 鼠标左键继续" + (pages > 1 ? "    " + page + " / " + pages : "") : string.Empty;
@@ -127,6 +147,7 @@ namespace BorrowTomorrow.UI
         private GameObject Button(string label, Vector2 pos, UnityEngine.Events.UnityAction action)
         {
             Image image=Node<Image>(label,panel.transform,pos,new Vector2(190,42)); image.color=new Color(.22f,.19f,.15f,1);
+            if (buttonSkin != null) { image.sprite = buttonSkin; image.color = Color.white; }
             var b=image.gameObject.AddComponent<Button>();b.onClick.AddListener(action);
             var t=Node<Text>("Label",image.transform,Vector2.zero,new Vector2(180,40));t.font=font;t.fontSize=23;t.text=label;t.alignment=TextAnchor.MiddleCenter;t.color=Color.white;t.raycastTarget=false;
             return image.gameObject;
