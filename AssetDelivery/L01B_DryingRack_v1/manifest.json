@@ -1,0 +1,244 @@
+{
+  "version": 1,
+  "imageMethod": "built-in imagegen; generated alpha preserved; originals copied unchanged",
+  "characterAnimation": "cancelled by user; none delivered",
+  "images": [
+    {
+      "file": "Art/PROP_Osmanthus_Natural_2024.png",
+      "size": [
+        1414,
+        1112
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "visibleBounds": [
+        14,
+        12,
+        1402,
+        1101
+      ],
+      "status": "generated; not integrated"
+    },
+    {
+      "file": "Art/PROP_RackBrace_1994.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "visibleBounds": [
+        44,
+        136,
+        1210,
+        1127
+      ],
+      "status": "generated; not integrated"
+    },
+    {
+      "file": "Art/PROP_RackLatch_Closed.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "visibleBounds": [
+        185,
+        585,
+        1117,
+        884
+      ],
+      "status": "generated; not integrated"
+    },
+    {
+      "file": "Art/PROP_RackLatch_Open.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "visibleBounds": [
+        187,
+        212,
+        1068,
+        882
+      ],
+      "status": "generated; not integrated"
+    },
+    {
+      "file": "Art/PROP_RackLeaf_1994.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaRange": [
+        0,
+        254
+      ],
+      "visibleBounds": [
+        86,
+        421,
+        1482,
+        585
+      ],
+      "status": "generated; not integrated"
+    },
+    {
+      "file": "Art/PROP_RackLeaf_2024.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaRange": [
+        0,
+        254
+      ],
+      "visibleBounds": [
+        56,
+        396,
+        1482,
+        645
+      ],
+      "status": "generated; not integrated"
+    },
+    {
+      "file": "Art/PROP_RackMount_1994.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "visibleBounds": [
+        522,
+        64,
+        767,
+        1183
+      ],
+      "status": "generated; not integrated"
+    },
+    {
+      "file": "Art/PROP_RackMount_2024.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "visibleBounds": [
+        520,
+        62,
+        775,
+        1186
+      ],
+      "status": "generated; not integrated"
+    }
+  ],
+  "audioMethod": "local sound design from existing repository audio and synthesis; no external service",
+  "audioSources": [
+    "ACTION_Open_Metal_Hatch_01_mono.wav",
+    "Footsteps_Ladder_Wood_Old_Squeak_Creak-003.wav",
+    "FABRIC_Flap_01_mono.wav"
+  ],
+  "audio": [
+    {
+      "file": "Audio/sfx_rack_rope_pull.wav",
+      "seconds": 1.5,
+      "loop": false,
+      "description": "拉绳摩擦：一次下拉，持续1.5秒",
+      "peak": 0.3
+    },
+    {
+      "file": "Audio/sfx_rack_raise_creak.wav",
+      "seconds": 1.8,
+      "loop": false,
+      "description": "木架升起：木料与铰链受力",
+      "peak": 0.36
+    },
+    {
+      "file": "Audio/sfx_rack_latch_lock.wav",
+      "seconds": 0.65,
+      "loop": false,
+      "description": "锁扣入位：短促清楚的咔嗒",
+      "peak": 0.48
+    },
+    {
+      "file": "Audio/sfx_rack_broken_rattle.wav",
+      "seconds": 0.95,
+      "loop": false,
+      "description": "现在态失败：松脱铁件、断绳与木架轻响",
+      "peak": 0.32
+    }
+  ],
+  "integration": "Not installed. New natural tree requires new level placement and collision fitting; do not reuse old tree collision.",
+  "pivotsTopLeftNormalized": {
+    "PROP_RackMount_1994.png": {
+      "hinge": [
+        0.554,
+        0.762
+      ],
+      "pulley": [
+        0.563,
+        0.185
+      ]
+    },
+    "PROP_RackMount_2024.png": {
+      "hinge": [
+        0.565,
+        0.77
+      ]
+    },
+    "PROP_RackLeaf_1994.png": {
+      "hinge": [
+        0.086,
+        0.511
+      ],
+      "ropeEye": [
+        0.926,
+        0.434
+      ]
+    },
+    "PROP_RackLeaf_2024.png": {
+      "hinge": [
+        0.075,
+        0.488
+      ]
+    },
+    "PROP_RackBrace_1994.png": {
+      "lowerEye": [
+        0.103,
+        0.828
+      ],
+      "upperEye": [
+        0.89,
+        0.18
+      ]
+    },
+    "PROP_RackLatch_Open.png": {
+      "pivot": [
+        0.467,
+        0.615
+      ]
+    },
+    "PROP_RackLatch_Closed.png": {
+      "pivot": [
+        0.443,
+        0.615
+      ]
+    }
+  }
+}
