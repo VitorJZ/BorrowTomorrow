@@ -533,8 +533,8 @@ namespace BorrowTomorrow.EditorTools
 
         /// <summary>
         /// L03 楼上回廊（策划 7.5）：同一上层高度 y=3，下方跌落区。
-        /// 初始全现在（地板缺失、踏板可用、柜子挡路）。
-        /// 标准解：B 在 7 与 15 之间（过去地板+现在踏板）→ 恒定门槛 → B 推过 24（柜子回到空位）→ 照片区。
+        /// 初始全现在（地板缺失、踏板可用、塌落砖墙挡路）。
+        /// 标准解：B 在 7 与 15 之间（过去地板+现在踏板）→ 恒定门槛 → B 推过 24（恢复坍塌前的通道）→ 照片区。
         /// </summary>
         internal static List<SpawnPoint> BuildL03(RoomContext ctx)
         {
@@ -570,13 +570,13 @@ namespace BorrowTomorrow.EditorTools
             Box(ctx, "FloorToPhoto", new Vector2(26.25f, 2.8f), new Vector2(8.5f, 0.4f), ConstantColor,
                 "ConstantStructure", "Ground", true);
 
-            // 储物柜（锚点 24）：现在固定到顶的隔间（无立顶可站）；过去空位。
+            // 现在塌落的砖墙堵路，过去通道畅通；保留旧稳定 ID 兼容存档。
             TemporalObject cabinet = Temporal(ctx, "L03_cabinet", new Vector2(24f, 0f));
             GameObject cabinetPast = EraChild(ctx, cabinet, "Past");
             cabinetPast.transform.localPosition = Vector3.zero;
             GameObject cabinetPresent = EraChild(ctx, cabinet, "Present");
             cabinetPresent.transform.localPosition = Vector3.zero;
-            BoxChild(ctx, cabinetPresent.transform, "Cabinet", new Vector2(24f, 4.4f), new Vector2(2f, 3.6f),
+            BoxChild(ctx, cabinetPresent.transform, "CollapsedMasonry", new Vector2(24f, 4.25f), new Vector2(2f, 2.5f),
                 new Color(0.5f, 0.52f, 0.56f));
             SetObject(cabinet, "pastRoot", cabinetPast);
             SetObject(cabinet, "presentRoot", cabinetPresent);

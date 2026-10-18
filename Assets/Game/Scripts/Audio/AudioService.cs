@@ -36,6 +36,8 @@ namespace BorrowTomorrow.Audio
         private bool epilogueMusic;
         private SaveSettings settings = new SaveSettings();
 
+        public float EffectsDuckingScale => ducking ? duckedVolumeScale : 1f;
+
         public int InitializeOrder => -40;
 
         private void Awake()

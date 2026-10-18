@@ -48,6 +48,9 @@ namespace BorrowTomorrow.TimeBoundary
 
         public event System.Action<string> OnAdjustBlocked;
 
+        /// <summary>安全校验通过并实际切换一组物件后触发；读档和初始化不触发。</summary>
+        public event System.Action OnEraSwitchCommitted;
+
         /// <summary>调整开始（进入 AdjustingBoundary，角色站定）。</summary>
         public event System.Action OnAdjustStarted;
 
@@ -305,6 +308,7 @@ namespace BorrowTomorrow.TimeBoundary
                 {
                     obj.ApplyEra(step.TargetEra);
                 }
+                OnEraSwitchCommitted?.Invoke();
                 CommitBoundary(step.BoundaryAfter);
             }
             CommitBoundary(clamped);

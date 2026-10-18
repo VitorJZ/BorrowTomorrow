@@ -223,6 +223,8 @@ namespace BorrowTomorrow.EditorTools
             }
             // One building skeleton in both eras: only the color treatment changes at the seam.
             backdrop.past.color=Color.white;backdrop.present.color=new Color(.86f,.94f,.91f,1);
+            if(System.IO.File.Exists(DryingRackInstaller.Art+"installed.txt"))
+            { DryingRackInstaller.Configure(room); return; }
             var tree=room.GetComponentsInChildren<TemporalObject>(true).Single(t=>t.ObjectId=="L01B_tree_branch");
             var past=tree.transform.Find("Past");
             var previous=past.Find("SampleYoungTree");if(previous!=null)UnityEngine.Object.DestroyImmediate(previous.gameObject);

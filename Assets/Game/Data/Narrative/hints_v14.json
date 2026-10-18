@@ -1,42 +1,77 @@
 [
   {
-    "level": "L00", "room": "L00", "stage": "HintPassed_L00_Fence", "minX": 11.5, "maxX": 10000, "minY": -10000,
+    "level": "L00",
+    "room": "L00",
+    "stage": "HintPassed_L00_Fence",
+    "minX": 11.5,
+    "maxX": 10000,
+    "minY": -10000,
     "h1": "看看栅栏。",
     "h2": "它在现在不完整。",
     "h3": "把边界拉到栅栏左边，从缺口通过。"
   },
   {
-    "level": "L01", "room": "L01A", "stage": "HintPassed_L01A_Canal", "minX": 14.6, "maxX": 10000, "minY": -10000,
-    "h1": "看看水渠上的木盖板。",
-    "h2": "盖板在过去是完好的。",
-    "h3": "站在左岸，把边界移到盖板右边，再沿盖板通过。"
+    "level": "L01",
+    "room": "L01A",
+    "stage": "HintPassed_L01A_Canal",
+    "minX": 14.6,
+    "maxX": 10000,
+    "minY": -10000,
+    "h1": "左岸有一套放桥的摇柄装置。",
+    "h2": "现在的装置已经损坏，过去还能使用。",
+    "h3": "把边界移到木桥右侧，回到左岸摇柄旁按 E，放下木桥再过渠。"
   },
   {
-    "level": "L01", "room": "L01B", "stage": "HintPassed_L01B_Climb", "minX": 65.8, "maxX": 10000, "minY": 2.9,
-    "h1": "观察左边木阶梯和右边桂花树。",
-    "h2": "阶梯在过去完好，树枝在现在才能通行。",
-    "h3": "把边界停在木阶梯与桂花树锚点之间。"
+    "level": "L01",
+    "room": "L01B",
+    "stage": "HintPassed_L01B_Climb",
+    "minX": 65.8,
+    "maxX": 10000,
+    "minY": 2.9,
+    "h1": "木梯旁的平台上有一套晾晒架。",
+    "h2": "过去能拉起晾晒架，现在的桂花树有粗枝。",
+    "h3": "爬过去的木梯，在平台按 E 拉起晾晒架，再把边界停在装置与树干锚点之间，借粗枝走上窗台。"
   },
   {
-    "level": "L02", "room": "L02Indoor", "stage": "HintPassed_L02_Terrace", "minX": -10000, "maxX": 10000, "minY": -10000,
+    "level": "L02",
+    "room": "L02Indoor",
+    "stage": "HintPassed_L02_Terrace",
+    "minX": -10000,
+    "maxX": 10000,
+    "minY": -10000,
     "h1": "两个地方需要不同年代。",
     "h2": "先找不会变化的砖台。",
     "h3": "先爬过去木梯站上砖台，再将边界移到左侧维修踏台的左边，让它进入现在。"
   },
   {
-    "level": "L03", "room": "L03", "stage": "HintPassed_L03_Front", "minX": 18.2, "maxX": 10000, "minY": 2.9,
+    "level": "L03",
+    "room": "L03",
+    "stage": "HintPassed_L03_Front",
+    "minX": 18.2,
+    "maxX": 10000,
+    "minY": 2.9,
     "h1": "看看缺失地板与金属踏板。",
     "h2": "左段需要过去地板，右段需要现在踏板。",
     "h3": "把边界放在两者锚点之间，走到恒定石门槛。"
   },
   {
-    "level": "L03", "room": "L03", "stage": "HintPassed_L03_Back", "minX": 25.3, "maxX": 10000, "minY": 2.9,
-    "h1": "看看挡路的储物隔间。",
-    "h2": "石门槛不会变化，可以在此调整。",
-    "h3": "站在门槛上，把边界推到隔间右边，让前方恢复过去的空位。"
+    "level": "L03",
+    "room": "L03",
+    "stage": "HintPassed_L03_Back",
+    "minX": 25.3,
+    "maxX": 10000,
+    "minY": 2.9,
+    "h1": "前方的回廊被塌落砖墙堵住了。",
+    "h2": "石门槛不会变化，可以在这里调整时间。",
+    "h3": "站在石门槛上，把边界推到砖墙右侧，恢复过去尚未坍塌的通道。"
   },
   {
-    "level": "L04", "room": "", "stage": "BoxLocated", "minX": 0, "maxX": 0, "minY": 0,
+    "level": "L04",
+    "room": "",
+    "stage": "BoxLocated",
+    "minX": 0,
+    "maxX": 0,
+    "minY": 0,
     "h1": "看看窗边木板和树枝的距离。",
     "h2": "桂花树在现在已长到窗边，切换锚点在左侧树干。",
     "h3": "站在恒定窗台，把边界移到树干左侧，再沿成年树枝靠近暗格。"
