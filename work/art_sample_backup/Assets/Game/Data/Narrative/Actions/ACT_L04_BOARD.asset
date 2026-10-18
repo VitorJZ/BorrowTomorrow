@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0be260cc297d44a4bbb93eaf2549bcea, type: 3}
+  m_Name: ACT_L04_BOARD
+  m_EditorClassIdentifier: 
+  actionId: ACT_L04_BOARD
+  beforeEntryId: DLG_L04_BOX_01
+  confirmBefore: 
+  confirmAfter: "\u544A\u8BC9\u6653\u6653\u4F4D\u7F6E"
+  seconds: 1.2
+  sfxId: sfx_tin_box
+  gesture: Interact
+  beforeImage: {fileID: 0}
+  afterImage: {fileID: 2800000, guid: d4f8768e56aa10a4eaf0e7ecd9c39f7c, type: 3}
+  coverRect:
+    serializedVersion: 2
+    x: 0.2
+    y: 0.38
+    width: 0.47
+    height: 0.48
+  coverColor: {r: 0.63, g: 0.5, b: 0.36, a: 1}
+  coverSlide: {x: 0.25, y: 0.35}
+  zoom: 1
+  focus: {x: 0.5, y: 0.5}

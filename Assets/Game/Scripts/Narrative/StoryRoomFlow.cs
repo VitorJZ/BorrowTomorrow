@@ -14,17 +14,25 @@ namespace BorrowTomorrow.Narrative
                 || !ServiceRegistry.TryGet<ILevelRoot>(out var room)) return;
             var f = session.StoryFlags;
             if (room.RoomId != "Epilogue") finished = false;
+            // Objectives are rebuilt from completed story flags first (spec 1.4 §4.4/§6.1):
+            // returning to an earlier room never rolls the goal back behind the reveal.
             string text = session.CurrentObjective;
             switch (room.RoomId)
             {
-                case "L00": text = "去阁楼，找到蓝色铁皮盒。"; break;
-                case "L01A": text = "跨过水渠，前往院子深处。"; break;
-                case "L01B": text = "借木阶梯与长高的树枝，登上缝纫间外廊。"; break;
-                case "L02": text = "通过后院外台，进入缝纫间。"; break;
-                case "L02Indoor": text = f.HasFlag("UniformRead") ? "穿过楼上回廊，前往阁楼门前。" : "查看缝纫桌上的校服。"; break;
-                case "L03": text = f.HasFlag("IdentityKnown") ? Objectives.TellXiaoxaoBoxLocation : "穿过楼上回廊，前往阁楼门前。"; break;
-                case "L04": text = f.HasFlag("BoxLocated") ? "已告知晓晓铁盒的位置。" : f.HasFlag("CompartmentSeen") ? "靠近窗边，确认铁盒藏处。" : Objectives.TellXiaoxaoBoxLocation; break;
                 case "Epilogue": text = null; break;
+                case "L00": case "L01A": case "L01B": case "L02": case "L02Indoor": case "L03": case "L04":
+                    if (f.HasFlag("BoxLocated")) text = "已告知晓晓铁盒的位置。";
+                    else if (f.HasFlag("IdentityKnown"))
+                        text = room.RoomId == "L04" && f.HasFlag("CompartmentSeen") ? "靠近窗边，确认铁盒藏处。" : Objectives.TellXiaoxaoBoxLocation;
+                    else if (room.RoomId == "L04") text = Objectives.TellXiaoxaoBoxLocation;
+                    else if (f.HasFlag("UniformRead")) text = "穿过楼上回廊，前往阁楼门前。";
+                    else if (room.RoomId == "L00") text = "去阁楼，找到蓝色铁皮盒。";
+                    else if (room.RoomId == "L01A") text = "跨过水渠，前往院子深处。";
+                    else if (room.RoomId == "L01B") text = "借木阶梯与长高的树枝，登上缝纫间外廊。";
+                    else if (room.RoomId == "L02") text = "通过后院外台，进入缝纫间。";
+                    else if (room.RoomId == "L02Indoor") text = "查看缝纫桌上的校服。";
+                    else text = "穿过楼上回廊，前往阁楼门前。";
+                    break;
             }
             if (text != previousObjective || text != session.CurrentObjective) { previousObjective = text; session.SetObjective(text); }
             if (room.RoomId == "Epilogue" && f.HasFlag("EpilogueSeen") && !finished

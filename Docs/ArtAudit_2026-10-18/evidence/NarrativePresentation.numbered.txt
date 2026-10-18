@@ -1,0 +1,221 @@
+1: using BorrowTomorrow.Core;
+2: using BorrowTomorrow.Core.Data;
+3: using BorrowTomorrow.Core.Interfaces;
+4: using BorrowTomorrow.Narrative;
+5: using UnityEngine;
+6: using UnityEngine.UI;
+7: 
+8: namespace BorrowTomorrow.UI
+9: {
+10:     // Builds its own responsive overlay; the existing gameplay HUD remains intact.
+11:     public sealed class NarrativePresentation : MonoBehaviour, INarrativePresentation, INarrativeActionView
+12:     {
+13:         private static readonly Vector2 PictureCenter = new Vector2(0, 110);
+14:         private static readonly Vector2 PictureMax = new Vector2(1380, 720);
+15:         private RectMask2D frame;
+16:         private RectTransform FrameRect => (RectTransform)frame.transform;
+17:         private Image cover;
+18:         private Text actionPrompt;
+19:         private NarrativeAction heldAction;
+20:         public Font font;
+21:         public Sprite subtitleSkin;
+22:         public Sprite buttonSkin;
+23:         public Texture2D creditsBackground;
+24:         private Canvas canvas;
+25:         private GameObject panel;
+26:         private Image backdrop;
+27:         private RawImage picture;
+28:         private Text speaker;
+29:         private Text body;
+30:         private Text title;
+31:         private Text help;
+32:         private GameObject next;
+33:         private GameObject skip;
+34:         private bool blocking;
+35:         private bool credits;
+36:         private bool wasPaused;
+37:         private DialogueEntry displayed;
+38:         private void Awake()
+39:         {
+40:             ServiceRegistry.Register<INarrativePresentation>(this);
+41:             var go = new GameObject("NarrativeCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+42:             go.transform.SetParent(transform, false);
+43:             canvas = go.GetComponent<Canvas>();
+44:             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+45:             canvas.sortingOrder = 50;
+46:             var scaler = go.GetComponent<CanvasScaler>();
+47:             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+48:             scaler.referenceResolution = new Vector2(1920, 1080);
+49:             scaler.matchWidthOrHeight = 0.5f;
+50:             panel = new GameObject("Story", typeof(RectTransform));
+51:             panel.transform.SetParent(go.transform, false);
+52:             RectTransform rt = panel.GetComponent<RectTransform>(); rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one; rt.offsetMin = rt.offsetMax = Vector2.zero;
+53:             backdrop = Node<Image>("Backdrop", panel.transform, Vector2.zero, Vector2.zero, true);
+54:             // The frame masks action push-ins so a zoomed illustration never covers the reading panel.
+55:             frame = Node<RectMask2D>("IllustrationFrame", panel.transform, PictureCenter, PictureMax);
+56:             picture = Node<RawImage>("Illustration", frame.transform, Vector2.zero, Vector2.zero, true);
+57:             picture.raycastTarget = false;
+58:             cover = Node<Image>("ActionCover", picture.transform, Vector2.zero, Vector2.zero);
+59:             cover.raycastTarget = false;
+60:             cover.gameObject.SetActive(false);
+61:             var box = Node<Image>("ReadingPanel", panel.transform, new Vector2(0,-405), new Vector2(1780,230));
+62:             box.color = new Color(0.075f,0.065f,0.055f,0.96f); box.raycastTarget = false;
+63:             if (subtitleSkin != null) { box.sprite = subtitleSkin; box.color = Color.white; }
+64:             speaker = Label("Speaker",new Vector2(-10,-323),new Vector2(1640,45),27,TextAnchor.MiddleLeft);
+65:             body = Label("Subtitle",new Vector2(-10,-407),new Vector2(1640,112),34,TextAnchor.UpperLeft);
+66:             title = Label("Title",Vector2.zero,new Vector2(1200,160),52,TextAnchor.MiddleCenter);
+67:             help = Label("ContinueHint",new Vector2(-300,-493),new Vector2(1000,34),22,TextAnchor.MiddleLeft);
+68:             actionPrompt = Label("ActionPrompt",new Vector2(0,-405),new Vector2(1200,80),38,TextAnchor.MiddleCenter);
+69:             actionPrompt.gameObject.SetActive(false);
+70:             next = Button("继续",new Vector2(520,-493),() => { if (ServiceRegistry.TryGet<IDialogueService>(out var d)) d.Advance(); });
+71:             skip = Button("跳过本段",new Vector2(740,-493),() => { if (ServiceRegistry.TryGet<IDialogueService>(out var d)) d.SkipCurrent(); });
+72:             if(subtitleSkin!=null)
+73:             {
+74:                 speaker.rectTransform.anchoredPosition=new Vector2(-645,-405);speaker.rectTransform.sizeDelta=new Vector2(330,160);
+75:                 speaker.alignment=TextAnchor.MiddleCenter;
+76:                 body.rectTransform.anchoredPosition=new Vector2(300,-395);body.rectTransform.sizeDelta=new Vector2(1050,122);
+77:                 help.rectTransform.anchoredPosition=new Vector2(80,-493);help.rectTransform.sizeDelta=new Vector2(620,34);
+78:             }
+79:             panel.SetActive(false);
+80:         }
+81:         private void OnDestroy() => ServiceRegistry.Unregister<INarrativePresentation>(this);
+82:         private void Update()
+83:         {
+84:             var session = GameSession.Instance;
+85:             if (session == null) return;
+86:             canvas.enabled = !session.State.IsPaused;
+87:             if (session.State.IsPaused) wasPaused = true;
+88:             else if (wasPaused) { wasPaused = false; ApplySubtitleSettings(); }
+89:             if (session.State.Phase == GamePhase.Credits && !credits)
+90:             {
+91:                 credits = true;
+92:                 panel.transform.Find("ReadingPanel").gameObject.SetActive(false);
+93:                 panel.SetActive(true); backdrop.color = Color.black; backdrop.raycastTarget = true;
+94:                 frame.gameObject.SetActive(false); speaker.gameObject.SetActive(false); body.gameObject.SetActive(false);
+95:                 if (creditsBackground != null)
+96:                 {
+97:                     ResetActionView();
+98:                     picture.texture = creditsBackground; picture.color = new Color(.55f,.55f,.55f,1);
+99:                     FrameRect.anchoredPosition = Vector2.zero; FrameRect.sizeDelta = new Vector2(1920,1080);
+100:                     frame.gameObject.SetActive(true);
+101:                 }
+102:                 actionPrompt.gameObject.SetActive(false);
+103:                 next.SetActive(false); skip.SetActive(false); help.gameObject.SetActive(false); title.gameObject.SetActive(true);
+104:                 title.text = "借一点明天\n\n谢谢你陪外婆走过这段回忆。";
+105:             }
+106:             else if (credits && session.State.Phase != GamePhase.Credits) { credits = false; Close(); }
+107:         }
+108:         public void Present(DialogueEntry entry, string text, bool locksControl, int page, int pages)
+109:         {
+110:             displayed = entry;
+111:             blocking = locksControl;
+112:             panel.SetActive(true);
+113:             bool image = entry.illustration != null;
+114:             backdrop.color = new Color(0.025f,0.022f,0.02f,(image || entry.blackBackground || entry.centeredTitle) ? 1f : 0f);
+115:             // Blocking background clicks also avoids dragging the time handle underneath an illustration.
+116:             backdrop.raycastTarget = locksControl;
+117:             frame.gameObject.SetActive(image);
+118:             // The line right after an action keeps its close-up; any later line returns to the full picture.
+119:             bool keepClose = heldAction != null && heldAction.beforeEntryId == entry.entryId && heldAction.afterImage == entry.illustration;
+120:             if (!keepClose) { heldAction = null; ResetActionView(); }
+121:             if (image) ShowPicture(entry.illustration);
+122:             actionPrompt.gameObject.SetActive(false);
+123:             bool isTitle = entry.centeredTitle;
+124:             title.gameObject.SetActive(isTitle); title.text = isTitle ? text : string.Empty;
+125:             speaker.gameObject.SetActive(!isTitle); body.gameObject.SetActive(!isTitle);
+126:             panel.transform.Find("ReadingPanel").gameObject.SetActive(!isTitle);
+127:             speaker.text = entry.speakerLabel;
+128:             speaker.color = entry.source == "Tape" ? new Color(0.96f,0.77f,0.43f) : entry.source == "Reality" ? new Color(0.65f,0.86f,0.94f) : Color.white;
+129:             if(subtitleSkin!=null) speaker.color=entry.source=="Reality"?new Color(.1f,.25f,.29f):new Color(.3f,.17f,.07f);
+130:             body.text = text;
+131:             help.gameObject.SetActive(!isTitle);
+132:             help.text = locksControl ? "E / 鼠标左键继续" + (pages > 1 ? "    " + page + " / " + pages : "") : string.Empty;
+133:             next.SetActive(locksControl && entry.holdForConfirm && !isTitle);
+134:             skip.SetActive(locksControl && !isTitle);
+135:             ApplySubtitleSettings();
+136:         }
+137:         public void PresentAction(NarrativeAction action, float progress, string prompt, bool locksControl)
+138:         {
+139:             displayed = null;
+140:             heldAction = action;
+141:             blocking = locksControl;
+142:             panel.SetActive(true);
+143:             backdrop.color = new Color(0.025f,0.022f,0.02f,1f);
+144:             backdrop.raycastTarget = locksControl;
+145:             float t = Mathf.SmoothStep(0f, 1f, progress);
+146:             Texture2D texture = action.beforeImage != null && t < 0.5f ? action.beforeImage : action.afterImage;
+147:             frame.gameObject.SetActive(texture != null);
+148:             if (texture != null) ShowPicture(texture);
+149:             picture.rectTransform.pivot = action.focus;
+150:             picture.rectTransform.localScale = Vector3.one * Mathf.Lerp(1f, Mathf.Max(1f, action.zoom), t);
+151:             // Placeholder before-state until dedicated art exists: a cover over the changed area moves away.
+152:             bool useCover = action.beforeImage == null && action.coverRect.width > 0f && t < 1f;
+153:             cover.gameObject.SetActive(useCover);
+154:             if (useCover)
+155:             {
+156:                 RectTransform rt = cover.rectTransform;
+157:                 rt.anchorMin = action.coverRect.min; rt.anchorMax = action.coverRect.max;
+158:                 rt.sizeDelta = Vector2.zero;
+159:                 rt.anchoredPosition = Vector2.Scale(action.coverSlide, FrameRect.sizeDelta) * t;
+160:                 Color c = action.coverColor; c.a *= 1f - Mathf.SmoothStep(0.55f, 1f, t);
+161:                 cover.color = c;
+162:             }
+163:             title.gameObject.SetActive(false);
+164:             panel.transform.Find("ReadingPanel").gameObject.SetActive(!string.IsNullOrEmpty(prompt));
+165:             speaker.gameObject.SetActive(false); body.gameObject.SetActive(false);
+166:             actionPrompt.gameObject.SetActive(!string.IsNullOrEmpty(prompt));
+167:             actionPrompt.text = string.IsNullOrEmpty(prompt) ? string.Empty : "[E] " + prompt;
+168:             actionPrompt.color = subtitleSkin != null ? new Color(.3f,.17f,.07f) : Color.white;
+169:             help.gameObject.SetActive(false);
+170:             next.SetActive(false);
+171:             skip.SetActive(locksControl);
+172:         }
+173:         private void ShowPicture(Texture2D texture)
+174:         {
+175:             picture.texture = texture;
+176:             picture.color = Color.white;
+177:             FrameRect.anchoredPosition = PictureCenter;
+178:             float ratio = (float)texture.width / texture.height;
+179:             FrameRect.sizeDelta = ratio > PictureMax.x / PictureMax.y
+180:                 ? new Vector2(PictureMax.x, PictureMax.x / ratio) : new Vector2(PictureMax.y * ratio, PictureMax.y);
+181:         }
+182:         private void ResetActionView()
+183:         {
+184:             picture.rectTransform.pivot = new Vector2(.5f,.5f);
+185:             picture.rectTransform.localScale = Vector3.one;
+186:             cover.gameObject.SetActive(false);
+187:         }
+188:         private void ApplySubtitleSettings()
+189:         {
+190:             if (displayed == null || displayed.centeredTitle) return;
+191:             bool readableObject = displayed.source == "Note";
+192:             bool enabled = !ServiceRegistry.TryGet<ISaveService>(out var save) || save.LoadSettings().subtitlesEnabled;
+193:             // Object text remains readable even when spoken subtitles are disabled.
+194:             body.gameObject.SetActive(enabled || readableObject);
+195:             speaker.gameObject.SetActive(enabled || readableObject);
+196:         }
+197:         public void Close() { displayed = null; if (panel != null) panel.SetActive(false); }
+198:         private T Node<T>(string name, Transform parent, Vector2 position, Vector2 size, bool stretch=false) where T : Component
+199:         {
+200:             var go = new GameObject(name, typeof(RectTransform)); go.transform.SetParent(parent,false);
+201:             var rt = go.GetComponent<RectTransform>();
+202:             if (stretch) { rt.anchorMin=Vector2.zero;rt.anchorMax=Vector2.one;rt.offsetMin=rt.offsetMax=Vector2.zero; }
+203:             else { rt.anchorMin=rt.anchorMax=new Vector2(.5f,.5f);rt.anchoredPosition=position;rt.sizeDelta=size; }
+204:             return go.AddComponent<T>();
+205:         }
+206:         private Text Label(string name, Vector2 pos, Vector2 size, int fontSize, TextAnchor alignment)
+207:         {
+208:             Text t=Node<Text>(name,panel.transform,pos,size);t.font=font;t.fontSize=fontSize;t.alignment=alignment;t.color=Color.white;t.raycastTarget=false;
+209:             t.horizontalOverflow=HorizontalWrapMode.Wrap;t.verticalOverflow=VerticalWrapMode.Overflow;
+210:             return t;
+211:         }
+212:         private GameObject Button(string label, Vector2 pos, UnityEngine.Events.UnityAction action)
+213:         {
+214:             Image image=Node<Image>(label,panel.transform,pos,new Vector2(190,42)); image.color=new Color(.22f,.19f,.15f,1);
+215:             if (buttonSkin != null) { image.sprite = buttonSkin; image.color = Color.white; }
+216:             var b=image.gameObject.AddComponent<Button>();b.onClick.AddListener(action);
+217:             var t=Node<Text>("Label",image.transform,Vector2.zero,new Vector2(180,40));t.font=font;t.fontSize=23;t.text=label;t.alignment=TextAnchor.MiddleCenter;t.color=Color.white;t.raycastTarget=false;
+218:             return image.gameObject;
+219:         }
+220:     }
+221: }

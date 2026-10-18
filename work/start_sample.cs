@@ -1,0 +1,10 @@
+using UnityEditor;
+using UnityEngine;
+using System.IO;
+Directory.CreateDirectory("Docs/ArtSample_2026-10-18/screenshots");
+var gt=typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView");
+var gw=EditorWindow.GetWindow(gt);var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.NonPublic;
+SessionState.SetInt("ArtSamplePreviousView",(int)gt.GetProperty("selectedSizeIndex",flags).GetValue(gw));
+gt.GetMethod("SetCustomResolution",flags).Invoke(gw,new object[]{new Vector2(1920,1080),"Art sample"});gw.Focus();
+EditorApplication.isPlaying=true;
+return "Starting";

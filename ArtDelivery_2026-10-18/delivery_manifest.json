@@ -1,0 +1,1176 @@
+[
+  {
+    "file": "01_背景_Backgrounds/BG_L00_Gate_1994_2560x1440.png",
+    "source": "M06_BG_L00_Gate_1994.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L00_Gate_2024_2560x1440.png",
+    "source": "M06_BG_L00_Gate_2024.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L01A_Canal_1994_2560x1440.png",
+    "source": "M06_BG_L01A_Canal_1994.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L01A_Canal_2024_2560x1440.png",
+    "source": "M06_BG_L01A_Canal_2024.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L01B_Tree_1994_2560x1440.png",
+    "source": "M06_BG_L01B_Tree_1994.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L01B_Tree_2024_2560x1440.png",
+    "source": "M06_BG_L01B_Tree_2024.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L02_Yard_1994_2560x1440.png",
+    "source": "M06_BG_L02_Yard_1994.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L02_Yard_2024_2560x1440.png",
+    "source": "M06_BG_L02_Yard_2024.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L02_Room_1994_2560x1440.png",
+    "source": "M06_BG_L02_Room_1994.png",
+    "native": [
+      1672,
+      940
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00069,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L02_Room_2024_2560x1440.png",
+    "source": "M06_BG_L02_Room_2024.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L03_Corridor_1994_2560x1440.png",
+    "source": "M06_BG_L03_Corridor_1994.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L03_Corridor_2024_2560x1440.png",
+    "source": "M06_BG_L03_Corridor_2024.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L04_Attic_1994_2560x1440.png",
+    "source": "M06_BG_L04_Attic_1994.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "01_背景_Backgrounds/BG_L04_Attic_2024_2560x1440.png",
+    "source": "M06_BG_L04_Attic_2024.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039,
+    "review": "需游戏碰撞与建筑配准复核"
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_00_Table_2304x1728.png",
+    "source": "M01_Table_Base.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_01_FabricRed_2304x1728.png",
+    "source": "M01_Fabric_Red.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.94548,
+    "placement_top_left": [
+      40,
+      820,
+      650,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_02_FabricBlue_2304x1728.png",
+    "source": "M01_Fabric_Blue.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.94493,
+    "placement_top_left": [
+      70,
+      1230,
+      740,
+      450
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_03_SleeveBefore_2304x1728.png",
+    "source": "M01_Sleeve_Before.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.87226,
+    "placement_top_left": [
+      600,
+      100,
+      1250,
+      1300
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_04_SleeveAfter_2304x1728.png",
+    "source": "M01_Sleeve_After_v2.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.87731,
+    "placement_top_left": [
+      600,
+      100,
+      1250,
+      1300
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_Hand_00_2304x1728.png",
+    "source": "M01_Hand_00.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.93753,
+    "placement_top_left": [
+      1320,
+      820,
+      984,
+      730
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_Hand_01_2304x1728.png",
+    "source": "M01_Hand_01_v2.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.92507,
+    "placement_top_left": [
+      1320,
+      808,
+      984,
+      730
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_Hand_02_2304x1728.png",
+    "source": "M01_Hand_02_v2.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.93828,
+    "placement_top_left": [
+      1320,
+      796,
+      984,
+      730
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_Hand_03_2304x1728.png",
+    "source": "M01_Hand_03_v2.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.93529,
+    "placement_top_left": [
+      1320,
+      784,
+      984,
+      730
+    ]
+  },
+  {
+    "file": "02_剧情插画_Illustrations/ILL_L02_Cuff_Before_2304x1728.png",
+    "source": "交付素材/03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_00_Table_2304x1728.png",
+    "native": [
+      2304,
+      1728
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0,
+    "type": "assembled_preview_or_state"
+  },
+  {
+    "file": "02_剧情插画_Illustrations/ILL_L02_Cuff_After_2304x1728.png",
+    "source": "交付素材/03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_00_Table_2304x1728.png",
+    "native": [
+      2304,
+      1728
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0,
+    "type": "assembled_preview_or_state"
+  },
+  {
+    "file": "03_动作分层_Actions/L04_Niche/ACT_L04_Niche_00_WallWindow_2304x1728.png",
+    "source": "M02_Niche_Base.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0
+  },
+  {
+    "file": "03_动作分层_Actions/L04_Niche/ACT_L04_Niche_01_BoxFixed_2304x1728.png",
+    "source": "M02_Box_Only.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.96909,
+    "placement_top_left": [
+      1620,
+      690,
+      540,
+      275
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L04_Niche/ACT_L04_Niche_02_BoardClosed_2304x1728.png",
+    "source": "M02_Board_Closed.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.86076,
+    "placement_top_left": [
+      1450,
+      210,
+      780,
+      750
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L04_Niche/ACT_L04_Niche_03_BoardOpen_2304x1728.png",
+    "source": "交付素材/03_动作分层_Actions/L04_Niche/ACT_L04_Niche_02_BoardClosed_2304x1728.png",
+    "native": [
+      2304,
+      1728
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.96915,
+    "hinge_pixel": [
+      1839.5,
+      210
+    ],
+    "note": "开板为同一板的投影状态；接入可改为绕上沿旋转"
+  },
+  {
+    "file": "02_剧情插画_Illustrations/ILL_L04_Niche_Closed_2304x1728.png",
+    "source": "交付素材/03_动作分层_Actions/L04_Niche/ACT_L04_Niche_00_WallWindow_2304x1728.png",
+    "native": [
+      2304,
+      1728
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0,
+    "type": "assembled_preview_or_state"
+  },
+  {
+    "file": "02_剧情插画_Illustrations/ILL_L04_Niche_Open_2304x1728.png",
+    "source": "交付素材/03_动作分层_Actions/L04_Niche/ACT_L04_Niche_00_WallWindow_2304x1728.png",
+    "native": [
+      2304,
+      1728
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0,
+    "type": "assembled_preview_or_state"
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_00_QuiltWrinkled_2304x1728.png",
+    "source": "M03_Quilt_Base.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_01_QuiltFlat_2304x1728.png",
+    "source": "M03_Quilt_Flat.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_OldHand_00_2304x1728.png",
+    "source": "M03_OldHand_00.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.89299,
+    "placement_top_left": [
+      0,
+      1050,
+      1500,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_OldHand_01_2304x1728.png",
+    "source": "M03_OldHand_01.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.88866,
+    "placement_top_left": [
+      0,
+      1042,
+      1540,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_OldHand_02_2304x1728.png",
+    "source": "M03_OldHand_02.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.885,
+    "placement_top_left": [
+      0,
+      1034,
+      1580,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_OldHand_03_2304x1728.png",
+    "source": "M03_OldHand_03.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.91323,
+    "placement_top_left": [
+      0,
+      1026,
+      1620,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_OldHand_04_2304x1728.png",
+    "source": "M03_OldHand_04.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.89785,
+    "placement_top_left": [
+      0,
+      1018,
+      1660,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_OldHand_05_2304x1728.png",
+    "source": "M03_OldHand_05.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.88097,
+    "placement_top_left": [
+      0,
+      1010,
+      1700,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_YoungHand_Resting_2304x1728.png",
+    "source": "M03_YoungHand_Resting.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.95838,
+    "placement_top_left": [
+      1500,
+      650,
+      804,
+      600
+    ]
+  },
+  {
+    "file": "02_剧情插画_Illustrations/ILL_EPI_Smooth_Before_2304x1728.png",
+    "source": "交付素材/03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_00_QuiltWrinkled_2304x1728.png",
+    "native": [
+      2304,
+      1728
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0,
+    "type": "assembled_preview_or_state"
+  },
+  {
+    "file": "02_剧情插画_Illustrations/ILL_EPI_Smooth_After_2304x1728.png",
+    "source": "交付素材/03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_01_QuiltFlat_2304x1728.png",
+    "native": [
+      2304,
+      1728
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0,
+    "type": "assembled_preview_or_state"
+  },
+  {
+    "file": "02_剧情插画_Illustrations/ILL_L03_Photo_Canonical_2304x1728.png",
+    "source": "M04_Photo_Master.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0
+  },
+  {
+    "file": "04_场景物件_Props/Photo/PROP_Photo_HandsFrameOverlay_2304x1728.png",
+    "source": "M04_Hands_Frame_Overlay.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.61351
+  },
+  {
+    "file": "04_场景物件_Props/Photo/PROP_Photo_DesktopFrameOverlay_2048x2048.png",
+    "source": "M04_Scene_Frame_Overlay.png",
+    "native": [
+      1447,
+      1087
+    ],
+    "delivery": [
+      2048,
+      2048
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.70802
+  },
+  {
+    "file": "02_剧情插画_Illustrations/ILL_Ward_Report_2304x1728.png",
+    "source": "M05_Ward_Master.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0
+  },
+  {
+    "file": "02_剧情插画_Illustrations/ILL_Ward_BoxDelivery_2304x1728.png",
+    "source": "M05_Ward_Delivery.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0
+  },
+  {
+    "file": "03_动作分层_Actions/Ward/WARD_00_Background_2304x1728.png",
+    "source": "M05_Ward_Background.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0
+  },
+  {
+    "file": "03_动作分层_Actions/Ward/WARD_01_People_2304x1728.png",
+    "source": "M05_Ward_People.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.34028
+  },
+  {
+    "file": "04_场景物件_Props/L01B_Tree/PROP_L01B_Tree_00_TrunkBranch_2048x1024.png",
+    "source": "M07_Trunk_Branch.png",
+    "native": [
+      1774,
+      887
+    ],
+    "delivery": [
+      2048,
+      1024
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.86783,
+    "review": "分层已提供；尚需校准层间位置和碰撞顶面"
+  },
+  {
+    "file": "04_场景物件_Props/L01B_Tree/PROP_L01B_Tree_01_BackLeaves_2048x1024.png",
+    "source": "M07_Back_Leaves.png",
+    "native": [
+      1774,
+      887
+    ],
+    "delivery": [
+      2048,
+      1024
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.59676,
+    "review": "分层已提供；尚需校准层间位置和碰撞顶面"
+  },
+  {
+    "file": "04_场景物件_Props/L01B_Tree/PROP_L01B_Tree_02_FrontLeaves_2048x1024.png",
+    "source": "M07_Front_Leaves.png",
+    "native": [
+      1774,
+      887
+    ],
+    "delivery": [
+      2048,
+      1024
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.92301,
+    "review": "分层已提供；尚需校准层间位置和碰撞顶面"
+  },
+  {
+    "file": "04_场景物件_Props/L04_Tree/PROP_L04_Tree_00_TrunkBranch_4096x2048.png",
+    "source": "M08_Trunk_Branch.png",
+    "native": [
+      1774,
+      887
+    ],
+    "delivery": [
+      4096,
+      2048
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.79152,
+    "review": "分层已提供；尚需校准层间位置和碰撞顶面"
+  },
+  {
+    "file": "04_场景物件_Props/L04_Tree/PROP_L04_Tree_01_BackLeaves_4096x2048.png",
+    "source": "M08_Back_Leaves.png",
+    "native": [
+      1774,
+      887
+    ],
+    "delivery": [
+      4096,
+      2048
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.67879,
+    "review": "分层已提供；尚需校准层间位置和碰撞顶面"
+  },
+  {
+    "file": "04_场景物件_Props/L04_Tree/PROP_L04_Tree_02_FrontLeaves_4096x2048.png",
+    "source": "M08_Front_Leaves.png",
+    "native": [
+      1774,
+      887
+    ],
+    "delivery": [
+      4096,
+      2048
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.90963,
+    "review": "分层已提供；尚需校准层间位置和碰撞顶面"
+  },
+  {
+    "file": "04_场景物件_Props/Decor/DECOR_ChildDrawing_TreeToWindow_2048x2048.png",
+    "source": "M07_ChildDrawing.png",
+    "native": [
+      1254,
+      1254
+    ],
+    "delivery": [
+      2048,
+      2048
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.57429
+  },
+  {
+    "file": "04_场景物件_Props/Decor/DECOR_Uniform_BlueWhite_2304x1728.png",
+    "source": "M01_Uniform_Matching.png",
+    "native": [
+      1448,
+      1086
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.41754
+  },
+  {
+    "file": "04_场景物件_Props/L00_Fence/PROP_L00_Fence_AdultOpening_2024_2048x2048.png",
+    "source": "M09_Fence_Open_2024.png",
+    "native": [
+      1254,
+      1254
+    ],
+    "delivery": [
+      2048,
+      2048
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.63094,
+    "review": "条件备选；先修原场景栅栏位置，不自动替换"
+  },
+  {
+    "file": "06_界面_UI/UI_Menu_Background_NoControls_2560x1440.png",
+    "source": "M11_Menu_Background.png",
+    "native": [
+      1672,
+      941
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.00039
+  },
+  {
+    "file": "06_界面_UI/UI_Button_Wood_Blank_1024x256.png",
+    "source": "M11_Button_Blank.png",
+    "native": [
+      2171,
+      724
+    ],
+    "delivery": [
+      1024,
+      256
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.17798,
+    "placement_top_left": [
+      8,
+      8,
+      1008,
+      240
+    ]
+  },
+  {
+    "file": "06_界面_UI/复用原稿_Reuse/UI_TabRecordsPanel.png",
+    "source": "../../../../../PROJECTS/Unity/BorrowTomorrow/Assets/Game/Art/UI/UI_TabRecordsPanel.png",
+    "native": [
+      2304,
+      1728
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.3411,
+    "type": "existing_reused",
+    "note": "既有底图；布局和文字仍由程序处理"
+  },
+  {
+    "file": "06_界面_UI/复用原稿_Reuse/UI_SubtitleBar.png",
+    "source": "../../../../../PROJECTS/Unity/BorrowTomorrow/Assets/Game/Art/UI/UI_SubtitleBar.png",
+    "native": [
+      2560,
+      1440
+    ],
+    "delivery": [
+      2560,
+      1440
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.30904,
+    "type": "existing_reused",
+    "note": "既有底图；布局和文字仍由程序处理"
+  },
+  {
+    "file": "06_界面_UI/复用原稿_Reuse/UI_ObjectiveCard.png",
+    "source": "../../../../../PROJECTS/Unity/BorrowTomorrow/Assets/Game/Art/UI/UI_ObjectiveCard.png",
+    "native": [
+      2048,
+      2048
+    ],
+    "delivery": [
+      2048,
+      2048
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.97139,
+    "type": "existing_reused",
+    "note": "既有底图；布局和文字仍由程序处理"
+  },
+  {
+    "file": "06_界面_UI/复用原稿_Reuse/UI_HintBubble.png",
+    "source": "../../../../../PROJECTS/Unity/BorrowTomorrow/Assets/Game/Art/UI/UI_HintBubble.png",
+    "native": [
+      2304,
+      1728
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.97652,
+    "type": "existing_reused",
+    "note": "既有底图；布局和文字仍由程序处理"
+  },
+  {
+    "file": "06_界面_UI/复用原稿_Reuse/UI_BoundaryHandle.png",
+    "source": "../../../../../PROJECTS/Unity/BorrowTomorrow/Assets/Game/Art/UI/UI_BoundaryHandle.png",
+    "native": [
+      2304,
+      1728
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.74373,
+    "type": "existing_reused",
+    "note": "既有底图；布局和文字仍由程序处理"
+  },
+  {
+    "file": "06_界面_UI/复用原稿_Reuse/UI_InteractIcon.png",
+    "source": "../../../../../PROJECTS/Unity/BorrowTomorrow/Assets/Game/Art/UI/UI_InteractIcon.png",
+    "native": [
+      2048,
+      2048
+    ],
+    "delivery": [
+      2048,
+      2048
+    ],
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "transparent_fraction": 0.40118,
+    "type": "existing_reused",
+    "note": "既有底图；布局和文字仍由程序处理"
+  },
+  {
+    "file": "02_剧情插画_Illustrations/ILL_PHOTO_BACK_Reuse.png",
+    "source": "../../../../../PROJECTS/Unity/BorrowTomorrow/Assets/Game/Art/Illustrations/ILL_PHOTO_BACK.jpg",
+    "native": [
+      2304,
+      1728
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0,
+    "type": "existing_reused_blank_text_backing"
+  },
+  {
+    "file": "02_剧情插画_Illustrations/ILL_EPILOGUE_LETTER_Reuse.png",
+    "source": "../../../../../PROJECTS/Unity/BorrowTomorrow/Assets/Game/Art/Illustrations/ILL_EPILOGUE_LETTER.jpg",
+    "native": [
+      2304,
+      1728
+    ],
+    "delivery": [
+      2304,
+      1728
+    ],
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "transparent_fraction": 0,
+    "type": "existing_reused_blank_text_backing"
+  }
+]

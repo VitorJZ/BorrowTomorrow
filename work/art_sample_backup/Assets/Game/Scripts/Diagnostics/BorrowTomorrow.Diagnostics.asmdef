@@ -1,0 +1,5 @@
+{
+  "name": "BorrowTomorrow.Diagnostics",
+  "references": ["BorrowTomorrow.Core", "BorrowTomorrow.Player", "BorrowTomorrow.TimeBoundary", "BorrowTomorrow.Level"],
+  "autoReferenced": true
+}

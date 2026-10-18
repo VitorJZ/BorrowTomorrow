@@ -1,0 +1,66 @@
+1: using System.Linq;
+2: using System.Text;
+3: using BorrowTomorrow.Core;
+4: using BorrowTomorrow.Core.Interfaces;
+5: using BorrowTomorrow.Narrative;
+6: using UnityEngine;
+7: using UnityEngine.UI;
+8: namespace BorrowTomorrow.UI
+9: {
+10:     public sealed class NarrativeJournal : MonoBehaviour
+11:     {
+12:         public Font font;
+13:         public Sprite journalSkin;
+14:         private Canvas canvas;
+15:         private GameObject panel;
+16:         private Text text;
+17:         private Text hint;
+18:         private bool opened;
+19:         private ScrollRect scroll;
+20:         private void Start()
+21:         {
+22:             var go=new GameObject("JournalCanvas",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler),typeof(GraphicRaycaster));go.transform.SetParent(transform,false);
+23:             canvas=go.GetComponent<Canvas>();canvas.renderMode=RenderMode.ScreenSpaceOverlay;canvas.sortingOrder=60;
+24:             var scaler=go.GetComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(1920,1080);
+25:             hint=Label(go.transform,"J 查看已读对白",new Vector2(700,-495),new Vector2(400,40),22);
+26:             panel=new GameObject("Records",typeof(RectTransform));panel.transform.SetParent(go.transform,false);var rt=panel.GetComponent<RectTransform>();rt.anchorMin=Vector2.zero;rt.anchorMax=Vector2.one;rt.offsetMin=rt.offsetMax=Vector2.zero;
+27:             var bg=panel.AddComponent<Image>();bg.color=new Color(.06f,.055f,.045f,.98f);
+28:             if(journalSkin!=null){bg.sprite=journalSkin;bg.color=Color.white;}
+29:             Label(panel.transform,"已读对白    ·    J 关闭",new Vector2(0,455),new Vector2(1640,70),34);
+30:             var view=Rect(panel.transform,"Viewport",new Vector2(0,-10),new Vector2(1640,790));view.gameObject.AddComponent<RectMask2D>();
+31:             scroll=view.gameObject.AddComponent<ScrollRect>();scroll.viewport=view;scroll.horizontal=false;
+32:             var content=Rect(view,"Content",Vector2.zero,new Vector2(1600,790));content.anchorMin=new Vector2(0,1);content.anchorMax=new Vector2(1,1);content.pivot=new Vector2(.5f,1);
+33:             text=content.gameObject.AddComponent<Text>();text.font=font;text.fontSize=28;text.lineSpacing=1.35f;text.color=new Color(.94f,.9f,.82f);text.horizontalOverflow=HorizontalWrapMode.Wrap;text.verticalOverflow=VerticalWrapMode.Overflow;text.raycastTarget=false;
+34:             scroll.content=content;panel.SetActive(false);
+35:             if(journalSkin!=null){text.color=new Color(.2f,.12f,.07f);foreach(var heading in panel.GetComponentsInChildren<Text>(true))heading.color=new Color(.2f,.12f,.07f);}
+36:         }
+37:         private void Update()
+38:         {
+39:             var session=GameSession.Instance;if(session==null||canvas==null)return;
+40:             canvas.enabled=!session.State.IsPaused;
+41:             hint.enabled=session.State.Phase==GamePhase.Playing && session.State.SubState==PlayingSubState.Free;
+42:             if(session.State.Phase!=GamePhase.Playing) { opened=false;panel.SetActive(false);return; }
+43:             if(Input.GetKeyDown(KeyCode.J) && !session.State.IsPaused)
+44:             {
+45:                 if(opened) { opened=false;panel.SetActive(false);session.State.SetSubState(PlayingSubState.Free);return; }
+46:                 if(session.State.SubState!=PlayingSubState.Free || !ServiceRegistry.TryGet<IDialogueService>(out var dialogue) || dialogue.IsPlaying)return;
+47:                 opened=true;session.State.SetSubState(PlayingSubState.Cutscene);
+48:                 var lines=new StringBuilder();
+49:                 if(ServiceRegistry.TryGet<DialogueLibrary>(out var library))foreach(var entry in library.Entries)
+50:                 {
+51:                     if(entry!=null&&session.ReadDialogueIds.Contains(entry.entryId))lines.Append(entry.speakerLabel).Append("\n").Append(entry.source=="Tape"?"「"+entry.subtitle+"」":entry.subtitle).Append("\n\n");
+52:                 }
+53:                 text.text=lines.Length>0?lines.ToString():"还没有读过的对白。";
+54:                 panel.SetActive(true);Canvas.ForceUpdateCanvases();text.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,Mathf.Max(790,text.preferredHeight+40));scroll.verticalNormalizedPosition=1;
+55:             }
+56:         }
+57:         private RectTransform Rect(Transform parent,string name,Vector2 pos,Vector2 size)
+58:         {
+59:             var go=new GameObject(name,typeof(RectTransform));go.transform.SetParent(parent,false);var r=go.GetComponent<RectTransform>();r.anchorMin=r.anchorMax=new Vector2(.5f,.5f);r.sizeDelta=size;r.anchoredPosition=pos;return r;
+60:         }
+61:         private Text Label(Transform parent,string value,Vector2 pos,Vector2 size,int fontSize)
+62:         {
+63:             var r=Rect(parent,value,pos,size);var t=r.gameObject.AddComponent<Text>();t.font=font;t.fontSize=fontSize;t.color=Color.white;t.text=value;t.raycastTarget=false;return t;
+64:         }
+65:     }
+66: }

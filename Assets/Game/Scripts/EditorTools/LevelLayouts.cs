@@ -227,23 +227,6 @@ namespace BorrowTomorrow.EditorTools
             return component;
         }
 
-        /// <summary>区域剧情触发器（策划 12.1：进入区域触发一次性剧情）。</summary>
-        internal static void StoryTrigger(RoomContext ctx, string triggerId, string dialogueEntryId,
-            Vector2 center, Vector2 size, DialoguePriority priority)
-        {
-            var trigger = new GameObject($"Trigger_{triggerId}");
-            trigger.transform.SetParent(ctx.Content);
-            trigger.transform.position = new Vector3(center.x, center.y, 0f);
-            var collider = trigger.AddComponent<BoxCollider2D>();
-            collider.isTrigger = true;
-            collider.size = size;
-            var volume = trigger.AddComponent<StoryTriggerVolume>();
-            SetField(volume, "triggerId", triggerId);
-            SetField(volume, "dialogueEntryId", dialogueEntryId);
-            SetField(volume, "priority", (int)priority);
-            SetField(volume, "playerMask", ctx.PlayerMaskValue);
-        }
-
         /// <summary>年代物体（策划 4.3：恒定/年代/叙事/装饰四类；本方法建年代物体）。</summary>
         internal static TemporalObject Temporal(RoomContext ctx, string definitionId, Vector2 position)
         {
@@ -407,8 +390,6 @@ namespace BorrowTomorrow.EditorTools
             };
             Checkpoint(ctx, "cp_L00_courtyard", new Vector2(14f, 0.8f));
             Door(ctx, "推门进院", new Vector2(23f, 1.2f), ExitDoor.TransitionMode.NextLevel, null, null);
-            StoryTrigger(ctx, "L00_gate_passed", "gate_self_talk", new Vector2(15.5f, 0.8f),
-                new Vector2(1.5f, 1.6f), DialoguePriority.Ambient);
             return spawns;
         }
 
@@ -442,8 +423,6 @@ namespace BorrowTomorrow.EditorTools
                 Spawn(ctx, "cp_L01A_bank", new Vector2(15.5f, 0.05f)),
             };
             Checkpoint(ctx, "cp_L01A_bank", new Vector2(15.5f, 0.8f));
-            StoryTrigger(ctx, "L01_bridge_passed", "bridge_self_talk", new Vector2(16.6f, 0.8f),
-                new Vector2(1.4f, 1.6f), DialoguePriority.Ambient);
             Door(ctx, "过桥进院", new Vector2(19.5f, 1.2f), ExitDoor.TransitionMode.SameSceneRoom, roomB, "spawn_L01B_in");
             return spawns;
         }
@@ -548,10 +527,6 @@ namespace BorrowTomorrow.EditorTools
                 Spawn(ctx, "cp_L02_brick", new Vector2(11.5f, 3.05f)),
             };
             Checkpoint(ctx, "cp_L02_brick", new Vector2(11.5f, 3.85f));
-            Narrative(ctx, "uniform", "查看校服", new Vector2(9.6f, 3.45f), new Vector2(0.7f, 0.8f),
-                "uniform_self", DialoguePriority.Story, replayable: false);
-            Narrative(ctx, "ledger", "翻看账本", new Vector2(10.9f, 3.45f), new Vector2(0.5f, 0.7f),
-                "ledger_check", DialoguePriority.Ambient, replayable: true);
             Door(ctx, "进缝纫间", new Vector2(1.6f, 4.2f), ExitDoor.TransitionMode.NextLevel, null, null);
             return spawns;
         }
@@ -616,8 +591,6 @@ namespace BorrowTomorrow.EditorTools
             };
             Checkpoint(ctx, "cp_L03_threshold", new Vector2(20f, 3.85f));
             Checkpoint(ctx, "cp_L03_photo", new Vector2(26.5f, 3.85f));
-            Narrative(ctx, "photo", "查看照片", new Vector2(28.5f, 3.55f), new Vector2(0.7f, 0.9f),
-                "photo_back", DialoguePriority.Story, replayable: false);
             Door(ctx, "推开阁楼门", new Vector2(29.8f, 4.2f), ExitDoor.TransitionMode.NextLevel, null, null);
             return spawns;
         }
@@ -641,8 +614,8 @@ namespace BorrowTomorrow.EditorTools
             Box(ctx, "CompartmentVisual", new Vector2(26.5f, 5.15f), new Vector2(1.4f, 1f),
                 new Color(0.28f, 0.3f, 0.36f), "ConstantStructure", "Default", false);
 
-            // 整棵树（锚点 x=4，策划 11.5：全部通行枝条同步切换）。
-            TemporalObject tree = Temporal(ctx, "L04_tree", new Vector2(4f, 0f));
+            // 整棵树（锚点为树干 x=14.5，与交付树干画面对齐；策划 11.5：全部通行枝条同步切换）。
+            TemporalObject tree = Temporal(ctx, "L04_tree", new Vector2(14.5f, 0f));
             GameObject treePast = EraChild(ctx, tree, "Past");
             treePast.transform.localPosition = Vector3.zero;
             BoxChild(ctx, treePast.transform, "Sapling", new Vector2(4f, -5f), new Vector2(0.4f, 2f),
@@ -666,10 +639,6 @@ namespace BorrowTomorrow.EditorTools
                 Spawn(ctx, "cp_L04_window", new Vector2(20.3f, 3.05f)),
             };
             Checkpoint(ctx, "cp_L04_window", new Vector2(20.3f, 3.85f));
-            Narrative(ctx, "compartment_view", "抬头看暗格", new Vector2(20.7f, 3.6f), new Vector2(0.6f, 0.9f),
-                "compartment_view", DialoguePriority.Ambient, replayable: true);
-            Narrative(ctx, "compartment_touch", "触摸暗格", new Vector2(26.5f, 4.95f), new Vector2(0.9f, 0.7f),
-                "compartment_touch", DialoguePriority.Story, replayable: false);
             return spawns;
         }
 
@@ -689,8 +658,6 @@ namespace BorrowTomorrow.EditorTools
             {
                 Spawn(ctx, "spawn_epilogue", new Vector2(1.5f, 0.05f)),
             };
-            Narrative(ctx, "epilogue_box", "打开铁盒", new Vector2(7f, 1.35f), new Vector2(0.8f, 0.5f),
-                "epilogue_letter", DialoguePriority.Story, replayable: false);
             Door(ctx, "离开", new Vector2(13.5f, 1.2f), ExitDoor.TransitionMode.NextLevel, null, null);
             return spawns;
         }

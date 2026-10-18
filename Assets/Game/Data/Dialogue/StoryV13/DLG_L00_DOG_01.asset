@@ -22,8 +22,7 @@ MonoBehaviour:
   requiredFlags:
   - IntroPlayed
   - '!DogEchoPlayed'
-  setFlags:
-  - DogEchoPlayed
+  setFlags: []
   holdForConfirm: 0
   minDurationSeconds: 3
   source: Tape

@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0be260cc297d44a4bbb93eaf2549bcea, type: 3}
+  m_Name: ACT_L04_BOARD
+  m_EditorClassIdentifier: 
+  actionId: ACT_L04_BOARD
+  beforeEntryId: DLG_L04_BOX_01
+  confirmBefore: 
+  confirmAfter: "\u544A\u8BC9\u6653\u6653\u4F4D\u7F6E"
+  seconds: 1.8
+  sfxId: sfx_tin_box
+  gesture: Interact
+  stageBackground: {fileID: 2800000, guid: be4d4caefa63c4b31b27e7ed11956861, type: 3}
+  layers:
+  - name: FixedBlueBox
+    frames:
+    - {fileID: 2800000, guid: 4f2d5dead72214ffd8e64ee6a2814425, type: 3}
+    start: 0
+    end: 1
+    alphaBefore: 1
+    alphaAfter: 1
+    pivot: {x: 0.5, y: 0.5}
+    offsetBefore: {x: 0, y: 0}
+    offsetAfter: {x: 0, y: 0}
+    scaleBefore: {x: 1, y: 1}
+    scaleAfter: {x: 1, y: 1}
+    rotationAfter: {x: 0, y: 0, z: 0}
+    region:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 1
+      height: 1
+  - name: HingedWoodenBoard
+    frames:
+    - {fileID: 2800000, guid: beb5f1411b6fa46a081c17d880548cd0, type: 3}
+    start: 0.1
+    end: 0.85
+    alphaBefore: 1
+    alphaAfter: 1
+    pivot: {x: 0.7986111, y: 0.8784722}
+    offsetBefore: {x: 0, y: 0}
+    offsetAfter: {x: 0, y: 0}
+    scaleBefore: {x: 1, y: 1}
+    scaleAfter: {x: 1, y: 1}
+    rotationAfter: {x: -104, y: 0, z: 0}
+    region:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 1
+      height: 1
+  beforeImage: {fileID: 2800000, guid: d5f069963e1c74345a0fef6d5347e1d3, type: 3}
+  afterImage: {fileID: 2800000, guid: fde121dac86634a35b4477bc4686f491, type: 3}
+  coverRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  coverColor: {r: 0.63, g: 0.5, b: 0.36, a: 1}
+  coverSlide: {x: 0.25, y: 0.35}
+  zoom: 1
+  focus: {x: 0.5, y: 0.5}

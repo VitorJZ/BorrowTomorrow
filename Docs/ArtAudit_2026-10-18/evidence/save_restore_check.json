@@ -1,0 +1,11 @@
+{
+  "restored_exactly": true,
+  "prior_files": [
+    "BorrowTomorrow/progress.backup.json",
+    "BorrowTomorrow/progress.json"
+  ],
+  "changed_during_audit": [
+    "BorrowTomorrow/progress.backup.json",
+    "BorrowTomorrow/progress.json"
+  ]
+}

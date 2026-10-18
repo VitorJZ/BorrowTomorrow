@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0be260cc297d44a4bbb93eaf2549bcea, type: 3}
+  m_Name: ACT_EPI_SMOOTH
+  m_EditorClassIdentifier: 
+  actionId: ACT_EPI_SMOOTH
+  beforeEntryId: DLG_EPI_07
+  confirmBefore: "\u629A\u5E73\u5E03\u89D2"
+  confirmAfter: 
+  seconds: 2
+  sfxId: sfx_cloth_paper
+  gesture: 
+  stageBackground: {fileID: 2800000, guid: ef965943f53754e7ebcb05d650660b57, type: 3}
+  layers:
+  - name: SmoothedCorner
+    frames:
+    - {fileID: 2800000, guid: 3975211127e184d099eb001b0bb677bb, type: 3}
+    start: 0.46
+    end: 0.82
+    alphaBefore: 0
+    alphaAfter: 1
+    pivot: {x: 0.5, y: 0.5}
+    offsetBefore: {x: 0, y: 0}
+    offsetAfter: {x: 0, y: 0}
+    scaleBefore: {x: 1, y: 1}
+    scaleAfter: {x: 1, y: 1}
+    rotationAfter: {x: 0, y: 0, z: 0}
+    region:
+      serializedVersion: 2
+      x: 0.48
+      y: 0.11
+      width: 0.23
+      height: 0.21
+  - name: XiaoxiaosRestingHand
+    frames:
+    - {fileID: 2800000, guid: bfb2e49cc80f74fb1a5d99bee64874f2, type: 3}
+    start: 0
+    end: 1
+    alphaBefore: 1
+    alphaAfter: 1
+    pivot: {x: 0.5, y: 0.5}
+    offsetBefore: {x: 0, y: 0}
+    offsetAfter: {x: 0, y: 0}
+    scaleBefore: {x: 1, y: 1}
+    scaleAfter: {x: 1, y: 1}
+    rotationAfter: {x: 0, y: 0, z: 0}
+    region:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 1
+      height: 1
+  - name: GrandmasActiveHand
+    frames:
+    - {fileID: 2800000, guid: 4d5adec15f5e647479f01bbd4ea710d4, type: 3}
+    - {fileID: 2800000, guid: cb119a22502214fed856a5327b25fca7, type: 3}
+    - {fileID: 2800000, guid: 901a5f4f6eddc49a28fb074e4f646ca9, type: 3}
+    - {fileID: 2800000, guid: aa139d1b18e6745d583a55772c4031f1, type: 3}
+    - {fileID: 2800000, guid: 4a820ca5cbb7e41968d4031a07179563, type: 3}
+    - {fileID: 2800000, guid: 4e811f2beb0ad4c028c96b65044b1a3f, type: 3}
+    start: 0.12
+    end: 0.86
+    alphaBefore: 1
+    alphaAfter: 1
+    pivot: {x: 0, y: 0.5}
+    offsetBefore: {x: -0.1, y: 0.025}
+    offsetAfter: {x: -0.1, y: 0}
+    scaleBefore: {x: 1.1, y: 1}
+    scaleAfter: {x: 1.22, y: 1}
+    rotationAfter: {x: 0, y: 0, z: 0}
+    region:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 1
+      height: 1
+  beforeImage: {fileID: 2800000, guid: 08fd012f3f47d45fa976ab7afb3f6aeb, type: 3}
+  afterImage: {fileID: 2800000, guid: 590ab111aca3d463eaf94d941416d070, type: 3}
+  coverRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  coverColor: {r: 0.3, g: 0.16, b: 0.12, a: 0.4}
+  coverSlide: {x: 0.06, y: 0}
+  zoom: 1
+  focus: {x: 0.5, y: 0.5}

@@ -1,0 +1,464 @@
+[
+  {
+    "file": "screenshots/ACT_EPI_SMOOTH_0.0.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/ACT_EPI_SMOOTH_0.5.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/ACT_EPI_SMOOTH_1.0.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/ACT_L02_CUFF_0.0.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/ACT_L02_CUFF_0.5.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/ACT_L02_CUFF_1.0.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/ACT_L04_BOARD_0.0.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/ACT_L04_BOARD_0.5.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/ACT_L04_BOARD_1.0.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Board_actual_wait.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Credits.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/DLG_EPI_02.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/DLG_EPI_03.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/DLG_EPI_04.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/DLG_L03_REVEAL_02.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/DLG_L03_REVEAL_03.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/DLG_L03_REVEAL_04.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Epilogue_mixed.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Epilogue_past.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Epilogue_present.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Hero_climb_0.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Hero_climb_1.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Hero_interact.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Hero_jump.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Hero_land.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Hero_walk_0.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Hero_walk_1.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Hero_walk_2.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Hero_walk_3.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Journal_1280x720.png",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "file": "screenshots/Journal_1440x1080.png",
+    "size": [
+      1440,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/Journal_1920x1080.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L00_mixed.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L00_past.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L00_present.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L01A_mixed.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L01A_past.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L01A_present.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L01B_mixed.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L01B_past.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L01B_present.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L01B_texture_binding_diagnostic.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L02Indoor_mixed.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L02Indoor_past.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L02Indoor_present.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L02_mixed.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L02_past.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L02_present.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L02_step1.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L02_step2.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L03_mixed.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L03_past.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L03_present.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L03_step2.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L04_mixed.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L04_past.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/L04_present.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/MainMenu_1280x720.png",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "file": "screenshots/MainMenu_1440x1080.png",
+    "size": [
+      1440,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/MainMenu_1920x1080.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/PauseSettings_1280x720.png",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "file": "screenshots/PauseSettings_1440x1080.png",
+    "size": [
+      1440,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/PauseSettings_1920x1080.png",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/PhotoText_1280x720.png",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "file": "screenshots/PhotoText_1440x1080.png",
+    "size": [
+      1440,
+      1080
+    ]
+  },
+  {
+    "file": "screenshots/PhotoText_1920x1080.png",
+    "size": [
+      1920,
+      1080
+    ]
+  }
+]

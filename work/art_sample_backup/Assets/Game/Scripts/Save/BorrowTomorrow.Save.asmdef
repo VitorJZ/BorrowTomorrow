@@ -1,0 +1,16 @@
+{
+    "name": "BorrowTomorrow.Save",
+    "rootNamespace": "BorrowTomorrow.Save",
+    "references": [
+        "BorrowTomorrow.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

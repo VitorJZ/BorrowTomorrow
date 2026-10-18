@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f993672bdb89944b81673ee9b42134, type: 3}
+  m_Name: DLG_EPI_04
+  m_EditorClassIdentifier: 
+  entryId: DLG_EPI_04
+  speakerLabel: "\u65E7\u4FE1\u4EF6"
+  subtitle: "\u7B49\u4F60\u6709\u4E86\u81EA\u5DF1\u7684\u5BB6\uFF0C\u5E26\u8FC7\u53BB\u3002\u4E0D\u7528\u6025\u7740\u56DE\u6765\uFF0C\u628A\u81EA\u5DF1\u7684\u65E5\u5B50\u8FC7\u597D\u3002"
+  voiceClip: {fileID: 0}
+  illustration: {fileID: 2800000, guid: fffe5068612c2954fa4b6726e5751f03, type: 3}
+  blackBackground: 0
+  nextId: DLG_EPI_05
+  requiredFlags: []
+  setFlags: []
+  holdForConfirm: 1
+  minDurationSeconds: 0.2
+  source: Note
+  eventId: EVT_EPILOGUE_MAIN
+  completionFlags: []
+  objectiveAfter: 
+  centeredTitle: 0
+  delayBefore: 0
+  sfxId: sfx_cloth_paper
+  endHoldSeconds: 0

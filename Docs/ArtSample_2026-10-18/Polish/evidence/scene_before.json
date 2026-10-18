@@ -1,0 +1,711 @@
+{
+  "room": "(x:40.000, y:-0.500, width:30.000, height:8.000)",
+  "objects": [
+    {
+      "path": "RoomRoot_L01B",
+      "position": "(0.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "RoomRoot_L01B/Content",
+      "position": "(0.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "Content/Ground",
+      "position": "(54.500, -0.500, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "Default",
+        "bounds": "Center: (54.500, -0.500, 0.000), Extents: (14.500, 0.500, 0.100)"
+      },
+      "box": {
+        "size": "(29.000, 1.000)",
+        "offset": "(0.000, 0.000)",
+        "trigger": false
+      }
+    },
+    {
+      "path": "Ground/ArtSkin",
+      "position": "(54.500, -4.250, 0.000)",
+      "scale": "(0.830, 0.830, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Data/Art/Sprites/PROP_Ground_Courtyard.asset",
+        "enabled": true,
+        "order": 2,
+        "layer": "EraPlatform",
+        "bounds": "Center: (54.500, -4.250, 0.000), Extents: (17.000, 4.250, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Content/WallL",
+      "position": "(40.000, 2.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "Default",
+        "bounds": "Center: (40.000, 2.000, 0.000), Extents: (0.300, 5.000, 0.100)"
+      },
+      "box": {
+        "size": "(0.600, 10.000)",
+        "offset": "(0.000, 0.000)",
+        "trigger": false
+      }
+    },
+    {
+      "path": "Content/WallR",
+      "position": "(69.000, 2.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "Default",
+        "bounds": "Center: (69.000, 2.000, 0.000), Extents: (0.300, 5.000, 0.100)"
+      },
+      "box": {
+        "size": "(0.600, 10.000)",
+        "offset": "(0.000, 0.000)",
+        "trigger": false
+      }
+    },
+    {
+      "path": "Content/Ledge",
+      "position": "(47.750, 1.800, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "Default",
+        "bounds": "Center: (47.750, 1.800, 0.000), Extents: (2.750, 0.200, 0.100)"
+      },
+      "box": {
+        "size": "(5.500, 0.400)",
+        "offset": "(0.000, 0.000)",
+        "trigger": false
+      }
+    },
+    {
+      "path": "Ledge/ArtSkin",
+      "position": "(47.750, 1.800, 0.000)",
+      "scale": "(0.134, 0.043, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Data/Art/Sprites/PROP_Platform_Stone.asset",
+        "enabled": true,
+        "order": 2,
+        "layer": "EraPlatform",
+        "bounds": "Center: (47.750, 1.800, 0.000), Extents: (2.750, 0.200, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Content/Temporal_L01B_wood_ladder",
+      "position": "(48.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "Temporal_L01B_wood_ladder/Past",
+      "position": "(48.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "Past/Bar",
+      "position": "(48.000, 1.450, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (48.000, 1.450, 0.000), Extents: (0.090, 1.250, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Past/Rung_0.5",
+      "position": "(48.000, 0.500, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (48.000, 0.500, 0.000), Extents: (0.275, 0.035, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Past/Rung_1.0",
+      "position": "(48.000, 1.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (48.000, 1.000, 0.000), Extents: (0.275, 0.035, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Past/Rung_1.5",
+      "position": "(48.000, 1.500, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (48.000, 1.500, 0.000), Extents: (0.275, 0.035, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Past/Rung_2.0",
+      "position": "(48.000, 2.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (48.000, 2.000, 0.000), Extents: (0.275, 0.035, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Past/Rung_2.5",
+      "position": "(48.000, 2.500, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (48.000, 2.500, 0.000), Extents: (0.275, 0.035, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Past/LadderZone",
+      "position": "(48.000, 1.450, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": {
+        "size": "(0.800, 2.500)",
+        "offset": "(0.000, 0.000)",
+        "trigger": true
+      }
+    },
+    {
+      "path": "Past/ArtSkin",
+      "position": "(48.000, 1.450, 0.000)",
+      "scale": "(0.100, 0.082, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Data/Art/Sprites/PROP_LadderTall_1994.asset",
+        "enabled": true,
+        "order": 3,
+        "layer": "EraPlatform",
+        "bounds": "Center: (48.000, 1.450, 0.000), Extents: (0.425, 1.250, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Temporal_L01B_wood_ladder/Present",
+      "position": "(48.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "Present/BrokenStub",
+      "position": "(48.000, 0.550, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (48.000, 0.550, 0.000), Extents: (0.301, 0.477, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Present/ArtSkin",
+      "position": "(48.000, 0.900, 0.000)",
+      "scale": "(0.089, 0.066, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Data/Art/Sprites/PROP_LadderTall_2024.asset",
+        "enabled": true,
+        "order": 5,
+        "layer": "EraPlatform",
+        "bounds": "Center: (48.000, 0.900, 0.000), Extents: (0.375, 0.900, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Content/Temporal_L01B_tree_branch",
+      "position": "(58.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "Temporal_L01B_tree_branch/Past",
+      "position": "(58.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "Past/Sapling",
+      "position": "(58.000, 0.750, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (58.000, 0.750, 0.000), Extents: (0.150, 0.750, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Sapling/ArtSkin",
+      "position": "(58.000, 0.750, 0.000)",
+      "scale": "(0.132, 0.115, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Data/Art/Sprites/PROP_TreeYoung_1994.asset",
+        "enabled": true,
+        "order": 2,
+        "layer": "EraPlatform",
+        "bounds": "Center: (58.000, 0.750, 0.000), Extents: (0.700, 1.050, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Temporal_L01B_tree_branch/Present",
+      "position": "(58.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "Present/Trunk",
+      "position": "(58.000, 1.100, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (58.000, 1.100, 0.000), Extents: (0.350, 1.100, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Present/BranchA",
+      "position": "(53.449, 2.155, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (53.449, 2.155, 0.000), Extents: (2.557, 0.185, 0.100)"
+      },
+      "box": {
+        "size": "(5.100, 0.350)",
+        "offset": "(0.000, 0.000)",
+        "trigger": false
+      }
+    },
+    {
+      "path": "BranchA/ArtSkin",
+      "position": "(53.449, 2.155, 0.000)",
+      "scale": "(1.461, 0.292, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Data/Art/Sprites/TreeBranchBark.asset",
+        "enabled": false,
+        "order": 2,
+        "layer": "EraPlatform",
+        "bounds": "Center: (53.449, 2.155, 0.000), Extents: (2.557, 0.185, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Present/BranchB",
+      "position": "(58.769, 2.446, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (58.769, 2.446, 0.000), Extents: (2.758, 0.473, 0.100)"
+      },
+      "box": {
+        "size": "(5.533, 0.350)",
+        "offset": "(0.000, 0.000)",
+        "trigger": false
+      }
+    },
+    {
+      "path": "BranchB/ArtSkin",
+      "position": "(58.769, 2.446, 0.000)",
+      "scale": "(1.575, 0.292, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Data/Art/Sprites/TreeBranchBark.asset",
+        "enabled": false,
+        "order": 2,
+        "layer": "EraPlatform",
+        "bounds": "Center: (58.769, 2.446, 0.000), Extents: (2.758, 0.473, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Present/BranchC",
+      "position": "(63.773, 3.047, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (63.773, 3.047, 0.000), Extents: (2.259, 0.472, 0.100)"
+      },
+      "box": {
+        "size": "(4.540, 0.350)",
+        "offset": "(0.000, 0.000)",
+        "trigger": false
+      }
+    },
+    {
+      "path": "BranchC/ArtSkin",
+      "position": "(63.773, 3.047, 0.000)",
+      "scale": "(1.289, 0.292, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Data/Art/Sprites/TreeBranchBark.asset",
+        "enabled": false,
+        "order": 2,
+        "layer": "EraPlatform",
+        "bounds": "Center: (63.773, 3.047, 0.000), Extents: (2.259, 0.472, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Present/ArtSkin",
+      "position": "(58.000, 3.200, 0.000)",
+      "scale": "(0.504, 0.343, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Data/Art/Sprites/PROP_TreeGrown_2024.asset",
+        "enabled": false,
+        "order": -10,
+        "layer": "EraPlatform",
+        "bounds": "Center: (58.000, 3.200, 0.000), Extents: (4.000, 3.500, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Present/SampleWholeTree",
+      "position": "(58.300, 3.500, 0.000)",
+      "scale": "(0.896, 0.896, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/SampleV1/Tree/L01B_WholeTree_v3.png",
+        "enabled": true,
+        "order": -10,
+        "layer": "EraPlatform",
+        "bounds": "Center: (58.300, 3.500, 0.000), Extents: (7.950, 3.975, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Content/ExitLedge",
+      "position": "(67.400, 2.950, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "Default",
+        "bounds": "Center: (67.400, 2.950, 0.000), Extents: (1.600, 0.200, 0.100)"
+      },
+      "box": {
+        "size": "(3.200, 0.400)",
+        "offset": "(0.000, 0.000)",
+        "trigger": false
+      }
+    },
+    {
+      "path": "ExitLedge/ArtSkin",
+      "position": "(67.400, 2.950, 0.000)",
+      "scale": "(0.078, 0.043, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Data/Art/Sprites/PROP_Platform_Stone.asset",
+        "enabled": true,
+        "order": 2,
+        "layer": "EraPlatform",
+        "bounds": "Center: (67.400, 2.950, 0.000), Extents: (1.600, 0.200, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "Content/Spawn_spawn_L01B_in",
+      "position": "(42.000, 0.050, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "Content/Spawn_cp_L01B_entry",
+      "position": "(42.500, 0.050, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "Content/Checkpoint_cp_L01B_entry",
+      "position": "(42.500, 0.800, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": {
+        "size": "(1.200, 1.600)",
+        "offset": "(0.000, 0.000)",
+        "trigger": true
+      }
+    },
+    {
+      "path": "Content/Exit_上楼",
+      "position": "(68.200, 4.350, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": {
+        "size": "(0.600, 2.400)",
+        "offset": "(0.000, 0.000)",
+        "trigger": true
+      }
+    },
+    {
+      "path": "Exit_上楼/ArtDoor",
+      "position": "(68.200, 4.350, 0.000)",
+      "scale": "(0.119, 0.102, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Data/Art/Sprites/PROP_Door_SewingRoom.asset",
+        "enabled": true,
+        "order": 8,
+        "layer": "EraPlatform",
+        "bounds": "Center: (68.200, 4.350, 0.000), Extents: (0.600, 1.150, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "RoomRoot_L01B/NarrativeContent",
+      "position": "(0.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "NarrativeContent/Auto_DLG_L01B_TREE_01",
+      "position": "(0.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "NarrativeContent/Narrative_height_marks",
+      "position": "(44.500, 1.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/UI/WhiteRect.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (44.500, 1.000, 0.000), Extents: (0.325, 0.425, 0.100)"
+      },
+      "box": {
+        "size": "(0.650, 0.850)",
+        "offset": "(0.000, 0.000)",
+        "trigger": true
+      }
+    },
+    {
+      "path": "NarrativeContent/HeightMarks",
+      "position": "(44.800, 1.500, 0.000)",
+      "scale": "(0.078, 0.139, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/Props/Decor/DECOR_HeightMarksWall.png",
+        "enabled": false,
+        "order": 0,
+        "layer": "EraPlatform",
+        "bounds": "Center: (44.800, 1.500, 0.000), Extents: (0.900, 1.200, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "RoomRoot_L01B/HintStages",
+      "position": "(0.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "HintStages/Stage_HintPassed_L01B_Climb",
+      "position": "(0.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "RoomRoot_L01B/ArtRoot",
+      "position": "(0.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "ArtRoot/PastBackdrop",
+      "position": "(55.000, 3.000, 0.000)",
+      "scale": "(1.328, 1.328, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/SampleV1/01_背景_Backgrounds/BG_L01B_Tree_1994_2560x1440.png",
+        "enabled": true,
+        "order": -100,
+        "layer": "FarBuildings",
+        "bounds": "Center: (55.000, 3.000, 0.000), Extents: (17.000, 9.563, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "ArtRoot/PresentBackdrop",
+      "position": "(55.000, 3.000, 0.000)",
+      "scale": "(1.328, 1.328, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/SampleV1/01_背景_Backgrounds/BG_L01B_Tree_2024_2560x1440.png",
+        "enabled": true,
+        "order": -99,
+        "layer": "FarBuildings",
+        "bounds": "Center: (55.000, 3.000, 0.000), Extents: (17.000, 9.563, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "RoomRoot_L01B/FinalArtSample",
+      "position": "(0.000, 0.000, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "FinalArtSample/LedgeSupport",
+      "position": "(47.750, 0.850, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Data/Art/Sprites/NearWall.asset",
+        "enabled": true,
+        "order": -5,
+        "layer": "EraPlatform",
+        "bounds": "Center: (47.750, 0.850, 0.000), Extents: (2.750, 0.850, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "FinalArtSample/TreeWindowDrawing",
+      "position": "(43.500, 1.600, 0.000)",
+      "scale": "(0.046, 0.046, 1.000)",
+      "active": true,
+      "renderer": {
+        "sprite": "Assets/Game/Art/SampleV1/04_场景物件_Props/Decor/DECOR_ChildDrawing_TreeToWindow_2048x2048.png",
+        "enabled": true,
+        "order": 3,
+        "layer": "EraPlatform",
+        "bounds": "Center: (43.500, 1.600, 0.000), Extents: (0.475, 0.475, 0.100)"
+      },
+      "box": null
+    },
+    {
+      "path": "FinalArtSample/HeightMark_0",
+      "position": "(43.100, 0.780, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    },
+    {
+      "path": "FinalArtSample/HeightMark_1",
+      "position": "(43.100, 1.030, 0.000)",
+      "scale": "(1.000, 1.000, 1.000)",
+      "active": true,
+      "renderer": null,
+      "box": null
+    }
+  ]
+}

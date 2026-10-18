@@ -1,0 +1,344 @@
+[
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_01_FabricRed_2304x1728.png",
+    "original_bbox": {
+      "left": 27,
+      "top": 263,
+      "width": 635,
+      "height": 740
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      40,
+      820,
+      650,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_02_FabricBlue_2304x1728.png",
+    "original_bbox": {
+      "left": 12,
+      "top": 618,
+      "width": 749,
+      "height": 453
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      70,
+      1230,
+      740,
+      450
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_03_SleeveBefore_2304x1728.png",
+    "original_bbox": {
+      "left": 67,
+      "top": 69,
+      "width": 1276,
+      "height": 956
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      600,
+      100,
+      1250,
+      1300
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_04_SleeveAfter_2304x1728.png",
+    "original_bbox": {
+      "left": 11,
+      "top": 108,
+      "width": 1353,
+      "height": 927
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      600,
+      100,
+      1250,
+      1300
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_Hand_00_2304x1728.png",
+    "original_bbox": {
+      "left": 239,
+      "top": 181,
+      "width": 1209,
+      "height": 905
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      1320,
+      820,
+      984,
+      730
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_Hand_01_2304x1728.png",
+    "original_bbox": {
+      "left": 154,
+      "top": 111,
+      "width": 1294,
+      "height": 975
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      1320,
+      808,
+      984,
+      730
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_Hand_02_2304x1728.png",
+    "original_bbox": {
+      "left": 370,
+      "top": 192,
+      "width": 1078,
+      "height": 894
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      1320,
+      796,
+      984,
+      730
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_Hand_03_2304x1728.png",
+    "original_bbox": {
+      "left": 383,
+      "top": 199,
+      "width": 1065,
+      "height": 887
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      1320,
+      784,
+      984,
+      730
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L04_Niche/ACT_L04_Niche_01_BoxFixed_2304x1728.png",
+    "original_bbox": {
+      "left": 1015,
+      "top": 453,
+      "width": 374,
+      "height": 176
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      1620,
+      690,
+      540,
+      275
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/L04_Niche/ACT_L04_Niche_02_BoardClosed_2304x1728.png",
+    "original_bbox": {
+      "left": 910,
+      "top": 123,
+      "width": 478,
+      "height": 465
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      1450,
+      210,
+      780,
+      750
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_OldHand_00_2304x1728.png",
+    "original_bbox": {
+      "left": 0,
+      "top": 492,
+      "width": 1126,
+      "height": 571
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      0,
+      1050,
+      1500,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_OldHand_01_2304x1728.png",
+    "original_bbox": {
+      "left": 0,
+      "top": 582,
+      "width": 1125,
+      "height": 504
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      0,
+      1042,
+      1540,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_OldHand_02_2304x1728.png",
+    "original_bbox": {
+      "left": 0,
+      "top": 484,
+      "width": 1144,
+      "height": 554
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      0,
+      1034,
+      1580,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_OldHand_03_2304x1728.png",
+    "original_bbox": {
+      "left": 0,
+      "top": 416,
+      "width": 1144,
+      "height": 638
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      0,
+      1026,
+      1620,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_OldHand_04_2304x1728.png",
+    "original_bbox": {
+      "left": 0,
+      "top": 429,
+      "width": 1261,
+      "height": 612
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      0,
+      1018,
+      1660,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_OldHand_05_2304x1728.png",
+    "original_bbox": {
+      "left": 0,
+      "top": 501,
+      "width": 1193,
+      "height": 550
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      0,
+      1010,
+      1700,
+      650
+    ]
+  },
+  {
+    "file": "03_动作分层_Actions/EPI_Smooth/ACT_EPI_Smooth_YoungHand_Resting_2304x1728.png",
+    "original_bbox": {
+      "left": 539,
+      "top": 232,
+      "width": 909,
+      "height": 648
+    },
+    "canvas": [
+      2304,
+      1728
+    ],
+    "placed": [
+      1500,
+      650,
+      804,
+      600
+    ]
+  },
+  {
+    "file": "06_界面_UI/UI_Button_Wood_Blank_1024x256.png",
+    "original_bbox": {
+      "left": 95,
+      "top": 148,
+      "width": 1982,
+      "height": 427
+    },
+    "canvas": [
+      1024,
+      256
+    ],
+    "placed": [
+      8,
+      8,
+      1008,
+      240
+    ]
+  }
+]

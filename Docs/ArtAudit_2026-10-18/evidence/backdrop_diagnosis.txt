@@ -1,0 +1,5 @@
+ArtRoot parent=RoomRoot_L01B boundary=RoomRoot_L01B (BorrowTomorrow.TimeBoundary.BoundaryController)
+past=True sprite=BG_L01B_Tree_1994 (UnityEngine.Sprite) mat=L01B_Past (UnityEngine.Material) bounds=Center: (55.00, 2.00, 0.00), Extents: (16.00, 9.50, 0.10) active=True
+ArtRoot parent=RoomRoot_L01A boundary=RoomRoot_L01A (BorrowTomorrow.TimeBoundary.BoundaryController)
+past=False sprite=BG_L01A_Canal_1994 (UnityEngine.Sprite) mat=L01A_Past (UnityEngine.Material) bounds=Center: (10.00, 2.00, 0.00), Extents: (11.00, 6.69, 0.10) active=True
+registered=RoomRoot_L01B (BorrowTomorrow.TimeBoundary.BoundaryController)

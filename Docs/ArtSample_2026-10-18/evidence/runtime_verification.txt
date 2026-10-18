@@ -1,0 +1,22 @@
+PASS walk to 48 at (47.91, 0.01, 0.00)
+PASS climb to permanent ledge
+PASS walk to 49.6 at (49.55, 2.00, 0.00)
+PASS stand on unchanged ledge
+PASS normal safe boundary drag to mixed solution
+PASS walk to 50.2 at (50.14, 2.01, 0.00)
+PASS walk to 51.8 at (51.75, 2.69, 0.00)
+PASS jump onto fitted branch
+PASS walk to 58 at (57.96, 2.54, 0.00)
+PASS walk to 68.1 at (68.04, 3.15, 0.00)
+PASS reach exit on original colliders
+PASS DLG_L02_UNIFORM_01 pause freezes action
+PASS DLG_L02_UNIFORM_01 resumes gated line after action
+PASS DLG_L04_BOX_01 pause freezes action
+PASS board holds report prompt without BoxLocated
+PASS board can stay open awaiting report
+PASS DLG_L04_BOX_01 resumes gated line after action
+PASS smooth waits for player before motion
+PASS DLG_EPI_07 pause freezes action
+PASS DLG_EPI_07 resumes gated line after action
+PASS smooth alone does not complete epilogue
+DONE - movement + event action/pause/wait samples; auto room dialogue disabled during route isolation.

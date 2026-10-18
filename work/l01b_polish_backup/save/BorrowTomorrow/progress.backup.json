@@ -1,0 +1,44 @@
+{
+    "saveVersion": 1,
+    "currentLevelId": "L00",
+    "checkpointId": "cp_L00_courtyard",
+    "checkpointRoomId": "L00",
+    "hasCheckpointPosition": true,
+    "checkpointPosition": {
+        "x": 13.09988784790039,
+        "y": 0.0067999958992004398
+    },
+    "currentObjective": "去阁楼，找到蓝色铁皮盒。",
+    "roomBoundaries": [
+        {
+            "roomId": "L00",
+            "boundaryX": 5.977745056152344
+        }
+    ],
+    "mechanismStates": [
+        {
+            "objectId": "L00_fence_gate",
+            "eraState": 1
+        }
+    ],
+    "triggeredStoryIds": [
+        "IntroPlayed",
+        "HintPassed_L00_Fence",
+        "DogEchoPlayed"
+    ],
+    "readDialogueIds": [
+        "DLG_L00_INTRO_01",
+        "DLG_L00_INTRO_02",
+        "DLG_L00_INTRO_03",
+        "DLG_L00_DOG_01"
+    ],
+    "settings": {
+        "volumeMaster": 1.0,
+        "volumeMusic": 0.800000011920929,
+        "volumeVoice": 1.0,
+        "volumeAmbience": 0.800000011920929,
+        "subtitlesEnabled": true,
+        "subtitleScale": 1.0,
+        "screenShakeEnabled": true
+    }
+}

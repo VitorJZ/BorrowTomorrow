@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: L04_tree
   m_EditorClassIdentifier: 
   objectId: L04_tree
-  anchorX: 4
+  anchorX: 14.5
   pastState:
     stateId: sapling
     sprite: {fileID: 0}

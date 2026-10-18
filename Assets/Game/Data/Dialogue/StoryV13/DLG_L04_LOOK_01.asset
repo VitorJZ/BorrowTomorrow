@@ -22,8 +22,7 @@ MonoBehaviour:
   requiredFlags:
   - IdentityKnown
   - '!CompartmentSeen'
-  setFlags:
-  - CompartmentSeen
+  setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
   source: Self

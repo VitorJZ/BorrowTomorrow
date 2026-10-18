@@ -63,7 +63,6 @@ namespace BorrowTomorrow.EditorTools
             CreateLevelScenes(catalog, whiteSprite, font, playerPrefab, friction, temporalDefPaths, dialoguePaths);
             SetBuildSceneList(catalog);
             NarrativeInstaller.Install();
-            StoryContentInstaller.Install();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             Debug.Log("[ProjectScaffolder] 项目骨架搭建完成。");
@@ -223,27 +222,29 @@ namespace BorrowTomorrow.EditorTools
             string levelsDir = $"{DataDir}/Levels";
             Directory.CreateDirectory(levelsDir);
 
+            // 三级提示由 NarrativeInstaller 按 Data/Narrative/hints_v14.json（规格 1.4 §6.3）写入。
+            var NoHints = Array.Empty<(string, string, string, string)>();
             var specs = new (string id, string scene, string display, float min, float max, float initial,
                 string spawn, string objective, string[] exitFlags, string exitHint,
                 (string stage, string h1, string h2, string h3)[] hints)[]
             {
                 ("L00", "L00_Gate", "院门", 0f, 26f, 26f, "spawn_gate_out",
                     Objectives.ReachAtticFindBox, new string[0], "先开门，进院子再说。",
-                    new[] { ("Trigger_L00_gate_passed", "看看栅栏。", "它现在不完整。", "把边界拉到栅栏左边。") }),
+                    NoHints),
                 ("L01", "L01_Courtyard", "水渠与树", 0f, 20f, 0f, "spawn_courtyard_in",
                     Objectives.ReachAtticFindBox, new string[0], "先跨过水渠，再往上走。",
-                    new[] { ("Trigger_L01_bridge_passed", "水渠上盖板看起来不结实。", "以前它是好的。", "让盖板回到过去，再踩上去。") }),
+                    NoHints),
                 ("L02", "L02_Sewing", "缝纫间外台", 0f, 26f, 0f, "spawn_sewing_ground",
                     Objectives.ReachAtticFindBox, new[] { StoryFlags.UniformRead }, "袖口的事还没弄明白。",
-                    new[] { (StoryFlags.UniformRead, "两个地方需要不同年代。", "先找不会变化的砖台。", "先爬旧梯，站上砖台，再让左侧踏台出现。") }),
+                    NoHints),
                 ("L03", "L03_Corridor", "楼上回廊", 0f, 30f, 0f, "spawn_corridor_in",
                     Objectives.ReachAtticFindBox, new[] { StoryFlags.PhotoRevealed }, "阁楼门前有张照片。",
-                    new[] { (StoryFlags.PhotoRevealed, "左边的地板缺了一段。", "右边踩板能用，柜子挡着路。", "过去地板接上现在踏板，再让柜子回到空位。") }),
+                    NoHints),
                 ("L04", "L04_Attic", "阁楼窗外", 0f, 28f, 27f, "spawn_attic_window",
                     Objectives.TellXiaoxaoBoxLocation, new[] { StoryFlags.BoxLocated }, "树还没有长到窗边。",
-                    new[] { (StoryFlags.BoxLocated, "小时候的树够不到窗户。", "树要长大。", "把边界拉到树干左边，让整棵树进入现在。") }),
+                    NoHints),
                 ("Epilogue", "Epilogue", "两天后", 0f, 1f, 0f, "spawn_epilogue",
-                    "（尾声演出）", new string[0], string.Empty, Array.Empty<(string, string, string, string)>()),
+                    "（尾声演出）", new[] { StoryFlags.EpilogueSeen }, "先打开铁盒，读完留给晓晓的信。", NoHints),
             };
 
             var catalog = new List<LevelDefinition>();
@@ -295,7 +296,7 @@ namespace BorrowTomorrow.EditorTools
                 ("L03_floor", 7f, SafetyPolicy.FullCheck, "wood_floor", true, false, "missing", false, false),
                 ("L03_walkway", 15f, SafetyPolicy.FullCheck, "missing", false, false, "metal_plate", true, false),
                 ("L03_cabinet", 24f, SafetyPolicy.BlockIfCoveringPlayer, "empty", false, false, "cabinet_full", false, true),
-                ("L04_tree", 4f, SafetyPolicy.FullCheck, "sapling", false, false, "adult_tree", true, false),
+                ("L04_tree", 14.5f, SafetyPolicy.FullCheck, "sapling", false, false, "adult_tree", true, false),
             };
 
             var map = new Dictionary<string, string>();

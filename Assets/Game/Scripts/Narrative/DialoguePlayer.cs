@@ -30,7 +30,16 @@ namespace BorrowTomorrow.Narrative
         private bool readOnly;
         private bool voicePaused;
         private int lastAdvanceFrame = -1;
+        private enum ActionPhase { None, WaitBefore, Playing, WaitAfter }
+        private ActionPhase actionPhase;
+        private NarrativeAction action;
+        private DialogueEntry actionTarget;
+        private float actionTimer;
+        private float stageTime;
+        private int stageFrame;
+        private int pointerReleasedFrame;
         public bool IsPlaying { get; private set; }
+        public bool IsWaitingForAction => actionPhase == ActionPhase.WaitBefore || actionPhase == ActionPhase.WaitAfter;
         public IReadOnlyList<DialogueEntry> History => history;
         public int InitializeOrder => -20;
         public DialogueEntry Current => current;
@@ -102,7 +111,78 @@ namespace BorrowTomorrow.Narrative
             if (ServiceRegistry.TryGet<IAudioService>(out var audio)) audio.SetDialogueDucking(true);
             if (ServiceRegistry.TryGet<ISaveService>(out var save)) voiceSource.volume = voiceVolume * save.LoadSettings().volumeVoice;
             else voiceSource.volume = voiceVolume;
-            BeginLine(entry);
+            EnterLine(entry);
+        }
+        // An action stage belongs to the same event: it gates the line without adding entries or flags.
+        private void EnterLine(DialogueEntry entry)
+        {
+            NarrativeAction gate = readOnly || !ServiceRegistry.TryGet<DialogueLibrary>(out var lib) ? null : lib.FindAction(entry.entryId);
+            if (gate == null) { BeginLine(entry); return; }
+            action = gate;
+            actionTarget = entry;
+            actionTimer = 0f;
+            voiceSource.Stop();
+            tapeSource.Stop();
+            if (ServiceRegistry.TryGet<IHudService>(out var hud)) hud.HideSubtitle();
+            if (string.IsNullOrEmpty(gate.confirmBefore)) StartActionPlay();
+            else EnterStage(ActionPhase.WaitBefore);
+        }
+        private void EnterStage(ActionPhase phase)
+        {
+            actionPhase = phase;
+            stageTime = 0f;
+            stageFrame = Time.frameCount;
+            pointerReleasedFrame = -1;
+            RenderAction();
+        }
+        private void StartActionPlay()
+        {
+            EnterStage(ActionPhase.Playing);
+            if (!string.IsNullOrEmpty(action.sfxId) && ServiceRegistry.TryGet<IAudioService>(out var audio)) audio.PlaySfx(action.sfxId);
+            if (!string.IsNullOrEmpty(action.gesture) && ServiceRegistry.TryGet<ICharacterArt>(out var character)) character.PlayGesture(action.gesture);
+        }
+        private void RenderAction()
+        {
+            string prompt = actionPhase == ActionPhase.WaitBefore ? action.confirmBefore
+                : actionPhase == ActionPhase.WaitAfter ? action.confirmAfter : null;
+            float progress = actionPhase == ActionPhase.WaitBefore ? 0f
+                : actionPhase == ActionPhase.WaitAfter ? 1f : Mathf.Clamp01(actionTimer / Mathf.Max(0.01f, action.seconds));
+            if (ServiceRegistry.TryGet<INarrativePresentation>(out var view) && view is INarrativeActionView actionView)
+                actionView.PresentAction(action, progress, prompt, ownsControl);
+        }
+        private void FinishAction()
+        {
+            DialogueEntry target = actionTarget;
+            actionPhase = ActionPhase.None;
+            action = null;
+            actionTarget = null;
+            BeginLine(target);
+        }
+        // Only a fresh press after the stage began counts; keyboard presses are edge-triggered,
+        // and the pointer must be seen released on an earlier frame so one click cannot pass two stages.
+        private void ConfirmAction()
+        {
+            if (!IsWaitingForAction || stageFrame == Time.frameCount || stageTime < 0.18f
+                || pointerReleasedFrame < 0 || pointerReleasedFrame == Time.frameCount
+                || GameSession.Instance.State.IsPaused) return;
+            if (actionPhase == ActionPhase.WaitBefore) StartActionPlay();
+            else FinishAction();
+        }
+        private void UpdateAction()
+        {
+            stageTime += Time.deltaTime;
+            if (pointerReleasedFrame < 0 && !Input.GetMouseButton(0)) pointerReleasedFrame = Time.frameCount;
+            if (actionPhase == ActionPhase.Playing)
+            {
+                actionTimer += Time.deltaTime;
+                RenderAction();
+                if (actionTimer < action.seconds) return;
+                if (string.IsNullOrEmpty(action.confirmAfter)) FinishAction();
+                else EnterStage(ActionPhase.WaitAfter);
+                return;
+            }
+            if (ServiceRegistry.TryGet<IInputSource>(out var input) && input.ConsumeInteract()) ConfirmAction();
+            else if (ownsControl && Input.GetMouseButtonDown(0)) ConfirmAction();
         }
         private void BeginLine(DialogueEntry entry)
         {
@@ -124,8 +204,7 @@ namespace BorrowTomorrow.Narrative
             presented = true;
             GameSession.Instance?.RecordDialogue(current.entryId);
             if (ServiceRegistry.TryGet<ICharacterArt>(out var character)
-                && (current.entryId == "DLG_L02_UNIFORM_01" || current.entryId == "DLG_L03_REVEAL_01"
-                    || current.entryId == "DLG_L04_LOOK_01" || current.entryId == "DLG_L04_BOX_01"))
+                && (current.entryId == "DLG_L03_REVEAL_01" || current.entryId == "DLG_L04_LOOK_01"))
                 character.PlayGesture("Interact");
             if (current.source == "Tape" && tapeHiss != null)
             {
@@ -171,6 +250,7 @@ namespace BorrowTomorrow.Narrative
                 tapeSource.volume = voiceSource.volume * 0.045f;
                 voiceSource.UnPause(); tapeSource.UnPause(); voicePaused = false;
             }
+            if (actionPhase != ActionPhase.None) { UpdateAction(); return; }
             timer += Time.deltaTime;
             if (endingTimer >= 0f)
             {
@@ -189,6 +269,7 @@ namespace BorrowTomorrow.Narrative
         }
         public void Advance()
         {
+            if (IsPlaying && actionPhase != ActionPhase.None) { ConfirmAction(); return; }
             if (!IsPlaying || !presented || endingTimer >= 0f || timer < 0.18f
                 || GameSession.Instance.State.IsPaused || lastAdvanceFrame == Time.frameCount) return;
             lastAdvanceFrame = Time.frameCount;
@@ -212,28 +293,17 @@ namespace BorrowTomorrow.Narrative
                     End(false);
                     return;
                 }
-                BeginLine(next);
+                EnterLine(next);
                 return;
             }
             if (!readOnly && current.endHoldSeconds > 0f) endingTimer = current.endHoldSeconds;
             else End(true);
         }
+        // Whole-event skip commits the event's completion result (first line's completionFlags),
+        // including any pending action stage; future lines are not walked (spec 1.4 §4.1).
         public void SkipCurrent()
         {
             if (!IsPlaying || GameSession.Instance.State.IsPaused) return;
-            if (!readOnly)
-            {
-                var walked = new HashSet<string>();
-                DialogueEntry line = current;
-                while (line != null)
-                {
-                    if (!walked.Add(line.entryId)) { End(false); return; }
-                    if (line.setFlags != null) foreach (string flag in line.setFlags) pendingFlags.Add(flag);
-                    if (string.IsNullOrEmpty(line.nextId)) break;
-                    line = FindNext(line.nextId);
-                    if (line == null) { End(false); return; }
-                }
-            }
             End(true);
         }
         private void End(bool completed)
@@ -241,10 +311,14 @@ namespace BorrowTomorrow.Narrative
             voiceSource.Stop();
             tapeSource.Stop();
             voicePaused = false;
+            actionPhase = ActionPhase.None;
+            action = null;
+            actionTarget = null;
             var session = GameSession.Instance;
             if (completed && !readOnly && session != null)
             {
                 if (!string.IsNullOrEmpty(first.objectiveAfter)) session.SetObjective(first.objectiveAfter == "HIDE" ? null : first.objectiveAfter);
+                if (first.completionFlags != null) foreach (string flag in first.completionFlags) pendingFlags.Add(flag);
                 session.StoryFlags.SetFlags(pendingFlags);
                 session.SaveProgressNow();
             }

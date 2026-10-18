@@ -1,0 +1,396 @@
+1: using System;
+2: using System.Collections.Generic;
+3: using System.IO;
+4: using System.Linq;
+5: using BorrowTomorrow.Core.Data;
+6: using BorrowTomorrow.Level;
+7: using BorrowTomorrow.Narrative;
+8: using BorrowTomorrow.Player;
+9: using BorrowTomorrow.TimeBoundary;
+10: using BorrowTomorrow.UI;
+11: using UnityEditor;
+12: using UnityEditor.SceneManagement;
+13: using UnityEngine;
+14: using UnityEngine.SceneManagement;
+15: using UnityEngine.UI;
+16: 
+17: namespace BorrowTomorrow.EditorTools
+18: {
+19:     public static class ArtInstaller
+20:     {
+21:         [Serializable] private class Manifest { public ArtSprite[] sprites; public ArtClip[] clips; }
+22:         [Serializable] private class ArtSprite { public string name;public string path;public float[] rect; }
+23:         [Serializable] private class ArtClip { public string name;public string path;public float fps;public float ppu;public bool loop;public ArtFrame[] frames; }
+24:         [Serializable] private class ArtFrame { public float[] rect;public float[] pivot; }
+25:         private const string Generated="Assets/Game/Data/Art/Sprites";
+26:         private static Dictionary<string,Sprite> sprites;
+27:         private static CharacterArtAnimator.Clip[] hero;
+28:         private static string BuildRoot=>Environment.GetEnvironmentVariable("BORROWTOMORROW_ART_OUTPUT")??Path.GetFullPath("Builds/Art/BorrowTomorrow.exe");
+29:         private static IEnumerable<T> All<T>(Scene scene)where T:Component=>scene.GetRootGameObjects().SelectMany(x=>x.GetComponentsInChildren<T>(true));
+30:         private static Sprite S(string name)=>sprites.TryGetValue(name,out var value)?value:null;
+31:         private static Sprite MakeSprite(string name,string texture,float[] rect,Vector2 pivot,float ppu)
+32:         {
+33:             string path=Generated+"/"+name+".asset";
+34:             Sprite existing=AssetDatabase.LoadAssetAtPath<Sprite>(path);if(existing!=null)return existing;
+35:             Texture2D tex=AssetDatabase.LoadAssetAtPath<Texture2D>(texture);
+36:             if(tex==null)throw new InvalidOperationException("Missing art: "+texture);
+37:             var importer=AssetImporter.GetAtPath(texture) as TextureImporter;
+38:             int sourceWidth=tex.width,sourceHeight=tex.height;
+39:             if(importer!=null)importer.GetSourceTextureWidthAndHeight(out sourceWidth,out sourceHeight);
+40:             float sx=(float)tex.width/sourceWidth,sy=(float)tex.height/sourceHeight;
+41:             var area=new Rect(rect[0]*sx,rect[1]*sy,rect[2]*sx,rect[3]*sy);
+42:             var s=Sprite.Create(tex,area,pivot,ppu*sy,0,SpriteMeshType.FullRect);s.name=name;
+43:             AssetDatabase.CreateAsset(s,path);return s;
+44:         }
+45:         private static void Import()
+46:         {
+47:             Directory.CreateDirectory(Generated);AssetDatabase.Refresh();
+48:             var m=JsonUtility.FromJson<Manifest>(File.ReadAllText("Assets/Game/Data/Art/art_manifest.json"));sprites=new Dictionary<string,Sprite>();
+49:             foreach(var entry in m.sprites)sprites[entry.name]=MakeSprite(entry.name,entry.path,entry.rect,new Vector2(.5f,.5f),100);
+50:             sprites["NearWall"]=MakeSprite("NearWall","Assets/Game/Art/Props/Constant/PROP_Wall_Old.png",new float[]{0,0,1024,4096},new Vector2(.5f,.5f),700);
+51:             sprites["NearFloor"]=MakeSprite("NearFloor","Assets/Game/Art/Props/Temporal/PROP_WoodFloor_1994.png",new float[]{600,850,800,180},new Vector2(.5f,.5f),100);
+52:             sprites["TreeBranchBark"]=MakeSprite("TreeBranchBark","Assets/Game/Art/Props/Temporal/PROP_TreeAttic_Grown_2024.png",new float[]{1800,1000,350,120},new Vector2(.5f,.5f),100);
+53:             hero=m.clips.Select(c=>new CharacterArtAnimator.Clip{name=c.name,fps=c.fps,loop=c.loop,frames=c.frames.Select((f,i)=>MakeSprite("Hero_"+c.name+"_"+i.ToString("00"),c.path,f.rect,new Vector2(f.pivot[0],f.pivot[1]),c.ppu)).ToArray()}).ToArray();
+54:             AssetDatabase.SaveAssets();
+55:         }
+56:         private static void SkinPlayer()
+57:         {
+58:             string path="Assets/Game/Prefabs/Player_Graybox.prefab";GameObject root=PrefabUtility.LoadPrefabContents(path);
+59:             try
+60:             {
+61:                 var renderer=root.transform.Find("Visual").GetComponent<SpriteRenderer>();
+62:                 renderer.drawMode=SpriteDrawMode.Simple;renderer.color=Color.white;renderer.sprite=hero.First(c=>c.name=="Idle").frames[0];
+63:                 renderer.transform.localPosition=Vector3.zero;renderer.transform.localScale=Vector3.one;
+64:                 var animator=root.GetComponent<CharacterArtAnimator>()??root.AddComponent<CharacterArtAnimator>();animator.visual=renderer;animator.clips=hero;
+65:                 PrefabUtility.SaveAsPrefabAsset(root,path);
+66:             }
+67:             finally{PrefabUtility.UnloadPrefabContents(root);}
+68:         }
+69:         private static SpriteRenderer Place(Transform parent,string name,Sprite sprite,Vector3 position,Vector2 size,string layer="EraPlatform",int order=5,bool local=false)
+70:         {
+71:             if(sprite==null)return null;
+72:             var go=new GameObject(name);go.transform.SetParent(parent,false);
+73:             if(local)go.transform.localPosition=position;else go.transform.position=position;
+74:             var renderer=go.AddComponent<SpriteRenderer>();renderer.sprite=sprite;renderer.sortingLayerName=layer;renderer.sortingOrder=order;
+75:             go.transform.localScale=new Vector3(size.x/sprite.bounds.size.x,size.y/sprite.bounds.size.y,1);return renderer;
+76:         }
+77:         private static void Skin(SpriteRenderer original,string key,Vector2? size=null)
+78:         {
+79:             Sprite sprite=S(original.name=="IndoorFloor"?"NearFloor":key);if(sprite==null)return;
+80:             Vector2 worldSize=size??original.size;original.enabled=false;
+81:             Vector3 offset=Vector3.zero;
+82:             if(original.name=="Ground"||original.name=="IndoorFloor"||original.name=="BankL"||original.name=="BankR")
+83:             {
+84:                 float depth=Mathf.Max(worldSize.y,worldSize.x*sprite.bounds.size.y/sprite.bounds.size.x);
+85:                 offset.y=(worldSize.y-depth)*.5f;worldSize.y=depth;
+86:             }
+87:             if(original.name=="Narrative_uniform")offset.y=.2f;
+88:             var skin=Place(original.transform,"ArtSkin",sprite,offset,worldSize,"EraPlatform",2,true);
+89:             if(original.name=="IndoorFloor")
+90:             {
+91:                 skin.transform.localScale=Vector3.one;skin.drawMode=SpriteDrawMode.Tiled;skin.size=worldSize;
+92:             }
+93:         }
+94:         private static void Backdrop(LevelRoot room,Rect bounds,string key,float initial)
+95:         {
+96:             var go=new GameObject("ArtRoot");go.transform.SetParent(room.transform,false);
+97:             float width=bounds.width+2;float height=Mathf.Max(bounds.height+2,width*9f/16f)+1;
+98:             string pastKey=key=="Epilogue_Ward"?"BG_Epilogue_Ward":"BG_"+key+"_1994";
+99:             string presentKey=key=="Epilogue_Ward"?pastKey:"BG_"+key+"_2024";
+100:             var past=Place(go.transform,"PastBackdrop",S(pastKey),bounds.center,new Vector2(width,height),"FarBuildings",-100);
+101:             var present=Place(go.transform,"PresentBackdrop",S(presentKey),bounds.center,new Vector2(width,height),"FarBuildings",-99);
+102:             string dir="Assets/Game/Data/Art/Materials";Directory.CreateDirectory(dir);AssetDatabase.Refresh();
+103:             Shader shader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/Game/Art/EraArtBackground.shader");
+104:             for(int i=0;i<2;i++)
+105:             {
+106:                 string path=dir+"/"+room.RoomId+(i==0?"_Past":"_Present")+".mat";
+107:                 Material mat=AssetDatabase.LoadAssetAtPath<Material>(path);
+108:                 if(mat==null){mat=new Material(shader);AssetDatabase.CreateAsset(mat,path);}else mat.shader=shader;
+109:                 mat.SetFloat("_Past",i==0?1:0);
+110:                 var settings=new SerializedObject(room);float min=settings.FindProperty("boundaryMin").floatValue,max=settings.FindProperty("boundaryMax").floatValue;
+111:                 mat.SetFloat("_Boundary",initial>=max-.01f?100000f:initial<=min+.01f?-100000f:initial);
+112:                 (i==0?past:present).sharedMaterial=mat;EditorUtility.SetDirty(mat);
+113:             }
+114:             var split=go.AddComponent<EraArtBackdrop>();split.past=past;split.present=present;
+115:             if(room.RoomId=="L02Indoor")
+116:             {
+117:                 var wall=Place(go.transform,"NearRoomWall",S("NearWall"),new Vector3(49,2.5f,0),new Vector2(20,5),"EraBackground",0);
+118:                 wall.transform.localScale=Vector3.one;wall.drawMode=SpriteDrawMode.Tiled;wall.size=new Vector2(20,5);wall.color=new Color(.85f,.80f,.72f,1);
+119:                 Place(go.transform,"WallTopBeam",S("PROP_WoodFloor_1994"),new Vector3(49,5.05f,0),new Vector2(20,.2f),"EraPlatform",-8);
+120:                 Place(go.transform,"CraftTableTop",S("PROP_WoodFloor_1994"),new Vector3(49.8f,.48f,0),new Vector2(3.4f,.14f),"EraPlatform",1);
+121:                 Place(go.transform,"CraftTableLegL",S("PROP_WoodFloor_1994"),new Vector3(48.3f,.24f,0),new Vector2(.12f,.48f),"EraPlatform",1);
+122:                 Place(go.transform,"CraftTableLegR",S("PROP_WoodFloor_1994"),new Vector3(51.3f,.24f,0),new Vector2(.12f,.48f),"EraPlatform",1);
+123:             }
+124:         }
+125:         private static void SkinRoom(LevelRoot room)
+126:         {
+127:             foreach(var t in room.GetComponentsInChildren<Transform>(true).Where(t=>t.name=="ArtRoot"||t.name=="ArtSkin"||t.name=="ArtDoor").ToArray())if(t!=null)UnityEngine.Object.DestroyImmediate(t.gameObject);
+128:             var so=new SerializedObject(room);Rect bounds=so.FindProperty("cameraBounds").rectValue;float initial=so.FindProperty("initialBoundary").floatValue;
+129:             string key=room.RoomId=="L00"?"L00_Gate":room.RoomId=="L01A"?"L01A_Canal":room.RoomId=="L01B"?"L01B_Tree":room.RoomId=="L02"?"L02_Yard":room.RoomId=="L02Indoor"?"L02_Room":room.RoomId=="L03"?"L03_Corridor":room.RoomId=="L04"?"L04_Attic":"Epilogue_Ward";
+130:             var originals=room.GetComponentsInChildren<SpriteRenderer>(true).ToArray();
+131:             foreach(var original in originals)
+132:             {
+133:                 string name=original.name;
+134:                 if(original.GetComponentInParent<CharacterArtAnimator>()!=null)continue;
+135:                 if(name.StartsWith("Wall")){original.enabled=false;continue;}
+136:                 var temporal=original.GetComponentInParent<TemporalObject>();
+137:                 string asset=null;Vector2? size=null;
+138:                 if(temporal!=null)
+139:                 {
+140:                     string id=temporal.ObjectId;bool past=IsPast(original.transform,temporal.transform);
+141:                     if(name=="Bar"||name.StartsWith("Rung_")||name=="BrokenStub"){original.enabled=false;continue;}
+142:                     if(id=="L00_fence_gate")asset=past?"PROP_Fence_1994":"PROP_Fence_2024";
+143:                     else if(id=="L01A_plank_bridge")asset=past?"PROP_BridgePlank_1994":"PROP_BridgePlank_2024";
+144:                     else if(id=="L02_maintenance")asset="PROP_MetalWalkway_2024";
+145:                     else if(id=="L03_floor")asset="PROP_WoodFloor_1994";
+146:                     else if(id=="L03_walkway")asset="PROP_MetalWalkway_2024";
+147:                     else if(id=="L03_cabinet")asset="PROP_StorageCabinet_2024";
+148:                     else if(name.StartsWith("Branch"))asset="TreeBranchBark";
+149:                     else if(name=="Sapling"){asset="PROP_TreeYoung_1994";size=new Vector2(1.4f,2.1f);}
+150:                     else if(name=="Trunk"||name=="YardGround"){original.enabled=false;continue;}
+151:                 }
+152:                 else if(name=="Ground"||name=="IndoorFloor")asset=room.RoomId=="Epilogue"||room.RoomId=="L02Indoor"?"PROP_Ground_Ward":"PROP_Ground_Courtyard";
+153:                 else if(name=="BankL"||name=="BankR")asset="PROP_Bank_Canal";
+154:                 else if(name.Contains("Threshold"))asset="PROP_Threshold_Stone";
+155:                 else if(name.Contains("Platform")||name.Contains("Ledge"))asset="PROP_Platform_Stone";
+156:                 else if(name=="FloorToPhoto")asset="PROP_WoodFloor_1994";
+157:                 else if(name=="CompartmentVisual")asset="PROP_BoardNiche";
+158:                 else if(name=="Narrative_uniform"){asset="DECOR_Uniform";size=new Vector2(1.1f,.65f);}
+159:                 else if(name=="Narrative_ledger"){asset="DECOR_Ledger";size=new Vector2(1,.7f);}
+160:                 else if(name=="Narrative_photo"){asset="DECOR_PhotoFrame";size=new Vector2(.8f,1);}
+161:                 else if(name=="Narrative_notice"){asset="DECOR_VacateNotice";size=new Vector2(.7f,1);}
+162:                 else if(name=="Narrative_height_marks"){original.enabled=false;continue;}
+163:                 else if(name=="Narrative_niche"){original.enabled=false;continue;}
+164:                 else if(name=="Bed"||name=="Table"){original.enabled=false;continue;}
+165:                 if(asset!=null)Skin(original,asset,size);
+166:             }
+167:             foreach(var temporal in room.GetComponentsInChildren<TemporalObject>(true))
+168:             {
+169:                 if(temporal.ObjectId.Contains("ladder"))
+170:                 {
+171:                     var past=temporal.transform.Find("Past");var zone=past?.GetComponentInChildren<BoxCollider2D>(true);
+172:                     if(zone!=null)Place(past,"ArtSkin",S("PROP_LadderTall_1994"),zone.transform.TransformPoint(zone.offset),new Vector2(.85f,zone.size.y),"EraPlatform",3);
+173:                     var present=temporal.transform.Find("Present");
+174:                     if(present!=null)Place(present,"ArtSkin",S("PROP_LadderTall_2024"),temporal.transform.position+Vector3.up*.9f,new Vector2(.75f,1.8f));
+175:                 }
+176:                 if(temporal.ObjectId.Contains("tree"))
+177:                 {
+178:                     var present=temporal.transform.Find("Present");
+179:                     if(present!=null)
+180:                     {
+181:                         bool attic=room.RoomId=="L04";
+182:                         var treeVisual=Place(present,"ArtSkin",S(attic?"PROP_TreeAttic_Grown_2024":"PROP_TreeGrown_2024"),attic?new Vector3(14,.3f,0):new Vector3(58,3.2f,0),attic?new Vector2(28,13):new Vector2(8,7),"EraPlatform",-10);
+183:                         if(attic)
+184:                         {
+185:                             string materialPath="Assets/Game/Data/Art/TreeCutout.mat";
+186:                             var material=AssetDatabase.LoadAssetAtPath<Material>(materialPath);
+187:                             if(material==null){material=new Material(AssetDatabase.LoadAssetAtPath<Shader>("Assets/Game/Art/Characters/DogWhiteCutout.shader"));AssetDatabase.CreateAsset(material,materialPath);}
+188:                             treeVisual.sharedMaterial=material;
+189:                         }
+190:                     }
+191:                 }
+192:             }
+193:             foreach(var door in room.GetComponentsInChildren<ExitDoor>(true))
+194:             {
+195:                 string doorKey=room.RoomId=="L00"?"PROP_YardDoor":room.RoomId=="L03"?"PROP_AtticDoor":room.RoomId=="L02Indoor"?"PROP_Door_StairHall":room.RoomId=="L02"||room.RoomId=="L01B"?"PROP_Door_SewingRoom":"PROP_Door_YardSide";
+196:                 Place(door.transform,"ArtDoor",S(doorKey),Vector3.zero,new Vector2(1.2f,2.3f),"EraPlatform",8,true);
+197:             }
+198:             var sewing=room.transform.Find("NarrativeContent/SewingMachine");
+199:             if(sewing!=null)
+200:             {
+201:                 var renderer=sewing.GetComponent<SpriteRenderer>();
+202:                 string matPath="Assets/Game/Data/Art/SewingCutout.mat";
+203:                 var mat=AssetDatabase.LoadAssetAtPath<Material>(matPath);
+204:                 if(mat==null){mat=new Material(AssetDatabase.LoadAssetAtPath<Shader>("Assets/Game/Art/Characters/DogWhiteCutout.shader"));AssetDatabase.CreateAsset(mat,matPath);}
+205:                 renderer.sharedMaterial=mat;
+206:             }
+207:             foreach(var tidy in room.GetComponentsInChildren<ClothTidyInteractable>(true))
+208:             {
+209:                 tidy.completedSprite=S("DECOR_ClothesOnChair");tidy.chairPosition=new Vector3(54,.72f,0);
+210:                 if(tidy.cloth!=null)
+211:                 {
+212:                     var renderer=tidy.cloth.GetComponent<SpriteRenderer>();var sprite=S("DECOR_ClothesOnFloor");
+213:                     renderer.sprite=sprite;tidy.cloth.localScale=new Vector3(1/sprite.bounds.size.x,.6f/sprite.bounds.size.y,1);
+214:                 }
+215:             }
+216:             Backdrop(room,bounds,key,initial);
+217:         }
+218:         private static bool IsPast(Transform t,Transform stop){while(t!=null&&t!=stop){if(t.name=="Past")return true;t=t.parent;}return false;}
+219:         private static Image PanelImage(Transform parent,string name,Sprite sprite,Color color)
+220:         {
+221:             Transform existing=parent.Find(name);if(existing!=null)UnityEngine.Object.DestroyImmediate(existing.gameObject);
+222:             var go=new GameObject(name,typeof(RectTransform),typeof(Image));go.transform.SetParent(parent,false);go.transform.SetAsFirstSibling();
+223:             var rt=go.GetComponent<RectTransform>();rt.anchorMin=Vector2.zero;rt.anchorMax=Vector2.one;rt.offsetMin=rt.offsetMax=Vector2.zero;
+224:             var image=go.GetComponent<Image>();image.sprite=sprite;image.color=color;image.raycastTarget=false;return image;
+225:         }
+226:         private static void SkinHud(Scene scene)
+227:         {
+228:             foreach(var presenter in All<NarrativePresentation>(scene))
+229:             {
+230:                 presenter.subtitleSkin=S("UI_SubtitleBar");presenter.buttonSkin=S("UI_SubtitleBar");presenter.creditsBackground=AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Game/Art/UI/UI_CreditsBackground.jpg");
+231:             }
+232:             foreach(var journal in All<NarrativeJournal>(scene))journal.journalSkin=S("UI_TabRecordsPanel");
+233:             SkinPause(scene);
+234:             foreach(var panel in All<ObjectivePanel>(scene))
+235:             {
+236:                 var root=panel.transform.Find("Root");if(root!=null){PanelImage(root,"ArtPaper",S("UI_ObjectiveCard"),Color.white);PanelImage(root,"ArtShade",null,new Color(.08f,.06f,.04f,.78f));}
+237:                 foreach(var text in panel.GetComponentsInChildren<Text>(true))text.color=new Color(1,.94f,.8f);
+238:             }
+239:             foreach(var panel in All<HintToast>(scene))
+240:             {
+241:                 var root=panel.transform.Find("Root");if(root!=null){PanelImage(root,"ArtPaper",S("UI_HintBubble"),Color.white);PanelImage(root,"ArtShade",null,new Color(.08f,.06f,.04f,.85f));}
+242:                 foreach(var text in panel.GetComponentsInChildren<Text>(true))text.color=Color.white;
+243:             }
+244:             foreach(var handle in All<BoundaryHandle>(scene))
+245:             {
+246:                 var image=handle.GetComponent<Image>();if(image!=null){image.sprite=S("UI_BoundaryHandle");image.color=Color.white;image.preserveAspect=true;}
+247:                 foreach(var label in handle.GetComponentsInChildren<Text>(true)){label.text="拖动";label.color=new Color(.2f,.12f,.06f);}
+248:             }
+249:             foreach(var prompt in All<InteractionPrompt>(scene))
+250:             {
+251:                 var root=prompt.transform.Find("Root");if(root!=null){PanelImage(root,"ArtPaper",S("UI_SubtitleBar"),Color.white);}
+252:                 foreach(var text in prompt.GetComponentsInChildren<Text>(true))text.color=Color.white;
+253:             }
+254:         }
+255:         private static RectTransform UiRect(Transform parent,string name,Vector2 pos,Vector2 size)
+256:         {
+257:             var go=new GameObject(name,typeof(RectTransform));go.transform.SetParent(parent,false);var rt=go.GetComponent<RectTransform>();rt.anchorMin=rt.anchorMax=new Vector2(.5f,.5f);rt.anchoredPosition=pos;rt.sizeDelta=size;return rt;
+258:         }
+259:         private static Text UiText(Transform parent,string value,Vector2 pos,Vector2 size,Font font,int fontSize=24)
+260:         {
+261:             var rt=UiRect(parent,value,pos,size);var text=rt.gameObject.AddComponent<Text>();text.text=value;text.font=font;text.fontSize=fontSize;text.alignment=TextAnchor.MiddleCenter;text.color=new Color(.23f,.14f,.08f);text.raycastTarget=false;return text;
+262:         }
+263:         private static Slider UiSlider(Transform parent,string label,float y,Font font)
+264:         {
+265:             var rt=UiRect(parent,label,new Vector2(40,y),new Vector2(380,30));var slider=rt.gameObject.AddComponent<Slider>();slider.minValue=0;slider.maxValue=1;
+266:             var bg=UiRect(rt,"Track",Vector2.zero,new Vector2(380,12)).gameObject.AddComponent<Image>();bg.color=new Color(.23f,.14f,.08f,.7f);
+267:             var fill=UiRect(rt,"Fill",Vector2.zero,new Vector2(380,12)).gameObject.AddComponent<Image>();fill.color=new Color(.7f,.48f,.24f);slider.fillRect=fill.rectTransform;
+268:             var handle=UiRect(rt,"Handle",Vector2.zero,new Vector2(18,30)).gameObject.AddComponent<Image>();handle.color=new Color(.95f,.83f,.58f);slider.handleRect=handle.rectTransform;slider.targetGraphic=handle;
+269:             UiText(parent,label,new Vector2(-210,y),new Vector2(90,35),font,22);return slider;
+270:         }
+271:         private static void SkinPause(Scene scene)
+272:         {
+273:             Font font=AssetDatabase.LoadAssetAtPath<Font>("Assets/Game/Art/UI/Fonts/PlaceholderChinese.ttf");
+274:             foreach(var pause in All<PauseMenu>(scene))
+275:             {
+276:                 var parent=(RectTransform)pause.transform;parent.sizeDelta=new Vector2(620,860);
+277:                 var root=pause.transform.Find("Root");
+278:                 foreach(Transform child in root.Cast<Transform>().ToArray())UnityEngine.Object.DestroyImmediate(child.gameObject);
+279:                 PanelImage(root,"ArtPause",S("UI_PauseMenuPanel"),Color.white);
+280:                 UiText(root,"暂停",new Vector2(0,355),new Vector2(400,70),font,38);
+281:                 Button[] buttons=new Button[3];string[] labels={"继续游戏","返回主菜单","退出游戏"};
+282:                 for(int i=0;i<3;i++)
+283:                 {
+284:                     var rt=UiRect(root,labels[i],new Vector2(0,210-i*120),new Vector2(440,90));var image=rt.gameObject.AddComponent<Image>();image.color=new Color(1,1,1,.025f);buttons[i]=rt.gameObject.AddComponent<Button>();
+285:                     var text=UiText(rt,labels[i],Vector2.zero,new Vector2(420,80),font,30);text.color=new Color(1,.91f,.74f);
+286:                 }
+287:                 LevelLayouts.SetObject(pause,"resumeButton",buttons[0]);LevelLayouts.SetObject(pause,"mainMenuButton",buttons[1]);
+288:                 var controls=pause.GetComponent<PauseArtControls>()??pause.gameObject.AddComponent<PauseArtControls>();controls.quit=buttons[2];
+289:                 LevelLayouts.SetObject(pause,"masterVolume",UiSlider(root,"总音量",-175,font));
+290:                 LevelLayouts.SetObject(pause,"musicVolume",UiSlider(root,"音乐",-265,font));
+291:                 LevelLayouts.SetObject(pause,"voiceVolume",UiSlider(root,"配音",-340,font));
+292:                 var toggleRt=UiRect(root,"Subtitles",new Vector2(0,-394),new Vector2(300,35));var toggle=toggleRt.gameObject.AddComponent<Toggle>();
+293:                 var box=UiRect(toggleRt,"Box",new Vector2(-90,0),new Vector2(24,24)).gameObject.AddComponent<Image>();box.color=new Color(.35f,.23f,.12f);
+294:                 var tick=UiRect(box.transform,"Tick",Vector2.zero,new Vector2(15,15)).gameObject.AddComponent<Image>();tick.color=new Color(.95f,.83f,.58f);toggle.targetGraphic=box;toggle.graphic=tick;
+295:                 UiText(toggleRt,"显示对白字幕",new Vector2(25,0),new Vector2(210,35),font,22);LevelLayouts.SetObject(pause,"subtitlesToggle",toggle);
+296:             }
+297:             foreach(var confirm in All<ResumeConfirmDialog>(scene))
+298:             {
+299:                 var root=confirm.transform.Find("Root");if(root!=null){PanelImage(root,"ArtConfirm",S("UI_SubtitleBar"),Color.white);foreach(var text in root.GetComponentsInChildren<Text>(true))text.color=Color.white;}
+300:             }
+301:         }
+302:         private static void SkinMenu(Scene scene)
+303:         {
+304:             var menu=All<MainMenuUi>(scene).First();var canvas=menu.GetComponent<Canvas>();
+305:             PanelImage(canvas.transform,"ArtMainMenu",S("UI_TitleScreen"),Color.white);
+306:             foreach(var text in menu.GetComponentsInChildren<Text>(true))text.enabled=false;
+307:             var so=new SerializedObject(menu);
+308:             foreach(var item in new[]{("newGameButton",-70f),("continueButton",-225f),("quitButton",-383f)})
+309:             {
+310:                 var button=so.FindProperty(item.Item1).objectReferenceValue as Button;if(button==null)continue;
+311:                 var rt=button.GetComponent<RectTransform>();rt.anchorMin=rt.anchorMax=new Vector2(.5f,.5f);rt.anchoredPosition=new Vector2(0,item.Item2);rt.sizeDelta=new Vector2(430,116);
+312:                 var image=button.GetComponent<Image>();image.sprite=null;image.color=Color.white;
+313:                 var colors=button.colors;colors.normalColor=Color.clear;colors.highlightedColor=new Color(1,1,1,.12f);colors.pressedColor=new Color(.25f,.15f,.05f,.25f);colors.disabledColor=new Color(0,0,0,.45f);button.colors=colors;button.targetGraphic.canvasRenderer.SetColor(Color.clear);
+314:             }
+315:         }
+316:         [MenuItem("BorrowTomorrow/本地接入生成美术（保留碰撞与剧情）")]
+317:         public static void Install()
+318:         {
+319:             Import();SkinPlayer();
+320:             foreach(var name in new[]{"Bootstrap","MainMenu","L00_Gate","L01_Courtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
+321:             {
+322:                 var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/"+name+".scene");
+323:                 if(name=="Bootstrap")SkinHud(scene);
+324:                 else if(name=="MainMenu")SkinMenu(scene);
+325:                 else foreach(var room in All<LevelRoot>(scene).ToArray())SkinRoom(room);
+326:                 EditorSceneManager.SaveScene(scene);
+327:             }
+328:             AssetDatabase.SaveAssets();EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");
+329:             if(!File.Exists("Assets/Game/Data/Art/enabled.json"))File.WriteAllText("Assets/Game/Data/Art/enabled.json","{\"enabled\":true}");
+330:             Debug.Log("[ArtInstaller] Applied 72 hero frames, room backgrounds, prop skins and UI without changing puzzle colliders.");
+331:         }
+332:         private static void ExportPreviews()
+333:         {
+334:             string output=Path.Combine(Path.GetDirectoryName(BuildRoot),"Previews");Directory.CreateDirectory(output);
+335:             foreach(var level in new[]{"L00_Gate","L01_Courtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
+336:             {
+337:                 var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/"+level+".scene");
+338:                 var rooms=All<LevelRoot>(scene).ToArray();
+339:                 foreach(var room in rooms)
+340:                 {
+341:                     foreach(var other in rooms)other.gameObject.SetActive(other==room);
+342:                     var so=new SerializedObject(room);Rect bounds=so.FindProperty("cameraBounds").rectValue;float b=so.FindProperty("initialBoundary").floatValue;
+343:                     foreach(var obj in room.GetComponentsInChildren<TemporalObject>(true))
+344:                     {
+345:                         Transform past=obj.transform.Find("Past"),present=obj.transform.Find("Present");
+346:                         // Static composition preview uses the useful combined state; it never changes saved colliders/scenes.
+347:                         bool usePast=obj.ObjectId.Contains("ladder")||obj.ObjectId=="L00_fence_gate"||obj.ObjectId=="L03_floor"||obj.ObjectId=="L01A_plank_bridge";
+348:                         if(obj.ObjectId=="L03_cabinet")usePast=true;
+349:                         if(past!=null)past.gameObject.SetActive(usePast);if(present!=null)present.gameObject.SetActive(!usePast);
+350:                     }
+351:                     Camera camera=All<Camera>(scene).First();camera.orthographic=true;camera.aspect=16f/9f;
+352:                     camera.orthographicSize=Mathf.Max(bounds.height*.5f,bounds.width/(2*camera.aspect))+.35f;
+353:                     camera.transform.position=new Vector3(bounds.center.x,bounds.center.y,-10);camera.backgroundColor=new Color(.12f,.11f,.095f);
+354:                     var spawn=room.GetComponentsInChildren<SpawnPoint>(true).FirstOrDefault();
+355:                     GameObject player=PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Game/Prefabs/Player_Graybox.prefab")) as GameObject;
+356:                     if(spawn!=null)player.transform.position=spawn.transform.position;
+357:                     var rt=new RenderTexture(1600,900,24);camera.targetTexture=rt;camera.Render();
+358:                     var old=RenderTexture.active;RenderTexture.active=rt;var image=new Texture2D(1600,900,TextureFormat.RGB24,false);image.ReadPixels(new Rect(0,0,1600,900),0,0);image.Apply();
+359:                     File.WriteAllBytes(Path.Combine(output,room.RoomId+".png"),image.EncodeToPNG());RenderTexture.active=old;camera.targetTexture=null;
+360:                     UnityEngine.Object.DestroyImmediate(image);rt.Release();UnityEngine.Object.DestroyImmediate(rt);UnityEngine.Object.DestroyImmediate(player);
+361:                 }
+362:             }
+363:             ExportUiPreviews(output);
+364:             EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");
+365:         }
+366:         private static void CaptureUi(Camera camera,string path)
+367:         {
+368:             var rt=new RenderTexture(1600,900,24);camera.targetTexture=rt;
+369:             foreach(var canvas in UnityEngine.Object.FindObjectsOfType<Canvas>(true)){canvas.renderMode=RenderMode.ScreenSpaceCamera;canvas.worldCamera=camera;canvas.planeDistance=1;}
+370:             Canvas.ForceUpdateCanvases();camera.Render();var old=RenderTexture.active;RenderTexture.active=rt;
+371:             var image=new Texture2D(1600,900,TextureFormat.RGB24,false);image.ReadPixels(new Rect(0,0,1600,900),0,0);image.Apply();File.WriteAllBytes(path,image.EncodeToPNG());
+372:             RenderTexture.active=old;camera.targetTexture=null;UnityEngine.Object.DestroyImmediate(image);rt.Release();UnityEngine.Object.DestroyImmediate(rt);
+373:         }
+374:         private static void ExportUiPreviews(string output)
+375:         {
+376:             var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/MainMenu.scene");
+377:             var camera=new GameObject("PreviewCamera").AddComponent<Camera>();camera.transform.position=new Vector3(0,0,-10);camera.orthographic=true;camera.orthographicSize=5;
+378:             foreach(var button in All<Button>(scene))if(button.targetGraphic!=null)button.targetGraphic.color=Color.clear;
+379:             CaptureUi(camera,Path.Combine(output,"MainMenu.png"));
+380:             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
+381:             camera=new GameObject("PreviewCamera").AddComponent<Camera>();camera.transform.position=new Vector3(0,0,-10);camera.orthographic=true;camera.orthographicSize=5;
+382:             var root=new GameObject("NarrativeArtPreview");var presenter=root.AddComponent<NarrativePresentation>();
+383:             presenter.font=AssetDatabase.LoadAssetAtPath<Font>("Assets/Game/Art/UI/Fonts/PlaceholderChinese.ttf");presenter.subtitleSkin=S("UI_SubtitleBar");presenter.buttonSkin=S("UI_SubtitleBar");
+384:             typeof(NarrativePresentation).GetMethod("Awake",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).Invoke(presenter,null);
+385:             var entry=AssetDatabase.LoadAssetAtPath<DialogueEntry>("Assets/Game/Data/Dialogue/StoryV13/DLG_L02_UNIFORM_01.asset");
+386:             presenter.Present(entry,entry.subtitle,true,1,1);CaptureUi(camera,Path.Combine(output,"Dialogue.png"));
+387:         }
+388:         public static void InstallAndBuild()
+389:         {
+390:             Install();ExportPreviews();Directory.CreateDirectory(Path.GetDirectoryName(BuildRoot));
+391:             var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=EditorBuildSettings.scenes.Where(x=>x.enabled).Select(x=>x.path).ToArray(),target=BuildTarget.StandaloneWindows64,locationPathName=BuildRoot,options=BuildOptions.Development});
+392:             if(report.summary.result!=UnityEditor.Build.Reporting.BuildResult.Succeeded)throw new InvalidOperationException("Art build failed: "+report.summary.result);
+393:             Debug.Log("[ArtInstaller] BUILD SUCCEEDED: "+BuildRoot);
+394:         }
+395:     }
+396: }

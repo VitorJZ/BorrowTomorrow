@@ -1,0 +1,16 @@
+using System;
+using System.Linq;
+using System.IO;
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using BorrowTomorrow.Level;
+using BorrowTomorrow.TimeBoundary;
+var saved=EditorSceneManager.GetSceneManagerSetup();
+var sc=EditorSceneManager.OpenScene("Assets/Game/Scenes/L01_Courtyard.scene");
+var root=sc.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<LevelRoot>(true)).Single(r=>r.RoomId=="L01B");
+var rows=root.GetComponentsInChildren<Transform>(true).Select(t=>new {path=t.parent==null?t.name:t.parent.name+"/"+t.name,position=t.position.ToString("F3"),scale=t.localScale.ToString("F3"),active=t.gameObject.activeSelf,renderer=t.GetComponent<SpriteRenderer>()==null?null:new {sprite=AssetDatabase.GetAssetPath(t.GetComponent<SpriteRenderer>().sprite),enabled=t.GetComponent<SpriteRenderer>().enabled,order=t.GetComponent<SpriteRenderer>().sortingOrder,layer=t.GetComponent<SpriteRenderer>().sortingLayerName,bounds=t.GetComponent<SpriteRenderer>().bounds.ToString("F3")},box=t.GetComponent<BoxCollider2D>()==null?null:new {size=t.GetComponent<BoxCollider2D>().size.ToString("F3"),offset=t.GetComponent<BoxCollider2D>().offset.ToString("F3"),trigger=t.GetComponent<BoxCollider2D>().isTrigger}}).ToArray();
+var report=Newtonsoft.Json.JsonConvert.SerializeObject(new {room=new SerializedObject(root).FindProperty("cameraBounds").rectValue.ToString("F3"),objects=rows},Newtonsoft.Json.Formatting.Indented);
+File.WriteAllText("Docs/ArtSample_2026-10-18/Polish/evidence/scene_before.json",report);
+EditorSceneManager.RestoreSceneManagerSetup(saved);
+return "Scene inventory saved; original scene setup restored";

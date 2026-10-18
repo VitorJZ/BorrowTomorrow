@@ -1,0 +1,16 @@
+{
+    "name": "BorrowTomorrow.Narrative",
+    "rootNamespace": "BorrowTomorrow.Narrative",
+    "references": [
+        "BorrowTomorrow.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

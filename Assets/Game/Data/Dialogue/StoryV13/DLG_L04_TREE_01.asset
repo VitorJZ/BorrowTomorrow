@@ -23,8 +23,7 @@ MonoBehaviour:
   - IdentityKnown
   - CompartmentSeen
   - '!TreeGrownL04'
-  setFlags:
-  - TreeGrownL04
+  setFlags: []
   holdForConfirm: 0
   minDurationSeconds: 3
   source: Self

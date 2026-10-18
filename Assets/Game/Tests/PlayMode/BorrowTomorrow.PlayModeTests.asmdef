@@ -5,6 +5,8 @@
         "BorrowTomorrow.Save",
         "BorrowTomorrow.Level",
         "BorrowTomorrow.Narrative",
+        "BorrowTomorrow.Player",
+        "BorrowTomorrow.TimeBoundary",
         "BorrowTomorrow.UI"
     ],
     "optionalUnityReferences": [

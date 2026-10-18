@@ -1,0 +1,3 @@
+L03_floor anchor=7 era=Past
+L03_cabinet anchor=24 era=Past
+L03_walkway anchor=15 era=Past
