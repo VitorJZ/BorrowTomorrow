@@ -38,6 +38,9 @@ namespace BorrowTomorrow.Player
         [Tooltip("跳跃预输入窗口（秒）")]
         [SerializeField] private float jumpBufferTime = 0.12f;
 
+        [Tooltip("完整人物起跳准备姿态的短暂蓄力时长")]
+        [SerializeField] private float jumpAnticipation = 0.08f;
+
         [Header("检测")]
         [Tooltip("可站立表面层（Ground + Temporal）")]
         [SerializeField] private LayerMask groundMask = ~0;
@@ -64,6 +67,7 @@ namespace BorrowTomorrow.Player
         private int ladderZoneCount;
         private bool wasGrounded;
         private float cachedGravityScale;
+        private float jumpPreparationTimer;
         private readonly Collider2D[] groundHits = new Collider2D[24];
         private readonly Collider2D[] ladderHits = new Collider2D[24];
 
@@ -78,6 +82,10 @@ namespace BorrowTomorrow.Player
 
         /// <summary>落地瞬间触发（音效/尘土等订阅）。</summary>
         public event System.Action Landed;
+        public event System.Action JumpStarted;
+        public event System.Action MotionReset;
+        public bool IsPreparingJump => jumpPreparationTimer > 0f;
+        public float JumpPreparationProgress => jumpAnticipation > 0f ? 1f-jumpPreparationTimer/jumpAnticipation : 1f;
 
         private void Awake()
         {
@@ -172,6 +180,7 @@ namespace BorrowTomorrow.Player
 
         private void UpdateWalking(bool controlAllowed, float move, float climb)
         {
+            if (!controlAllowed) jumpPreparationTimer = 0f;
             // 水平移动。
             body.velocity = new Vector2(controlAllowed ? move * moveSpeed : 0f, body.velocity.y);
 
@@ -180,19 +189,36 @@ namespace BorrowTomorrow.Player
                 && IsInsideLadderZone())
             {
                 IsClimbingLadder = true;
+                jumpPreparationTimer = 0f;
                 body.gravityScale = 0f;
                 body.velocity = Vector2.zero;
                 return;
             }
 
-            // 跳跃：需要落地或离地宽容（策划 4.5：腾空时不能开始拖动，但主动跳跃允许）。
+            if (IsPreparingJump)
+            {
+                jumpPreparationTimer = Mathf.Max(0f,jumpPreparationTimer-Time.fixedDeltaTime);
+                if (jumpPreparationTimer <= 0f) LaunchJump();
+                return;
+            }
+            // A ground jump has a short visual preparation, then applies the
+            // original physical impulse. Coyote jumps stay immediate.
             if (controlAllowed && jumpBufferTimer > 0f && coyoteTimer > 0f)
             {
-                body.velocity = new Vector2(body.velocity.x, jumpVelocity);
                 jumpBufferTimer = 0f;
-                coyoteTimer = 0f;
-                PlaySfx(jumpSfxId);
+                if (IsGrounded && jumpAnticipation > 0f) jumpPreparationTimer = jumpAnticipation;
+                else LaunchJump();
             }
+        }
+
+        private void LaunchJump()
+        {
+            jumpPreparationTimer = 0f;
+            body.velocity = new Vector2(body.velocity.x,jumpVelocity);
+            jumpBufferTimer = 0f;
+            coyoteTimer = 0f;
+            PlaySfx(jumpSfxId);
+            JumpStarted?.Invoke();
         }
 
         private void UpdateClimbing(bool controlAllowed, float climb, float move)
@@ -228,6 +254,8 @@ namespace BorrowTomorrow.Player
             {
                 body.velocity = new Vector2(body.velocity.x, jumpVelocity * 0.8f);
                 jumpBufferTimer = 0f;
+                coyoteTimer = 0f;
+                JumpStarted?.Invoke();
             }
         }
 
@@ -344,7 +372,7 @@ namespace BorrowTomorrow.Player
         /// 是否可以开始拖动时间边界：必须落地或站稳，
         /// 攀爬与腾空时不能开始（策划 4.5）。另由状态机保证子状态合法。
         /// </summary>
-        public bool CanBeginBoundaryAdjust => IsGrounded && !IsClimbingLadder && IsControlAllowed;
+        public bool CanBeginBoundaryAdjust => IsGrounded && !IsClimbingLadder && !IsPreparingJump && IsControlAllowed;
 
         /// <summary>存档/检查点恢复用：直接放置（策划 12.2：先恢复环境再放人）。</summary>
         public void TeleportTo(Vector2 position)
@@ -354,12 +382,14 @@ namespace BorrowTomorrow.Player
             IsClimbingLadder = false;
             body.gravityScale = cachedGravityScale;
             jumpBufferTimer = 0f;
+            jumpPreparationTimer = 0f;
             coyoteTimer = 0f;
             footstepTimer = 0f;
             ladderZoneCount = 0;
             IsGrounded = false;
             GroundCollider = null;
             Physics2D.SyncTransforms();
+            MotionReset?.Invoke();
         }
 
         private void OnDrawGizmosSelected()
