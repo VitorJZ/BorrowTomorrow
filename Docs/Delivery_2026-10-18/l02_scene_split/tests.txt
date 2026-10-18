@@ -1,0 +1,8 @@
+passed=2 failed=0
+Passed BorrowTomorrow  
+Passed /Users/edwin/Documents/PROJECTS/Unity/BorrowTomorrow/Library/ScriptAssemblies/BorrowTomorrow.PlayModeTests.dll  
+Passed BorrowTomorrow  
+Passed BorrowTomorrow.Tests  
+Passed BorrowTomorrow.Tests.L02IndoorSceneTests  
+Passed BorrowTomorrow.Tests.L02IndoorSceneTests.ExteriorDoorLoadsIndependentInterior_PastOnlyObjectsRevealAtTheirAnchors  
+Passed BorrowTomorrow.Tests.L02IndoorSceneTests.LegacyInteriorSaveMigratesToNewSceneAndCoordinates  

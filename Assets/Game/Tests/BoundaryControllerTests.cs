@@ -115,7 +115,6 @@ namespace BorrowTomorrow.Tests
             public bool InteractPressedThisFrame => false;
             public bool ConsumeInteract() => false;
             public bool RespawnPressedThisFrame => false;
-            public bool HintPressedThisFrame => false;
             public bool ObjectiveHeld => false;
             public bool PausePressedThisFrame => false;
             public bool JumpHeld => false;

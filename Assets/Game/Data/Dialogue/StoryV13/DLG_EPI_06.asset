@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entryId: DLG_EPI_06
   speakerLabel: "\u6797\u6653\uFF08\u73B0\u5B9E\uFF09"
-  subtitle: "\u6211\u662F\u6653\u6653\u3002\u4ECA\u5929\u4E0D\u8D76\u8DEF\uFF0C\u6211\u5728\u8FD9\u513F\u5750\u4E00\u4F1A\u513F\u3002"
+  subtitle: "\u6211\u662F\u6653\u6653\u5440\u3002\u4ECA\u5929\u4E0D\u8D76\u8DEF\uFF0C\u6211\u5C31\u5728\u8FD9\u513F\u966A\u4F60\u5750\u4E00\u4F1A\u513F\u3002"
   voiceClip: {fileID: 8300000, guid: 4e07bb435601a4142917f6e3f0bbc1df, type: 3}
   illustration: {fileID: 2800000, guid: 08fd012f3f47d45fa976ab7afb3f6aeb, type: 3}
   blackBackground: 0

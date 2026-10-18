@@ -73,6 +73,40 @@ namespace BorrowTomorrow.Tests
             Assert.IsFalse(completed);
             Assert.IsFalse(dialogue.IsPlaying);
         }
+        [Test] public void HiddenAmbientSource_CancelsWithoutCompletingAndCanPlayAgain()
+        {
+            var entry = Entry("dog_echo");
+            bool completed = false;
+            dialogue.Play(entry, DialoguePriority.Ambient, () => completed = true);
+            dialogue.CancelAmbient(entry);
+            Assert.IsFalse(dialogue.IsPlaying);
+            Assert.IsFalse(completed);
+            Assert.IsFalse(session.StoryFlags.HasFlag(entry.entryId));
+            dialogue.Play(entry, DialoguePriority.Ambient);
+            Assert.AreSame(entry, dialogue.Current);
+        }
+        [TestCase(DialoguePriority.Story)]
+        [TestCase(DialoguePriority.Reveal)]
+        public void AmbientCancellation_DoesNotInterruptBlockingDialogue(DialoguePriority priority)
+        {
+            var entry = Entry("story");
+            dialogue.Play(entry, priority);
+            dialogue.CancelAmbient(entry);
+            Assert.IsTrue(dialogue.IsPlaying);
+            Assert.AreSame(entry, dialogue.Current);
+        }
+        [Test] public void AmbientCancellation_DoesNotInterruptAnotherEntryOrHistoryReplay()
+        {
+            var entry = Entry("dog_echo");
+            dialogue.Play(entry, DialoguePriority.Ambient);
+            dialogue.CancelAmbient(Entry("other"));
+            Assert.IsTrue(dialogue.IsPlaying);
+            dialogue.CancelAmbient(entry);
+            dialogue.PlayReadOnly(entry);
+            dialogue.CancelAmbient(entry);
+            Assert.IsTrue(dialogue.IsPlaying);
+            Assert.AreSame(entry, dialogue.Current);
+        }
         private void Register(params NarrativeAction[] actions)
         {
             typeof(DialogueLibrary).GetField("entries", BindingFlags.Instance | BindingFlags.NonPublic)

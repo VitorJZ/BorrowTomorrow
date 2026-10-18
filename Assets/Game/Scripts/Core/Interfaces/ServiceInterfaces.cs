@@ -124,14 +124,6 @@ namespace BorrowTomorrow.Core.Interfaces
         /// <summary>显示边界受阻提示：“先到稳固的地方。”（策划 4.5）。</summary>
         void ShowBoundaryBlocked(string reason);
 
-        /// <summary>显示按 H 查看提示的引导气泡（策划 12.4）。</summary>
-        void ShowHintAvailable(string hintId);
-
-        /// <summary>展开一级/二级/三级提示文本。</summary>
-        void ShowHintText(string hintLine);
-
-        void HideHint();
-
         /// <summary>章节角标：过门转场后重新标清两侧年代（策划 4.2）。</summary>
         void FlashEraBadge(BorrowTomorrow.Core.Data.Era dominantEra);
 

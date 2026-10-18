@@ -15,15 +15,15 @@ MonoBehaviour:
   objectId: L00_fence_gate
   anchorX: 10
   pastState:
-    stateId: fence_full
+    stateId: stored_crates
     sprite: {fileID: 0}
-    canStand: 0
+    canStand: 1
     blocksMovement: 1
   presentState:
-    stateId: fence_gap
+    stateId: cleared_lane
     sprite: {fileID: 0}
     canStand: 0
-    blocksMovement: 1
+    blocksMovement: 0
   safetyPolicy: 3
   anchorHysteresis: 0.05
   switchSfxId: temporal_switch

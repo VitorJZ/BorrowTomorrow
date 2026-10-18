@@ -1,0 +1,2 @@
+PASS L00_NoticeFollowsEraAndClearedCratesAllowWalkingBothWays
+PASS L00_DogEchoRequiresVisiblePastDogAndStopsWhenHidden

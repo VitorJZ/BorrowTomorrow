@@ -1155,7 +1155,6 @@ GameObject:
   - component: {fileID: 1438749863}
   - component: {fileID: 1438749862}
   - component: {fileID: 1438749861}
-  - component: {fileID: 1438749860}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: RoomRoot_Epilogue
@@ -1164,20 +1163,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1438749860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1438749859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c3d367f7e199be4d98b9868c8237d4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  availabilityDelay: 22
-  availabilityDuration: 4
 --- !u!114 &1438749861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1510,6 +1495,7 @@ MonoBehaviour:
   maximumX: 10000
   minimumY: -10000
   presentMechanism: 
+  requiredVisibleDog: {fileID: 0}
 --- !u!1 &1668813182
 GameObject:
   m_ObjectHideFlags: 0

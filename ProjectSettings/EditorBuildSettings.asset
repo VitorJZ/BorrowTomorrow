@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/L02_Sewing.scene
     guid: 99f99400a596ba345827ab7829ec8d1d
   - enabled: 1
+    path: Assets/Game/Scenes/L02_SewingRoom.scene
+    guid: b3405f97a336d4563ab7a0abc722f03f
+  - enabled: 1
     path: Assets/Game/Scenes/L03_Corridor.scene
     guid: 47a07b139f15ce84f879abe4c7a3263c
   - enabled: 1

@@ -306,6 +306,12 @@ namespace BorrowTomorrow.Narrative
             if (!IsPlaying || GameSession.Instance.State.IsPaused) return;
             End(true);
         }
+        /// <summary>环境对象消失时停止对应回声，保留未完成状态供返回后触发。</summary>
+        public void CancelAmbient(DialogueEntry entry)
+        {
+            if (!IsPlaying || readOnly || currentPriority != DialoguePriority.Ambient || first != entry) return;
+            End(false);
+        }
         private void End(bool completed)
         {
             voiceSource.Stop();

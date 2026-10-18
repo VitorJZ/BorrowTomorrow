@@ -66,7 +66,10 @@ namespace BorrowTomorrow.EditorTools
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             Debug.Log("[ProjectScaffolder] 项目骨架搭建完成。");
-            return catalog;
+            var indoor = AssetDatabase.LoadAssetAtPath<LevelDefinition>("Assets/Game/Data/Levels/L02Indoor_L02_SewingRoom.asset");
+            var expanded = new List<LevelDefinition>(catalog);
+            if (indoor != null) expanded.Insert(expanded.FindIndex(d => d.levelId == "L02") + 1, indoor);
+            return expanded.ToArray();
         }
 
         // ---------------------------------------------------------------- 项目设置
@@ -222,29 +225,21 @@ namespace BorrowTomorrow.EditorTools
             string levelsDir = $"{DataDir}/Levels";
             Directory.CreateDirectory(levelsDir);
 
-            // 三级提示由 NarrativeInstaller 按 Data/Narrative/hints_v14.json（规格 1.4 §6.3）写入。
-            var NoHints = Array.Empty<(string, string, string, string)>();
             var specs = new (string id, string scene, string display, float min, float max, float initial,
-                string spawn, string objective, string[] exitFlags, string exitHint,
-                (string stage, string h1, string h2, string h3)[] hints)[]
+                string spawn, string objective, string[] exitFlags, string exitHint)[]
             {
                 ("L00", "L00_Gate", "院门", 0f, 26f, 26f, "spawn_gate_out",
-                    Objectives.ReachAtticFindBox, new string[0], "先开门，进院子再说。",
-                    NoHints),
+                    Objectives.ReachAtticFindBox, new string[0], "先开门，进院子再说。"),
                 ("L01", "L01_Courtyard", "水渠与树", 0f, 20f, 0f, "spawn_courtyard_in",
-                    Objectives.ReachAtticFindBox, new string[0], "先跨过水渠，再往上走。",
-                    NoHints),
+                    Objectives.ReachAtticFindBox, new string[0], "先跨过水渠，再往上走。"),
                 ("L02", "L02_Sewing", "缝纫间外台", 0f, 26f, 0f, "spawn_sewing_ground",
-                    Objectives.ReachAtticFindBox, new[] { StoryFlags.UniformRead }, "袖口的事还没弄明白。",
-                    NoHints),
+                    Objectives.ReachAtticFindBox, new[] { StoryFlags.UniformRead }, "先看看缝纫桌上的旧校服吧。"),
                 ("L03", "L03_Corridor", "楼上回廊", 0f, 30f, 0f, "spawn_corridor_in",
-                    Objectives.ReachAtticFindBox, new[] { StoryFlags.PhotoRevealed }, "阁楼门前有张照片。",
-                    NoHints),
+                    Objectives.ReachAtticFindBox, new[] { StoryFlags.PhotoRevealed }, "先看看门边墙上的老照片吧。"),
                 ("L04", "L04_Attic", "阁楼窗外", 0f, 28f, 27f, "spawn_attic_window",
-                    Objectives.TellXiaoxaoBoxLocation, new[] { StoryFlags.BoxLocated }, "树还没有长到窗边。",
-                    NoHints),
+                    Objectives.TellXiaoxaoBoxLocation, new[] { StoryFlags.BoxLocated }, "还没想起铁盒藏在哪儿。"),
                 ("Epilogue", "Epilogue", "两天后", 0f, 1f, 0f, "spawn_epilogue",
-                    "（尾声演出）", new[] { StoryFlags.EpilogueSeen }, "先打开铁盒，读完留给晓晓的信。", NoHints),
+                    "（尾声演出）", new[] { StoryFlags.EpilogueSeen }, "先陪晓晓看看盒子里的东西。"),
             };
 
             var catalog = new List<LevelDefinition>();
@@ -267,9 +262,6 @@ namespace BorrowTomorrow.EditorTools
                 def.initialObjective = spec.objective;
                 def.exitRequiredFlags = spec.exitFlags;
                 def.exitLockedHint = spec.exitHint;
-                def.hintGroups = spec.hints
-                    .Select(h => new HintGroup { stageKey = h.stage, hintLevel1 = h.h1, hintLevel2 = h.h2, hintLevel3 = h.h3 })
-                    .ToArray();
                 EditorUtility.SetDirty(def);
                 catalog.Add(def);
             }
@@ -296,7 +288,7 @@ namespace BorrowTomorrow.EditorTools
                 ("L03_floor", 7f, SafetyPolicy.FullCheck, "wood_floor", true, false, "missing", false, false),
                 ("L03_walkway", 15f, SafetyPolicy.FullCheck, "missing", false, false, "metal_plate", true, false),
                 ("L03_cabinet", 24f, SafetyPolicy.BlockIfCoveringPlayer, "empty", false, false, "cabinet_full", false, true),
-                ("L04_tree", 14.5f, SafetyPolicy.FullCheck, "sapling", false, false, "adult_tree", true, false),
+                ("L04_tree", L04FinaleInstaller.TreeAnchor, SafetyPolicy.FullCheck, "sapling", false, false, "adult_tree_branch", true, true),
             };
 
             var map = new Dictionary<string, string>();
@@ -487,17 +479,6 @@ namespace BorrowTomorrow.EditorTools
             LevelLayouts.SetObject(promptPanel, "root", promptRoot);
             LevelLayouts.SetObject(promptPanel, "hintText", promptText);
 
-            // 提示气泡（策划 12.4）。
-            var toast = CreateChild<UI.HintToast>(uiRoot.transform, "HintToast");
-            Stretch((RectTransform)toast.transform, new Vector2(0f, 160f), new Vector2(700f, 50f));
-            GameObject toastRoot = CreateUIChild(toast.transform, "Root");
-            Stretch((RectTransform)toastRoot.transform, Vector2.zero, Vector2.zero, true);
-            Text toastText = MakeText(toastRoot.transform, "HintText", string.Empty, font, 24,
-                TextAnchor.MiddleCenter, new Vector2(0f, 0f), new Vector2(680f, 46f));
-            var toastPanel = toast.GetComponent<UI.HintToast>();
-            LevelLayouts.SetObject(toastPanel, "root", toastRoot);
-            LevelLayouts.SetObject(toastPanel, "hintText", toastText);
-
             // 年代角标（策划 4.2：过门转场后重新标清两侧年代）。
             var badge = CreateChild<UI.EraBadge>(uiRoot.transform, "EraBadge");
             Stretch((RectTransform)badge.transform, new Vector2(0f, 380f), new Vector2(300f, 70f));
@@ -523,7 +504,6 @@ namespace BorrowTomorrow.EditorTools
             LevelLayouts.SetObject(hud, "objectivePanel", objective);
             LevelLayouts.SetObject(hud, "interactionPrompt", prompt);
             LevelLayouts.SetObject(hud, "boundaryHandle", handle);
-            LevelLayouts.SetObject(hud, "hintToast", toast);
             LevelLayouts.SetObject(hud, "eraBadge", badge);
             LevelLayouts.SetObject(hud, "fadeScreen", fadeObject);
 
@@ -716,7 +696,6 @@ namespace BorrowTomorrow.EditorTools
             roomGo.AddComponent<TimeBoundary.TemporalObjectRegistry>();
             TimeBoundary.BoundaryController boundary = roomGo.AddComponent<TimeBoundary.BoundaryController>();
             roomGo.AddComponent<Level.LevelDirector>();
-            roomGo.AddComponent<Level.HintDirector>();
 
             // 内容子目录：本房间的全部可交互与年代物体都挂在这里，
             // 保证 TemporalObject 能通过 GetComponentInParent 注册进本房间注册表。

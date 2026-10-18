@@ -64,8 +64,6 @@ namespace BorrowTomorrow.Player
 
         public bool RespawnPressedThisFrame => bindings.AnyDown(bindings.respawn);
 
-        public bool HintPressedThisFrame => bindings.AnyDown(bindings.hint);
-
         public bool ObjectiveHeld => bindings.AnyHeld(bindings.objectiveRecords);
 
         public bool PausePressedThisFrame => bindings.AnyDown(bindings.pause);

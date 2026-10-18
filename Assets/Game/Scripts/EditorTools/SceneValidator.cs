@@ -124,7 +124,7 @@ namespace BorrowTomorrow.EditorTools
 
             int expectedTemporal = id switch
             {
-                "L00" => 1, "L01" => 3, "L02" => 2, "L03" => 3, "L04" => 1, _ => 0,
+                "L00" => 1, "L01" => 3, "L02" => 2, "L02Indoor" => 5, "L03" => 3, "L04" => 3, _ => 0,
             };
             if (totalTemporal != expectedTemporal)
             {

@@ -1212,39 +1212,6 @@ MeshRenderer:
   m_SortingOrder: 4
   m_AdditionalVertexStreams: {fileID: 0}
   m_MaskInteraction: 0
---- !u!1 &283765491
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 7
-  m_Component:
-  - component: {fileID: 283765492}
-  m_Layer: 0
-  m_HasEditorInfo: 1
-  m_Name: HintStages
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &283765492
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 283765491}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1254048485}
-  m_Father: {fileID: 1438749865}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &283938720
 GameObject:
   m_ObjectHideFlags: 0
@@ -2346,7 +2313,6 @@ GameObject:
   - component: {fileID: 647763571}
   - component: {fileID: 647763570}
   - component: {fileID: 647763569}
-  - component: {fileID: 647763568}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: RoomRoot_L01A
@@ -2355,20 +2321,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &647763568
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 647763567}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c3d367f7e199be4d98b9868c8237d4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  availabilityDelay: 22
-  availabilityDuration: 4
 --- !u!114 &647763569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2453,7 +2405,6 @@ Transform:
   m_Children:
   - {fileID: 1009509448}
   - {fileID: 684740764}
-  - {fileID: 1434873063}
   - {fileID: 1656694654}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4703,56 +4654,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1254048484
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 7
-  m_Component:
-  - component: {fileID: 1254048485}
-  - component: {fileID: 1254048486}
-  m_Layer: 0
-  m_HasEditorInfo: 1
-  m_Name: Stage_HintPassed_L01B_Climb
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1254048485
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1254048484}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 283765492}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1254048486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1254048484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b188163bcb734e55ab245f443db872f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomId: L01B
-  stageFlag: HintPassed_L01B_Climb
-  minimumX: 65.8
-  maximumX: 10000
-  minimumY: 2.9
 --- !u!1 &1307545176
 GameObject:
   m_ObjectHideFlags: 0
@@ -5073,6 +4974,7 @@ MonoBehaviour:
   maximumX: 10000
   minimumY: -10000
   presentMechanism: 
+  requiredVisibleDog: {fileID: 0}
 --- !u!1 &1375786500
 GameObject:
   m_ObjectHideFlags: 0
@@ -5678,39 +5580,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1434873062
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 7
-  m_Component:
-  - component: {fileID: 1434873063}
-  m_Layer: 0
-  m_HasEditorInfo: 1
-  m_Name: HintStages
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1434873063
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1434873062}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1586184954}
-  m_Father: {fileID: 647763573}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1438749859
 GameObject:
   m_ObjectHideFlags: 0
@@ -5724,7 +5593,6 @@ GameObject:
   - component: {fileID: 1438749863}
   - component: {fileID: 1438749862}
   - component: {fileID: 1438749861}
-  - component: {fileID: 1438749860}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: RoomRoot_L01B
@@ -5733,20 +5601,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1438749860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1438749859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c3d367f7e199be4d98b9868c8237d4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  availabilityDelay: 22
-  availabilityDuration: 4
 --- !u!114 &1438749861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5831,7 +5685,6 @@ Transform:
   m_Children:
   - {fileID: 1523901966}
   - {fileID: 237263722}
-  - {fileID: 283765492}
   - {fileID: 166008711}
   - {fileID: 892500151}
   m_Father: {fileID: 0}
@@ -6394,56 +6247,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 1
   m_SpriteSortPoint: 0
---- !u!1 &1586184953
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 7
-  m_Component:
-  - component: {fileID: 1586184954}
-  - component: {fileID: 1586184955}
-  m_Layer: 0
-  m_HasEditorInfo: 1
-  m_Name: Stage_HintPassed_L01A_Canal
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1586184954
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1586184953}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1434873063}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1586184955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1586184953}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b188163bcb734e55ab245f443db872f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomId: L01A
-  stageFlag: HintPassed_L01A_Canal
-  minimumX: 14.6
-  maximumX: 10000
-  minimumY: -10000
 --- !u!1 &1623551707
 GameObject:
   m_ObjectHideFlags: 0

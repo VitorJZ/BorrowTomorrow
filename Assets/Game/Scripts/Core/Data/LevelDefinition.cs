@@ -4,7 +4,7 @@ namespace BorrowTomorrow.Core.Data
 {
     /// <summary>
     /// 关卡静态定义（ScriptableObject，数据驱动，策划方案 10.5）。
-    /// 字段：levelId、sceneName、boundaryMin/Max、initialBoundary、spawnId、hintGroups。
+    /// 字段：levelId、sceneName、boundaryMin/Max、initialBoundary、spawnId。
     /// </summary>
     [CreateAssetMenu(fileName = "LevelDef_New", menuName = "BorrowTomorrow/Level Definition")]
     public sealed class LevelDefinition : ScriptableObject
@@ -41,27 +41,5 @@ namespace BorrowTomorrow.Core.Data
 
         [Tooltip("出口条件未满足时的自语文本（策划 7.7）")]
         public string exitLockedHint;
-
-        [Header("三级提示（策划 12.4 / 7.x）")]
-        public HintGroup[] hintGroups;
-    }
-
-    /// <summary>
-    /// 一组绑定到关卡阶段的三级提示。玩家按 H 才展开下一层，不自动报答案。
-    /// </summary>
-    [System.Serializable]
-    public sealed class HintGroup
-    {
-        [Tooltip("阶段 key：完成该阶段后停止旧提示计时（策划 12.4）")]
-        public string stageKey;
-
-        [Tooltip("一级提示：观察引导（如“看看栅栏”）")]
-        public string hintLevel1;
-
-        [Tooltip("二级提示：规则说明（如“它现在不完整”）")]
-        public string hintLevel2;
-
-        [Tooltip("三级提示：接近答案（如“把边界拉到栅栏左边”）")]
-        public string hintLevel3;
     }
 }

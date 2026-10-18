@@ -7,7 +7,7 @@ namespace BorrowTomorrow.UI
 {
     /// <summary>
     /// HUD 服务（策划 10.4/5.4）：UI 根协调者。
-    /// 转发目标、字幕、交互提示、边界受阻提示、提示气泡与年代角标到各子面板；
+    /// 转发目标、字幕、交互提示、边界受阻提示与年代角标到各子面板；
     /// 挂在系统根的 Canvas 上，注册为全局 IHudService。
     /// </summary>
     [RequireComponent(typeof(Canvas))]
@@ -18,7 +18,6 @@ namespace BorrowTomorrow.UI
         [SerializeField] private ObjectivePanel objectivePanel;
         [SerializeField] private InteractionPrompt interactionPrompt;
         [SerializeField] private BoundaryHandle boundaryHandle;
-        [SerializeField] private HintToast hintToast;
         [SerializeField] private EraBadge eraBadge;
         [SerializeField] private FadeScreen fadeScreen;
         [SerializeField] private UnityEngine.UI.Text blockedToastText;
@@ -43,7 +42,7 @@ namespace BorrowTomorrow.UI
             {
                 if (child.GetComponent<SubtitlePanel>() != null || child.GetComponent<ObjectivePanel>() != null
                     || child.GetComponent<InteractionPrompt>() != null || child.GetComponent<BoundaryHandle>() != null
-                    || child.GetComponent<HintToast>() != null || child.GetComponent<EraBadge>() != null
+                    || child.GetComponent<EraBadge>() != null
                     || child.name == "EraLabelPast" || child.name == "EraLabelPresent" || child.name == "BlockedToast")
                     child.SetParent(rect, false);
             }
@@ -78,7 +77,6 @@ namespace BorrowTomorrow.UI
             SetGameplayVisible(false);
             HideSubtitle();
             HideObjective();
-            HideHint();
             SetInteractionPrompt(false);
             CancelInvoke(nameof(HideBlockedToast));
             HideBlockedToast();
@@ -174,30 +172,6 @@ namespace BorrowTomorrow.UI
             if (blockedToastText != null)
             {
                 blockedToastText.enabled = false;
-            }
-        }
-
-        public void ShowHintAvailable(string hintId)
-        {
-            if (hintToast != null)
-            {
-                hintToast.ShowAvailable(hintId);
-            }
-        }
-
-        public void ShowHintText(string hintLine)
-        {
-            if (hintToast != null)
-            {
-                hintToast.ShowHint(hintLine);
-            }
-        }
-
-        public void HideHint()
-        {
-            if (hintToast != null)
-            {
-                hintToast.Hide();
             }
         }
 

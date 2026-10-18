@@ -253,11 +253,6 @@ namespace BorrowTomorrow.EditorTools
                 var root=panel.transform.Find("Root");if(root!=null){PanelImage(root,"ArtPaper",S("UI_ObjectiveCard"),Color.white);PanelImage(root,"ArtShade",null,new Color(.08f,.06f,.04f,.78f));}
                 foreach(var text in panel.GetComponentsInChildren<Text>(true))text.color=new Color(1,.94f,.8f);
             }
-            foreach(var panel in All<HintToast>(scene))
-            {
-                var root=panel.transform.Find("Root");if(root!=null){PanelImage(root,"ArtPaper",S("UI_HintBubble"),Color.white);PanelImage(root,"ArtShade",null,new Color(.08f,.06f,.04f,.85f));}
-                foreach(var text in panel.GetComponentsInChildren<Text>(true))text.color=Color.white;
-            }
             foreach(var handle in All<BoundaryHandle>(scene))
             {
                 var image=handle.GetComponent<Image>();if(image!=null){image.sprite=S("UI_BoundaryHandle");image.color=Color.white;image.preserveAspect=true;}

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entryId: DLG_L01B_TREE_02
   speakerLabel: "\u78C1\u5E26\xB7\u5E74\u8F7B\u5916\u5A46"
-  subtitle: "\u6811\u4E5F\u8981\u6162\u6162\u957F\u3002"
+  subtitle: "\u6811\u8981\u6162\u6162\u957F\uFF0C\u6653\u6653\u4E5F\u662F\u3002\u6025\u4EC0\u4E48\u3002"
   voiceClip: {fileID: 8300000, guid: 2b0f4658776a47f4885361b6d813a405, type: 3}
   illustration: {fileID: 0}
   blackBackground: 0

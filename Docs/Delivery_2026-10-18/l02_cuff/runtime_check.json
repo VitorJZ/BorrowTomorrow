@@ -1,0 +1,28 @@
+{
+  "playing": false,
+  "scene": "Assets/Game/Scenes/MainMenu.scene",
+  "action": "ACT_L02_CUFF",
+  "layerCount": 5,
+  "fullJacketBefore": "ACT_L02_Cuff_03_SleeveBefore_2304x1728",
+  "fullJacketAfter": "ACT_L02_Cuff_04_SleeveAfter_2304x1728",
+  "dialogueImages": [
+    {
+      "entryId": "DLG_L02_UNIFORM_01",
+      "image": "ILL_UNIFORM_CUFF"
+    },
+    {
+      "entryId": "DLG_L02_UNIFORM_02",
+      "image": "ILL_UNIFORM_CUFF"
+    },
+    {
+      "entryId": "DLG_L02_UNIFORM_03",
+      "image": "ILL_UNIFORM_CUFF"
+    },
+    {
+      "entryId": "DLG_L02_UNIFORM_04",
+      "image": "ILL_UNIFORM_CUFF"
+    }
+  ],
+  "restored": false,
+  "verification_note": "Captured the first action frame in the running L02 scene. Play mode ended before the later action and dialogue captures, so full playback verification is not claimed."
+}

@@ -186,6 +186,16 @@ namespace BorrowTomorrow.Core
             readDialogueIds.Clear();
             if (data.readDialogueIds != null)
                 foreach (string id in data.readDialogueIds) RecordDialogue(id);
+            // Before the sewing-room split, its checkpoint belonged to L02 and
+            // used world coordinates 40..58. Keep existing interior saves usable.
+            if (data.currentLevelId == "L02" && data.checkpointRoomId == "L02Indoor")
+            {
+                data.currentLevelId = "L02Indoor";
+                data.roomBoundaries.RemoveAll(r => r.roomId != "L02Indoor");
+                foreach (var room in data.roomBoundaries) room.boundaryX -= 40f;
+                if (data.hasCheckpointPosition) data.checkpointPosition.x -= 40f;
+                data.mechanismStates.Clear();
+            }
             LevelDefinition target = FindLevel(data.currentLevelId);
             // Preserve v1.3 handover when resuming between the final dialogue and scene transition.
             if (target != null && target.levelId == "L04" && StoryFlags.HasFlag(StoryFlagIds.BoxLocated))

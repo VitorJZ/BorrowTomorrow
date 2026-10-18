@@ -6,7 +6,7 @@ namespace BorrowTomorrow.Narrative
 {
     /// <summary>
     /// 阿黄生活回声（剧情 1.4 §3.2）：过去态趴卧，录音播放时抬头并摇尾；
-    /// 现在态只留空狗窝与收好的食盆，录音照常播放。动作全部脚本化，透明逐帧素材，不用抠白着色器。
+    /// 现在态只留空狗窝与收好的食盆，不触发回声。动作全部脚本化，透明逐帧素材，不用抠白着色器。
     /// </summary>
     public sealed class NarrativeDogEcho : MonoBehaviour
     {
@@ -20,6 +20,10 @@ namespace BorrowTomorrow.Narrative
         private DialoguePlayer player;
         private float echoTimer;
         private const float EchoSeconds = 4.5f;
+
+        // 与触发条件共用已提交的年代，避免渲染更新顺序让消失的阿黄仍触发对白。
+        public bool IsVisibleInPast => isActiveAndEnabled
+            && ServiceRegistry.TryGet<IBoundaryContext>(out var boundary) && boundary.EraAtAnchor(anchorX) == Era.Past;
 
         private void Start()
         {
@@ -36,7 +40,7 @@ namespace BorrowTomorrow.Narrative
 
         private void OnLine(DialogueEntry entry)
         {
-            if (entry.entryId != "DLG_L00_DOG_01") return;
+            if (entry.entryId != "DLG_L00_DOG_01" || !IsVisibleInPast) return;
             echoTimer = EchoSeconds;
             if (ServiceRegistry.TryGet<IAudioService>(out var audio)) audio.PlaySfx("sfx_dog_soft");
         }
@@ -46,7 +50,7 @@ namespace BorrowTomorrow.Narrative
             if (renderer2d == null) return;
             if (GameSession.Instance != null && GameSession.Instance.State.IsPaused) return;
             echoTimer = Mathf.Max(0, echoTimer - Time.deltaTime);
-            bool past = ServiceRegistry.TryGet<IBoundaryContext>(out var b) && b.EraAtAnchor(anchorX) == Era.Past;
+            bool past = IsVisibleInPast;
             renderer2d.enabled = past;
             if (presentProps != null) presentProps.enabled = !past;
             if (!past) return;
