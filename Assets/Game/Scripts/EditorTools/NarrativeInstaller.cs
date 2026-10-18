@@ -284,6 +284,7 @@ namespace BorrowTomorrow.EditorTools
         private static void ConfigureAudio(Scene scene)
         {
             var audio=All<BorrowTomorrow.Audio.AudioService>(scene).First();
+            BoundaryAudioInstaller.Configure(audio.gameObject);
             foreach(var pair in new[]{("musicPast","BGM_Past_1994"),("musicPresent","BGM_Present_2024"),("musicEpilogue","BGM_Epilogue")})
                 LevelLayouts.SetObject(audio,pair.Item1,AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Game/Audio/Music/"+pair.Item2+".wav"));
             string hissPath=AssetDatabase.FindAssets("SFX_staticloop01 t:AudioClip").Select(AssetDatabase.GUIDToAssetPath).FirstOrDefault(p=>Path.GetFileNameWithoutExtension(p)=="SFX_staticloop01");

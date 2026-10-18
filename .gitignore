@@ -55,3 +55,6 @@ Docs/test-results-*.xml
 
 # Local editor tooling/configuration
 .codely-cli/
+
+# Local integration runs: backups, isolated test saves, logs and captures
+/work/drying-rack/

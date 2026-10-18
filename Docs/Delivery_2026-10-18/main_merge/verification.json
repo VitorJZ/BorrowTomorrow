@@ -1,0 +1,26 @@
+{
+  "main_commit": "b0cdc60cce751375b1e0b981f3d60b3e04a0f0cb",
+  "editmode_passed": 65,
+  "playmode_distinct_passed": 15,
+  "playmode_results": {
+    "BorrowTomorrow.Tests.BootToGameSmokeTests.BootstrapToL00_PlayerGroundedAndBoundaryReady": "Passed",
+    "BorrowTomorrow.Tests.BootToGameSmokeTests.ColdContinue_RestoresL01BThenNewLevelUsesOwnSnapshot": "Passed",
+    "BorrowTomorrow.Tests.BootToGameSmokeTests.CorruptedContinue_ShowsWarningAndKeepsOriginalFiles": "Passed",
+    "BorrowTomorrow.Tests.BootToGameSmokeTests.HudLayout_StaysInsideWideAndTallScreensAndSubtitlesDoNotOverlap": "Passed",
+    "BorrowTomorrow.Tests.BootToGameSmokeTests.L00_DogEchoRequiresVisiblePastDogAndStopsWhenHidden": "Passed",
+    "BorrowTomorrow.Tests.BootToGameSmokeTests.L00_NoticeFollowsEraAndClearedCratesAllowWalkingBothWays": "Passed",
+    "BorrowTomorrow.Tests.BootToGameSmokeTests.LegacySaveWithoutCheckpoint_CreatesPlayerAtEntryAndPauseFreezesPhysics": "Passed",
+    "BorrowTomorrow.Tests.BootToGameSmokeTests.MenuHud_NewGamePauseReturnContinueAndEveryLevel": "Passed",
+    "BorrowTomorrow.Tests.BootToGameSmokeTests.PauseSettings_LoadDoesNotOverwritePreferencesAndFadeResetIsImmediate": "Passed",
+    "BorrowTomorrow.Tests.BootToGameSmokeTests.Story_RevealBoardReportSmoothingAndHistoryPersist": "Passed",
+    "BorrowTomorrow.Tests.ClimbAnimationIntegrationTests.ApprovedClimb_RealMovement_Stop_Reverse_Pause_Jump_AndReturnToWalk": "Passed",
+    "BorrowTomorrow.Tests.DryingRackIntegrationTests.RealRoute_Raise_Pause_Safety_SaveContinue_AndKeyboardDoubleAudio": "Passed",
+    "BorrowTomorrow.Tests.L02IndoorSceneTests.ExteriorDoorLoadsIndependentInterior_PastOnlyObjectsRevealAtTheirAnchors": "Passed",
+    "BorrowTomorrow.Tests.L02IndoorSceneTests.LegacyInteriorSaveMigratesToNewSceneAndCoordinates": "Passed",
+    "BorrowTomorrow.Tests.L04FinaleRouteTests.L04_ThreeGenerationRoute_EnforcesOrderAndReachesNiche": "Passed"
+  },
+  "scene_audit_passed": 9,
+  "canal_runtime_check": "passed",
+  "backup_branch": "codex/backup-before-main-20261018-151922",
+  "note": "Runtime tests ran in batches; latest outcome of each distinct selected test is recorded. Dog audio lifecycle was retested after updating its stale no-voice assertion. Concurrent voice binding edits are preserved unstaged."
+}

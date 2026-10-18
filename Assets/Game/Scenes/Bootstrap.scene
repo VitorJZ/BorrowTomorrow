@@ -2162,6 +2162,7 @@ GameObject:
   - component: {fileID: 896203967}
   - component: {fileID: 896203966}
   - component: {fileID: 896203965}
+  - component: {fileID: 896203977}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: SystemRoot
@@ -2302,7 +2303,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 416cdf9ef30a45dea240ad14e1b49a64, type: 3}
     volume: 0.18
   - id: door_open
-    clip: {fileID: 8300000, guid: 432bfd19a2cf478fb16cc48d3c784580, type: 3}
+    clip: {fileID: 8300000, guid: 005a58dcf9615545b8ab71fa71ca601b, type: 3}
     volume: 0.3
   - id: player_footstep
     clip: {fileID: 8300000, guid: 4ee4b22aeb4c4bb3b66d4f37d2b330af, type: 3}
@@ -2503,6 +2504,29 @@ Transform:
   - {fileID: 1309924532}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &896203977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896203964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9bd693a91cbb6747975c3e3ecb7b4bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pastSlow: {fileID: 8300000, guid: 19555442e109a9d42a52f2c39fd00383, type: 3}
+  pastFast: {fileID: 8300000, guid: 5cfcf3e9fd3779544968bed86e5b9039, type: 3}
+  presentSlow: {fileID: 8300000, guid: e615af2965626bf4cae6131cda0f4b0d, type: 3}
+  presentFast: {fileID: 8300000, guid: cbabb7ef5b6b4f941812aaa731f75c1f, type: 3}
+  dragStart: {fileID: 8300000, guid: 083beeda0f1740846bbcd07abfeaade6, type: 3}
+  dragStop: {fileID: 8300000, guid: 81ccfbf0f7b87ea4d82999dbff14cad4, type: 3}
+  switchOk: {fileID: 8300000, guid: 57dba5fe7f7152b48a9c6c1ca67add42, type: 3}
+  switchBlocked: {fileID: 8300000, guid: 1a3cffdb8f41de94386035f956fc3d8b, type: 3}
+  dragVolume: 0.85
+  feedbackVolume: 0.85
+  fullSpeed: 8
 --- !u!1 &917663711
 GameObject:
   m_ObjectHideFlags: 0

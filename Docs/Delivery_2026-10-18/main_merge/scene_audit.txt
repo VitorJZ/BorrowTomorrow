@@ -1,0 +1,9 @@
+Assets/Game/Scenes/Bootstrap.scene: 66 objects, no missing scripts/references, no legacy hint objects
+Assets/Game/Scenes/Epilogue.scene: 18 objects, no missing scripts/references, no legacy hint objects
+Assets/Game/Scenes/L00_Gate.scene: 29 objects, no missing scripts/references, no legacy hint objects
+Assets/Game/Scenes/L01_Courtyard.scene: 123 objects, no missing scripts/references, no legacy hint objects
+Assets/Game/Scenes/L02_Sewing.scene: 40 objects, no missing scripts/references, no legacy hint objects
+Assets/Game/Scenes/L02_SewingRoom.scene: 40 objects, no missing scripts/references, no legacy hint objects
+Assets/Game/Scenes/L03_Corridor.scene: 49 objects, no missing scripts/references, no legacy hint objects
+Assets/Game/Scenes/L04_Attic.scene: 44 objects, no missing scripts/references, no legacy hint objects
+Assets/Game/Scenes/MainMenu.scene: 11 objects, no missing scripts/references, no legacy hint objects

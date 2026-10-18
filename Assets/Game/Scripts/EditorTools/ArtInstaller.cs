@@ -161,7 +161,7 @@ namespace BorrowTomorrow.EditorTools
                     else if(id=="L02_maintenance")asset="PROP_MetalWalkway_2024";
                     else if(id=="L03_floor")asset="PROP_WoodFloor_1994";
                     else if(id=="L03_walkway")asset="PROP_MetalWalkway_2024";
-                    else if(id=="L03_cabinet")asset="PROP_StorageCabinet_2024";
+                    else if(id=="L03_cabinet"){original.enabled=false;continue;}
                     else if(name.StartsWith("Branch"))asset="TreeBranchBark";
                     else if(name=="Sapling"){asset="PROP_TreeYoung_1994";size=new Vector2(1.4f,2.1f);}
                     else if(name=="Trunk"||name=="YardGround"){original.enabled=false;continue;}
@@ -230,6 +230,7 @@ namespace BorrowTomorrow.EditorTools
                     renderer.sprite=sprite;tidy.cloth.localScale=new Vector3(1/sprite.bounds.size.x,.6f/sprite.bounds.size.y,1);
                 }
             }
+            if(room.RoomId=="L03")CorridorRubbleInstaller.Configure(room);
             Backdrop(room,bounds,key,initial);
         }
         private static bool IsPast(Transform t,Transform stop){while(t!=null&&t!=stop){if(t.name=="Past")return true;t=t.parent;}return false;}

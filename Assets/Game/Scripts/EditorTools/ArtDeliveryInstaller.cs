@@ -257,6 +257,7 @@ namespace BorrowTomorrow.EditorTools
             // 过去态的盖板：用侧视木板条代替被压扁的 3/4 视角整块图。
             var plank = room.GetComponentsInChildren<TemporalObject>(true).First(t => t.ObjectId == "L01A_plank_bridge");
             Reskin(plank.transform.Find("Past/PlankPast"), Strip("Strip_Wood"));
+            CanalMechanismInstaller.Configure(room);
             EditorUtility.SetDirty(room);
         }
 
@@ -403,6 +404,7 @@ namespace BorrowTomorrow.EditorTools
             var photo = room.transform.Find("NarrativeContent/Narrative_photo");
             RemoveChild(photo, "ArtSkin");
             PutByBounds(photo, "ArtSkin", Load("Props", "PROP_Photo_CanonicalInFrame"), new Vector2(28.3f, 3.28f), 1.1f, "EraPlatform", 3);
+            CorridorRubbleInstaller.Configure(room);
         }
 
         // ---------------------------------------------------------------- L04 阁楼窗外
