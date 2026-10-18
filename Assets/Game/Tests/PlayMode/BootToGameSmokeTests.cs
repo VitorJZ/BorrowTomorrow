@@ -103,13 +103,12 @@ namespace BorrowTomorrow.Tests
             public bool ConsumeInteract() => false;
             public float BoundaryNudgeDirection => 0f;
             public bool RespawnPressedThisFrame => false;
-            public bool HintPressedThisFrame => false;
             public bool ObjectiveHeld => false;
             public bool PausePressedThisFrame => false;
         }
 
         [UnityTest]
-        public IEnumerator L00_NoticeFollowsEraAndOpenGateAllowsWalkingBothWays()
+        public IEnumerator L00_NoticeFollowsEraAndClearedCratesAllowWalkingBothWays()
         {
             SceneManager.LoadScene("Bootstrap");
             yield return new WaitForSeconds(2f);
@@ -128,6 +127,9 @@ namespace BorrowTomorrow.Tests
 
             var boundary = (BoundaryController)ServiceRegistry.Get<IBoundaryContext>();
             var notice = Object.FindObjectOfType<PresentOnlyInvestigation>();
+            var crates = Object.FindObjectsOfType<TemporalObject>().Single(t => t.ObjectId == "L00_fence_gate");
+            Assert.Greater(notice.anchorX, crates.AnchorX, "通知应位于木箱之后的必经路上");
+            Assert.Less(notice.anchorX, Object.FindObjectOfType<NarrativeDogEcho>().anchorX, "通知应在阿黄之前");
             var interaction = notice.GetComponent<NarrativeInteractable>();
             var art = notice.transform.Find("ArtSkin").GetComponent<SpriteRenderer>();
             var graybox = notice.GetComponent<SpriteRenderer>();
@@ -153,15 +155,85 @@ namespace BorrowTomorrow.Tests
             boundary.RestoreBoundary(26f);
             motor.TeleportTo(new Vector2(7f, .05f));
             yield return new WaitForSeconds(1.5f);
-            Assert.Less(motor.transform.position.x, 8f, "过去态完整栅栏必须阻挡玩家");
+            Assert.Less(motor.transform.position.x, 8f, "过去堆放的木箱必须阻挡玩家");
 
             boundary.RestoreBoundary(0f);
             yield return new WaitForSeconds(1.5f);
-            Assert.Greater(motor.transform.position.x, 12f, "打开后应能从左侧走过整个门洞");
+            Assert.Greater(motor.transform.position.x, 12f, "现在木箱清走后应能从左侧沿平地通过");
             input.MoveAxis = -1f;
             yield return new WaitForSeconds(1.8f);
-            Assert.Less(motor.transform.position.x, 8f, "打开后也应能向左返回");
+            Assert.Less(motor.transform.position.x, 8f, "清空后的巷道也应能向左返回");
             input.MoveAxis = 0f;
+        }
+
+        [UnityTest]
+        public IEnumerator L00_DogEchoRequiresVisiblePastDogAndStopsWhenHidden()
+        {
+            SceneManager.LoadScene("Bootstrap");
+            yield return new WaitForSeconds(2f);
+            var session = GameSession.Instance;
+            IsolateSave();
+            session.StartNewGame();
+            yield return WaitForPlaying(session);
+            var dialogue = (DialoguePlayer)ServiceRegistry.Get<IDialogueService>();
+            float introDeadline = Time.realtimeSinceStartup + 5f;
+            while (!dialogue.IsPlaying && Time.realtimeSinceStartup < introDeadline) yield return null;
+            Assert.IsTrue(dialogue.IsPlaying);
+            dialogue.SkipCurrent();
+
+            var boundary = (BoundaryController)ServiceRegistry.Get<IBoundaryContext>();
+            var dog = Object.FindObjectOfType<NarrativeDogEcho>();
+            var dogEvent = Object.FindObjectsOfType<NarrativeAutoEvent>()
+                .Single(e => e.entry.entryId == "DLG_L00_DOG_01");
+            Assert.AreSame(dog, dogEvent.requiredVisibleDog, "场景事件必须使用实际阿黄的年代条件");
+            var player = ServiceRegistry.Get<IPlayerContext>();
+            boundary.RestoreBoundary(0f);
+            player.TeleportToPosition(new Vector2(14f, .05f));
+            yield return new WaitForSeconds(1f);
+            Assert.IsTrue(player.IsGrounded);
+            Assert.IsFalse(dog.GetComponent<SpriteRenderer>().enabled);
+            Assert.IsFalse(dialogue.IsPlaying, "现代空狗窝旁不得触发阿黄台词");
+            Assert.IsFalse(session.StoryFlags.HasFlag("DogEchoPlayed"));
+
+            boundary.RestoreBoundary(dog.anchorX);
+            yield return new WaitForSeconds(.2f);
+            Assert.IsFalse(dialogue.IsPlaying, "边界恰在锚点时，阿黄仍属现在态");
+            player.TeleportToPosition(new Vector2(18f, .05f));
+            boundary.RestoreBoundary(26f);
+            yield return new WaitForSeconds(.8f);
+            Assert.IsFalse(dialogue.IsPlaying, "离开阿黄附近后不得补播回声");
+
+            player.TeleportToPosition(new Vector2(14f, .05f));
+            yield return new WaitForSeconds(.3f);
+            Assert.IsTrue(dog.GetComponent<SpriteRenderer>().enabled);
+            Assert.AreEqual("DLG_L00_DOG_01", dialogue.Current?.entryId);
+            StringAssert.DoesNotContain("你脚边", dialogue.Current.subtitle);
+            var dogVoice = (AudioSource)typeof(DialoguePlayer)
+                .GetField("voiceSource", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(dialogue);
+            if (dialogue.Current.voiceClip != null)
+            {
+                Assert.AreEqual("vo_l00_dog_01", dialogue.Current.voiceClip.name);
+                Assert.AreSame(dialogue.Current.voiceClip, dogVoice.clip);
+                Assert.IsTrue(dogVoice.isPlaying, "已接入的阿黄配音应随回声开始播放");
+            }
+            boundary.RestoreBoundary(0f);
+            yield return new WaitForSeconds(.2f);
+            Assert.IsFalse(dialogue.IsPlaying, "播放中阿黄消失时应停止回声");
+            Assert.IsFalse(dogVoice.isPlaying, "阿黄消失时不得继续播放回声配音");
+            Assert.IsFalse(session.StoryFlags.HasFlag("DogEchoPlayed"), "中止不得写入已完成标记");
+
+            boundary.RestoreBoundary(26f);
+            yield return new WaitForSeconds(.2f);
+            Assert.AreEqual("DLG_L00_DOG_01", dialogue.Current?.entryId, "切回过去后仍可触发");
+            float echoSeconds = Mathf.Max(3f, dialogue.Current.voiceClip != null ? dialogue.Current.voiceClip.length : 0f);
+            yield return new WaitForSeconds(echoSeconds + .3f);
+            Assert.IsFalse(dialogue.IsPlaying);
+            Assert.IsTrue(session.StoryFlags.HasFlag("DogEchoPlayed"));
+            boundary.RestoreBoundary(0f);
+            yield return null;
+            boundary.RestoreBoundary(26f);
+            yield return new WaitForSeconds(.2f);
+            Assert.IsFalse(dialogue.IsPlaying, "完整播放后不重复触发");
         }
 
         [UnityTest]
@@ -323,7 +395,7 @@ namespace BorrowTomorrow.Tests
         private static void AssertMenuClean()
         {
             foreach (string name in new[] { "BoundaryHandle", "EraLabelPast", "EraLabelPresent", "SubtitlePanel",
-                "ObjectivePanel", "HintToast", "BlockedToast" })
+                "ObjectivePanel", "BlockedToast" })
                 Assert.IsFalse(IsVisible(HudElement(name).gameObject), "菜单不得显示 " + name);
             var guide = Object.FindObjectsOfType<Transform>(true).FirstOrDefault(t => t.name == "CommittedBoundaryGuide");
             if (guide != null) Assert.IsFalse(IsVisible(guide.gameObject), "菜单不得显示边界辅助线");
@@ -363,7 +435,6 @@ namespace BorrowTomorrow.Tests
             Assert.IsTrue(IsVisible(HudElement("BoundaryHandle").gameObject));
             var hud = ServiceRegistry.Get<IHudService>();
             hud.ShowSubtitle("测试", "暂停前的当前句");
-            hud.ShowHintText("旧关卡提示");
             hud.ShowBoundaryBlocked("旧关卡受阻提示");
             session.State.EnterPause();
             yield return null;

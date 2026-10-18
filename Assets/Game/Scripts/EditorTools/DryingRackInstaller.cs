@@ -144,10 +144,6 @@ namespace BorrowTomorrow.EditorTools
             so.ApplyModifiedPropertiesWithoutUndo();leaf.localRotation=Quaternion.Euler(0,0,-78);brace.gameObject.SetActive(false);
             line.positionCount=2;line.SetPosition(0,guide.position);line.SetPosition(1,eye.position);
             handLine.positionCount=2;handLine.SetPosition(0,guide.position);handLine.SetPosition(1,handle.position);
-            foreach(var h in room.Definition.hintGroups??Array.Empty<HintGroup>())
-                if(h.stageKey=="HintPassed_L01B_Climb")
-                {h.hintLevel1="木梯旁的平台上有一套晾晒架。";h.hintLevel2="过去能拉起晾晒架，现在的桂花树有粗枝。";h.hintLevel3="爬过去的木梯，在平台按 E 拉起晾晒架，再把边界停在装置与树干锚点之间，借粗枝走上窗台。";}
-            EditorUtility.SetDirty(room.Definition);
             Debug.Log("[DryingRack] Installed past-only folding deck, natural tree and short-branch route; no character animation.");
         }
         [MenuItem("BorrowTomorrow/关卡/接入桂花树晾晒架")]

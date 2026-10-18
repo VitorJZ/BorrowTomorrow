@@ -235,29 +235,8 @@ namespace BorrowTomorrow.EditorTools
             // 背景里的门洞就是出口（门框中心约在图宽 70.4% 处），不再另画一扇小门。
             MoveExit(room, 13f - viewW * .5f + .704f * viewW);
 
-            // 栅栏：过去整块阻挡；现在门柱只作背景装饰，门梁上方保留碰撞。
-            var fence = room.GetComponentsInChildren<TemporalObject>(true).First(t => t.ObjectId == "L00_fence_gate");
-            Transform past = fence.transform.Find("Past"), present = fence.transform.Find("Present");
-            const float width = 3.73f, height = 3.4f;
-            var pastBox = past.Find("FencePast");
-            pastBox.GetComponent<BoxCollider2D>().size = new Vector2(width, height);
-            pastBox.GetComponent<BoxCollider2D>().offset = Vector2.zero;
-            var fenceSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Game/Art/Props/Temporal/PROP_Fence_1994.png");
-            var pastArt = PutByBounds(pastBox, "ArtSkin", fenceSprite, new Vector2(10f, 0f), width, "EraPlatform", 2);
-            pastBox.GetComponent<SpriteRenderer>().enabled = false;
-
-            var lintel = present.Find("FencePresent");
-            lintel.position = new Vector3(10f, height - .25f, 0f);
-            var lintelCol = lintel.GetComponent<BoxCollider2D>();
-            lintelCol.size = new Vector2(width, .5f); lintelCol.offset = Vector2.zero;
-            lintel.GetComponent<SpriteRenderer>().enabled = false;
-            // 侧视玩法沿 X 轴穿过缺口；实心立柱会在进入门洞前挡住玩家。
-            // 门柱已经画在 ArtGate 中，无需额外的碰撞物体。
-            RemoveChild(present, "PostL");
-            RemoveChild(present, "PostR");
-            RemoveChild(lintel, "ArtSkin");
-            var adult = Load("Props", "PROP_L00_Fence_AdultOpening");
-            PutByBounds(present, "ArtGate", adult, new Vector2(10f, 0f), width, "EraPlatform", 2);
+            // 过去临时堆放的木箱堵住巷道，现在已清走；正面院门只负责出口转场。
+            L00ObstacleInstaller.ConfigureRoom(room);
             var dog = room.GetComponentInChildren<NarrativeDogEcho>(true);
             if (dog != null) ConfigureDog(dog);
             EditorUtility.SetDirty(room);
@@ -336,15 +315,6 @@ namespace BorrowTomorrow.EditorTools
             if (t == null) return;
             var sr = t.GetComponent<SpriteRenderer>();
             if (sr != null) sr.sprite = Fixed(fixedName);
-        }
-
-        private static void FitSupport(Transform branch, Vector2 start, Vector2 end)
-        {
-            var box = branch.GetComponent<BoxCollider2D>();
-            Vector2 delta = end - start, normal = new Vector2(-delta.y, delta.x).normalized;
-            branch.position = (start + end) * .5f - normal * (box.size.y * .5f);
-            branch.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg);
-            box.size = new Vector2(delta.magnitude, box.size.y);
         }
 
         private static void SetRenderer(LevelRoot room, string path, bool enabled)
@@ -439,88 +409,12 @@ namespace BorrowTomorrow.EditorTools
 
         // ---------------------------------------------------------------- L04 阁楼窗外
 
-        private static void L04(LevelRoot room)
-        {
-            // 背景地面 = 院子地面（树根处 y≈-2.6）；右侧用墙体拼阁楼外立面，玩家所站窗台是立面上的窗洞，
-            // 暗格在窗外右上方（剧情 1.4：朝院子那扇窗，外头右上边）。
-            const float yard = -3.3f;
-            float viewW = Backdrop(room, "BG_L04_Attic_1994_v2", "BG_L04_Attic_2024_v2", 31f, 15.5f, yard, .755f, .755f, V2);
-            var content = room.transform.Find("Content");
-            var tree = room.GetComponentsInChildren<TemporalObject>(true).First(t => t.ObjectId == "L04_tree");
-            Transform past = tree.transform.Find("Past"), present = tree.transform.Find("Present");
-            const float s = .0075f, rot = -4f;
-            foreach (var r in present.GetComponentsInChildren<SpriteRenderer>(true)) r.enabled = false;
-            foreach (var r in past.GetComponentsInChildren<SpriteRenderer>(true)) r.enabled = false;
-            foreach (var n in new[] { "TreeBack", "TreeTrunk", "TreeFront" }) RemoveChild(present, n);
-            var layers = new[] { ("TreeBack", "PROP_L04_Tree_01_BackLeaves", -12), ("TreeTrunk", "PROP_L04_Tree_00_TrunkBranch", -10), ("TreeFront", "PROP_L04_Tree_02_FrontLeaves", 6) };
-            foreach (var l in layers)
-            {
-                var go = new GameObject(l.Item1);
-                go.transform.SetParent(present, false);
-                go.transform.position = new Vector3(21.81f, 3.51f, 0f);
-                go.transform.rotation = Quaternion.Euler(0, 0, rot);
-                go.transform.localScale = new Vector3(s * 100f, s * 100f, 1f);
-                var sr = go.AddComponent<SpriteRenderer>();
-                sr.sprite = Load("Props", l.Item2); sr.sortingLayerName = "EraPlatform"; sr.sortingOrder = l.Item3;
-            }
-            // 枝面实测上沿（交付分层按上面同一变换投影到世界坐标）。
-            FitSupport(present.Find("BranchA"), new Vector2(21.8f, 3.10f), new Vector2(23.66f, 3.89f));
-            FitSupport(present.Find("BranchB"), new Vector2(23.66f, 3.89f), new Vector2(25.4f, 4.65f));
-            // 暗格小台随枝梢上沿抬高 0.15，暗格画面与调查范围同步。
-            content.Find("CompartmentLedge").position = new Vector3(26.5f, 4.45f, 0f);
-            content.Find("CompartmentVisual").position = new Vector3(26.5f, 5.3f, 0f);
-            room.transform.Find("NarrativeContent/Narrative_niche").position = new Vector3(26.5f, 5.1f, 0f);
-            RemoveChild(past, "YoungTree");
-            PutByBounds(past, "YoungTree", Fixed("PROP_TreeYoung_1994_Fixed"), new Vector2(15.2f, yard - .05f), 1.9f, "EraPlatform", -10);
-
-            // 阁楼外立面：窗下墙、窗左框、窗上过梁、窗右整片墙（暗格所在），墙后为暗的室内。
-            RemoveChild(content, "AtticFacade");
-            var facade = new GameObject("AtticFacade").transform;
-            facade.SetParent(content, false);
-            var wall = CropSprite(Load("Backgrounds", "BG_L00_Gate_1994").texture, "L04_Facade_Plaster", new Rect(110, 190, 1000, 1000));
-            var wood = Strip("Strip_Wood");
-            var white = AssetDatabase.FindAssets("WhiteRect t:Sprite").Select(g => AssetDatabase.LoadAssetAtPath<Sprite>(AssetDatabase.GUIDToAssetPath(g))).First(sp => sp != null);
-            float top = 13f, right = 32.5f;
-            void Block(string name, Sprite sp, float x0, float x1, float y0, float y1, Color c, int order, bool tiled)
-            {
-                var r = Put(facade, name, sp, new Vector2((x0 + x1) * .5f, (y0 + y1) * .5f), new Vector2(x1 - x0, y1 - y0), "EraPlatform", order);
-                if (tiled) { r.transform.localScale = Vector3.one; r.drawMode = SpriteDrawMode.Tiled; r.size = new Vector2(x1 - x0, y1 - y0); }
-                r.color = c;
-            }
-            var plaster = new Color(.93f, .89f, .82f);
-            Block("Interior", white, 18.9f, 22.2f, 2.6f, 6.4f, new Color(.16f, .12f, .09f), -20, false);
-            Block("WallBelowSill", wall, 18.6f, 22.4f, yard - 5f, 2.6f, plaster, -15, true);
-            Block("WallLeftJamb", wall, 18.6f, 18.95f, 2.6f, 6.4f, plaster, -15, true);
-            Block("WallLintel", wall, 18.6f, 22.4f, 6.4f, top, plaster, -15, true);
-            Block("WallRight", wall, 22.15f, right, yard - 5f, top, plaster, -15, true);
-            Block("FrameTop", wood, 18.8f, 22.35f, 6.3f, 6.55f, Color.white, -14, false);
-            Block("FrameLeft", wood, 18.8f, 19.0f, 2.6f, 6.4f, Color.white, -14, false);
-            Block("FrameRight", wood, 22.1f, 22.35f, 2.6f, 6.4f, Color.white, -14, false);
-            // 暗格窗台/暗格贴在右墙面上；暗格木板画面沿用原资源。
-            var niche = content.Find("CompartmentVisual/ArtSkin");
-            if (niche != null) niche.GetComponent<SpriteRenderer>().sortingOrder = 3;
-            // 跌到院子 = 回检查点：恢复区抬到院子地面，避免角色陷进画出的地面。
-            var kill = content.Find("KillZone");
-            if (kill != null) { kill.position = new Vector3(13f, yard + .2f, 0f); kill.GetComponent<BoxCollider2D>().size = new Vector2(40f, 1f); }
-            // 占位黄块（窗边木板调查点）改为不可见，调查范围保持。
-            SetRenderer(room, "NarrativeContent/Narrative_window_boards", false);
-        }
+        private static void L04(LevelRoot room) => L04FinaleInstaller.RebuildRoom(room);
 
         // ---------------------------------------------------------------- 尾声病房
 
         private static void EpilogueRoom(LevelRoot room)
         {
-        }
-
-        private static Sprite CropSprite(Texture2D texture, string name, Rect rect)
-        {
-            string path = "Assets/Game/Art/Delivery/Fixed/" + name + ".asset";
-            var old = AssetDatabase.LoadAssetAtPath<Sprite>(path);
-            if (old != null) AssetDatabase.DeleteAsset(path);
-            var sprite = Sprite.Create(texture, rect, new Vector2(.5f, .5f), 100f, 0, SpriteMeshType.FullRect);
-            sprite.name = name;
-            AssetDatabase.CreateAsset(sprite, path);
-            return sprite;
         }
     }
 }

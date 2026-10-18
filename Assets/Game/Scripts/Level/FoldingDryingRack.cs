@@ -69,13 +69,13 @@ namespace BorrowTomorrow.Level
             if (!CanInteract || session == null || !session.State.IsPlayerControlAllowed) return false;
             if (!ServiceRegistry.TryGet<IPlayerContext>(out var player) || !player.IsGrounded || player.IsClimbingLadder)
             {
-                if (ServiceRegistry.TryGet<IHudService>(out var h)) h.ShowHintText("先站到墙边平台，再拉绳。");
+                if (ServiceRegistry.TryGet<IHudService>(out var h)) h.ShowBoundaryBlocked("先站到墙边平台，再拉绳。");
                 return true;
             }
             if (!IsPast)
             {
                 Play(brokenSound);
-                if (ServiceRegistry.TryGet<IHudService>(out var h)) h.ShowHintText("绳子断了，架子也坏了。过去还能用。");
+                if (ServiceRegistry.TryGet<IHudService>(out var h)) h.ShowBoundaryBlocked("绳子断了，架子也坏了。过去还能用。");
                 return true;
             }
             operating = ownsControl = true; elapsed = 0; creaked = false;

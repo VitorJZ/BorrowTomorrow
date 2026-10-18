@@ -28,7 +28,6 @@ namespace BorrowTomorrow.Player
 
         [Header("系统")]
         public KeyCode[] respawn = { KeyCode.Backspace };
-        public KeyCode[] hint = { KeyCode.H };
         public KeyCode[] objectiveRecords = { KeyCode.Tab };
         public KeyCode[] pause = { KeyCode.Escape };
 

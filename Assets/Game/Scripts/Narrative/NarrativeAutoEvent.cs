@@ -16,12 +16,20 @@ namespace BorrowTomorrow.Narrative
         public float maximumX = 10000f;
         public float minimumY = -10000f;
         public string presentMechanism;
+        [Tooltip("仅在指定的阿黄处于过去态、可见时播放环境回声")]
+        public NarrativeDogEcho requiredVisibleDog;
         private float readySeconds;
         private void Update()
         {
             var session = GameSession.Instance;
             if (session == null || session.State.Phase != GamePhase.Playing
                 || !ServiceRegistry.TryGet<ILevelRoot>(out var room) || room.RoomId != roomId) { readySeconds = 0f; return; }
+            if (requiredVisibleDog != null && !requiredVisibleDog.IsVisibleInPast)
+            {
+                if (ServiceRegistry.TryGet<IDialogueService>(out var activeDialogue) && activeDialogue is DialoguePlayer activePlayer)
+                    activePlayer.CancelAmbient(entry);
+                return;
+            }
             readySeconds += Time.deltaTime;
             if (readySeconds < 0.65f || entry == null || DialoguePlayer.Completed(entry)
                 || !DialoguePlayer.RequirementsMet(entry.requiredFlags)

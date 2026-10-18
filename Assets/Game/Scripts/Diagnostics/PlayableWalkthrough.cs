@@ -143,10 +143,18 @@ namespace BorrowTomorrow.Diagnostics
             yield return Level("L04");
             yield return PressE();
             yield return Until(Free, 12f, "Observe niche without blocking controls");
+            // 竹梯（过去）上腰檐 → 铁梯（现在、树仍是幼苗）上墀头 → 墀头上让树长大，沿长枝到暗格（Docs/18）。
+            Adjust(Boundary.RangeMax);
+            yield return Move(25.2f);
+            yield return ClimbTo(5.07f);
+            yield return Move(18.8f);
+            yield return Settle();
+            Adjust(16.5f);
+            yield return ClimbTo(7.65f);
+            yield return Move(19.6f);
+            yield return Settle();
             Adjust(0f);
-            yield return Move(21.2f);
-            yield return JumpTo(22.8f);
-            yield return Move(26.5f);
+            yield return Move(25.5f);
             Shot("06-L04-tree-to-niche");
             yield return PressE();
             yield return Level("Epilogue");
@@ -265,7 +273,6 @@ namespace BorrowTomorrow.Diagnostics
                 return true;
             }
             public bool RespawnPressedThisFrame => false;
-            public bool HintPressedThisFrame => false;
             public bool ObjectiveHeld => false;
             public bool PausePressedThisFrame => false;
         }

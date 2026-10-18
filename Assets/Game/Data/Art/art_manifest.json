@@ -761,16 +761,6 @@
       ]
     },
     {
-      "name": "UI_HintBubble",
-      "path": "Assets/Game/Art/UI/UI_HintBubble.png",
-      "rect": [
-        148,
-        151,
-        2023,
-        1369
-      ]
-    },
-    {
       "name": "UI_InteractIcon",
       "path": "Assets/Game/Art/UI/UI_InteractIcon.png",
       "rect": [

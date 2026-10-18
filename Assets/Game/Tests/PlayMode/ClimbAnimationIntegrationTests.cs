@@ -28,7 +28,6 @@ namespace BorrowTomorrow.Tests
             public bool ConsumeInteract() => false;
             public float BoundaryNudgeDirection => 0;
             public bool RespawnPressedThisFrame => false;
-            public bool HintPressedThisFrame => false;
             public bool ObjectiveHeld => false;
             public bool PausePressedThisFrame => false;
             public bool JumpHeld => JumpPressedThisFrame;

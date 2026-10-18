@@ -1,0 +1,57 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "data": {
+    "job_id": "7a1cba66fd564276809f57e3e5d291a5",
+    "status": "succeeded",
+    "mode": "PlayMode",
+    "started_unix_ms": 1792305664400,
+    "finished_unix_ms": 1792305679750,
+    "last_update_unix_ms": 1792305679750,
+    "progress": {
+      "completed": 2,
+      "total": 13,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": 1792305675428,
+      "last_finished_test_full_name": "BorrowTomorrow.Tests.L02IndoorSceneTests.LegacyInteriorSaveMigratesToNewSceneAndCoordinates",
+      "last_finished_unix_ms": 1792305679717,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "PlayMode",
+      "summary": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 13.8967514,
+        "resultState": "Passed"
+      },
+      "results": [
+        {
+          "name": "ExteriorDoorLoadsIndependentInterior_PastOnlyObjectsRevealAtTheirAnchors",
+          "fullName": "BorrowTomorrow.Tests.L02IndoorSceneTests.ExteriorDoorLoadsIndependentInterior_PastOnlyObjectsRevealAtTheirAnchors",
+          "state": "Passed",
+          "durationSeconds": 9.5470429,
+          "message": null,
+          "stackTrace": null,
+          "output": "[PlacePlayer诊断] 房间 L02：已实例化玩家于 (23.00, 0.05)（出生点 spawn_sewing_ground）\n[PlacePlayer诊断] 房间 L02Indoor：已实例化玩家于 (3.00, 0.05)（出生点 spawn_sewing_indoor）\n[PlacePlayer诊断] 房间 L02Indoor：已实例化玩家于 (3.00, 0.05)（出生点 cp_L02_indoor）\n[PlacePlayer诊断] 房间 L03：已实例化玩家于 (2.00, 3.05)（出生点 spawn_corridor_in）\n"
+        },
+        {
+          "name": "LegacyInteriorSaveMigratesToNewSceneAndCoordinates",
+          "fullName": "BorrowTomorrow.Tests.L02IndoorSceneTests.LegacyInteriorSaveMigratesToNewSceneAndCoordinates",
+          "state": "Passed",
+          "durationSeconds": 4.2889273,
+          "message": null,
+          "stackTrace": null,
+          "output": "[PlacePlayer诊断] 房间 L02Indoor：已实例化玩家于 (3.00, 0.05)（出生点 cp_L02_indoor）\n"
+        }
+      ]
+    }
+  }
+}

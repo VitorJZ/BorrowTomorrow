@@ -1,0 +1,1 @@
+PASS: actual E interaction in both eras; damaged feedback; pause freezes lowering; bridge lowers; actual player crosses; completion survives level reload.

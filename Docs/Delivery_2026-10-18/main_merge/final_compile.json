@@ -1,0 +1,17 @@
+{
+  "status": "completed",
+  "pipeline_kind": "refresh",
+  "requires_console_validation": false,
+  "console": {
+    "included": true,
+    "cleared": true,
+    "read_success": true,
+    "entries": [],
+    "truncated": false,
+    "collapse": false
+  },
+  "errors": 0,
+  "hasErrors": false,
+  "warnings": 0,
+  "hasWarnings": false
+}

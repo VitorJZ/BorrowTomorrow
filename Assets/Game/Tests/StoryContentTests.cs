@@ -76,13 +76,5 @@ namespace BorrowTomorrow.Tests
             var level = AssetDatabase.LoadAssetAtPath<LevelDefinition>("Assets/Game/Data/Levels/Epilogue_Epilogue.asset");
             CollectionAssert.Contains(level.exitRequiredFlags, StoryFlags.EpilogueSeen);
         }
-        [TestCase("L01", "HintPassed_L01A_Canal", "HintPassed_L01B_Climb")]
-        [TestCase("L03", "HintPassed_L03_Front", "HintPassed_L03_Back")]
-        public void PuzzleHints_AreSplitIntoStages(string levelId, string first, string second)
-        {
-            var level = AssetDatabase.FindAssets("t:LevelDefinition").Select(g => AssetDatabase.LoadAssetAtPath<LevelDefinition>(AssetDatabase.GUIDToAssetPath(g)))
-                .Single(l => l.levelId == levelId);
-            CollectionAssert.AreEqual(new[] { first, second }, level.hintGroups.Select(h => h.stageKey).ToArray());
-        }
     }
 }

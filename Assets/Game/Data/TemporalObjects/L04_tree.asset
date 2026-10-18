@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: L04_tree
   m_EditorClassIdentifier: 
   objectId: L04_tree
-  anchorX: 14.5
+  anchorX: 14.3
   pastState:
     stateId: sapling
     sprite: {fileID: 0}
     canStand: 0
     blocksMovement: 0
   presentState:
-    stateId: adult_tree
+    stateId: adult_tree_branch
     sprite: {fileID: 0}
     canStand: 1
-    blocksMovement: 0
+    blocksMovement: 1
   safetyPolicy: 3
   anchorHysteresis: 0.05
   switchSfxId: temporal_switch

@@ -33,7 +33,6 @@ namespace BorrowTomorrow.Tests
             public bool ConsumeInteract()
             {if(!InteractPressedThisFrame||consumed==Time.frameCount)return false;consumed=Time.frameCount;return true;}
             public bool RespawnPressedThisFrame => false;
-            public bool HintPressedThisFrame => false;
             public bool ObjectiveHeld => false;
             public bool PausePressedThisFrame => false;
         }

@@ -138,8 +138,10 @@ namespace BorrowTomorrow.UI
             if (keepClose && heldAction.layers != null && heldAction.layers.Length > 0) RenderLayers(heldAction, 1);
             else if (image) foreach (var art in stagedArt)
             {
-                if (art != null && art.beforeImage == entry.illustration && art.stageBackground != null)
-                { RenderLayers(art, 0); break; }
+                // Standalone after-lines also need the anchored sleeves and resting hand.
+                if (art != null && art.stageBackground != null &&
+                    (art.beforeImage == entry.illustration || art.afterImage == entry.illustration))
+                { RenderLayers(art, art.afterImage == entry.illustration ? 1 : 0); break; }
             }
             actionPrompt.gameObject.SetActive(false);
             bool isTitle = entry.centeredTitle;

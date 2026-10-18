@@ -12,7 +12,7 @@ namespace BorrowTomorrow.Narrative
         private bool busy;
         public string InteractId => "tidy_clothes";
         public string InteractPrompt => "整理衣物";
-        public bool CanInteract => !busy && GameSession.Instance != null && !GameSession.Instance.StoryFlags.HasFlag("ClothTidyDone");
+        public bool CanInteract => isActiveAndEnabled && !busy && GameSession.Instance != null && !GameSession.Instance.StoryFlags.HasFlag("ClothTidyDone");
         private void Start() { if (!CanInteract && cloth != null) ShowCompleted(); }
         private void ShowCompleted()
         {

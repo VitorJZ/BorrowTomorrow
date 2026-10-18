@@ -1,0 +1,65 @@
+[
+  {
+    "path": "Assets/Game/Art/SampleV1/02_剧情插画_Illustrations/ILL_L02_Cuff_Before_2304x1728.png",
+    "width": 2304,
+    "height": 1728,
+    "alpha": true,
+    "sha256": "22aa822729c1c7f4025e808d1534ad4ba29b7baa621b111754b29eb8307fb424"
+  },
+  {
+    "path": "Assets/Game/Art/SampleV1/02_剧情插画_Illustrations/ILL_L02_Cuff_After_2304x1728.png",
+    "width": 2304,
+    "height": 1728,
+    "alpha": true,
+    "sha256": "c0a2f1a0645305824cf379ad445edeef174ad031bde83f816ae95f1cbb7b7549"
+  },
+  {
+    "path": "Assets/Game/Art/SampleV1/03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_03_SleeveBefore_2304x1728.png",
+    "width": 2304,
+    "height": 1728,
+    "alpha": true,
+    "sha256": "f13d6c927f2262b0a65e594e4cb775ae4ea85947db2126d15d88563b8ea7db37"
+  },
+  {
+    "path": "Assets/Game/Art/SampleV1/03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_04_SleeveAfter_2304x1728.png",
+    "width": 2304,
+    "height": 1728,
+    "alpha": true,
+    "sha256": "4ffd68ba4f8317927d40206a49442e1d7a16c312f7d5db1bd051f35e3cc78f15"
+  },
+  {
+    "path": "Assets/Game/Art/SampleV1/03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_Hand_00_2304x1728.png",
+    "width": 2304,
+    "height": 1728,
+    "alpha": true,
+    "sha256": "c6377e0e3fea2faf722d8d2e610f68a2a94a5eccbee6c123bb32d56faca31afe"
+  },
+  {
+    "path": "Assets/Game/Art/SampleV1/03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_Hand_01_2304x1728.png",
+    "width": 2304,
+    "height": 1728,
+    "alpha": true,
+    "sha256": "087b911a8cfd38dadb28b6f8e1ab9671331cabb7e19118c2191532b5b47efce6"
+  },
+  {
+    "path": "Assets/Game/Art/SampleV1/03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_Hand_02_2304x1728.png",
+    "width": 2304,
+    "height": 1728,
+    "alpha": true,
+    "sha256": "4efa41a9521687a8e2088fe0ae8ff7f938d6e0674a2fc0ddc25a2c24302a1fc5"
+  },
+  {
+    "path": "Assets/Game/Art/SampleV1/03_动作分层_Actions/L02_Cuff/ACT_L02_Cuff_Hand_03_2304x1728.png",
+    "width": 2304,
+    "height": 1728,
+    "alpha": true,
+    "sha256": "39a0720aa4e2919ead75f90a6aadf181a22279d51e3e20c3e562b7f02259ebdb"
+  },
+  {
+    "path": "Assets/Game/Art/Illustrations/ILL_UNIFORM_CUFF.jpg",
+    "width": 2304,
+    "height": 1728,
+    "alpha": false,
+    "sha256": "f9c8df029af9443aaa807019d738eeb4bae6755f4640e5e34c18e934d88f06ff"
+  }
+]

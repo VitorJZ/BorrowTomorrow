@@ -27,10 +27,6 @@ namespace BorrowTomorrow.EditorTools
             public float seconds, zoom;
             public float[] cover; public Color coverColor; public Vector2 slide, focus;
         }
-        [Serializable] private class Hints { public HintSpec[] stages; }
-        [Serializable] private class HintSpec { public string level, room, stage, h1, h2, h3; public float minX, maxX, minY; }
-        private const string HintSource = "Assets/Game/Data/Narrative/hints_v14.json";
-        private static HintSpec[] LoadHints() => JsonUtility.FromJson<Hints>("{\"stages\":" + File.ReadAllText(HintSource) + "}").stages;
         private const string Source = "Assets/Game/Data/Narrative/story_v13.json";
         private const string Target = "Assets/Game/Data/Dialogue/StoryV13";
         private const string ActionTarget = "Assets/Game/Data/Narrative/Actions";
@@ -68,37 +64,6 @@ namespace BorrowTomorrow.EditorTools
             AssetDatabase.SaveAssets();
             return map;
         }
-        // Three-level puzzle hints (spec 1.4 §6.3); stage order inside a level follows the JSON order.
-        public static void ApplyHints()
-        {
-            foreach(var level in LoadHints().GroupBy(h=>h.level))
-            {
-                string path=AssetDatabase.FindAssets("t:LevelDefinition",new[]{"Assets/Game/Data/Levels"}).Select(AssetDatabase.GUIDToAssetPath)
-                    .FirstOrDefault(p=>AssetDatabase.LoadAssetAtPath<LevelDefinition>(p).levelId==level.Key);
-                if(path==null)throw new InvalidOperationException("Missing LevelDefinition: "+level.Key);
-                var def=AssetDatabase.LoadAssetAtPath<LevelDefinition>(path);
-                def.hintGroups=level.Select(h=>new HintGroup{stageKey=h.stage,hintLevel1=h.h1,hintLevel2=h.h2,hintLevel3=h.h3}).ToArray();
-                EditorUtility.SetDirty(def);
-            }
-            AssetDatabase.SaveAssets();
-        }
-        private static void InstallHintMarkers(Scene scene)
-        {
-            var hints=LoadHints();
-            foreach(var room in All<LevelRoot>(scene))
-            {
-                Transform old=room.transform.Find("HintStages");if(old!=null)UnityEngine.Object.DestroyImmediate(old.gameObject);
-                var stages=hints.Where(h=>h.room==room.RoomId).ToArray();
-                if(stages.Length==0)continue;
-                var parent=new GameObject("HintStages");parent.transform.SetParent(room.transform,false);
-                foreach(var h in stages)
-                {
-                    var go=new GameObject("Stage_"+h.stage);go.transform.SetParent(parent.transform,false);
-                    var marker=go.AddComponent<HintStageMarker>();
-                    marker.roomId=h.room;marker.stageFlag=h.stage;marker.minimumX=h.minX;marker.maximumX=h.maxX;marker.minimumY=h.minY;
-                }
-            }
-        }
         public static NarrativeAction[] ImportActions()
         {
             Directory.CreateDirectory(ActionTarget);
@@ -114,7 +79,9 @@ namespace BorrowTomorrow.EditorTools
                 if(a==null){a=ScriptableObject.CreateInstance<NarrativeAction>();AssetDatabase.CreateAsset(a,path);}
                 a.actionId=s.id;a.beforeEntryId=s.before;a.confirmBefore=s.confirmBefore;a.confirmAfter=s.confirmAfter;
                 a.seconds=s.seconds>0?s.seconds:1.2f;a.sfxId=s.sfx;a.gesture=s.gesture;
-                a.afterImage=IllustrationByKey(s.image);a.beforeImage=IllustrationByKey(s.beforeImage);
+                // Keep the staged quilt close-ups aligned with its red-sleeved hand layers.
+                bool stagedSmooth=s.id=="ACT_EPI_SMOOTH" && a.stageBackground!=null;
+                if(!stagedSmooth){a.afterImage=IllustrationByKey(s.image);a.beforeImage=IllustrationByKey(s.beforeImage);}
                 if(a.afterImage==null)throw new InvalidOperationException("Missing action illustration: "+s.image);
                 a.coverRect=s.cover!=null&&s.cover.Length==4?new Rect(s.cover[0],s.cover[1],s.cover[2],s.cover[3]):default;a.coverColor=s.coverColor;a.coverSlide=s.slide;
                 a.zoom=s.zoom>0?s.zoom:1f;a.focus=s.focus==Vector2.zero?new Vector2(.5f,.5f):s.focus;
@@ -165,7 +132,13 @@ namespace BorrowTomorrow.EditorTools
             if(id.StartsWith("DLG_L04_BOX"))key="ILL_HOSPITAL_HOLD";
             if(id=="DLG_EPI_02")key="ILL_EPILOGUE_BOX_OPEN";
             if(id=="DLG_EPI_03"||id=="DLG_EPI_04")key="ILL_EPILOGUE_LETTER";
-            if(id.StartsWith("DLG_EPI_") && int.Parse(id.Substring(id.Length-2))>=5)key="ILL_EPILOGUE_QUILT_LAP";
+            if(id.StartsWith("DLG_EPI_") && int.Parse(id.Substring(id.Length-2))>=5)
+            {
+                var smooth=AssetDatabase.LoadAssetAtPath<NarrativeAction>(ActionTarget+"/ACT_EPI_SMOOTH.asset");
+                if(smooth!=null && smooth.stageBackground!=null)
+                    return int.Parse(id.Substring(id.Length-2))<7?smooth.beforeImage:smooth.afterImage;
+                key="ILL_EPILOGUE_QUILT_LAP";
+            }
             return IllustrationByKey(key);
         }
         private static Texture2D IllustrationByKey(string key)
@@ -177,7 +150,6 @@ namespace BorrowTomorrow.EditorTools
         public static void Install()
         {
             var map=ImportDialogue();
-            ApplyHints();
             foreach(string name in new[]{"Bootstrap","L00_Gate","L01_Courtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
             {
                 Scene scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/"+name+".scene");
@@ -187,6 +159,7 @@ namespace BorrowTomorrow.EditorTools
             AssetDatabase.SaveAssets();
             EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");
             if(File.Exists("Assets/Game/Data/Art/enabled.json"))ArtInstaller.Install();
+            L02IndoorSceneInstaller.Install();
             Debug.Log("[NarrativeInstaller] Full v1.4 narrative installed without rebuilding existing puzzle geometry.");
         }
         public static void InstallAndBuild()
@@ -215,9 +188,21 @@ namespace BorrowTomorrow.EditorTools
             {
                 var library=All<DialogueLibrary>(scene).First();
                 Objects(library,"entries",map.Values.Select(AssetDatabase.LoadAssetAtPath<DialogueEntry>).Cast<UnityEngine.Object>().ToArray());
-                Objects(library,"actions",ImportActions().Cast<UnityEngine.Object>().ToArray());
+                var actions=ImportActions();
+                Objects(library,"actions",actions.Cast<UnityEngine.Object>().ToArray());
                 var ui=All<HudService>(scene).First();
                 var presenter=ui.GetComponent<NarrativePresentation>()??ui.gameObject.AddComponent<NarrativePresentation>();
+                presenter.stagedArt=actions.Where(a=>a.stageBackground!=null).ToArray();
+                presenter.clothPatchMaterial=AssetDatabase.LoadAssetAtPath<Material>("Assets/Game/Data/Art/SampleClothPatch.mat");
+                if(presenter.clothPatchMaterial==null)
+                {
+                    var shader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/Game/Art/SampleV1/SoftClothPatch.shader");
+                    if(shader!=null)
+                    {
+                        presenter.clothPatchMaterial=new Material(shader);
+                        AssetDatabase.CreateAsset(presenter.clothPatchMaterial,"Assets/Game/Data/Art/SampleClothPatch.mat");
+                    }
+                }
                 presenter.font=AssetDatabase.LoadAssetAtPath<Font>("Assets/Game/Art/UI/Fonts/PlaceholderChinese.ttf");
                 var journal=ui.GetComponent<NarrativeJournal>()??ui.gameObject.AddComponent<NarrativeJournal>();journal.font=presenter.font;
                 if(ui.GetComponent<StoryRoomFlow>()==null)ui.gameObject.AddComponent<StoryRoomFlow>();
@@ -239,11 +224,12 @@ namespace BorrowTomorrow.EditorTools
             {
                 case "L00_Gate":
                     Auto(ctx,main,"DLG_L00_INTRO_01");
-                    Auto(ctx,main,"DLG_L00_DOG_01",13.5f,false);
+                    var dogEcho=Auto(ctx,main,"DLG_L00_DOG_01",13.5f,false);
                     var dogObject=new GameObject("AHuangEcho");dogObject.transform.SetParent(ctx.Content,false);dogObject.transform.position=new Vector3(14,.12f,0);
                     var dog=dogObject.AddComponent<NarrativeDogEcho>();ArtDeliveryInstaller.ConfigureDog(dog);
-                    var notice=Investigate(ctx,"notice","查看通知",new Vector2(6,.9f),"DLG_L00_NOTICE_01",true);
-                    notice.gameObject.AddComponent<PresentOnlyInvestigation>().anchorX=6f;
+                    dogEcho.requiredVisibleDog=dog;dogEcho.maximumX=dog.anchorX+2f;
+                    var notice=Investigate(ctx,"notice","查看通知",new Vector2(12.5f,.9f),"DLG_L00_NOTICE_01",true);
+                    notice.gameObject.AddComponent<PresentOnlyInvestigation>().anchorX=12.5f;
                     break;
                 case "L01_Courtyard":
                     var treeRoom=rooms.First(r=>r.RoomId=="L01B");var treeCtx=Context(treeRoom,map);
@@ -261,9 +247,9 @@ namespace BorrowTomorrow.EditorTools
                 case "L04_Attic":
                     // Auto-play on the window sill and the E investigation share one completion flag (spec 3.11).
                     Auto(ctx,main,"DLG_L04_LOOK_01");
-                    Investigate(ctx,"window_boards","查看窗边木板",new Vector2(20.7f,3.6f),"DLG_L04_LOOK_01",true);
-                    var grown=Auto(ctx,main,"DLG_L04_TREE_01",-10000,false);grown.presentMechanism="L04_tree";
-                    Investigate(ctx,"niche","拨开木板",new Vector2(26.5f,4.95f),"DLG_L04_BOX_01",false);
+                    Investigate(ctx,"window_boards","查看窗边木板",new Vector2(20.9f,L04FinaleInstaller.Sill.z+.8f),"DLG_L04_LOOK_01",true);
+                    var grown=Auto(ctx,main,"DLG_L04_TREE_01",-10000,false);grown.presentMechanism="L04_tree";grown.minimumY=L04FinaleInstaller.Corbel.z-1.6f;
+                    Investigate(ctx,"niche","拨开木板",L04FinaleInstaller.Niche,"DLG_L04_BOX_01",false);
                     LevelLayouts.SetField(main.GetComponent<LevelDirector>(),"completeLevelOnFlag","BoxLocated");
                     break;
                 case "Epilogue":
@@ -271,7 +257,6 @@ namespace BorrowTomorrow.EditorTools
                     Auto(ctx,main,"DLG_EPI_01");
                     break;
             }
-            InstallHintMarkers(scene);
         }
         private static LevelLayouts.RoomContext Context(LevelRoot room,Dictionary<string,string> map)
         {

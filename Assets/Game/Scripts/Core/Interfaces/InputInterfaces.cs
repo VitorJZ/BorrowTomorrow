@@ -33,9 +33,6 @@ namespace BorrowTomorrow.Core.Interfaces
         /// <summary>本帧请求恢复最近检查点（Backspace，需经确认，策划 5.1/4.6）。</summary>
         bool RespawnPressedThisFrame { get; }
 
-        /// <summary>本帧请求提示（H，策划 5.1）。</summary>
-        bool HintPressedThisFrame { get; }
-
         /// <summary>按住 Tab 查看当前目标与已听录音的文字记录（策划 5.1）。</summary>
         bool ObjectiveHeld { get; }
 

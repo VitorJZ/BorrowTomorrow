@@ -113,13 +113,6 @@ namespace BorrowTomorrow.EditorTools
                 Ref(pair.Item1,clip);
             }
             so.ApplyModifiedPropertiesWithoutUndo();
-            // Update the actual hint assets as well as the JSON source.
-            var definition=room.Definition;
-            foreach(var hint in definition.hintGroups??Array.Empty<HintGroup>())
-                if(hint.stageKey=="HintPassed_L01A_Canal")
-                {hint.hintLevel1="左岸有一套放桥的摇柄装置。";hint.hintLevel2="现在的装置已经损坏，过去还能使用。";
-                 hint.hintLevel3="把边界移到木桥右侧，回到左岸摇柄旁按 E，放下木桥再过渠。";}
-            EditorUtility.SetDirty(definition);
         }
 
         [MenuItem("BorrowTomorrow/关卡/接入水渠摇柄放桥")]

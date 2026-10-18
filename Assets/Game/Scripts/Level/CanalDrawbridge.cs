@@ -99,7 +99,7 @@ namespace BorrowTomorrow.Level
             if (!CanInteract || session == null || !session.State.IsPlayerControlAllowed) return false;
             if (!ServiceRegistry.TryGet<IPlayerContext>(out var player) || !player.IsGrounded || player.IsClimbingLadder)
             {
-                if (ServiceRegistry.TryGet<IHudService>(out var hud)) hud.ShowHintText("先站稳，再操作摇柄。");
+                if (ServiceRegistry.TryGet<IHudService>(out var hud)) hud.ShowBoundaryBlocked("先站稳，再操作摇柄。");
                 return true;
             }
             session.State.SetSubState(PlayingSubState.Interacting);
@@ -118,7 +118,7 @@ namespace BorrowTomorrow.Level
                 Play(jammed);
                 if (rust != null) rust.Emit(14);
                 if (ServiceRegistry.TryGet<IHudService>(out var hud))
-                    hud.ShowHintText("握把断了，转轴也卡死了。");
+                    hud.ShowBoundaryBlocked("握把断了，转轴也卡死了。");
             }
             return true;
         }

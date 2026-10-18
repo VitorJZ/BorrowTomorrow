@@ -22,5 +22,4 @@ MonoBehaviour:
   spawnId: spawn_epilogue
   exitRequiredFlags:
   - EpilogueSeen
-  exitLockedHint: "\u5148\u6253\u5F00\u94C1\u76D2\uFF0C\u8BFB\u5B8C\u7559\u7ED9\u6653\u6653\u7684\u4FE1\u3002"
-  hintGroups: []
+  exitLockedHint: "\u5148\u966A\u6653\u6653\u770B\u770B\u76D2\u5B50\u91CC\u7684\u4E1C\u897F\u3002"

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d11685b2dbe2a046a1cbc2e979e8346, type: 3}
+  m_Name: L02Indoor_L02_SewingRoom
+  m_EditorClassIdentifier: 
+  levelId: L02Indoor
+  sceneName: L02_SewingRoom
+  displayName: "\u7F1D\u7EAB\u95F4"
+  initialObjective: "\u67E5\u770B\u7F1D\u7EAB\u684C\u4E0A\u7684\u6821\u670D\u3002"
+  boundaryMin: 0
+  boundaryMax: 18
+  initialBoundary: 0
+  spawnId: spawn_sewing_indoor
+  exitRequiredFlags:
+  - UniformRead
+  exitLockedHint: "\u5148\u770B\u770B\u7F1D\u7EAB\u684C\u4E0A\u7684\u65E7\u6821\u670D\u5427\u3002"

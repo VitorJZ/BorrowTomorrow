@@ -38,14 +38,6 @@ namespace BorrowTomorrow.EditorTools
             Block("MasonryCore",new Vector2(24.10f,3.825f),new Vector2(2.10f,1.65f));
             Block("LeftBrokenPier",new Vector2(23.40f,4.825f),new Vector2(.60f,.35f));
             Block("RightBrokenPier",new Vector2(24.75f,5.025f),new Vector2(.80f,.75f));
-            foreach(var hint in room.Definition.hintGroups)
-                if(hint.stageKey=="HintPassed_L03_Back")
-                {
-                    hint.hintLevel1="前方的回廊被塌落砖墙堵住了。";
-                    hint.hintLevel2="石门槛不会变化，可以在这里调整时间。";
-                    hint.hintLevel3="站在石门槛上，把边界推到砖墙右侧，恢复过去尚未坍塌的通道。";
-                }
-            EditorUtility.SetDirty(room.Definition);
         }
 
         [MenuItem("BorrowTomorrow/关卡/回廊柜子替换为塌落砖墙")]
