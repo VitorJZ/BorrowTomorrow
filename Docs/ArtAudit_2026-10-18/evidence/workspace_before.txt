@@ -1,0 +1,121 @@
+D  Assets/Game/Data/Dialogue/D_attic_tree.asset
+D  Assets/Game/Data/Dialogue/D_attic_tree.asset.meta
+D  Assets/Game/Data/Dialogue/D_bridge_self_talk.asset
+D  Assets/Game/Data/Dialogue/D_bridge_self_talk.asset.meta
+D  Assets/Game/Data/Dialogue/D_compartment_blue.asset
+D  Assets/Game/Data/Dialogue/D_compartment_blue.asset.meta
+D  Assets/Game/Data/Dialogue/D_compartment_reply.asset
+D  Assets/Game/Data/Dialogue/D_compartment_reply.asset.meta
+D  Assets/Game/Data/Dialogue/D_compartment_touch.asset
+D  Assets/Game/Data/Dialogue/D_compartment_touch.asset.meta
+D  Assets/Game/Data/Dialogue/D_compartment_view.asset
+D  Assets/Game/Data/Dialogue/D_compartment_view.asset.meta
+D  Assets/Game/Data/Dialogue/D_epilogue_arrival.asset
+D  Assets/Game/Data/Dialogue/D_epilogue_arrival.asset.meta
+D  Assets/Game/Data/Dialogue/D_epilogue_letter.asset
+D  Assets/Game/Data/Dialogue/D_epilogue_letter.asset.meta
+D  Assets/Game/Data/Dialogue/D_epilogue_letter2.asset
+D  Assets/Game/Data/Dialogue/D_epilogue_letter2.asset.meta
+D  Assets/Game/Data/Dialogue/D_epilogue_letter3.asset
+D  Assets/Game/Data/Dialogue/D_epilogue_letter3.asset.meta
+D  Assets/Game/Data/Dialogue/D_epilogue_letter4.asset
+D  Assets/Game/Data/Dialogue/D_epilogue_letter4.asset.meta
+D  Assets/Game/Data/Dialogue/D_epilogue_quilt.asset
+D  Assets/Game/Data/Dialogue/D_epilogue_quilt.asset.meta
+D  Assets/Game/Data/Dialogue/D_epilogue_real_box.asset
+D  Assets/Game/Data/Dialogue/D_epilogue_real_box.asset.meta
+D  Assets/Game/Data/Dialogue/D_epilogue_tomorrow.asset
+D  Assets/Game/Data/Dialogue/D_epilogue_tomorrow.asset.meta
+D  Assets/Game/Data/Dialogue/D_epilogue_who.asset
+D  Assets/Game/Data/Dialogue/D_epilogue_who.asset.meta
+D  Assets/Game/Data/Dialogue/D_epilogue_xiaoxiao.asset
+D  Assets/Game/Data/Dialogue/D_epilogue_xiaoxiao.asset.meta
+D  Assets/Game/Data/Dialogue/D_epilogue_yes.asset
+D  Assets/Game/Data/Dialogue/D_epilogue_yes.asset.meta
+D  Assets/Game/Data/Dialogue/D_gate_self_talk.asset
+D  Assets/Game/Data/Dialogue/D_gate_self_talk.asset.meta
+D  Assets/Game/Data/Dialogue/D_intro_box.asset
+D  Assets/Game/Data/Dialogue/D_intro_box.asset.meta
+D  Assets/Game/Data/Dialogue/D_intro_far.asset
+D  Assets/Game/Data/Dialogue/D_intro_far.asset.meta
+D  Assets/Game/Data/Dialogue/D_intro_kid.asset
+D  Assets/Game/Data/Dialogue/D_intro_kid.asset.meta
+D  Assets/Game/Data/Dialogue/D_ledger_check.asset
+D  Assets/Game/Data/Dialogue/D_ledger_check.asset.meta
+D  Assets/Game/Data/Dialogue/D_photo_back.asset
+D  Assets/Game/Data/Dialogue/D_photo_back.asset.meta
+D  Assets/Game/Data/Dialogue/D_photo_front.asset
+D  Assets/Game/Data/Dialogue/D_photo_front.asset.meta
+D  Assets/Game/Data/Dialogue/D_photo_hands.asset
+D  Assets/Game/Data/Dialogue/D_photo_hands.asset.meta
+D  Assets/Game/Data/Dialogue/D_photo_question.asset
+D  Assets/Game/Data/Dialogue/D_photo_question.asset.meta
+D  Assets/Game/Data/Dialogue/D_photo_tape.asset
+D  Assets/Game/Data/Dialogue/D_photo_tape.asset.meta
+D  Assets/Game/Data/Dialogue/D_photo_voice.asset
+D  Assets/Game/Data/Dialogue/D_photo_voice.asset.meta
+D  Assets/Game/Data/Dialogue/D_tree_gran.asset
+D  Assets/Game/Data/Dialogue/D_tree_gran.asset.meta
+D  Assets/Game/Data/Dialogue/D_tree_kid.asset
+D  Assets/Game/Data/Dialogue/D_tree_kid.asset.meta
+D  Assets/Game/Data/Dialogue/D_tree_marks.asset
+D  Assets/Game/Data/Dialogue/D_tree_marks.asset.meta
+D  Assets/Game/Data/Dialogue/D_uniform_gran.asset
+D  Assets/Game/Data/Dialogue/D_uniform_gran.asset.meta
+D  Assets/Game/Data/Dialogue/D_uniform_kid.asset
+D  Assets/Game/Data/Dialogue/D_uniform_kid.asset.meta
+D  Assets/Game/Data/Dialogue/D_uniform_self.asset
+D  Assets/Game/Data/Dialogue/D_uniform_self.asset.meta
+ M Assets/Game/Data/Dialogue/StoryV13/DLG_EPI_08.asset
+ M Assets/Game/Data/Dialogue/StoryV13/DLG_L00_DOG_01.asset
+ M Assets/Game/Data/Dialogue/StoryV13/DLG_L00_INTRO_03.asset
+ M Assets/Game/Data/Dialogue/StoryV13/DLG_L00_NOTICE_01.asset
+ M Assets/Game/Data/Dialogue/StoryV13/DLG_L01B_TREE_03.asset
+ M Assets/Game/Data/Dialogue/StoryV13/DLG_L02_LEDGER_01.asset
+ M Assets/Game/Data/Dialogue/StoryV13/DLG_L02_UNIFORM_04.asset
+ M Assets/Game/Data/Dialogue/StoryV13/DLG_L03_REVEAL_07.asset
+ M Assets/Game/Data/Dialogue/StoryV13/DLG_L04_BOX_01.asset
+ M Assets/Game/Data/Dialogue/StoryV13/DLG_L04_BOX_03.asset
+ M Assets/Game/Data/Dialogue/StoryV13/DLG_L04_LOOK_01.asset
+ M Assets/Game/Data/Dialogue/StoryV13/DLG_L04_TREE_01.asset
+ M Assets/Game/Data/Levels/L00_L00_Gate.asset
+ M Assets/Game/Data/Levels/L01_L01_Courtyard.asset
+ M Assets/Game/Data/Levels/L02_L02_Sewing.asset
+ M Assets/Game/Data/Levels/L03_L03_Corridor.asset
+ M Assets/Game/Data/Levels/L04_L04_Attic.asset
+ M Assets/Game/Data/Narrative/story_v13.json
+ M Assets/Game/Scenes/Bootstrap.scene
+ M Assets/Game/Scenes/Epilogue.scene
+ M Assets/Game/Scenes/L00_Gate.scene
+ M Assets/Game/Scenes/L01_Courtyard.scene
+ M Assets/Game/Scenes/L02_Sewing.scene
+ M Assets/Game/Scenes/L03_Corridor.scene
+ M Assets/Game/Scenes/L04_Attic.scene
+ M Assets/Game/Scenes/MainMenu.scene
+ M Assets/Game/Scripts/EditorTools/LevelLayouts.cs
+ M Assets/Game/Scripts/EditorTools/NarrativeInstaller.cs
+ M Assets/Game/Scripts/EditorTools/ProjectScaffolder.cs
+D  Assets/Game/Scripts/EditorTools/StoryContent.json
+D  Assets/Game/Scripts/EditorTools/StoryContent.json.meta
+D  Assets/Game/Scripts/EditorTools/StoryContentInstaller.cs
+D  Assets/Game/Scripts/EditorTools/StoryContentInstaller.cs.meta
+ M Assets/Game/Scripts/Narrative/DialogueLibrary.cs
+ M Assets/Game/Scripts/Narrative/DialoguePlayer.cs
+ M Assets/Game/Scripts/UI/NarrativePresentation.cs
+D  Assets/Game/Scripts/UI/StoryPresentation.cs
+D  Assets/Game/Scripts/UI/StoryPresentation.cs.meta
+ M Assets/Game/Tests/DialogueLifecycleTests.cs
+ M Assets/Game/Tests/PlayMode/BootToGameSmokeTests.cs
+ M Assets/Game/Tests/StoryContentTests.cs
+ M Packages/manifest.json
+ M Packages/packages-lock.json
+ M ProjectSettings/EditorSettings.asset
+?? Assets/Game/Data/Narrative/Actions.meta
+?? Assets/Game/Data/Narrative/Actions/
+?? Assets/Game/Data/Narrative/hints_v14.json
+?? Assets/Game/Data/Narrative/hints_v14.json.meta
+?? Assets/Game/Scripts/Narrative/HintStageMarker.cs
+?? Assets/Game/Scripts/Narrative/HintStageMarker.cs.meta
+?? Assets/Game/Scripts/Narrative/NarrativeAction.cs
+?? Assets/Game/Scripts/Narrative/NarrativeAction.cs.meta
+?? Docs/ArtAudit_2026-10-18/

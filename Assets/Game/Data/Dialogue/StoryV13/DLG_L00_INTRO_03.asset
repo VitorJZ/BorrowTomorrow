@@ -20,8 +20,7 @@ MonoBehaviour:
   blackBackground: 0
   nextId: 
   requiredFlags: []
-  setFlags:
-  - IntroPlayed
+  setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
   source: Self

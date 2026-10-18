@@ -1,0 +1,1096 @@
+[
+  {
+    "path": "Assets/Game/Art/Anchors/Anchor_Fabric.jpg",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "30002bc3b1e65d9292c478586504868e19f01bef3220a634b48b107f725c8354"
+  },
+  {
+    "path": "Assets/Game/Art/Anchors/Anchor_Grandma.jpg",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "93f3400dedc97741cfec2f8841bbc2ad3e913391067652f668355453bf3f2b41"
+  },
+  {
+    "path": "Assets/Game/Art/Anchors/Anchor_Props.jpg",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "d444f873e9c62b8c49a4d46a16791c39681ba9556f9891efa0e43f43748d254a"
+  },
+  {
+    "path": "Assets/Game/Art/Anchors/Anchor_Style.jpg",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "00e91775c22bf6ff2503b1d88ef111192efa5a7fa41889dd383b16de8e05e987"
+  },
+  {
+    "path": "Assets/Game/Art/Characters/AHuang_SpriteSheet.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "5d481a77e28efa0aeec0e4158d62f937a82374f390f61db263111fb0fe37bdaa"
+  },
+  {
+    "path": "Assets/Game/Art/Characters/Hero_v2/Hero_Climb_8f_v2.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "sha256": "4147d0ec1aad8963811f6e9498644f4593aec9c8f67ffdf5dea707b2cb028853"
+  },
+  {
+    "path": "Assets/Game/Art/Characters/Hero_v2/Hero_Idle_8f_v2.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "sha256": "fab441780b8e48d939f778178983436e4dd52f9e931f44b2c6ff594760988076"
+  },
+  {
+    "path": "Assets/Game/Art/Characters/Hero_v2/Hero_Interact_8f_v2.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "sha256": "79cbc2a3f8b1aa6c0f2837a8ac066c3bd30059936dba2567bdc69f3e46e629d9"
+  },
+  {
+    "path": "Assets/Game/Art/Characters/Hero_v2/Hero_JumpLand_12f_v2.png",
+    "size": [
+      1448,
+      1086
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "8e802a4b29ae1209eef640043d557f3f87a7bd2a097a5e927c4dd73dc250c754"
+  },
+  {
+    "path": "Assets/Game/Art/Characters/Hero_v2/Hero_Mantle_12f_v2.png",
+    "size": [
+      1224,
+      1285
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "4c861f76526dd16388e2e377ed58f1e263e8a76878b8af78a5eab9491f648231"
+  },
+  {
+    "path": "Assets/Game/Art/Characters/Hero_v2/Hero_PickUp_12f_v2.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "sha256": "c96e92a7f4f9ab0013bb0c3c770c4c0622efbff8db40e6792eeab536e50cb9f8"
+  },
+  {
+    "path": "Assets/Game/Art/Characters/Hero_v2/Hero_Walk_12f_v2.png",
+    "size": [
+      1448,
+      1086
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "c133dcb7b29b80684df06bac7905ddeaad5955fa5d733bdcd4d6199e76b21684"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_Epilogue_Ward.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "aaf3c0fde19a982799c5f6c66137e965368b84daf90a88ef0b095925b471876b"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L00_Gate_1994.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "f7d696a6b1583b0243fd8afb13c65cf1835daf1394e7797aaa994819e56bbf04"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L00_Gate_2024.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "58baba69dbcba6e42afa99f9e7826aa6c957661e15245e86bddd88e2caec7266"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L01A_Canal_1994.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "6b7ac1a6927b28b0098fa51a155c93b614c795a869fa941cc495e80f18b8a767"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L01A_Canal_2024.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "63c6c5eb99aedfa5807265fe1e87c85863c522fcb2c9759025913ad2d2beb30e"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L01B_Tree_1994.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "cf96b3b7688a12cfcbe87616f36c0be3af64b9b8ad0f9446ab16720f9c3afdd7"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L01B_Tree_2024.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "a24bfef46c69679a5b2df53bb50a42795b432222dfa131a81ae1bcba012b9d21"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L02_Room_1994.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "4d50a4d121fe60797b5a91dad6c9e00632148db615d30401b5d0875a8b424825"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L02_Room_2024.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "f4935adb651908cb1c2f40d9af5780856c0fcf04d41c51fc1934bdaec5b57d8e"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L02_Yard_1994.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "da2f61e85e83a32e61da9d7d8739321b014526fc5aed9a336693f337f03bb764"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L02_Yard_2024.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "1487e871ba1606cac943a5eb3701f241152e886513a6418ab262e39c7c89e50c"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L03_Corridor_1994.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "abc5d2a703df4fc9924719f0c9e0ddcf59faa943b5a4c3962f9c7a1b91b852ef"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L03_Corridor_2024.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "28e8f481dddee3b940f6a2a5032384e0a400d0d62cf816dda576bfe0a4596621"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L04_Attic_1994.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "5b49615c1163b897c3d9b5e92909e25a930be2a9330f1dc914f78dec36d86a7a"
+  },
+  {
+    "path": "Assets/Game/Art/Environment/BG_L04_Attic_2024.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "bb0968d0b8aef8f5011013b5993b67b43e1207652ea57020dbea672e484269b6"
+  },
+  {
+    "path": "Assets/Game/Art/Illustrations/ILL_BOX_IN_NICHE.jpg",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "623cb44f110d1e7081d3572fc1bddf82826a9a4f06b980139bbb51f7c42bc915"
+  },
+  {
+    "path": "Assets/Game/Art/Illustrations/ILL_EPILOGUE_BOX_OPEN.jpg",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "f124514fc1064b8ae56d33d5a7545e0f0f352ea4b703ad9db72d330edbb760de"
+  },
+  {
+    "path": "Assets/Game/Art/Illustrations/ILL_EPILOGUE_LETTER.jpg",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "2111dc2aa29e10764ab340503fbcf75d7680d70d4d67404e257a6b0b44e281e2"
+  },
+  {
+    "path": "Assets/Game/Art/Illustrations/ILL_EPILOGUE_QUILT_LAP.png",
+    "size": [
+      2368,
+      1776
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "0266f843fef2214b57934904960fb918763c5acf2cf13fde25d84cf41d3bd9d9"
+  },
+  {
+    "path": "Assets/Game/Art/Illustrations/ILL_HANDS_OLD.jpg",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "2b5a9c1fc889726f1d267becfe684b2f8766ab83437bc849286a17354d9d1fe0"
+  },
+  {
+    "path": "Assets/Game/Art/Illustrations/ILL_HOSPITAL_HOLD.jpg",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "69b76fdd4bffcf0184fe8e52b8741af1b2d6743685eead829b14b3f25d79c01b"
+  },
+  {
+    "path": "Assets/Game/Art/Illustrations/ILL_PHOTO_BACK.jpg",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "c42816a9f5e79107ff7f063afcea6cf79455803bbfa1a47af7be58a5ddc796a6"
+  },
+  {
+    "path": "Assets/Game/Art/Illustrations/ILL_PHOTO_FRONT.jpg",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "d7b0d02af2b519faa2680f331bbc2c60af182639562ef1e19689904863519f4d"
+  },
+  {
+    "path": "Assets/Game/Art/Illustrations/ILL_UNIFORM_CUFF.jpg",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "046319e7fbf7b94488178aedc7dc359cd129a8f626409d6d5ef2d2173109395e"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Constant/PROP_Bank_Canal.png",
+    "size": [
+      4096,
+      1024
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "99d7e3d60cf4320bd7b553af9f1bb8eea9fe60788aa48ca943ca7b38754fba62"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Constant/PROP_Ground_Courtyard.png",
+    "size": [
+      4096,
+      1024
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "1e32b73941bd6eccafb5c2b3285abc06ff155d463fba241e732cd42ec731b343"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Constant/PROP_Ground_Ward.png",
+    "size": [
+      3072,
+      1306
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      255,
+      255
+    ],
+    "sha256": "391ae11b068b02d1ef2df972abcf0f51103b7b56f52d417a011f29d361ab348a"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Constant/PROP_Platform_Stone.png",
+    "size": [
+      4096,
+      922
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      255,
+      255
+    ],
+    "sha256": "8d177c240fe40b5611662c2dad111059c9a736b5abb663a76327fd6faff25566"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Constant/PROP_Threshold_Stone.png",
+    "size": [
+      3072,
+      630
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      255,
+      255
+    ],
+    "sha256": "a914ae8580d7684b7a79d315c97ddb1c6bf10af162ffcef236a41b250ddbc062"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Constant/PROP_Wall_Old.png",
+    "size": [
+      1024,
+      4096
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "0e06728ddbd7f434808cf9a12905dda91ec05d780acf363ddacc450370336142"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_BlueTinBox.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "9f484613d35dadd34bd4ed39b308a1a1cfb9fad8bf792430608f4d2cfca6bc27"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_ChildDrawing.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "69e2691dfabed15a845ab151f400a16e7954aa2a76d681cca9be27cfcccf4fc1"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_ClothesOnChair.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "86ff65bd27bde2fc7d02cc38b8ed6adb9411e62c90e19a74551940366a135df7"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_ClothesOnFloor.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "09a0a63e7aba26d563a0714b96944d91c633158033adbd3c9fdc3747f0947476"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_DogBowlAndKennel_2024.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "aecbb3096968716e89054379919c99b88262f68b35289bbba8c4313495f14cd8"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_EnamelCup.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "a551ea92d8351599fe1a7fa19f3ebf53e395b474e114516d1bf46018484ff7c9"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_Fabrics.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "3a4b3e8bd7c9b56496a315591739c6d6783f81204fddec05168ab4b79aa98da4"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_HeightMarksWall.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "aff7481a56f8981b2e59c8b183861ed70465210863ab32f79f88676a8599d183"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_Ledger.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "c52096635d6d76ca487a8d1e0627880869e4ff6e95cc03d026c58ebbce699013"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_PhotoFrame.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "b4107f5a7fd7e80f96231457008482c9a501fa40a4e3b2d211b00f3787cce8c1"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_SewingMachine.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "fdf1fbde8c935c19a8bcab4f0ff184b300df2cd4bc658eae8ccc660836ff2a2a"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_TapeRecorder.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "b14f1e8cc3e2aa90e5dc42982c783993726705f842c4e696c45bfe337107f966"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_Uniform.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "0bd0bbdd324befef06470dd1dec889136b7fdba8b2662fbe9d236578904f70f6"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_VacateNotice.png",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "be7218fd7ca8efb625239aa52870c3e0af67c62848a840092618589ebc37c4d8"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Decor/DECOR_WoodenHanger.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "2c6d91a9e4efc9d80bd0d9f52b4da543a8a0b1748d7ec3068e23de3c56c5680e"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_AtticDoor.png",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "a232c110ec52009ef6a6826b5200694d891941d32a5d7860bb731fa064bced7b"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_BoardNiche.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "726d767a3794f5ec960e8023ad64392f7701e31ec088257cb0b95cf6ff06ba03"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_BridgePlank_1994.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "d2101c00783eb2b39857fe3474d9abd2bbfc30b5fe65116b5790d3041db671a8"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_BridgePlank_2024.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "7d7169fd4f9269754f3990241ea852b0cb764a967359cb231ae162ec05ba32be"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_Door_SewingRoom.png",
+    "size": [
+      1536,
+      3072
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "29955606185d742c7bdcdb4f31f3f6893b6be02af4933b9e858647613e2e5c6e"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_Door_StairHall.png",
+    "size": [
+      1536,
+      3072
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "aa540e8f4ffc1bf7b38bcd96e78da0d65f66aea8de40d3107e2385549e43959a"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_Door_Ward.png",
+    "size": [
+      1536,
+      2980
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "92aede0b259f1a606940c1a74663e33e5492bcff4d05f76b1fb1d45e5123ef18"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_Door_YardSide.png",
+    "size": [
+      1536,
+      3072
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "9df906b556907cc39466f6ae927511ab13d6150b511e81995a096938f30b2747"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_Fence_1994.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "ff97e7c2a9da10b154b727e119f643fca6fc8b549944f7969f0a9230eb5886c1"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_Fence_2024.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "f74ba07beebab57e9a80db85f6e86082af1de9b426e53a51e6d4220a1519679c"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_LadderTall_1994.png",
+    "size": [
+      1024,
+      4096
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "39b5ab16337a8f310bf3cb7c360844efb91780ee69940132b914bcc057bd44e0"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_LadderTall_2024.png",
+    "size": [
+      1024,
+      4096
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "e508a66b6f2d20a6e2bd96b51fe1f3a0ea9a183de0f52371a4ca6dd35b80daaf"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_Ladder_1994.png",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "6a62736a250bc03fea7ebc18076d5abf1550a4e554115fccf7ef013402b5463f"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_Ladder_2024.png",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "787ce6f18d0478b57f4f482cd93adeb6219dab31e7f930220a15e5cc492e6416"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_MaintenancePlatform_2024.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "9ce1d585e93faa236eb6b780ce51355c15578b921f09828de2923d2610e98ac2"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_MetalWalkway_2024.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "4f4050eb1cd7f15fd119e9d3a797c38f81904bad068ed1b8b6fe3c411f287a75"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_Stairs.png",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "300ff0a9b3a76c5e13ad2f8929662c797605222988e03e6e3bf52957b2e34a0d"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_Steps_1994.png",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "94d750334ad59e73741716b1265dc0e40f0db4a9e1b905962ea26a1439597094"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_Steps_2024.png",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "f069024166dcc2b675a392a1e9d722039084734c0d86a999a252551b857e1d14"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_StorageCabinet_2024.png",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "a8e819a0c8aeee39df5cb52e745efb4046ef1ccf1bd19d3b35ad9b462351b772"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_TreeAttic_Grown_2024.png",
+    "size": [
+      4096,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "94dd8314062bcefb545a51e87c248eff0220e239f5715eb2c9e4ddc7cf6f1446"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_TreeGrown_2024.png",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "609201b814be1dd68b3f129d48c6581ad304d65d5a97f407b909c076592ee8df"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_TreeYoung_1994.png",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "dfd4b14782846f9360127932f72206be089f233c09ba888263b368cce0a20b75"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_WoodFloor_1994.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "9a57e490bd9861f72c32a578d0c3062954eb15d0c868f55e920f853c5edce131"
+  },
+  {
+    "path": "Assets/Game/Art/Props/Temporal/PROP_YardDoor.png",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "5a0b41592f3c25edac3d278aff87cc53dd4d87dcd22a122a51e217aac85d04ff"
+  },
+  {
+    "path": "Assets/Game/Art/UI/UI_BoundaryHandle.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "52eb0d25b2a116a2243d5e506de6bc1fde695e4c6c7e34959ac8bc5b576d476b"
+  },
+  {
+    "path": "Assets/Game/Art/UI/UI_CreditsBackground.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "2992cd63c8849e0a18c967a577a1d402006c464a95def6b8e4b895c74da35d8a"
+  },
+  {
+    "path": "Assets/Game/Art/UI/UI_HintBubble.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "57fedcfb82229ce89f437f84f5ea3561876da1cc921e8eacadb239e6a13c1eb3"
+  },
+  {
+    "path": "Assets/Game/Art/UI/UI_InteractIcon.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "169c7ca3233aed51cdbff510556263a5e4c99df1676cdd1242e8f19fdef500e5"
+  },
+  {
+    "path": "Assets/Game/Art/UI/UI_ObjectiveCard.png",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "064fa70ca50642bcd1c63b69d29d091cc842309c068640d586d0d87d43194996"
+  },
+  {
+    "path": "Assets/Game/Art/UI/UI_PauseMenuPanel.png",
+    "size": [
+      1728,
+      2304
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "2c276db7b137c00b6a1df4a03ccb142b278eadb7ce136bef06a47ae1a984e549"
+  },
+  {
+    "path": "Assets/Game/Art/UI/UI_SubtitleBar.png",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "4665921d23ef0df1370b732e0cce0634538f1b69eedd23eb36c60f164538bdae"
+  },
+  {
+    "path": "Assets/Game/Art/UI/UI_TabRecordsPanel.png",
+    "size": [
+      2304,
+      1728
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "5d08998f9888855f2b79aadc28900cb4af4a56615fb9dcaa83937059497fb868"
+  },
+  {
+    "path": "Assets/Game/Art/UI/UI_TitleScreen.jpg",
+    "size": [
+      2560,
+      1440
+    ],
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "sha256": "7a751adfafdecd1b0c659c558e934a39504c529ce8cff030d93ce4e522095909"
+  },
+  {
+    "path": "Assets/Game/Art/UI/WhiteRect.png",
+    "size": [
+      4,
+      4
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      255,
+      255
+    ],
+    "sha256": "82e8394a3122deb48992b7c6df384cba4b04bc389b776f3d26100c390815e091"
+  }
+]

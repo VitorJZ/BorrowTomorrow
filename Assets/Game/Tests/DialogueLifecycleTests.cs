@@ -16,6 +16,7 @@ namespace BorrowTomorrow.Tests
         private DialoguePlayer dialogue;
         private DialogueLibrary library;
         private readonly List<DialogueEntry> entries = new List<DialogueEntry>();
+        private readonly List<NarrativeAction> created = new List<NarrativeAction>();
         [SetUp] public void Setup()
         {
             host = new GameObject("DialogueTest");
@@ -34,13 +35,15 @@ namespace BorrowTomorrow.Tests
             Object.DestroyImmediate(host);
             foreach (var entry in entries) Object.DestroyImmediate(entry);
             entries.Clear();
+            foreach (var action in created) Object.DestroyImmediate(action);
+            created.Clear();
         }
         private static void Invoke(object o, string method) => o.GetType().GetMethod(method, BindingFlags.Instance | BindingFlags.NonPublic).Invoke(o, null);
         private DialogueEntry Entry(string id)
         {
             var entry = ScriptableObject.CreateInstance<DialogueEntry>();
             entry.entryId = id;
-            entry.setFlags = new[] { id };
+            entry.completionFlags = new[] { id };
             entries.Add(entry);
             return entry;
         }
@@ -70,19 +73,70 @@ namespace BorrowTomorrow.Tests
             Assert.IsFalse(completed);
             Assert.IsFalse(dialogue.IsPlaying);
         }
-        [Test] public void SkipChain_WritesAllFlagsAndCompletesOnce()
+        private void Register(params NarrativeAction[] actions)
         {
-            var first = Entry("first"); var second = Entry("second"); first.nextId = second.entryId;
             typeof(DialogueLibrary).GetField("entries", BindingFlags.Instance | BindingFlags.NonPublic)
                 .SetValue(library, entries.ToArray());
+            typeof(DialogueLibrary).GetField("actions", BindingFlags.Instance | BindingFlags.NonPublic)
+                .SetValue(library, actions);
+        }
+        private NarrativeAction Action(string beforeEntryId, string confirmBefore = "", string confirmAfter = "")
+        {
+            var action = ScriptableObject.CreateInstance<NarrativeAction>();
+            action.beforeEntryId = beforeEntryId; action.confirmBefore = confirmBefore; action.confirmAfter = confirmAfter;
+            created.Add(action);
+            return action;
+        }
+        [Test] public void SkipChain_CommitsEventCompletionOnceWithoutWalkingLines()
+        {
+            var first = Entry("first"); var second = Entry("second"); first.nextId = second.entryId;
+            Register();
             int completed = 0;
             dialogue.Play(first, DialoguePriority.Story, () => completed++);
             dialogue.SkipCurrent();
             dialogue.SkipCurrent();
             Assert.IsTrue(session.StoryFlags.HasFlag("first"));
-            Assert.IsTrue(session.StoryFlags.HasFlag("second"));
+            Assert.IsFalse(session.StoryFlags.HasFlag("second"), "后续条目的配置不应被跳过逻辑盲写");
             Assert.AreEqual(1, completed);
             Assert.IsFalse(dialogue.IsPlaying);
+        }
+        [Test] public void ActionStage_HoldsGatedLineUntilActionCompletes()
+        {
+            var first = Entry("cuff");
+            Register(Action("cuff"));
+            dialogue.Play(first, DialoguePriority.Story);
+            Assert.IsTrue(dialogue.IsPlaying);
+            Assert.IsNull(dialogue.Current, "动作结束前不显示被门控的第一句");
+            Assert.IsFalse(session.StoryFlags.HasFlag("cuff"));
+        }
+        [Test] public void ActionWait_IgnoresConfirmOnSameFrameAsStageStart()
+        {
+            var first = Entry("smooth");
+            Register(Action("smooth", confirmBefore: "抚平布角"));
+            dialogue.Play(first, DialoguePriority.Story);
+            Assert.IsTrue(dialogue.IsWaitingForAction);
+            dialogue.Advance();
+            Assert.IsTrue(dialogue.IsWaitingForAction, "启动事件的同一次输入不能穿透为动作确认");
+            Assert.IsNull(dialogue.Current);
+        }
+        [Test] public void SkipDuringActionWait_CommitsEventAndClearsStage()
+        {
+            var first = Entry("niche");
+            Register(Action("niche", confirmAfter: "告诉晓晓位置"));
+            int completed = 0;
+            dialogue.Play(first, DialoguePriority.Story, () => completed++);
+            dialogue.SkipCurrent();
+            Assert.IsTrue(session.StoryFlags.HasFlag("niche"));
+            Assert.IsFalse(dialogue.IsWaitingForAction);
+            Assert.IsFalse(dialogue.IsPlaying);
+            Assert.AreEqual(1, completed);
+        }
+        [Test] public void ReadOnlyReplay_SkipsActionStage()
+        {
+            var first = Entry("cuff_replay");
+            Register(Action("cuff_replay"));
+            dialogue.PlayReadOnly(first);
+            Assert.AreSame(first, dialogue.Current);
         }
     }
 }

@@ -1,0 +1,16 @@
+PASS hero visual uniform scale 1.30
+PASS motor root retains original scale
+PASS original collision capsule retained
+PASS walk to 48 at (47.91, 0.01, 0.00)
+PASS climb to ledge
+PASS walk to 49.6 at (49.55, 2.00, 0.00)
+PASS stand on ledge before drag
+PASS normal safe drag retains mixed solution
+PASS walk to 50.2 at (50.14, 2.01, 0.00)
+PASS walk to 51.8 at (51.75, 2.69, 0.00)
+PASS land on branch after visual enlargement
+PASS walk to 58 at (57.96, 2.54, 0.00)
+PASS walk to 65.5 at (65.42, 3.45, 0.00)
+PASS walk to 68.1 at (68.04, 3.15, 0.00)
+PASS reach exit grounded
+DONE: three era states at three sizes, normal ladder/drag/jump/branch/exit route. Room automatic dialogue disabled for route isolation; not a full new-game playthrough.

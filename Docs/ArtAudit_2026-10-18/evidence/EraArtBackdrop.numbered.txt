@@ -1,0 +1,25 @@
+1: using BorrowTomorrow.Core;
+2: using UnityEngine;
+3: namespace BorrowTomorrow.TimeBoundary
+4: {
+5:     public sealed class EraArtBackdrop : MonoBehaviour
+6:     {
+7:         public SpriteRenderer past;
+8:         public SpriteRenderer present;
+9:         private BoundaryController boundary;
+10:         private MaterialPropertyBlock properties;
+11:         private void Awake(){boundary=GetComponentInParent<BoundaryController>();properties=new MaterialPropertyBlock();}
+12:         private void LateUpdate()
+13:         {
+14:             bool active=BorrowTomorrow.Core.ServiceRegistry.TryGet<BorrowTomorrow.Core.Interfaces.IBoundaryContext>(out var b)
+15:                 && ReferenceEquals(b,boundary);
+16:             if(past!=null)past.enabled=active;if(present!=null)present.enabled=active;
+17:             if(!active||boundary==null)return;
+18:             float value=boundary.CommittedBoundary;
+19:             if(value>=boundary.RangeMax-.01f)value=100000f;
+20:             else if(value<=boundary.RangeMin+.01f)value=-100000f;
+21:             properties.SetFloat("_Boundary",value);
+22:             past?.SetPropertyBlock(properties);present?.SetPropertyBlock(properties);
+23:         }
+24:     }
+25: }

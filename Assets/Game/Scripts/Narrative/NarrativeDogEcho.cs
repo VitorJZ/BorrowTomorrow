@@ -4,45 +4,64 @@ using BorrowTomorrow.Core.Interfaces;
 using UnityEngine;
 namespace BorrowTomorrow.Narrative
 {
+    /// <summary>
+    /// 阿黄生活回声（剧情 1.4 §3.2）：过去态趴卧，录音播放时抬头并摇尾；
+    /// 现在态只留空狗窝与收好的食盆，录音照常播放。动作全部脚本化，透明逐帧素材，不用抠白着色器。
+    /// </summary>
     public sealed class NarrativeDogEcho : MonoBehaviour
     {
-        public Texture2D sheet;
-        public Shader cutoutShader;
-        private Sprite[] frames;
+        public Sprite[] sleep;
+        public Sprite[] alert;
+        public Sprite[] wag;
+        [Tooltip("现在态的空狗窝与食盆（过去态隐藏）")]
+        public SpriteRenderer presentProps;
+        public float anchorX = 14f;
         private SpriteRenderer renderer2d;
         private DialoguePlayer player;
-        private Material material;
         private float echoTimer;
+        private const float EchoSeconds = 4.5f;
+
         private void Start()
         {
-            renderer2d=gameObject.AddComponent<SpriteRenderer>();renderer2d.sortingLayerName="EraPlatform";renderer2d.sortingOrder=5;
-            frames=new Sprite[16];
-            for(int i=0;i<16;i++)frames[i]=Sprite.Create(sheet,new Rect((i%4)*sheet.width/4,(3-i/4)*sheet.height/4,sheet.width/4,sheet.height/4),new Vector2(.5f,.15f),200);
-            if(cutoutShader!=null){material=new Material(cutoutShader);renderer2d.sharedMaterial=material;}
-            if(ServiceRegistry.TryGet<IDialogueService>(out var d))player=d as DialoguePlayer;
-            if(player!=null)player.LineStarted+=OnLine;
+            renderer2d = gameObject.GetComponent<SpriteRenderer>();
+            if (renderer2d == null)
+            {
+                renderer2d = gameObject.AddComponent<SpriteRenderer>();
+                renderer2d.sortingLayerName = "EraPlatform";
+                renderer2d.sortingOrder = 5;
+            }
+            if (ServiceRegistry.TryGet<IDialogueService>(out var d)) player = d as DialoguePlayer;
+            if (player != null) player.LineStarted += OnLine;
         }
+
         private void OnLine(DialogueEntry entry)
         {
-            if(entry.entryId!="DLG_L00_DOG_01")return;
-            echoTimer=4.5f;
-            if(ServiceRegistry.TryGet<IAudioService>(out var audio))audio.PlaySfx("sfx_dog_soft");
+            if (entry.entryId != "DLG_L00_DOG_01") return;
+            echoTimer = EchoSeconds;
+            if (ServiceRegistry.TryGet<IAudioService>(out var audio)) audio.PlaySfx("sfx_dog_soft");
         }
+
         private void Update()
         {
-            if(renderer2d==null)return;
-            if(GameSession.Instance!=null && GameSession.Instance.State.IsPaused)return;
-            echoTimer=Mathf.Max(0,echoTimer-Time.deltaTime);
-            bool past=ServiceRegistry.TryGet<IBoundaryContext>(out var b)&&b.EraAtAnchor(14)==Era.Past;
-            renderer2d.enabled=past||echoTimer>0;
-            int frame=echoTimer>0?8+((int)(Time.time*7)%8):0;
-            renderer2d.sprite=frames[frame];
+            if (renderer2d == null) return;
+            if (GameSession.Instance != null && GameSession.Instance.State.IsPaused) return;
+            echoTimer = Mathf.Max(0, echoTimer - Time.deltaTime);
+            bool past = ServiceRegistry.TryGet<IBoundaryContext>(out var b) && b.EraAtAnchor(anchorX) == Era.Past;
+            renderer2d.enabled = past;
+            if (presentProps != null) presentProps.enabled = !past;
+            if (!past) return;
+            float elapsed = EchoSeconds - echoTimer;
+            Sprite[] frames; float fps;
+            if (echoTimer <= 0f) { frames = sleep; fps = 2f; elapsed = Time.time; }
+            else if (elapsed < 1.1f) { frames = alert; fps = 6f; }
+            else { frames = wag; fps = 8f; }
+            if (frames != null && frames.Length > 0)
+                renderer2d.sprite = frames[(int)(elapsed * fps) % frames.Length];
         }
+
         private void OnDestroy()
         {
-            if(player!=null)player.LineStarted-=OnLine;
-            if(frames!=null)foreach(var f in frames)if(f!=null)Destroy(f);
-            if(material!=null)Destroy(material);
+            if (player != null) player.LineStarted -= OnLine;
         }
     }
 }

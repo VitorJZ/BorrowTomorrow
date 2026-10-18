@@ -1,0 +1,36 @@
+{
+  "L01_Courtyard.scene": {
+    "original_physics_blocks": 20,
+    "preserved": false,
+    "intentional_changes": "Only BranchA/B/C support lengths and transforms fitted to intact tree; anchors and route unchanged. Other scenes physics preserved."
+  },
+  "L00_Gate.scene": {
+    "original_physics_blocks": 8,
+    "preserved": true
+  },
+  "Epilogue.scene": {
+    "original_physics_blocks": 3,
+    "preserved": true
+  },
+  "MainMenu.scene": {
+    "original_physics_blocks": 0,
+    "preserved": true
+  },
+  "L02_Sewing.scene": {
+    "original_physics_blocks": 16,
+    "preserved": true
+  },
+  "L03_Corridor.scene": {
+    "original_physics_blocks": 13,
+    "preserved": true
+  },
+  "L04_Attic.scene": {
+    "original_physics_blocks": 10,
+    "preserved": true
+  },
+  "Bootstrap.scene": {
+    "original_physics_blocks": 0,
+    "preserved": true
+  },
+  "dialogue_changes_other_than_illustration": []
+}

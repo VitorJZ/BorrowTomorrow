@@ -12,7 +12,12 @@ namespace BorrowTomorrow.Narrative
     {
         [Tooltip("全部对白条目（按 entryId 检索，nextId 串联）")]
         [SerializeField] private DialogueEntry[] entries = new DialogueEntry[0];
+        [Tooltip("事件内动作阶段（按 beforeEntryId 关联，规格 1.4 §4.6）")]
+        [SerializeField] private NarrativeAction[] actions = new NarrativeAction[0];
         public System.Collections.Generic.IReadOnlyList<DialogueEntry> Entries => entries;
+
+        public NarrativeAction FindAction(string beforeEntryId) =>
+            string.IsNullOrEmpty(beforeEntryId) ? null : actions.FirstOrDefault(a => a != null && a.beforeEntryId == beforeEntryId);
 
         private void Awake()
         {

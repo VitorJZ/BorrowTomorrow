@@ -5,6 +5,8 @@ using System.Reflection;
 using BorrowTomorrow.Core.Data;
 using BorrowTomorrow.Save;
 using BorrowTomorrow.Narrative;
+using BorrowTomorrow.Player;
+using BorrowTomorrow.TimeBoundary;
 using BorrowTomorrow.Core;
 using BorrowTomorrow.Core.Interfaces;
 using NUnit.Framework;
@@ -90,6 +92,78 @@ namespace BorrowTomorrow.Tests
             Assert.IsTrue(player.IsGrounded && !player.IsClimbingLadder,
                 "边界调整前置条件（落地且非攀爬）应成立");
         }
+
+        private sealed class WalkInput : IInputSource
+        {
+            public float MoveAxis { get; set; }
+            public float ClimbAxis => 0f;
+            public bool JumpPressedThisFrame => false;
+            public bool JumpHeld => false;
+            public bool InteractPressedThisFrame => false;
+            public bool ConsumeInteract() => false;
+            public float BoundaryNudgeDirection => 0f;
+            public bool RespawnPressedThisFrame => false;
+            public bool HintPressedThisFrame => false;
+            public bool ObjectiveHeld => false;
+            public bool PausePressedThisFrame => false;
+        }
+
+        [UnityTest]
+        public IEnumerator L00_NoticeFollowsEraAndOpenGateAllowsWalkingBothWays()
+        {
+            SceneManager.LoadScene("Bootstrap");
+            yield return new WaitForSeconds(2f);
+            var session = GameSession.Instance;
+            IsolateSave();
+            session.StartNewGame();
+            yield return WaitForPlaying(session);
+            yield return null;
+            var dialogue = ServiceRegistry.Get<IDialogueService>();
+            float introDeadline = Time.realtimeSinceStartup + 5f;
+            while (!dialogue.IsPlaying && Time.realtimeSinceStartup < introDeadline) yield return null;
+            Assert.IsTrue(dialogue.IsPlaying, "应先等待开场对白实际开始");
+            dialogue.SkipCurrent();
+            yield return null;
+            yield return null;
+
+            var boundary = (BoundaryController)ServiceRegistry.Get<IBoundaryContext>();
+            var notice = Object.FindObjectOfType<PresentOnlyInvestigation>();
+            var interaction = notice.GetComponent<NarrativeInteractable>();
+            var art = notice.transform.Find("ArtSkin").GetComponent<SpriteRenderer>();
+            var graybox = notice.GetComponent<SpriteRenderer>();
+            var area = notice.GetComponent<Collider2D>();
+            foreach (float position in new[] { 26f, 0f, 26f, 0f })
+            {
+                boundary.RestoreBoundary(position);
+                yield return null;
+                yield return null;
+                bool present = position < notice.anchorX;
+                Assert.AreEqual(present, art.enabled, "通知子物体的美术必须跟随年代");
+                Assert.AreEqual(present, area.enabled, "过去态不得保留调查范围");
+                Assert.AreEqual(present, interaction.CanInteract);
+                Assert.IsFalse(graybox.enabled, "切回现在不得重新显示灰盒贴图");
+                Assert.AreEqual(present, interaction.Interact(), "过去态不得直接触发通知对白");
+                if (present) dialogue.SkipCurrent();
+            }
+
+            var motor = Object.FindObjectOfType<PlayerMotor2D>();
+            var input = new WalkInput { MoveAxis = 1f };
+            typeof(PlayerMotor2D).GetField("input", BindingFlags.Instance | BindingFlags.NonPublic)
+                .SetValue(motor, input);
+            boundary.RestoreBoundary(26f);
+            motor.TeleportTo(new Vector2(7f, .05f));
+            yield return new WaitForSeconds(1.5f);
+            Assert.Less(motor.transform.position.x, 8f, "过去态完整栅栏必须阻挡玩家");
+
+            boundary.RestoreBoundary(0f);
+            yield return new WaitForSeconds(1.5f);
+            Assert.Greater(motor.transform.position.x, 12f, "打开后应能从左侧走过整个门洞");
+            input.MoveAxis = -1f;
+            yield return new WaitForSeconds(1.8f);
+            Assert.Less(motor.transform.position.x, 8f, "打开后也应能向左返回");
+            input.MoveAxis = 0f;
+        }
+
         [UnityTest]
         public IEnumerator ColdContinue_RestoresL01BThenNewLevelUsesOwnSnapshot()
         {
@@ -147,8 +221,18 @@ namespace BorrowTomorrow.Tests
             Assert.AreEqual(1f, Time.timeScale);
             Assert.IsFalse(AudioListener.pause);
         }
+        private static IEnumerator AdvanceUntil(DialoguePlayer dialogue, string entryId)
+        {
+            float deadline = Time.realtimeSinceStartup + 30f;
+            while ((dialogue.Current == null || dialogue.Current.entryId != entryId) && Time.realtimeSinceStartup < deadline)
+            {
+                dialogue.Advance();
+                yield return new WaitForSeconds(0.25f);
+            }
+            Assert.AreEqual(entryId, dialogue.Current?.entryId);
+        }
         [UnityTest]
-        public IEnumerator StoryPresentation_RevealDeliveryEndingAndHistoryPersist()
+        public IEnumerator Story_RevealBoardReportSmoothingAndHistoryPersist()
         {
             SceneManager.LoadScene("Bootstrap");
             yield return new WaitForSeconds(2f);
@@ -157,11 +241,11 @@ namespace BorrowTomorrow.Tests
             session.LoadLevel(session.FindLevel("L03"));
             yield return WaitForPlaying(session);
             var director = ServiceRegistry.Get<NarrativeDirector>();
-            var dialogue = ServiceRegistry.Get<IDialogueService>();
-            Assert.IsTrue(director.PlayStory("photo_back", DialoguePriority.Reveal));
+            var dialogue = (DialoguePlayer)ServiceRegistry.Get<IDialogueService>();
+            session.StoryFlags.SetFlag(StoryFlags.UniformRead);
+            Assert.IsTrue(director.PlayStory("DLG_L03_REVEAL_01", DialoguePriority.Reveal));
             yield return null;
             Assert.IsFalse(session.StoryFlags.HasFlag(StoryFlags.IdentityKnown));
-            Assert.IsNotNull(ServiceRegistry.Get<IStoryPresentation>());
             string capture = System.Environment.GetEnvironmentVariable("BORROWTOMORROW_STORY_CAPTURE");
             if (!string.IsNullOrEmpty(capture))
             {
@@ -170,53 +254,59 @@ namespace BorrowTomorrow.Tests
             }
             dialogue.SkipCurrent();
             Assert.IsTrue(session.StoryFlags.HasFlag(StoryFlags.IdentityKnown));
-            Assert.IsTrue(session.ReadDialogueIds.Contains("photo_question"));
-            Assert.IsFalse(director.PlayStory("photo_back", DialoguePriority.Reveal));
+            Assert.IsTrue(session.StoryFlags.HasFlag(StoryFlags.PhotoRevealed));
+            Assert.IsFalse(director.PlayStory("DLG_L03_REVEAL_01", DialoguePriority.Reveal));
+
+            // L04: board action plays first, then waits for a separate "tell Xiaoxiao" confirmation.
             session.LoadLevel(session.FindLevel("L04"));
             yield return WaitForPlaying(session);
             yield return null;
-            dialogue.SkipCurrent(); // arrival line if active
-            director.PlayStory("compartment_touch", DialoguePriority.Reveal);
+            if (dialogue.IsPlaying) dialogue.SkipCurrent();
+            session.StoryFlags.SetFlag("CompartmentSeen");
+            Assert.IsTrue(director.PlayStory("DLG_L04_BOX_01", DialoguePriority.Reveal));
+            yield return null;
+            Assert.IsNull(dialogue.Current, "拨板动作期间不显示报位置台词");
+            Assert.IsFalse(dialogue.IsWaitingForAction, "拨板动作播放中不等待确认");
+            float actionDeadline = Time.realtimeSinceStartup + 5f;
+            while (!dialogue.IsWaitingForAction && Time.realtimeSinceStartup < actionDeadline) yield return null;
+            Assert.IsTrue(dialogue.IsWaitingForAction, "拨板后等待“告诉晓晓位置”");
+            Assert.IsNull(dialogue.Current);
+            yield return new WaitForSeconds(0.3f);
+            dialogue.Advance();
+            yield return null;
+            Assert.AreEqual("DLG_L04_BOX_01", dialogue.Current?.entryId);
+            Assert.IsFalse(session.StoryFlags.HasFlag(StoryFlags.BoxLocated), "进入报告链不等于完成");
             dialogue.SkipCurrent();
             Assert.IsTrue(session.StoryFlags.HasFlag(StoryFlags.BoxLocated));
+
             float deadline = Time.realtimeSinceStartup + 15f;
             while ((session.CurrentLevel.levelId != "Epilogue" || session.State.Phase != GamePhase.Playing)
                 && Time.realtimeSinceStartup < deadline) yield return null;
             Assert.AreEqual("Epilogue", session.CurrentLevel.levelId);
-            yield return null;
-            dialogue.SkipCurrent();
-            Assert.IsTrue(session.StoryFlags.HasFlag("EpilogueArrived"));
-            Assert.IsFalse(ServiceRegistry.Get<ILevelContext>().ExitUnlocked);
-            director.PlayStory("epilogue_letter", DialoguePriority.Story);
-            if (!string.IsNullOrEmpty(capture))
-            {
-                yield return null;
-                ScreenCapture.CaptureScreenshot(Path.Combine(capture, "story-letter.png"));
-                yield return new WaitForSecondsRealtime(0.2f);
-            }
-            dialogue.SkipCurrent();
-            Assert.IsTrue(ServiceRegistry.Get<ILevelContext>().ExitUnlocked);
+            deadline = Time.realtimeSinceStartup + 10f;
+            while (!dialogue.IsPlaying && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.IsTrue(dialogue.IsPlaying, "尾声自动开始");
+            yield return AdvanceUntil(dialogue, "DLG_EPI_06");
+            yield return new WaitForSeconds(0.25f);
+            dialogue.Advance();
+            Assert.IsTrue(dialogue.IsWaitingForAction, "第 6 条后等待抚平布角");
+            dialogue.Advance();
+            Assert.IsTrue(dialogue.IsWaitingForAction, "翻页输入不能同时触发抚平");
+            yield return new WaitForSeconds(0.3f);
+            dialogue.Advance();
+            Assert.IsFalse(dialogue.IsWaitingForAction);
+            Assert.AreEqual("DLG_EPI_06", dialogue.Current?.entryId, "动作结束前不播放第 7 条");
+            float smoothDeadline = Time.realtimeSinceStartup + 5f;
+            while (dialogue.Current?.entryId != "DLG_EPI_07" && Time.realtimeSinceStartup < smoothDeadline) yield return null;
+            Assert.AreEqual("DLG_EPI_07", dialogue.Current?.entryId);
+            Assert.IsFalse(session.StoryFlags.HasFlag(StoryFlags.EpilogueSeen));
+            yield return AdvanceUntil(dialogue, "DLG_EPI_08");
             session.SaveProgressNow();
             var save = ServiceRegistry.Get<ISaveService>();
             Assert.AreEqual(SaveLoadResult.Loaded, save.TryLoadProgress(out var data));
-            CollectionAssert.Contains(data.readDialogueIds, "epilogue_yes");
-            var originalInput = ServiceRegistry.Get<IInputSource>();
-            ServiceRegistry.Register<IInputSource>(new RecordsInput());
-            yield return null;
-            Assert.IsNotNull(GameObject.Find("StoryRecords"));
-            Assert.IsTrue(Object.FindObjectsOfType<UnityEngine.UI.Text>().Any(t => t.text.Contains("明天还来吗？")));
-            if (!string.IsNullOrEmpty(capture))
-            {
-                ScreenCapture.CaptureScreenshot(Path.Combine(capture, "story-records.png"));
-                yield return new WaitForSecondsRealtime(0.2f);
-            }
-            ServiceRegistry.Register<IInputSource>(originalInput);
-            session.ReturnToMainMenu();
-            yield return null;
-            session.ContinueGame();
-            yield return WaitForPlaying(session);
-            Assert.IsTrue(session.ReadDialogueIds.Contains("epilogue_yes"));
-            Assert.IsTrue(ServiceRegistry.Get<ILevelContext>().ExitUnlocked);
+            CollectionAssert.Contains(data.readDialogueIds, "DLG_EPI_07");
+            dialogue.SkipCurrent();
+            Assert.IsTrue(session.StoryFlags.HasFlag(StoryFlags.EpilogueSeen));
         }
         private static bool IsVisible(GameObject go)
         {
@@ -420,19 +510,5 @@ namespace BorrowTomorrow.Tests
             Assert.IsTrue(HudElement("SubtitlePanel").Find("Root").gameObject.activeSelf);
         }
 
-        private sealed class RecordsInput : IInputSource
-        {
-            public float MoveAxis => 0f;
-            public float ClimbAxis => 0f;
-            public bool JumpPressedThisFrame => false;
-            public bool JumpHeld => false;
-            public bool InteractPressedThisFrame => false;
-            public bool ConsumeInteract() => false;
-            public float BoundaryNudgeDirection => 0f;
-            public bool RespawnPressedThisFrame => false;
-            public bool HintPressedThisFrame => false;
-            public bool ObjectiveHeld => true;
-            public bool PausePressedThisFrame => false;
-        }
     }
 }

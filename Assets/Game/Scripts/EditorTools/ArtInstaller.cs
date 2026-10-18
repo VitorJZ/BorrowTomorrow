@@ -260,39 +260,77 @@ namespace BorrowTomorrow.EditorTools
         {
             var rt=UiRect(parent,value,pos,size);var text=rt.gameObject.AddComponent<Text>();text.text=value;text.font=font;text.fontSize=fontSize;text.alignment=TextAnchor.MiddleCenter;text.color=new Color(.23f,.14f,.08f);text.raycastTarget=false;return text;
         }
-        private static Slider UiSlider(Transform parent,string label,float y,Font font)
+        private static readonly Color Ink=new Color(.29f,.17f,.08f);
+        private static Sprite UiSprite(string file)
         {
-            var rt=UiRect(parent,label,new Vector2(40,y),new Vector2(380,30));var slider=rt.gameObject.AddComponent<Slider>();slider.minValue=0;slider.maxValue=1;
-            var bg=UiRect(rt,"Track",Vector2.zero,new Vector2(380,12)).gameObject.AddComponent<Image>();bg.color=new Color(.23f,.14f,.08f,.7f);
-            var fill=UiRect(rt,"Fill",Vector2.zero,new Vector2(380,12)).gameObject.AddComponent<Image>();fill.color=new Color(.7f,.48f,.24f);slider.fillRect=fill.rectTransform;
-            var handle=UiRect(rt,"Handle",Vector2.zero,new Vector2(18,30)).gameObject.AddComponent<Image>();handle.color=new Color(.95f,.83f,.58f);slider.handleRect=handle.rectTransform;slider.targetGraphic=handle;
-            UiText(parent,label,new Vector2(-210,y),new Vector2(90,35),font,22);return slider;
+            string path="Assets/Game/Art/UI/"+file+".png";var importer=(TextureImporter)AssetImporter.GetAtPath(path);
+            if(importer.textureType!=TextureImporterType.Sprite||importer.mipmapEnabled)
+            {
+                importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;importer.mipmapEnabled=false;importer.alphaIsTransparency=true;importer.SaveAndReimport();
+            }
+            return AssetDatabase.LoadAssetAtPath<Sprite>(path);
+        }
+        private static RectTransform UiStretch(Transform parent,string name,Vector2 min,Vector2 max)
+        {
+            var rt=UiRect(parent,name,Vector2.zero,Vector2.zero);rt.anchorMin=min;rt.anchorMax=max;rt.offsetMin=rt.offsetMax=Vector2.zero;return rt;
+        }
+        private static Image UiImage(Transform parent,string name,Sprite sprite,Vector2 pos,Vector2 size,Color? color=null)
+        {
+            var image=UiRect(parent,name,pos,size).gameObject.AddComponent<Image>();image.sprite=sprite;image.color=color??Color.white;image.raycastTarget=false;return image;
+        }
+        private static Slider UiSlider(Transform parent,string label,float y,Font font,Sprite track,Sprite knob)
+        {
+            var rt=UiRect(parent,label,new Vector2(45,y),new Vector2(350,30));
+            var bg=rt.gameObject.AddComponent<Image>();bg.sprite=track;bg.raycastTarget=true;
+            var slider=rt.gameObject.AddComponent<Slider>();slider.minValue=0;slider.maxValue=1;slider.transition=Selectable.Transition.ColorTint;
+            var fillArea=UiStretch(rt,"FillArea",new Vector2(.08f,.3f),new Vector2(.92f,.78f));
+            var fill=UiStretch(fillArea,"Fill",Vector2.zero,Vector2.one).gameObject.AddComponent<Image>();fill.color=new Color(.9f,.66f,.34f,.55f);fill.raycastTarget=false;slider.fillRect=fill.rectTransform;
+            var handleArea=UiStretch(rt,"HandleArea",new Vector2(.08f,0),new Vector2(.92f,1));
+            var handle=UiImage(handleArea,"Handle",knob,Vector2.zero,new Vector2(36,6));handle.raycastTarget=true;
+            slider.handleRect=handle.rectTransform;slider.targetGraphic=handle;
+            var colors=slider.colors;colors.normalColor=Color.white;colors.highlightedColor=new Color(1,.96f,.88f);colors.pressedColor=new Color(.85f,.78f,.68f);colors.selectedColor=Color.white;slider.colors=colors;
+            UiText(parent,label,new Vector2(-205,y),new Vector2(100,36),font,24).color=Ink;return slider;
         }
         private static void SkinPause(Scene scene)
         {
             Font font=AssetDatabase.LoadAssetAtPath<Font>("Assets/Game/Art/UI/Fonts/PlaceholderChinese.ttf");
+            Sprite paper=UiSprite("UI_PausePaper"),plank=UiSprite("UI_PausePlank"),track=UiSprite("UI_PauseSliderTrack"),knob=UiSprite("UI_PauseSliderKnob"),ornament=UiSprite("UI_PauseOrnament");
             foreach(var pause in All<PauseMenu>(scene))
             {
                 var parent=(RectTransform)pause.transform;parent.sizeDelta=new Vector2(620,860);
                 var root=pause.transform.Find("Root");
                 foreach(Transform child in root.Cast<Transform>().ToArray())UnityEngine.Object.DestroyImmediate(child.gameObject);
-                PanelImage(root,"ArtPause",S("UI_PauseMenuPanel"),Color.white);
-                UiText(root,"暂停",new Vector2(0,355),new Vector2(400,70),font,38);
+                // 全屏压暗 + 拦截点击，菜单之外不可操作。
+                var dim=UiImage(root,"Dim",null,Vector2.zero,new Vector2(6000,6000),new Color(.06f,.04f,.03f,.55f));dim.raycastTarget=true;
+                PanelImage(root,"ArtPause",paper,Color.white).transform.SetSiblingIndex(1);
+                const float o=-10;
+                UiText(root,"暂  停",new Vector2(0,370+o),new Vector2(300,64),font,44).color=Ink;
+                UiImage(root,"TitleOrnament",ornament,new Vector2(0,326+o),new Vector2(420,23));
                 Button[] buttons=new Button[3];string[] labels={"继续游戏","返回主菜单","退出游戏"};
                 for(int i=0;i<3;i++)
                 {
-                    var rt=UiRect(root,labels[i],new Vector2(0,210-i*120),new Vector2(440,90));var image=rt.gameObject.AddComponent<Image>();image.color=new Color(1,1,1,.025f);buttons[i]=rt.gameObject.AddComponent<Button>();
-                    var text=UiText(rt,labels[i],Vector2.zero,new Vector2(420,80),font,30);text.color=new Color(1,.91f,.74f);
+                    var image=UiImage(root,labels[i],plank,new Vector2(0,250+o-i*106),new Vector2(440,94));image.raycastTarget=true;
+                    buttons[i]=image.gameObject.AddComponent<Button>();buttons[i].targetGraphic=image;
+                    var colors=buttons[i].colors;colors.normalColor=new Color(.9f,.9f,.9f);colors.highlightedColor=Color.white;colors.selectedColor=Color.white;colors.pressedColor=new Color(.72f,.66f,.6f);colors.fadeDuration=.08f;buttons[i].colors=colors;
+                    var text=UiText(image.transform,labels[i],new Vector2(0,2),new Vector2(400,80),font,32);text.color=new Color(1,.92f,.76f);
+                    var shadow=text.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(.12f,.06f,.02f,.75f);shadow.effectDistance=new Vector2(1.5f,-2);
                 }
                 LevelLayouts.SetObject(pause,"resumeButton",buttons[0]);LevelLayouts.SetObject(pause,"mainMenuButton",buttons[1]);
                 var controls=pause.GetComponent<PauseArtControls>()??pause.gameObject.AddComponent<PauseArtControls>();controls.quit=buttons[2];
-                LevelLayouts.SetObject(pause,"masterVolume",UiSlider(root,"总音量",-175,font));
-                LevelLayouts.SetObject(pause,"musicVolume",UiSlider(root,"音乐",-265,font));
-                LevelLayouts.SetObject(pause,"voiceVolume",UiSlider(root,"配音",-340,font));
-                var toggleRt=UiRect(root,"Subtitles",new Vector2(0,-394),new Vector2(300,35));var toggle=toggleRt.gameObject.AddComponent<Toggle>();
-                var box=UiRect(toggleRt,"Box",new Vector2(-90,0),new Vector2(24,24)).gameObject.AddComponent<Image>();box.color=new Color(.35f,.23f,.12f);
-                var tick=UiRect(box.transform,"Tick",Vector2.zero,new Vector2(15,15)).gameObject.AddComponent<Image>();tick.color=new Color(.95f,.83f,.58f);toggle.targetGraphic=box;toggle.graphic=tick;
-                UiText(toggleRt,"显示对白字幕",new Vector2(25,0),new Vector2(210,35),font,22);LevelLayouts.SetObject(pause,"subtitlesToggle",toggle);
+                UiImage(root,"SettingsOrnament",ornament,new Vector2(0,-30+o),new Vector2(340,18),new Color(1,1,1,.8f));
+                LevelLayouts.SetObject(pause,"masterVolume",UiSlider(root,"总音量",-86+o,font,track,knob));
+                LevelLayouts.SetObject(pause,"musicVolume",UiSlider(root,"音乐",-148+o,font,track,knob));
+                LevelLayouts.SetObject(pause,"voiceVolume",UiSlider(root,"配音",-210+o,font,track,knob));
+                var toggleRt=UiRect(root,"Subtitles",new Vector2(0,-274+o),new Vector2(260,40));
+                var hit=toggleRt.gameObject.AddComponent<Image>();hit.color=Color.clear;
+                var toggle=toggleRt.gameObject.AddComponent<Toggle>();
+                var box=UiImage(toggleRt,"Box",knob,new Vector2(-100,0),new Vector2(32,32));
+                var tick=UiImage(box.transform,"Tick",null,Vector2.zero,new Vector2(12,12),Ink);tick.rectTransform.localEulerAngles=new Vector3(0,0,45);
+                toggle.targetGraphic=box;toggle.graphic=tick;
+                var colors2=toggle.colors;colors2.highlightedColor=new Color(1,.96f,.88f);colors2.pressedColor=new Color(.85f,.78f,.68f);colors2.selectedColor=Color.white;toggle.colors=colors2;
+                var label=UiText(toggleRt,"显示对白字幕",new Vector2(20,0),new Vector2(200,36),font,24);label.color=Ink;
+                LevelLayouts.SetObject(pause,"subtitlesToggle",toggle);
+                var hint=UiText(root,"Esc  继续游戏",new Vector2(0,-336+o),new Vector2(300,30),font,18);hint.color=new Color(Ink.r,Ink.g,Ink.b,.55f);
             }
             foreach(var confirm in All<ResumeConfirmDialog>(scene))
             {
@@ -328,6 +366,11 @@ namespace BorrowTomorrow.EditorTools
             AssetDatabase.SaveAssets();EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");
             if(!File.Exists("Assets/Game/Data/Art/enabled.json"))File.WriteAllText("Assets/Game/Data/Art/enabled.json","{\"enabled\":true}");
             Debug.Log("[ArtInstaller] Applied 72 hero frames, room backgrounds, prop skins and UI without changing puzzle colliders.");
+        }
+        [MenuItem("BorrowTomorrow/仅重建暂停菜单")]
+        public static void RebuildPauseMenu()
+        {
+            Import();var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");SkinPause(scene);EditorSceneManager.SaveScene(scene);
         }
         private static void ExportPreviews()
         {

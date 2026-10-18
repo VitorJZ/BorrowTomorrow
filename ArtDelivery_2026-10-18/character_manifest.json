@@ -1,0 +1,2150 @@
+[
+  {
+    "file": "05_角色_Characters/Hero/Idle/Hero_Idle_00_1024x1024.png",
+    "clip": "Idle",
+    "source": "Hero_Idle_8f_v2.png",
+    "source_rect_top_left": [
+      203,
+      16,
+      118,
+      489
+    ],
+    "source_ppu": 295.7576,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 39302
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Idle/Hero_Idle_01_1024x1024.png",
+    "clip": "Idle",
+    "source": "Hero_Idle_8f_v2.png",
+    "source_rect_top_left": [
+      523,
+      16,
+      120,
+      490
+    ],
+    "source_ppu": 295.7576,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 39817
+      },
+      {
+        "label": 2,
+        "n": 2
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Idle/Hero_Idle_02_1024x1024.png",
+    "clip": "Idle",
+    "source": "Hero_Idle_8f_v2.png",
+    "source_rect_top_left": [
+      862,
+      16,
+      126,
+      490
+    ],
+    "source_ppu": 295.7576,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 40761
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Idle/Hero_Idle_03_1024x1024.png",
+    "clip": "Idle",
+    "source": "Hero_Idle_8f_v2.png",
+    "source_rect_top_left": [
+      1213,
+      15,
+      123,
+      491
+    ],
+    "source_ppu": 295.7576,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 40372
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Idle/Hero_Idle_04_1024x1024.png",
+    "clip": "Idle",
+    "source": "Hero_Idle_8f_v2.png",
+    "source_rect_top_left": [
+      191,
+      520,
+      125,
+      492
+    ],
+    "source_ppu": 295.7576,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 42091
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Idle/Hero_Idle_05_1024x1024.png",
+    "clip": "Idle",
+    "source": "Hero_Idle_8f_v2.png",
+    "source_rect_top_left": [
+      529,
+      524,
+      122,
+      489
+    ],
+    "source_ppu": 295.7576,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 40693
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Idle/Hero_Idle_06_1024x1024.png",
+    "clip": "Idle",
+    "source": "Hero_Idle_8f_v2.png",
+    "source_rect_top_left": [
+      874,
+      527,
+      125,
+      485
+    ],
+    "source_ppu": 295.7576,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 41016
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Idle/Hero_Idle_07_1024x1024.png",
+    "clip": "Idle",
+    "source": "Hero_Idle_8f_v2.png",
+    "source_rect_top_left": [
+      1226,
+      524,
+      121,
+      488
+    ],
+    "source_ppu": 295.7576,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 41004
+      },
+      {
+        "label": 2,
+        "n": 1
+      },
+      {
+        "label": 3,
+        "n": 1
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Walk/Hero_Walk_00_1024x1024.png",
+    "clip": "Walk",
+    "source": "Hero_Walk_12f_v2.png",
+    "source_rect_top_left": [
+      162,
+      9,
+      200,
+      348
+    ],
+    "source_ppu": 208.4848,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 28796
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Walk/Hero_Walk_01_1024x1024.png",
+    "clip": "Walk",
+    "source": "Hero_Walk_12f_v2.png",
+    "source_rect_top_left": [
+      362,
+      9,
+      308,
+      347
+    ],
+    "source_ppu": 208.4848,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 121,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 27942
+      },
+      {
+        "label": 2,
+        "n": 121
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Walk/Hero_Walk_02_1024x1024.png",
+    "clip": "Walk",
+    "source": "Hero_Walk_12f_v2.png",
+    "source_rect_top_left": [
+      793,
+      9,
+      172,
+      348
+    ],
+    "source_ppu": 208.4848,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 26254
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Walk/Hero_Walk_03_1024x1024.png",
+    "clip": "Walk",
+    "source": "Hero_Walk_12f_v2.png",
+    "source_rect_top_left": [
+      1106,
+      8,
+      177,
+      347
+    ],
+    "source_ppu": 208.4848,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 25952
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Walk/Hero_Walk_04_1024x1024.png",
+    "clip": "Walk",
+    "source": "Hero_Walk_12f_v2.png",
+    "source_rect_top_left": [
+      161,
+      366,
+      201,
+      347
+    ],
+    "source_ppu": 208.4848,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 29804
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Walk/Hero_Walk_05_1024x1024.png",
+    "clip": "Walk",
+    "source": "Hero_Walk_12f_v2.png",
+    "source_rect_top_left": [
+      362,
+      366,
+      325,
+      346
+    ],
+    "source_ppu": 208.4848,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 326,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 29350
+      },
+      {
+        "label": 2,
+        "n": 326
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Walk/Hero_Walk_06_1024x1024.png",
+    "clip": "Walk",
+    "source": "Hero_Walk_12f_v2.png",
+    "source_rect_top_left": [
+      787,
+      366,
+      217,
+      347
+    ],
+    "source_ppu": 208.4848,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 29986
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Walk/Hero_Walk_07_1024x1024.png",
+    "clip": "Walk",
+    "source": "Hero_Walk_12f_v2.png",
+    "source_rect_top_left": [
+      1107,
+      366,
+      186,
+      347
+    ],
+    "source_ppu": 208.4848,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 27864
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Walk/Hero_Walk_08_1024x1024.png",
+    "clip": "Walk",
+    "source": "Hero_Walk_12f_v2.png",
+    "source_rect_top_left": [
+      194,
+      724,
+      140,
+      348
+    ],
+    "source_ppu": 208.4848,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 24301
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Walk/Hero_Walk_09_1024x1024.png",
+    "clip": "Walk",
+    "source": "Hero_Walk_12f_v2.png",
+    "source_rect_top_left": [
+      475,
+      724,
+      213,
+      346
+    ],
+    "source_ppu": 208.4848,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 29220
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Walk/Hero_Walk_10_1024x1024.png",
+    "clip": "Walk",
+    "source": "Hero_Walk_12f_v2.png",
+    "source_rect_top_left": [
+      789,
+      724,
+      229,
+      347
+    ],
+    "source_ppu": 208.4848,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 30452
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Walk/Hero_Walk_11_1024x1024.png",
+    "clip": "Walk",
+    "source": "Hero_Walk_12f_v2.png",
+    "source_rect_top_left": [
+      1104,
+      724,
+      212,
+      347
+    ],
+    "source_ppu": 208.4848,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 28742
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/JumpLand/Hero_JumpLand_00_1024x1024.png",
+    "clip": "JumpLand",
+    "source": "Hero_JumpLand_12f_v2.png",
+    "source_rect_top_left": [
+      194,
+      6,
+      92,
+      342
+    ],
+    "source_ppu": 204.8485,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 21296
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/JumpLand/Hero_JumpLand_01_1024x1024.png",
+    "clip": "JumpLand",
+    "source": "Hero_JumpLand_12f_v2.png",
+    "source_rect_top_left": [
+      482,
+      29,
+      136,
+      318
+    ],
+    "source_ppu": 204.8485,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 22918
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/JumpLand/Hero_JumpLand_02_1024x1024.png",
+    "clip": "JumpLand",
+    "source": "Hero_JumpLand_12f_v2.png",
+    "source_rect_top_left": [
+      794,
+      90,
+      178,
+      255
+    ],
+    "source_ppu": 204.8485,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 20274
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/JumpLand/Hero_JumpLand_03_1024x1024.png",
+    "clip": "JumpLand",
+    "source": "Hero_JumpLand_12f_v2.png",
+    "source_rect_top_left": [
+      1149,
+      12,
+      192,
+      331
+    ],
+    "source_ppu": 204.8485,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 23456
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/JumpLand/Hero_JumpLand_04_1024x1024.png",
+    "clip": "JumpLand",
+    "source": "Hero_JumpLand_12f_v2.png",
+    "source_rect_top_left": [
+      142,
+      369,
+      208,
+      332
+    ],
+    "source_ppu": 204.8485,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 23411
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/JumpLand/Hero_JumpLand_05_1024x1024.png",
+    "clip": "JumpLand",
+    "source": "Hero_JumpLand_12f_v2.png",
+    "source_rect_top_left": [
+      492,
+      373,
+      176,
+      275
+    ],
+    "source_ppu": 204.8485,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 20522
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/JumpLand/Hero_JumpLand_06_1024x1024.png",
+    "clip": "JumpLand",
+    "source": "Hero_JumpLand_12f_v2.png",
+    "source_rect_top_left": [
+      822,
+      360,
+      173,
+      255
+    ],
+    "source_ppu": 204.8485,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 19570
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/JumpLand/Hero_JumpLand_07_1024x1024.png",
+    "clip": "JumpLand",
+    "source": "Hero_JumpLand_12f_v2.png",
+    "source_rect_top_left": [
+      1161,
+      372,
+      173,
+      319
+    ],
+    "source_ppu": 204.8485,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 21649
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/JumpLand/Hero_JumpLand_08_1024x1024.png",
+    "clip": "JumpLand",
+    "source": "Hero_JumpLand_12f_v2.png",
+    "source_rect_top_left": [
+      163,
+      722,
+      163,
+      335
+    ],
+    "source_ppu": 204.8485,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 23221
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/JumpLand/Hero_JumpLand_09_1024x1024.png",
+    "clip": "JumpLand",
+    "source": "Hero_JumpLand_12f_v2.png",
+    "source_rect_top_left": [
+      497,
+      750,
+      178,
+      309
+    ],
+    "source_ppu": 204.8485,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 22621
+      },
+      {
+        "label": 2,
+        "n": 2
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/JumpLand/Hero_JumpLand_10_1024x1024.png",
+    "clip": "JumpLand",
+    "source": "Hero_JumpLand_12f_v2.png",
+    "source_rect_top_left": [
+      826,
+      795,
+      201,
+      264
+    ],
+    "source_ppu": 204.8485,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 21468
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/JumpLand/Hero_JumpLand_11_1024x1024.png",
+    "clip": "JumpLand",
+    "source": "Hero_JumpLand_12f_v2.png",
+    "source_rect_top_left": [
+      1190,
+      718,
+      93,
+      341
+    ],
+    "source_ppu": 204.8485,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 21107
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Climb/Hero_Climb_00_1024x1024.png",
+    "clip": "Climb",
+    "source": "Hero_Climb_8f_v2.png",
+    "source_rect_top_left": [
+      139,
+      18,
+      210,
+      484
+    ],
+    "source_ppu": 252.0833,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 48413
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Climb/Hero_Climb_01_1024x1024.png",
+    "clip": "Climb",
+    "source": "Hero_Climb_8f_v2.png",
+    "source_rect_top_left": [
+      517,
+      25,
+      189,
+      477
+    ],
+    "source_ppu": 252.0833,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 48832
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Climb/Hero_Climb_02_1024x1024.png",
+    "clip": "Climb",
+    "source": "Hero_Climb_8f_v2.png",
+    "source_rect_top_left": [
+      890,
+      21,
+      185,
+      480
+    ],
+    "source_ppu": 252.0833,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 46109
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Climb/Hero_Climb_03_1024x1024.png",
+    "clip": "Climb",
+    "source": "Hero_Climb_8f_v2.png",
+    "source_rect_top_left": [
+      1263,
+      28,
+      203,
+      474
+    ],
+    "source_ppu": 252.0833,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 45570
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Climb/Hero_Climb_04_1024x1024.png",
+    "clip": "Climb",
+    "source": "Hero_Climb_8f_v2.png",
+    "source_rect_top_left": [
+      149,
+      517,
+      187,
+      486
+    ],
+    "source_ppu": 252.0833,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 46129
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Climb/Hero_Climb_05_1024x1024.png",
+    "clip": "Climb",
+    "source": "Hero_Climb_8f_v2.png",
+    "source_rect_top_left": [
+      512,
+      515,
+      196,
+      488
+    ],
+    "source_ppu": 252.0833,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 47311
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Climb/Hero_Climb_06_1024x1024.png",
+    "clip": "Climb",
+    "source": "Hero_Climb_8f_v2.png",
+    "source_rect_top_left": [
+      883,
+      516,
+      191,
+      487
+    ],
+    "source_ppu": 252.0833,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 47629
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Climb/Hero_Climb_07_1024x1024.png",
+    "clip": "Climb",
+    "source": "Hero_Climb_8f_v2.png",
+    "source_rect_top_left": [
+      1271,
+      516,
+      212,
+      485
+    ],
+    "source_ppu": 252.0833,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 47838
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Interact/Hero_Interact_00_1024x1024.png",
+    "clip": "Interact",
+    "source": "Hero_Interact_8f_v2.png",
+    "source_rect_top_left": [
+      160,
+      7,
+      115,
+      498
+    ],
+    "source_ppu": 300,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 39090
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Interact/Hero_Interact_01_1024x1024.png",
+    "clip": "Interact",
+    "source": "Hero_Interact_8f_v2.png",
+    "source_rect_top_left": [
+      540,
+      9,
+      120,
+      497
+    ],
+    "source_ppu": 300,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 39535
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Interact/Hero_Interact_02_1024x1024.png",
+    "clip": "Interact",
+    "source": "Hero_Interact_8f_v2.png",
+    "source_rect_top_left": [
+      898,
+      7,
+      209,
+      498
+    ],
+    "source_ppu": 300,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 42278
+      },
+      {
+        "label": 2,
+        "n": 1
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Interact/Hero_Interact_03_1024x1024.png",
+    "clip": "Interact",
+    "source": "Hero_Interact_8f_v2.png",
+    "source_rect_top_left": [
+      1282,
+      7,
+      231,
+      499
+    ],
+    "source_ppu": 300,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 43863
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Interact/Hero_Interact_04_1024x1024.png",
+    "clip": "Interact",
+    "source": "Hero_Interact_8f_v2.png",
+    "source_rect_top_left": [
+      144,
+      516,
+      240,
+      496
+    ],
+    "source_ppu": 300,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 45503
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Interact/Hero_Interact_05_1024x1024.png",
+    "clip": "Interact",
+    "source": "Hero_Interact_8f_v2.png",
+    "source_rect_top_left": [
+      384,
+      521,
+      384,
+      491
+    ],
+    "source_ppu": 300,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 354,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 45842
+      },
+      {
+        "label": 2,
+        "n": 354
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Interact/Hero_Interact_06_1024x1024.png",
+    "clip": "Interact",
+    "source": "Hero_Interact_8f_v2.png",
+    "source_rect_top_left": [
+      768,
+      516,
+      297,
+      496
+    ],
+    "source_ppu": 300,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 132,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 41239
+      },
+      {
+        "label": 2,
+        "n": 132
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Interact/Hero_Interact_07_1024x1024.png",
+    "clip": "Interact",
+    "source": "Hero_Interact_8f_v2.png",
+    "source_rect_top_left": [
+      1285,
+      516,
+      118,
+      496
+    ],
+    "source_ppu": 300,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 39759
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/PickUp/Hero_PickUp_00_1024x1024.png",
+    "clip": "PickUp",
+    "source": "Hero_PickUp_12f_v2.png",
+    "source_rect_top_left": [
+      102,
+      41,
+      118,
+      445
+    ],
+    "source_ppu": 271.5151,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 31383
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/PickUp/Hero_PickUp_01_1024x1024.png",
+    "clip": "PickUp",
+    "source": "Hero_PickUp_12f_v2.png",
+    "source_rect_top_left": [
+      301,
+      70,
+      175,
+      413
+    ],
+    "source_ppu": 271.5151,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 31558
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/PickUp/Hero_PickUp_02_1024x1024.png",
+    "clip": "PickUp",
+    "source": "Hero_PickUp_12f_v2.png",
+    "source_rect_top_left": [
+      523,
+      125,
+      245,
+      357
+    ],
+    "source_ppu": 271.5151,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 640,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 32169
+      },
+      {
+        "label": 2,
+        "n": 640
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/PickUp/Hero_PickUp_03_1024x1024.png",
+    "clip": "PickUp",
+    "source": "Hero_PickUp_12f_v2.png",
+    "source_rect_top_left": [
+      768,
+      210,
+      190,
+      273
+    ],
+    "source_ppu": 271.5151,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 29210
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/PickUp/Hero_PickUp_04_1024x1024.png",
+    "clip": "PickUp",
+    "source": "Hero_PickUp_12f_v2.png",
+    "source_rect_top_left": [
+      51,
+      696,
+      205,
+      259
+    ],
+    "source_ppu": 271.5151,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 30726
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/PickUp/Hero_PickUp_05_1024x1024.png",
+    "clip": "PickUp",
+    "source": "Hero_PickUp_12f_v2.png",
+    "source_rect_top_left": [
+      256,
+      589,
+      256,
+      366
+    ],
+    "source_ppu": 271.5151,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 457,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 33740
+      },
+      {
+        "label": 3,
+        "n": 409
+      },
+      {
+        "label": 2,
+        "n": 48
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/PickUp/Hero_PickUp_06_1024x1024.png",
+    "clip": "PickUp",
+    "source": "Hero_PickUp_12f_v2.png",
+    "source_rect_top_left": [
+      512,
+      554,
+      203,
+      401
+    ],
+    "source_ppu": 271.5151,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 43,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 32146
+      },
+      {
+        "label": 2,
+        "n": 43
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/PickUp/Hero_PickUp_07_1024x1024.png",
+    "clip": "PickUp",
+    "source": "Hero_PickUp_12f_v2.png",
+    "source_rect_top_left": [
+      835,
+      531,
+      140,
+      425
+    ],
+    "source_ppu": 271.5151,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 30704
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/PickUp/Hero_PickUp_08_1024x1024.png",
+    "clip": "PickUp",
+    "source": "Hero_PickUp_12f_v2.png",
+    "source_rect_top_left": [
+      65,
+      1011,
+      191,
+      448
+    ],
+    "source_ppu": 271.5151,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 36149
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/PickUp/Hero_PickUp_09_1024x1024.png",
+    "clip": "PickUp",
+    "source": "Hero_PickUp_12f_v2.png",
+    "source_rect_top_left": [
+      256,
+      1011,
+      256,
+      448
+    ],
+    "source_ppu": 271.5151,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 1203,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 35198
+      },
+      {
+        "label": 2,
+        "n": 1203
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/PickUp/Hero_PickUp_10_1024x1024.png",
+    "clip": "PickUp",
+    "source": "Hero_PickUp_12f_v2.png",
+    "source_rect_top_left": [
+      512,
+      1011,
+      213,
+      448
+    ],
+    "source_ppu": 271.5151,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 767,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 33273
+      },
+      {
+        "label": 2,
+        "n": 767
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/PickUp/Hero_PickUp_11_1024x1024.png",
+    "clip": "PickUp",
+    "source": "Hero_PickUp_12f_v2.png",
+    "source_rect_top_left": [
+      833,
+      1007,
+      108,
+      452
+    ],
+    "source_ppu": 271.5151,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 32548
+      }
+    ],
+    "note": ""
+  },
+  {
+    "file": "05_角色_Characters/Hero/Mantle/Hero_Mantle_00_1024x1024.png",
+    "clip": "Mantle",
+    "source": "Hero_Mantle_12f_v2.png",
+    "source_rect_top_left": [
+      100,
+      9,
+      102,
+      407
+    ],
+    "source_ppu": 247.8788,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 28209
+      }
+    ],
+    "note": "备用动作；当前能力未驱动"
+  },
+  {
+    "file": "05_角色_Characters/Hero/Mantle/Hero_Mantle_01_1024x1024.png",
+    "clip": "Mantle",
+    "source": "Hero_Mantle_12f_v2.png",
+    "source_rect_top_left": [
+      371,
+      22,
+      216,
+      392
+    ],
+    "source_ppu": 247.8788,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 32590
+      }
+    ],
+    "note": "备用动作；当前能力未驱动"
+  },
+  {
+    "file": "05_角色_Characters/Hero/Mantle/Hero_Mantle_02_1024x1024.png",
+    "clip": "Mantle",
+    "source": "Hero_Mantle_12f_v2.png",
+    "source_rect_top_left": [
+      667,
+      50,
+      230,
+      364
+    ],
+    "source_ppu": 247.8788,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 31437
+      }
+    ],
+    "note": "备用动作；当前能力未驱动"
+  },
+  {
+    "file": "05_角色_Characters/Hero/Mantle/Hero_Mantle_03_1024x1024.png",
+    "clip": "Mantle",
+    "source": "Hero_Mantle_12f_v2.png",
+    "source_rect_top_left": [
+      977,
+      81,
+      227,
+      333
+    ],
+    "source_ppu": 247.8788,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 27849
+      }
+    ],
+    "note": "备用动作；当前能力未驱动"
+  },
+  {
+    "file": "05_角色_Characters/Hero/Mantle/Hero_Mantle_04_1024x1024.png",
+    "clip": "Mantle",
+    "source": "Hero_Mantle_12f_v2.png",
+    "source_rect_top_left": [
+      74,
+      441,
+      204,
+      373
+    ],
+    "source_ppu": 247.8788,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 33677
+      }
+    ],
+    "note": "备用动作；当前能力未驱动"
+  },
+  {
+    "file": "05_角色_Characters/Hero/Mantle/Hero_Mantle_05_1024x1024.png",
+    "clip": "Mantle",
+    "source": "Hero_Mantle_12f_v2.png",
+    "source_rect_top_left": [
+      398,
+      435,
+      212,
+      378
+    ],
+    "source_ppu": 247.8788,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 33428
+      }
+    ],
+    "note": "备用动作；当前能力未驱动"
+  },
+  {
+    "file": "05_角色_Characters/Hero/Mantle/Hero_Mantle_06_1024x1024.png",
+    "clip": "Mantle",
+    "source": "Hero_Mantle_12f_v2.png",
+    "source_rect_top_left": [
+      672,
+      445,
+      217,
+      368
+    ],
+    "source_ppu": 247.8788,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 32269
+      }
+    ],
+    "note": "备用动作；当前能力未驱动"
+  },
+  {
+    "file": "05_角色_Characters/Hero/Mantle/Hero_Mantle_07_1024x1024.png",
+    "clip": "Mantle",
+    "source": "Hero_Mantle_12f_v2.png",
+    "source_rect_top_left": [
+      962,
+      439,
+      235,
+      319
+    ],
+    "source_ppu": 247.8788,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 28646
+      }
+    ],
+    "note": "备用动作；当前能力未驱动"
+  },
+  {
+    "file": "05_角色_Characters/Hero/Mantle/Hero_Mantle_08_1024x1024.png",
+    "clip": "Mantle",
+    "source": "Hero_Mantle_12f_v2.png",
+    "source_rect_top_left": [
+      77,
+      840,
+      210,
+      340
+    ],
+    "source_ppu": 247.8788,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 30528
+      }
+    ],
+    "note": "备用动作；当前能力未驱动"
+  },
+  {
+    "file": "05_角色_Characters/Hero/Mantle/Hero_Mantle_09_1024x1024.png",
+    "clip": "Mantle",
+    "source": "Hero_Mantle_12f_v2.png",
+    "source_rect_top_left": [
+      384,
+      913,
+      203,
+      240
+    ],
+    "source_ppu": 247.8788,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 25655
+      }
+    ],
+    "note": "备用动作；当前能力未驱动"
+  },
+  {
+    "file": "05_角色_Characters/Hero/Mantle/Hero_Mantle_10_1024x1024.png",
+    "clip": "Mantle",
+    "source": "Hero_Mantle_12f_v2.png",
+    "source_rect_top_left": [
+      688,
+      845,
+      176,
+      382
+    ],
+    "source_ppu": 247.8788,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 34028
+      }
+    ],
+    "note": "备用动作；当前能力未驱动"
+  },
+  {
+    "file": "05_角色_Characters/Hero/Mantle/Hero_Mantle_11_1024x1024.png",
+    "clip": "Mantle",
+    "source": "Hero_Mantle_12f_v2.png",
+    "source_rect_top_left": [
+      1028,
+      814,
+      106,
+      413
+    ],
+    "source_ppu": 247.8788,
+    "delivery_ppu": 300,
+    "pivot_unity_normalized": [
+      0.5,
+      0.125
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "removed_neighbor_pixels": 0,
+    "largest_components": [
+      {
+        "label": 1,
+        "n": 29462
+      }
+    ],
+    "note": "备用动作；当前能力未驱动"
+  }
+]

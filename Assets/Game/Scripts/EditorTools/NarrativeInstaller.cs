@@ -19,20 +19,22 @@ namespace BorrowTomorrow.EditorTools
     public static class NarrativeInstaller
     {
         [Serializable] private class Script { public Event[] events; }
-        [Serializable] private class Event { public string id; public string[] flags; public string objective; public Line[] lines; }
+        [Serializable] private class Event { public string id; public string[] flags; public string objective; public Line[] lines; public ActionSpec action; }
         [Serializable] private class Line { public string id; public string speaker; public string source; public string text; public string mode; public string voice; public string next; }
+        [Serializable] private class ActionSpec
+        {
+            public string id, before, confirmBefore, confirmAfter, sfx, gesture, image, beforeImage;
+            public float seconds, zoom;
+            public float[] cover; public Color coverColor; public Vector2 slide, focus;
+        }
+        [Serializable] private class Hints { public HintSpec[] stages; }
+        [Serializable] private class HintSpec { public string level, room, stage, h1, h2, h3; public float minX, maxX, minY; }
+        private const string HintSource = "Assets/Game/Data/Narrative/hints_v14.json";
+        private static HintSpec[] LoadHints() => JsonUtility.FromJson<Hints>("{\"stages\":" + File.ReadAllText(HintSource) + "}").stages;
         private const string Source = "Assets/Game/Data/Narrative/story_v13.json";
         private const string Target = "Assets/Game/Data/Dialogue/StoryV13";
+        private const string ActionTarget = "Assets/Game/Data/Narrative/Actions";
         private static Script Load() => JsonUtility.FromJson<Script>("{\"events\":" + File.ReadAllText(Source) + "}");
-        private static readonly Dictionary<string,string> Aliases = new Dictionary<string,string>
-        {
-            {"gate_self_talk","DLG_L00_INTRO_01"}, {"uniform_self","DLG_L02_UNIFORM_01"},
-            {"uniform_kid","DLG_L02_UNIFORM_02"}, {"uniform_gran","DLG_L02_UNIFORM_03"},
-            {"ledger_check","DLG_L02_LEDGER_01"}, {"photo_back","DLG_L03_REVEAL_01"},
-            {"photo_front","DLG_L03_REVEAL_02"}, {"photo_voice","DLG_L03_REVEAL_03"},
-            {"compartment_view","DLG_L04_LOOK_01"}, {"compartment_touch","DLG_L04_BOX_01"},
-            {"epilogue_letter","DLG_EPI_01"}
-        };
         public static Dictionary<string,string> ImportDialogue()
         {
             Directory.CreateDirectory(Target);
@@ -49,8 +51,9 @@ namespace BorrowTomorrow.EditorTools
                     entry.nextId=l.next;entry.holdForConfirm=l.mode!="自动";
                     entry.minDurationSeconds=l.source=="Title"?2.5f:l.mode=="自动"?3f:.2f;
                     entry.requiredFlags=i==0?Required(e.id):Array.Empty<string>();
+                    // Event completion is committed once from the first line's config; per-line setFlags stay empty (spec 1.4 §4.1).
                     entry.completionFlags=i==0?e.flags:Array.Empty<string>();
-                    entry.setFlags=i==e.lines.Length-1?e.flags:Array.Empty<string>();
+                    entry.setFlags=Array.Empty<string>();
                     entry.objectiveAfter=i==0?Objective(e.objective):null;
                     entry.voiceClip=string.IsNullOrEmpty(l.voice)?null:AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Game/Audio/Voice/"+l.voice+".mp3");
                     entry.illustration=Illustration(l.id);entry.blackBackground=l.id=="DLG_L00_INTRO_01"||l.id=="DLG_L00_INTRO_02";
@@ -58,13 +61,67 @@ namespace BorrowTomorrow.EditorTools
                     entry.delayBefore=l.id=="DLG_L02_UNIFORM_04"?1.2f:0f;
                     entry.endHoldSeconds=l.id=="DLG_EPI_08"?3f:0f;
                     entry.sfxId=l.source=="Note"?"sfx_cloth_paper":l.source=="Tape"?"sfx_tape_click":null;
-                    if(l.id=="DLG_L04_BOX_01"||l.id=="DLG_EPI_02")entry.sfxId="sfx_tin_box";
+                    if(l.id=="DLG_EPI_02")entry.sfxId="sfx_tin_box";
                     EditorUtility.SetDirty(entry);map[l.id]=path;
                 }
             }
-            foreach(var pair in Aliases)map[pair.Key]=map[pair.Value];
             AssetDatabase.SaveAssets();
             return map;
+        }
+        // Three-level puzzle hints (spec 1.4 §6.3); stage order inside a level follows the JSON order.
+        public static void ApplyHints()
+        {
+            foreach(var level in LoadHints().GroupBy(h=>h.level))
+            {
+                string path=AssetDatabase.FindAssets("t:LevelDefinition",new[]{"Assets/Game/Data/Levels"}).Select(AssetDatabase.GUIDToAssetPath)
+                    .FirstOrDefault(p=>AssetDatabase.LoadAssetAtPath<LevelDefinition>(p).levelId==level.Key);
+                if(path==null)throw new InvalidOperationException("Missing LevelDefinition: "+level.Key);
+                var def=AssetDatabase.LoadAssetAtPath<LevelDefinition>(path);
+                def.hintGroups=level.Select(h=>new HintGroup{stageKey=h.stage,hintLevel1=h.h1,hintLevel2=h.h2,hintLevel3=h.h3}).ToArray();
+                EditorUtility.SetDirty(def);
+            }
+            AssetDatabase.SaveAssets();
+        }
+        private static void InstallHintMarkers(Scene scene)
+        {
+            var hints=LoadHints();
+            foreach(var room in All<LevelRoot>(scene))
+            {
+                Transform old=room.transform.Find("HintStages");if(old!=null)UnityEngine.Object.DestroyImmediate(old.gameObject);
+                var stages=hints.Where(h=>h.room==room.RoomId).ToArray();
+                if(stages.Length==0)continue;
+                var parent=new GameObject("HintStages");parent.transform.SetParent(room.transform,false);
+                foreach(var h in stages)
+                {
+                    var go=new GameObject("Stage_"+h.stage);go.transform.SetParent(parent.transform,false);
+                    var marker=go.AddComponent<HintStageMarker>();
+                    marker.roomId=h.room;marker.stageFlag=h.stage;marker.minimumX=h.minX;marker.maximumX=h.maxX;marker.minimumY=h.minY;
+                }
+            }
+        }
+        public static NarrativeAction[] ImportActions()
+        {
+            Directory.CreateDirectory(ActionTarget);
+            AssetDatabase.Refresh();
+            var result=new List<NarrativeAction>();
+            foreach(Event e in Load().events)
+            {
+                ActionSpec s=e.action;
+                if(s==null||string.IsNullOrEmpty(s.id))continue;
+                if(!e.lines.Any(l=>l.id==s.before))throw new InvalidOperationException(e.id+" action targets a line outside its event: "+s.before);
+                string path=ActionTarget+"/"+s.id+".asset";
+                var a=AssetDatabase.LoadAssetAtPath<NarrativeAction>(path);
+                if(a==null){a=ScriptableObject.CreateInstance<NarrativeAction>();AssetDatabase.CreateAsset(a,path);}
+                a.actionId=s.id;a.beforeEntryId=s.before;a.confirmBefore=s.confirmBefore;a.confirmAfter=s.confirmAfter;
+                a.seconds=s.seconds>0?s.seconds:1.2f;a.sfxId=s.sfx;a.gesture=s.gesture;
+                a.afterImage=IllustrationByKey(s.image);a.beforeImage=IllustrationByKey(s.beforeImage);
+                if(a.afterImage==null)throw new InvalidOperationException("Missing action illustration: "+s.image);
+                a.coverRect=s.cover!=null&&s.cover.Length==4?new Rect(s.cover[0],s.cover[1],s.cover[2],s.cover[3]):default;a.coverColor=s.coverColor;a.coverSlide=s.slide;
+                a.zoom=s.zoom>0?s.zoom:1f;a.focus=s.focus==Vector2.zero?new Vector2(.5f,.5f):s.focus;
+                EditorUtility.SetDirty(a);result.Add(a);
+            }
+            AssetDatabase.SaveAssets();
+            return result.ToArray();
         }
         private static string[] Required(string id)
         {
@@ -104,18 +161,23 @@ namespace BorrowTomorrow.EditorTools
             if(id=="DLG_L03_REVEAL_02")key="ILL_PHOTO_FRONT";
             if(id=="DLG_L03_REVEAL_03")key="ILL_HANDS_OLD";
             if(id.StartsWith("DLG_L03_REVEAL") && int.Parse(id.Substring(id.Length-2))>=4)key="ILL_HOSPITAL_HOLD";
-            if(id=="DLG_L04_BOX_01")key="ILL_BOX_IN_NICHE";
-            if(id=="DLG_L04_BOX_02"||id=="DLG_L04_BOX_03")key="ILL_HOSPITAL_HOLD";
+            // The niche itself is shown by the board action; the spoken location happens at the hospital bed.
+            if(id.StartsWith("DLG_L04_BOX"))key="ILL_HOSPITAL_HOLD";
             if(id=="DLG_EPI_02")key="ILL_EPILOGUE_BOX_OPEN";
             if(id=="DLG_EPI_03"||id=="DLG_EPI_04")key="ILL_EPILOGUE_LETTER";
             if(id.StartsWith("DLG_EPI_") && int.Parse(id.Substring(id.Length-2))>=5)key="ILL_EPILOGUE_QUILT_LAP";
-            if(key==null)return null;
+            return IllustrationByKey(key);
+        }
+        private static Texture2D IllustrationByKey(string key)
+        {
+            if(string.IsNullOrEmpty(key))return null;
             return AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Game/Art/Illustrations/"+key+(key=="ILL_EPILOGUE_QUILT_LAP"?".png":".jpg"));
         }
-        [MenuItem("BorrowTomorrow/接入完整剧情 v1.3（保留现有关卡）")]
+        [MenuItem("BorrowTomorrow/接入完整剧情 v1.4（保留现有关卡）")]
         public static void Install()
         {
             var map=ImportDialogue();
+            ApplyHints();
             foreach(string name in new[]{"Bootstrap","L00_Gate","L01_Courtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
             {
                 Scene scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/"+name+".scene");
@@ -125,7 +187,7 @@ namespace BorrowTomorrow.EditorTools
             AssetDatabase.SaveAssets();
             EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");
             if(File.Exists("Assets/Game/Data/Art/enabled.json"))ArtInstaller.Install();
-            Debug.Log("[NarrativeInstaller] Full v1.3 narrative installed without rebuilding existing puzzle geometry.");
+            Debug.Log("[NarrativeInstaller] Full v1.4 narrative installed without rebuilding existing puzzle geometry.");
         }
         public static void InstallAndBuild()
         {
@@ -151,10 +213,9 @@ namespace BorrowTomorrow.EditorTools
         {
             if(scene.name=="Bootstrap")
             {
-                // One active presentation/trigger pipeline; retain legacy importer/assets for compatibility.
-                foreach(var legacy in All<StoryPresentation>(scene).ToArray())UnityEngine.Object.DestroyImmediate(legacy);
                 var library=All<DialogueLibrary>(scene).First();
-                Objects(library,"entries",map.Values.Distinct().Select(AssetDatabase.LoadAssetAtPath<DialogueEntry>).Cast<UnityEngine.Object>().ToArray());
+                Objects(library,"entries",map.Values.Select(AssetDatabase.LoadAssetAtPath<DialogueEntry>).Cast<UnityEngine.Object>().ToArray());
+                Objects(library,"actions",ImportActions().Cast<UnityEngine.Object>().ToArray());
                 var ui=All<HudService>(scene).First();
                 var presenter=ui.GetComponent<NarrativePresentation>()??ui.gameObject.AddComponent<NarrativePresentation>();
                 presenter.font=AssetDatabase.LoadAssetAtPath<Font>("Assets/Game/Art/UI/Fonts/PlaceholderChinese.ttf");
@@ -180,7 +241,7 @@ namespace BorrowTomorrow.EditorTools
                     Auto(ctx,main,"DLG_L00_INTRO_01");
                     Auto(ctx,main,"DLG_L00_DOG_01",13.5f,false);
                     var dogObject=new GameObject("AHuangEcho");dogObject.transform.SetParent(ctx.Content,false);dogObject.transform.position=new Vector3(14,.12f,0);
-                    var dog=dogObject.AddComponent<NarrativeDogEcho>();dog.sheet=AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Game/Art/Characters/AHuang_SpriteSheet.png");dog.cutoutShader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/Game/Art/Characters/DogWhiteCutout.shader");
+                    var dog=dogObject.AddComponent<NarrativeDogEcho>();ArtDeliveryInstaller.ConfigureDog(dog);
                     var notice=Investigate(ctx,"notice","查看通知",new Vector2(6,.9f),"DLG_L00_NOTICE_01",true);
                     notice.gameObject.AddComponent<PresentOnlyInvestigation>().anchorX=6f;
                     break;
@@ -198,9 +259,11 @@ namespace BorrowTomorrow.EditorTools
                     foreach(var door in All<ExitDoor>(scene))LevelLayouts.SetObject(door,"lockedDialogue",Entry(map,"DLG_LOCK_L03_01"));
                     break;
                 case "L04_Attic":
+                    // Auto-play on the window sill and the E investigation share one completion flag (spec 3.11).
                     Auto(ctx,main,"DLG_L04_LOOK_01");
+                    Investigate(ctx,"window_boards","查看窗边木板",new Vector2(20.7f,3.6f),"DLG_L04_LOOK_01",true);
                     var grown=Auto(ctx,main,"DLG_L04_TREE_01",-10000,false);grown.presentMechanism="L04_tree";
-                    Investigate(ctx,"niche","触摸木板暗格",new Vector2(26.5f,4.95f),"DLG_L04_BOX_01",false);
+                    Investigate(ctx,"niche","拨开木板",new Vector2(26.5f,4.95f),"DLG_L04_BOX_01",false);
                     LevelLayouts.SetField(main.GetComponent<LevelDirector>(),"completeLevelOnFlag","BoxLocated");
                     break;
                 case "Epilogue":
@@ -208,6 +271,7 @@ namespace BorrowTomorrow.EditorTools
                     Auto(ctx,main,"DLG_EPI_01");
                     break;
             }
+            InstallHintMarkers(scene);
         }
         private static LevelLayouts.RoomContext Context(LevelRoot room,Dictionary<string,string> map)
         {
@@ -280,7 +344,7 @@ namespace BorrowTomorrow.EditorTools
                 LevelLayouts.SetField(door,"mode",(int)ExitDoor.TransitionMode.SameSceneRoom);LevelLayouts.SetObject(door,"targetRoom",room);
                 LevelLayouts.SetField(door,"targetSpawnId","spawn_sewing_indoor");LevelLayouts.SetField(door,"ignoreLevelConditions",true);
             }
-            Investigate(ctx,"uniform","查看校服",new Vector2(47,.9f),"DLG_L02_UNIFORM_01",true);
+            Investigate(ctx,"uniform","翻开校服袖口",new Vector2(47,.9f),"DLG_L02_UNIFORM_01",true);
             Investigate(ctx,"ledger","查看账本",new Vector2(50.5f,.9f),"DLG_L02_LEDGER_01",true);
             Decor(ctx,"SewingMachine",new Vector2(47,1),new Vector2(2.3f,1.8f),"DECOR_SewingMachine");
             Decor(ctx,"Fabrics",new Vector2(48.5f,.75f),new Vector2(.8f,.6f),"DECOR_Fabrics");

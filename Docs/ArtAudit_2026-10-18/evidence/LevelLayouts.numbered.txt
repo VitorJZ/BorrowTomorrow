@@ -1,0 +1,704 @@
+1: using System.Collections.Generic;
+2: using BorrowTomorrow.Core.Data;
+3: using BorrowTomorrow.Core.Interfaces;
+4: using BorrowTomorrow.Level;
+5: using BorrowTomorrow.Narrative;
+6: using BorrowTomorrow.Player;
+7: using BorrowTomorrow.TimeBoundary;
+8: using UnityEditor;
+9: using UnityEngine;
+10: 
+11: namespace BorrowTomorrow.EditorTools
+12: {
+13:     /// <summary>
+14:     /// 灰盒关卡布局构建器：按策划方案第 7 章的锚点坐标生成每关内容。
+15:     /// 全部几何均为简单形状占位（白方块/斜坡），正式美术按 Docs/10 资源清单替换。
+16:     /// 布局规则：
+17:     /// - 必经水平跳跃 ≤1.2、向上跳 ≤0.6（策划 6.2）；
+18:     /// - 关键隔断缺口 > 理论最大跳距 2.25（策划 16 风险二：谜题不能被普通跳跃绕过）；
+19:     /// - 梯顶平台为单向碰撞（PlatformEffector），攀爬可穿过、落下可站稳；
+20:     /// - 恒定站稳面挂高摩擦 PhysicsMaterial（策划 7.4：安全砖台可静止站立）。
+21:     /// </summary>
+22:     internal static class LevelLayouts
+23:     {
+24:         internal sealed class RoomContext
+25:         {
+26:             public Transform Content;
+27:             public Sprite White;
+28:             public PhysicsMaterial2D Friction;
+29:             public int PlayerMaskValue;
+30:             public Dictionary<string, string> TemporalDefPaths;
+31:             public Dictionary<string, string> DialoguePaths;
+32: 
+33:             /// <summary>年代物体定义查找：按路径惰性加载（始终取得引擎当前的规范实例，
+34:             /// 规避批处理中资产实例在导入/场景操作期间被销毁导致的伪 null 引用）。</summary>
+35:             public TemporalObjectDefinition FindTemporalDef(string id)
+36:             {
+37:                 if (!TemporalDefPaths.TryGetValue(id, out string path))
+38:                 {
+39:                     return null;
+40:                 }
+41:                 return AssetDatabase.LoadAssetAtPath<TemporalObjectDefinition>(path);
+42:             }
+43: 
+44:             /// <summary>对白条目查找：按路径惰性加载（同上）。</summary>
+45:             public DialogueEntry FindDialogue(string id)
+46:             {
+47:                 if (!DialoguePaths.TryGetValue(id, out string path))
+48:                 {
+49:                     return null;
+50:                 }
+51:                 return AssetDatabase.LoadAssetAtPath<DialogueEntry>(path);
+52:             }
+53:         }
+54: 
+55:         // ------------------------------------------------------------ 通用构建件
+56: 
+57:         /// <summary>
+58:         /// 按世界尺寸渲染 Sprite。用 Sliced 绘制模式 + renderer.size：
+59:         /// Simple 模式下 size 不生效（灰盒曾全部渲染成贴图原尺寸小点）；
+60:         /// Tiled 模式按贴图尺寸生成真实网格（4×4 贴图铺 700×25 瓦片 ≈ 7 万顶点报错）；
+61:         /// Sliced 对零边框纯色贴图就是一次拉伸，恒定 4 顶点，且不影响同物体上的碰撞体。
+62:         /// </summary>
+63:         internal static void SizeSprite(SpriteRenderer renderer, Vector2 worldSize)
+64:         {
+65:             renderer.drawMode = SpriteDrawMode.Sliced;
+66:             renderer.size = worldSize;
+67:         }
+68: 
+69:         /// <summary>灰盒盒子：SpriteRenderer + 可选 BoxCollider2D（可旋转）。</summary>
+70:         internal static GameObject Box(RoomContext ctx, string name, Vector2 center, Vector2 size, Color color,
+71:             string sortingLayer, string layerName, bool solid, bool oneWay = false, float angle = 0f)
+72:         {
+73:             var box = new GameObject(name);
+74:             box.transform.SetParent(ctx.Content);
+75:             box.transform.position = new Vector3(center.x, center.y, 0f);
+76:             box.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+77:             int layer = LayerMask.NameToLayer(layerName);
+78:             if (layer >= 0)
+79:             {
+80:                 box.layer = layer;
+81:             }
+82:             var renderer = box.AddComponent<SpriteRenderer>();
+83:             renderer.sprite = ctx.White;
+84:             renderer.color = color;
+85:             renderer.sortingLayerName = sortingLayer;
+86:             SizeSprite(renderer, size);
+87:             if (solid)
+88:             {
+89:                 var collider = box.AddComponent<BoxCollider2D>();
+90:                 collider.size = size;
+91:                 collider.sharedMaterial = ctx.Friction;
+92:                 if (oneWay)
+93:                 {
+94:                     collider.usedByEffector = true;
+95:                     var effector = box.AddComponent<PlatformEffector2D>();
+96:                     effector.useOneWay = true;
+97:                 }
+98:             }
+99:             return box;
+100:         }
+101: 
+102:         /// <summary>斜坡盒子：p1→p2 为上表面连线，厚度向下延伸（树枝缓坡）。</summary>
+103:         internal static GameObject SlopeBox(RoomContext ctx, string name, Vector2 p1, Vector2 p2, float thickness,
+104:             Color color, string sortingLayer, string layerName)
+105:         {
+106:             Vector2 direction = (p2 - p1).normalized;
+107:             Vector2 upNormal = new Vector2(-direction.y, direction.x);
+108:             if (upNormal.y < 0f)
+109:             {
+110:                 upNormal = -upNormal; // 保证法线朝上
+111:             }
+112:             Vector2 center = (p1 + p2) * 0.5f - upNormal * (thickness * 0.5f);
+113:             float length = Vector2.Distance(p1, p2);
+114:             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+115:             return Box(ctx, name, center, new Vector2(length, thickness), color, sortingLayer, layerName,
+116:                 solid: true, oneWay: false, angle);
+117:         }
+118: 
+119:         /// <summary>出生点（策划 12.2：优先安全出生点 ID）。</summary>
+120:         internal static SpawnPoint Spawn(RoomContext ctx, string id, Vector2 feetPos)
+121:         {
+122:             var spawn = new GameObject($"Spawn_{id}");
+123:             spawn.transform.SetParent(ctx.Content);
+124:             spawn.transform.position = new Vector3(feetPos.x, feetPos.y, 0f);
+125:             var point = spawn.AddComponent<SpawnPoint>();
+126:             SetField(point, "spawnId", id);
+127:             SetField(point, "placementOffset", Vector2.zero);
+128:             return point;
+129:         }
+130: 
+131:         /// <summary>检查点标记（策划 7.x：触发采集空间快照）。</summary>
+132:         internal static CheckpointMarker Checkpoint(RoomContext ctx, string id, Vector2 center)
+133:         {
+134:             var marker = new GameObject($"Checkpoint_{id}");
+135:             marker.transform.SetParent(ctx.Content);
+136:             marker.transform.position = new Vector3(center.x, center.y, 0f);
+137:             var collider = marker.AddComponent<BoxCollider2D>();
+138:             collider.isTrigger = true;
+139:             collider.size = new Vector2(1.2f, 1.6f);
+140:             var component = marker.AddComponent<CheckpointMarker>();
+141:             SetField(component, "checkpointId", id);
+142:             SetField(component, "playerMask", ctx.PlayerMaskValue);
+143:             return component;
+144:         }
+145: 
+146:         /// <summary>跌落恢复区（策划 4.6）。</summary>
+147:         internal static void KillZone(RoomContext ctx, Vector2 center, Vector2 size)
+148:         {
+149:             var zone = new GameObject("KillZone");
+150:             zone.transform.SetParent(ctx.Content);
+151:             zone.transform.position = new Vector3(center.x, center.y, 0f);
+152:             int layer = LayerMask.NameToLayer("KillZone");
+153:             if (layer >= 0)
+154:             {
+155:                 zone.layer = layer;
+156:             }
+157:             var collider = zone.AddComponent<BoxCollider2D>();
+158:             collider.isTrigger = true;
+159:             collider.size = size;
+160:             var kill = zone.AddComponent<KillZone>();
+161:             SetField(kill, "playerMask", ctx.PlayerMaskValue);
+162:         }
+163: 
+164:         /// <summary>出口门（策划 7.7：E 确认转场，不因接近边缘误切关）。</summary>
+165:         internal static ExitDoor Door(RoomContext ctx, string prompt, Vector2 center,
+166:             ExitDoor.TransitionMode mode, LevelRoot targetRoom, string targetSpawnId)
+167:         {
+168:             var door = new GameObject($"Exit_{prompt}");
+169:             door.transform.SetParent(ctx.Content);
+170:             door.transform.position = new Vector3(center.x, center.y, 0f);
+171:             int layer = LayerMask.NameToLayer("Interactable");
+172:             if (layer >= 0)
+173:             {
+174:                 door.layer = layer;
+175:             }
+176:             var collider = door.AddComponent<BoxCollider2D>();
+177:             collider.isTrigger = true;
+178:             collider.size = new Vector2(0.6f, 2.4f);
+179:             var exit = door.AddComponent<ExitDoor>();
+180:             SetField(exit, "prompt", prompt);
+181:             SetField(exit, "mode", (int)mode);
+182:             if (targetRoom != null)
+183:             {
+184:                 SetObject(exit, "targetRoom", targetRoom);
+185:             }
+186:             if (!string.IsNullOrEmpty(targetSpawnId))
+187:             {
+188:                 SetField(exit, "targetSpawnId", targetSpawnId);
+189:             }
+190:             return exit;
+191:         }
+192: 
+193:         /// <summary>叙事物（调查：校服/照片/账本/暗格，策划 3.1 渠道 D）。</summary>
+194:         internal static NarrativeInteractable Narrative(RoomContext ctx, string id, string prompt, Vector2 center,
+195:             Vector2 size, string dialogueEntryId, DialoguePriority priority, bool replayable)
+196:         {
+197:             var obj = new GameObject($"Narrative_{id}");
+198:             obj.transform.SetParent(ctx.Content);
+199:             obj.transform.position = new Vector3(center.x, center.y, 0f);
+200:             int layer = LayerMask.NameToLayer("Interactable");
+201:             if (layer >= 0)
+202:             {
+203:                 obj.layer = layer;
+204:             }
+205:             var collider = obj.AddComponent<BoxCollider2D>();
+206:             collider.isTrigger = true;
+207:             collider.size = size;
+208:             var renderer = obj.AddComponent<SpriteRenderer>();
+209:             renderer.sprite = ctx.White;
+210:             renderer.color = new Color(0.95f, 0.85f, 0.3f, 0.85f);
+211:             renderer.sortingLayerName = "EraPlatform";
+212:             SizeSprite(renderer, size);
+213:             var component = obj.AddComponent<NarrativeInteractable>();
+214:             SetField(component, "interactId", id);
+215:             SetField(component, "prompt", prompt);
+216:             DialogueEntry entry = ctx.FindDialogue(dialogueEntryId);
+217:             if (entry != null)
+218:             {
+219:                 // 直接字段赋值 + SetDirty：批处理下最可靠的资产引用注入方式。
+220:                 component.EditorConfigure(entry, priority, replayable);
+221:             }
+222:             else
+223:             {
+224:                 SetField(component, "replayable", replayable);
+225:                 Debug.LogWarning($"[LevelLayouts] 叙事物 {id} 找不到对白条目 {dialogueEntryId}");
+226:             }
+227:             return component;
+228:         }
+229: 
+230:         /// <summary>年代物体（策划 4.3：恒定/年代/叙事/装饰四类；本方法建年代物体）。</summary>
+231:         internal static TemporalObject Temporal(RoomContext ctx, string definitionId, Vector2 position)
+232:         {
+233:             var obj = new GameObject($"Temporal_{definitionId}");
+234:             obj.transform.SetParent(ctx.Content);
+235:             obj.transform.position = new Vector3(position.x, position.y, 0f);
+236:             int layer = LayerMask.NameToLayer("Temporal");
+237:             if (layer >= 0)
+238:             {
+239:                 obj.layer = layer;
+240:             }
+241:             var temporal = obj.AddComponent<TemporalObject>();
+242:             TemporalObjectDefinition definition = ctx.FindTemporalDef(definitionId);
+243:             if (definition == null)
+244:             {
+245:                 Debug.LogWarning($"[LevelLayouts] 找不到年代物体定义 {definitionId}");
+246:             }
+247:             else
+248:             {
+249:                 // 直接字段赋值 + SetDirty：批处理下最可靠的资产引用注入方式。
+250:                 temporal.EditorConfigure(definition);
+251:             }
+252:             return temporal;
+253:         }
+254: 
+255:         /// <summary>年代物体的某个年代状态子物体（策划 11.2：物理与渲染同步整体切换）。</summary>
+256:         internal static GameObject EraChild(RoomContext ctx, TemporalObject host, string era)
+257:         {
+258:             var child = new GameObject(era);
+259:             child.transform.SetParent(host.transform, false);
+260:             child.layer = host.gameObject.layer;
+261:             return child;
+262:         }
+263: 
+264:         /// <summary>梯子内容：视觉立杆+横档 + 攀爬 Trigger（挂到过去状态子物体，策划 11.3）。
+265:         /// centerX/bottomY/topY 均为世界坐标。</summary>
+266:         internal static void LadderContent(RoomContext ctx, GameObject eraChild,
+267:             float centerX, float bottomY, float topY)
+268:         {
+269:             float height = topY - bottomY;
+270:             float midY = (bottomY + topY) * 0.5f;
+271:             Vector2 parentWorld = eraChild.transform.position;
+272: 
+273:             // 视觉立杆（无碰撞）。
+274:             var bar = new GameObject("Bar");
+275:             bar.transform.SetParent(eraChild.transform, false);
+276:             bar.transform.localPosition = new Vector3(centerX, midY, 0f) - (Vector3)parentWorld;
+277:             var barRenderer = bar.AddComponent<SpriteRenderer>();
+278:             barRenderer.sprite = ctx.White;
+279:             barRenderer.color = new Color(0.55f, 0.38f, 0.22f);
+280:             barRenderer.sortingLayerName = "EraPlatform";
+281:             SizeSprite(barRenderer, new Vector2(0.18f, height));
+282: 
+283:             // 横档（无碰撞，每 0.5 单位一根）。
+284:             for (float y = bottomY + 0.3f; y < topY; y += 0.5f)
+285:             {
+286:                 var rung = new GameObject($"Rung_{y:0.0}");
+287:                 rung.transform.SetParent(eraChild.transform, false);
+288:                 rung.transform.localPosition = new Vector3(centerX, y, 0f) - (Vector3)parentWorld;
+289:                 var rungRenderer = rung.AddComponent<SpriteRenderer>();
+290:                 rungRenderer.sprite = ctx.White;
+291:                 rungRenderer.color = new Color(0.7f, 0.55f, 0.35f);
+292:                 rungRenderer.sortingLayerName = "EraPlatform";
+293:                 SizeSprite(rungRenderer, new Vector2(0.55f, 0.07f));
+294:             }
+295: 
+296:             // 攀爬触发区（梯顶超出平台面 0.7，便于爬出后落到相邻平台，策划 11.3）。
+297:             // 触发器放独立的 Ladder 层：地面探测掩码（Ground|Temporal）不含它，玩家贴梯悬空不会被误判为落地。
+298:             var zone = new GameObject("LadderZone");
+299:             zone.transform.SetParent(eraChild.transform, false);
+300:             zone.transform.localPosition = new Vector3(centerX, midY, 0f) - (Vector3)parentWorld;
+301:             int ladderLayer = LayerMask.NameToLayer("Ladder");
+302:             if (ladderLayer >= 0)
+303:             {
+304:                 zone.layer = ladderLayer;
+305:             }
+306:             var trigger = zone.AddComponent<BoxCollider2D>();
+307:             trigger.isTrigger = true;
+308:             trigger.size = new Vector2(0.8f, height);
+309:             zone.AddComponent<LadderZone>();
+310:         }
+311: 
+312:         // ------------------------------------------------------------ 私有字段工具
+313: 
+314:         internal static void SetField(UnityEngine.Object target, string field, object value)
+315:         {
+316:             var so = new SerializedObject(target);
+317:             SerializedProperty property = so.FindProperty(field);
+318:             if (property == null)
+319:             {
+320:                 Debug.LogWarning($"[LevelLayouts] 找不到字段 {field}（{target.GetType().Name}）。");
+321:                 return;
+322:             }
+323:             switch (value)
+324:             {
+325:                 case float f: property.floatValue = f; break;
+326:                 case int i: property.intValue = i; break;
+327:                 case bool b: property.boolValue = b; break;
+328:                 case string s: property.stringValue = s; break;
+329:                 case Vector2 v: property.vector2Value = v; break;
+330:             }
+331:             so.ApplyModifiedPropertiesWithoutUndo();
+332:         }
+333: 
+334:         internal static void SetObject(UnityEngine.Object target, string field, UnityEngine.Object value)
+335:         {
+336:             var so = new SerializedObject(target);
+337:             SerializedProperty property = so.FindProperty(field);
+338:             if (property != null)
+339:             {
+340:                 property.objectReferenceValue = value;
+341:                 so.ApplyModifiedPropertiesWithoutUndo();
+342:             }
+343:         }
+344: 
+345:         internal static void SetRect(UnityEngine.Object target, string field, Rect rect)
+346:         {
+347:             var so = new SerializedObject(target);
+348:             SerializedProperty property = so.FindProperty(field);
+349:             if (property != null)
+350:             {
+351:                 property.rectValue = rect;
+352:                 so.ApplyModifiedPropertiesWithoutUndo();
+353:             }
+354:             else
+355:             {
+356:                 Debug.LogWarning($"[LevelLayouts] 找不到字段 {field}（{target.GetType().Name}）。");
+357:             }
+358:         }
+359: 
+360:         // ------------------------------------------------------------ 关卡布局（策划第 7 章）
+361: 
+362:         internal static readonly Color ConstantColor = new Color(0.62f, 0.58f, 0.52f);
+363:         internal static readonly Color PastColor = new Color(0.86f, 0.68f, 0.42f);
+364:         internal static readonly Color PresentColor = new Color(0.58f, 0.72f, 0.64f);
+365:         internal static readonly Color WallColor = new Color(0.35f, 0.33f, 0.3f);
+366:         internal static readonly Color DoorColor = new Color(0.5f, 0.3f, 0.2f);
+367: 
+368:         /// <summary>L00 院门（策划 7.1）：起点 x=2，栅栏 x=10，出口 x=23，初始全过去 B=26。</summary>
+369:         internal static List<SpawnPoint> BuildL00(RoomContext ctx)
+370:         {
+371:             Box(ctx, "Ground", new Vector2(13f, -0.5f), new Vector2(28f, 1f), ConstantColor, "ConstantStructure", "Ground", true);
+372:             Box(ctx, "WallL", new Vector2(0f, 2f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
+373:             Box(ctx, "WallR", new Vector2(26f, 2f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
+374: 
+375:             // 栅栏（锚点 x=10）：过去完整阻挡（高于跳高 0.93）；现在下部留成年人缺口（策划 7.1）。
+376:             TemporalObject fence = Temporal(ctx, "L00_fence_gate", new Vector2(10f, 0f));
+377:             GameObject past = EraChild(ctx, fence, "Past");
+378:             past.transform.localPosition = Vector3.zero;
+379:             BoxChild(ctx, past.transform, "FencePast", new Vector2(10f, 1.7f), new Vector2(1.2f, 3.4f), PastColor);
+380:             GameObject present = EraChild(ctx, fence, "Present");
+381:             present.transform.localPosition = Vector3.zero;
+382:             BoxChild(ctx, present.transform, "FencePresent", new Vector2(10f, 2.65f), new Vector2(1.2f, 1.5f), PresentColor);
+383:             SetObject(fence, "pastRoot", past);
+384:             SetObject(fence, "presentRoot", present);
+385: 
+386:             var spawns = new List<SpawnPoint>
+387:             {
+388:                 Spawn(ctx, "spawn_gate_out", new Vector2(2f, 0.05f)),
+389:                 Spawn(ctx, "cp_L00_courtyard", new Vector2(14f, 0.05f)),
+390:             };
+391:             Checkpoint(ctx, "cp_L00_courtyard", new Vector2(14f, 0.8f));
+392:             Door(ctx, "推门进院", new Vector2(23f, 1.2f), ExitDoor.TransitionMode.NextLevel, null, null);
+393:             return spawns;
+394:         }
+395: 
+396:         /// <summary>L01A 水渠盖板（策划 7.2）：缺口宽 4，盖板锚点 x=12，初始全现在（盖板腐坏）。
+397:         /// roomB 为同场景的 L01B 房间根（过桥门 SameSceneRoom 转场目标）。</summary>
+398:         internal static List<SpawnPoint> BuildL01A(RoomContext ctx, LevelRoot roomB)
+399:         {
+400:             Box(ctx, "BankL", new Vector2(5f, -0.5f), new Vector2(10f, 1f), ConstantColor, "ConstantStructure", "Ground", true);
+401:             Box(ctx, "BankR", new Vector2(17.5f, -0.5f), new Vector2(7f, 1f), ConstantColor, "ConstantStructure", "Ground", true);
+402:             Box(ctx, "WallL", new Vector2(0f, 2f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
+403:             Box(ctx, "WallR", new Vector2(20f, 2f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
+404:             KillZone(ctx, new Vector2(12f, -4.5f), new Vector2(6f, 1f));
+405: 
+406:             // 盖板（锚点 x=12）：过去完好可站；现在腐坏无碰撞（策划 7.2 安全阻挡教学）。
+407:             TemporalObject plank = Temporal(ctx, "L01A_plank_bridge", new Vector2(12f, 0f));
+408:             GameObject past = EraChild(ctx, plank, "Past");
+409:             past.transform.localPosition = Vector3.zero;
+410:             BoxChild(ctx, past.transform, "PlankPast", new Vector2(12f, -0.175f), new Vector2(4.4f, 0.35f), PastColor);
+411:             GameObject present = EraChild(ctx, plank, "Present");
+412:             present.transform.localPosition = Vector3.zero;
+413:             BoxChild(ctx, present.transform, "StubL", new Vector2(10.8f, 0.1f), new Vector2(1.1f, 0.28f),
+414:                 new Color(PresentColor.r, PresentColor.g, PresentColor.b, 0.6f), solid: false, angle: 12f);
+415:             BoxChild(ctx, present.transform, "StubR", new Vector2(13.1f, 0.02f), new Vector2(1.1f, 0.28f),
+416:                 new Color(PresentColor.r, PresentColor.g, PresentColor.b, 0.6f), solid: false, angle: -18f);
+417:             SetObject(plank, "pastRoot", past);
+418:             SetObject(plank, "presentRoot", present);
+419: 
+420:             var spawns = new List<SpawnPoint>
+421:             {
+422:                 Spawn(ctx, "spawn_courtyard_in", new Vector2(2f, 0.05f)),
+423:                 Spawn(ctx, "cp_L01A_bank", new Vector2(15.5f, 0.05f)),
+424:             };
+425:             Checkpoint(ctx, "cp_L01A_bank", new Vector2(15.5f, 0.8f));
+426:             Door(ctx, "过桥进院", new Vector2(19.5f, 1.2f), ExitDoor.TransitionMode.SameSceneRoom, roomB, "spawn_L01B_in");
+427:             return spawns;
+428:         }
+429: 
+430:         /// <summary>
+431:         /// L01B 旧踏台与新树枝（策划 7.3，世界坐标整体偏移 +40）：
+432:         /// 过去阶梯锚点 48；树枝整体锚点 58；初始全过去（有阶梯、无成年枝条）。
+433:         /// 标准解：B 放在 48 与 58 之间，同时保留过去阶梯与现在树枝（策划 7.3）。
+434:         /// </summary>
+435:         internal static List<SpawnPoint> BuildL01B(RoomContext ctx)
+436:         {
+437:             Box(ctx, "Ground", new Vector2(54.5f, -0.5f), new Vector2(29f, 1f), ConstantColor, "ConstantStructure", "Ground", true);
+438:             Box(ctx, "WallL", new Vector2(40f, 2f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
+439:             Box(ctx, "WallR", new Vector2(69f, 2f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
+440: 
+441:             // 梯顶平台（单向碰撞：攀爬可穿过，落下可站稳）。
+442:             Box(ctx, "Ledge", new Vector2(47.75f, 1.8f), new Vector2(5.5f, 0.4f), ConstantColor,
+443:                 "ConstantStructure", "Ground", true, oneWay: true);
+444: 
+445:             // 旧木梯（过去可爬，现在断裂）。
+446:             TemporalObject ladder = Temporal(ctx, "L01B_wood_ladder", new Vector2(48f, 0f));
+447:             GameObject past = EraChild(ctx, ladder, "Past");
+448:             past.transform.localPosition = Vector3.zero;
+449:             LadderContent(ctx, past, 48f, 0.2f, 2.7f);
+450:             GameObject present = EraChild(ctx, ladder, "Present");
+451:             present.transform.localPosition = Vector3.zero;
+452:             BoxChild(ctx, present.transform, "BrokenStub", new Vector2(48f, 0.55f), new Vector2(0.15f, 1f),
+453:                 new Color(0.4f, 0.3f, 0.18f), solid: false, angle: 28f);
+454:             SetObject(ladder, "pastRoot", past);
+455:             SetObject(ladder, "presentRoot", present);
+456: 
+457:             // 院子里的树（锚点 x=58）：过去幼树无可走枝条；现在粗枝接向出口。
+458:             TemporalObject tree = Temporal(ctx, "L01B_tree_branch", new Vector2(58f, 0f));
+459:             GameObject treePast = EraChild(ctx, tree, "Past");
+460:             treePast.transform.localPosition = Vector3.zero;
+461:             BoxChild(ctx, treePast.transform, "Sapling", new Vector2(58f, 0.75f), new Vector2(0.3f, 1.5f),
+462:                 new Color(0.45f, 0.65f, 0.35f), solid: false);
+463:             GameObject treePresent = EraChild(ctx, tree, "Present");
+464:             treePresent.transform.localPosition = Vector3.zero;
+465:             BoxChild(ctx, treePresent.transform, "Trunk", new Vector2(58f, 1.1f), new Vector2(0.7f, 2.2f),
+466:                 new Color(0.4f, 0.3f, 0.2f), solid: false);
+467:             SlopeChild(ctx, treePresent.transform, "BranchA", new Vector2(50.9f, 2.12f), new Vector2(56f, 2.47f), 0.35f);
+468:             SlopeChild(ctx, treePresent.transform, "BranchB", new Vector2(56f, 2.47f), new Vector2(61.5f, 2.82f), 0.35f);
+469:             SlopeChild(ctx, treePresent.transform, "BranchC", new Vector2(61.5f, 2.82f), new Vector2(66f, 3.15f), 0.35f);
+470:             SetObject(tree, "pastRoot", treePast);
+471:             SetObject(tree, "presentRoot", treePresent);
+472: 
+473:             // 出口平台与门（树枝终点 y≈3.15，策划 7.3：终点 x=26→世界 66）。
+474:             Box(ctx, "ExitLedge", new Vector2(67.4f, 2.95f), new Vector2(3.2f, 0.4f), ConstantColor,
+475:                 "ConstantStructure", "Ground", true);
+476: 
+477:             var spawns = new List<SpawnPoint>
+478:             {
+479:                 Spawn(ctx, "spawn_L01B_in", new Vector2(42f, 0.05f)),
+480:                 Spawn(ctx, "cp_L01B_entry", new Vector2(42.5f, 0.05f)),
+481:             };
+482:             Checkpoint(ctx, "cp_L01B_entry", new Vector2(42.5f, 0.8f));
+483:             Door(ctx, "上楼", new Vector2(68.2f, 4.35f), ExitDoor.TransitionMode.NextLevel, null, null);
+484:             return spawns;
+485:         }
+486: 
+487:         /// <summary>
+488:         /// L02 缝纫间外台（策划 7.4）：维修踏台 x=6、恒定砖台 x=8.5~13.2、旧木梯 x=13、地面起点 x=23。
+489:         /// 初始全现在（木梯断裂、踏台悬空不可达）→ 必须先右移边界修梯上砖台，再左移边界放踏台。
+490:         /// </summary>
+491:         internal static List<SpawnPoint> BuildL02(RoomContext ctx)
+492:         {
+493:             Box(ctx, "Ground", new Vector2(13f, -0.5f), new Vector2(28f, 1f), ConstantColor, "ConstantStructure", "Ground", true);
+494:             Box(ctx, "WallL", new Vector2(0f, 2f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
+495:             Box(ctx, "WallR", new Vector2(26f, 2f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
+496: 
+497:             // 恒定砖台（中途检查点；单向碰撞供梯子穿过）。
+498:             Box(ctx, "BrickPlatform", new Vector2(10.85f, 2.75f), new Vector2(4.7f, 0.5f),
+499:                 new Color(0.72f, 0.55f, 0.45f), "ConstantStructure", "Ground", true, oneWay: true);
+500: 
+501:             // 旧木梯（过去可爬：地面 y=0 → 砖台 y=3；现在断裂）。
+502:             TemporalObject ladder = Temporal(ctx, "L02_old_ladder", new Vector2(13f, 0f));
+503:             GameObject past = EraChild(ctx, ladder, "Past");
+504:             past.transform.localPosition = Vector3.zero;
+505:             LadderContent(ctx, past, 13f, 0.2f, 3.7f);
+506:             GameObject present = EraChild(ctx, ladder, "Present");
+507:             present.transform.localPosition = Vector3.zero;
+508:             BoxChild(ctx, present.transform, "BrokenStub", new Vector2(13f, 0.5f), new Vector2(0.15f, 0.9f),
+509:                 new Color(0.4f, 0.3f, 0.18f), solid: false, angle: 25f);
+510:             SetObject(ladder, "pastRoot", past);
+511:             SetObject(ladder, "presentRoot", present);
+512: 
+513:             // 现在维修踏台（过去完全不存在；现在形成砖台通向左侧出口的路径，策划 7.4）。
+514:             TemporalObject maintenance = Temporal(ctx, "L02_maintenance", new Vector2(6f, 0f));
+515:             GameObject maintenancePast = EraChild(ctx, maintenance, "Past");
+516:             maintenancePast.transform.localPosition = Vector3.zero;
+517:             GameObject maintenancePresent = EraChild(ctx, maintenance, "Present");
+518:             maintenancePresent.transform.localPosition = Vector3.zero;
+519:             BoxChild(ctx, maintenancePresent.transform, "Platform", new Vector2(4.75f, 2.75f), new Vector2(7.5f, 0.5f),
+520:                 PresentColor);
+521:             SetObject(maintenance, "pastRoot", maintenancePast);
+522:             SetObject(maintenance, "presentRoot", maintenancePresent);
+523: 
+524:             var spawns = new List<SpawnPoint>
+525:             {
+526:                 Spawn(ctx, "spawn_sewing_ground", new Vector2(23f, 0.05f)),
+527:                 Spawn(ctx, "cp_L02_brick", new Vector2(11.5f, 3.05f)),
+528:             };
+529:             Checkpoint(ctx, "cp_L02_brick", new Vector2(11.5f, 3.85f));
+530:             Door(ctx, "进缝纫间", new Vector2(1.6f, 4.2f), ExitDoor.TransitionMode.NextLevel, null, null);
+531:             return spawns;
+532:         }
+533: 
+534:         /// <summary>
+535:         /// L03 楼上回廊（策划 7.5）：同一上层高度 y=3，下方跌落区。
+536:         /// 初始全现在（地板缺失、踏板可用、柜子挡路）。
+537:         /// 标准解：B 在 7 与 15 之间（过去地板+现在踏板）→ 恒定门槛 → B 推过 24（柜子回到空位）→ 照片区。
+538:         /// </summary>
+539:         internal static List<SpawnPoint> BuildL03(RoomContext ctx)
+540:         {
+541:             Box(ctx, "EntryLedge", new Vector2(2.75f, 2.8f), new Vector2(3.5f, 0.4f), ConstantColor,
+542:                 "ConstantStructure", "Ground", true);
+543:             Box(ctx, "WallL", new Vector2(0.7f, 3f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
+544:             Box(ctx, "WallR", new Vector2(30.7f, 3f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
+545: 
+546:             // 过去木地板（锚点 7，区段 4.5~10）。
+547:             TemporalObject floor = Temporal(ctx, "L03_floor", new Vector2(7f, 0f));
+548:             GameObject floorPast = EraChild(ctx, floor, "Past");
+549:             floorPast.transform.localPosition = Vector3.zero;
+550:             BoxChild(ctx, floorPast.transform, "Plank", new Vector2(7.25f, 2.8f), new Vector2(5.5f, 0.4f), PastColor);
+551:             GameObject floorPresent = EraChild(ctx, floor, "Present");
+552:             floorPresent.transform.localPosition = Vector3.zero;
+553:             SetObject(floor, "pastRoot", floorPast);
+554:             SetObject(floor, "presentRoot", floorPresent);
+555: 
+556:             // 现在金属踏板（锚点 15，区段 10~18）。
+557:             TemporalObject walkway = Temporal(ctx, "L03_walkway", new Vector2(15f, 0f));
+558:             GameObject walkwayPast = EraChild(ctx, walkway, "Past");
+559:             walkwayPast.transform.localPosition = Vector3.zero;
+560:             GameObject walkwayPresent = EraChild(ctx, walkway, "Present");
+561:             walkwayPresent.transform.localPosition = Vector3.zero;
+562:             BoxChild(ctx, walkwayPresent.transform, "Plate", new Vector2(14f, 2.8f), new Vector2(8f, 0.4f),
+563:                 new Color(0.62f, 0.68f, 0.72f));
+564:             SetObject(walkway, "pastRoot", walkwayPast);
+565:             SetObject(walkway, "presentRoot", walkwayPresent);
+566: 
+567:             // 恒定石门槛（策划 7.5 检查点）与门槛后方的恒定短地面（到照片区）。
+568:             Box(ctx, "Threshold", new Vector2(20f, 2.75f), new Vector2(4f, 0.5f), new Color(0.7f, 0.7f, 0.66f),
+569:                 "ConstantStructure", "Ground", true);
+570:             Box(ctx, "FloorToPhoto", new Vector2(26.25f, 2.8f), new Vector2(8.5f, 0.4f), ConstantColor,
+571:                 "ConstantStructure", "Ground", true);
+572: 
+573:             // 储物柜（锚点 24）：现在固定到顶的隔间（无立顶可站）；过去空位。
+574:             TemporalObject cabinet = Temporal(ctx, "L03_cabinet", new Vector2(24f, 0f));
+575:             GameObject cabinetPast = EraChild(ctx, cabinet, "Past");
+576:             cabinetPast.transform.localPosition = Vector3.zero;
+577:             GameObject cabinetPresent = EraChild(ctx, cabinet, "Present");
+578:             cabinetPresent.transform.localPosition = Vector3.zero;
+579:             BoxChild(ctx, cabinetPresent.transform, "Cabinet", new Vector2(24f, 4.4f), new Vector2(2f, 3.6f),
+580:                 new Color(0.5f, 0.52f, 0.56f));
+581:             SetObject(cabinet, "pastRoot", cabinetPast);
+582:             SetObject(cabinet, "presentRoot", cabinetPresent);
+583: 
+584:             KillZone(ctx, new Vector2(13f, -3.5f), new Vector2(24f, 1f));
+585: 
+586:             var spawns = new List<SpawnPoint>
+587:             {
+588:                 Spawn(ctx, "spawn_corridor_in", new Vector2(2f, 3.05f)),
+589:                 Spawn(ctx, "cp_L03_threshold", new Vector2(20f, 3.05f)),
+590:                 Spawn(ctx, "cp_L03_photo", new Vector2(26.5f, 3.05f)),
+591:             };
+592:             Checkpoint(ctx, "cp_L03_threshold", new Vector2(20f, 3.85f));
+593:             Checkpoint(ctx, "cp_L03_photo", new Vector2(26.5f, 3.85f));
+594:             Door(ctx, "推开阁楼门", new Vector2(29.8f, 4.2f), ExitDoor.TransitionMode.NextLevel, null, null);
+595:             return spawns;
+596:         }
+597: 
+598:         /// <summary>
+599:         /// L04 阁楼窗外（策划 7.6）：树干锚点 x=4，窗台 x=21.5~30.5（y=3），暗格 x=26、y=4.5。
+600:         /// 初始全过去（幼树）；标准解：E 看暗格 → B&lt;4 让整棵树成年 → 窗台跳上粗枝 → 沿缓坡到暗格 → E 触摸 → 通关。
+601:         /// </summary>
+602:         internal static List<SpawnPoint> BuildL04(RoomContext ctx)
+603:         {
+604:             // Keep the standing/adjustment area outside the future branch bounds.
+605:             // The previous spawn was inside the underside of the high niche ledge.
+606:             Box(ctx, "WindowPlatform", new Vector2(20.5f, 2.8f), new Vector2(3f, 0.4f), ConstantColor,
+607:                 "ConstantStructure", "Ground", true);
+608:             Box(ctx, "WallL", new Vector2(0f, 3f), new Vector2(0.6f, 14f), WallColor, "ConstantStructure", "Ground", true);
+609:             Box(ctx, "WallR", new Vector2(30.8f, 3f), new Vector2(0.6f, 14f), WallColor, "ConstantStructure", "Ground", true);
+610: 
+611:             // 暗格窗台（恒定小平台，y=4.5）与暗格视觉。
+612:             Box(ctx, "CompartmentLedge", new Vector2(26.5f, 4.3f), new Vector2(2.2f, 0.4f), ConstantColor,
+613:                 "ConstantStructure", "Ground", true);
+614:             Box(ctx, "CompartmentVisual", new Vector2(26.5f, 5.15f), new Vector2(1.4f, 1f),
+615:                 new Color(0.28f, 0.3f, 0.36f), "ConstantStructure", "Default", false);
+616: 
+617:             // 整棵树（锚点 x=4，策划 11.5：全部通行枝条同步切换）。
+618:             TemporalObject tree = Temporal(ctx, "L04_tree", new Vector2(4f, 0f));
+619:             GameObject treePast = EraChild(ctx, tree, "Past");
+620:             treePast.transform.localPosition = Vector3.zero;
+621:             BoxChild(ctx, treePast.transform, "Sapling", new Vector2(4f, -5f), new Vector2(0.4f, 2f),
+622:                 new Color(0.45f, 0.65f, 0.35f), solid: false);
+623:             GameObject treePresent = EraChild(ctx, tree, "Present");
+624:             treePresent.transform.localPosition = Vector3.zero;
+625:             BoxChild(ctx, treePresent.transform, "YardGround", new Vector2(14f, -6.5f), new Vector2(32f, 1f),
+626:                 new Color(0.42f, 0.5f, 0.38f), solid: false);
+627:             BoxChild(ctx, treePresent.transform, "Trunk", new Vector2(4f, -3.5f), new Vector2(0.8f, 6f),
+628:                 new Color(0.4f, 0.3f, 0.2f), solid: false);
+629:             SlopeChild(ctx, treePresent.transform, "BranchA", new Vector2(21.8f, 3.28f), new Vector2(23.4f, 3.91f), 0.35f);
+630:             SlopeChild(ctx, treePresent.transform, "BranchB", new Vector2(23.4f, 3.91f), new Vector2(25.4f, 4.52f), 0.35f);
+631:             SetObject(tree, "pastRoot", treePast);
+632:             SetObject(tree, "presentRoot", treePresent);
+633: 
+634:             KillZone(ctx, new Vector2(14f, -3.5f), new Vector2(34f, 1f));
+635: 
+636:             var spawns = new List<SpawnPoint>
+637:             {
+638:                 Spawn(ctx, "spawn_attic_window", new Vector2(20.3f, 3.05f)),
+639:                 Spawn(ctx, "cp_L04_window", new Vector2(20.3f, 3.05f)),
+640:             };
+641:             Checkpoint(ctx, "cp_L04_window", new Vector2(20.3f, 3.85f));
+642:             return spawns;
+643:         }
+644: 
+645:         /// <summary>尾声（策划 3.9）：两天后病房，铁盒与短信，读完后离开 → 制作名单。</summary>
+646:         internal static List<SpawnPoint> BuildEpilogue(RoomContext ctx)
+647:         {
+648:             Box(ctx, "Ground", new Vector2(8f, -0.5f), new Vector2(18f, 1f), new Color(0.9f, 0.88f, 0.82f),
+649:                 "ConstantStructure", "Ground", true);
+650:             Box(ctx, "Bed", new Vector2(3f, 0.6f), new Vector2(2.4f, 1.2f), new Color(0.85f, 0.87f, 0.82f),
+651:                 "ConstantStructure", "Ground", false);
+652:             Box(ctx, "Table", new Vector2(7f, 0.5f), new Vector2(1.4f, 1f), new Color(0.75f, 0.72f, 0.65f),
+653:                 "ConstantStructure", "Ground", false);
+654:             Box(ctx, "WallL", new Vector2(0f, 2f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
+655:             Box(ctx, "WallR", new Vector2(15.7f, 2f), new Vector2(0.6f, 10f), WallColor, "ConstantStructure", "Ground", true);
+656: 
+657:             var spawns = new List<SpawnPoint>
+658:             {
+659:                 Spawn(ctx, "spawn_epilogue", new Vector2(1.5f, 0.05f)),
+660:             };
+661:             Door(ctx, "离开", new Vector2(13.5f, 1.2f), ExitDoor.TransitionMode.NextLevel, null, null);
+662:             return spawns;
+663:         }
+664: 
+665:         // ------------------------------------------------------------ 子物体盒子/斜坡（挂在年代状态子物体下）
+666: 
+667:         private static void BoxChild(RoomContext ctx, Transform parent, string name, Vector2 center, Vector2 size,
+668:             Color color, bool solid = true, float angle = 0f)
+669:         {
+670:             var box = new GameObject(name);
+671:             box.transform.SetParent(parent, false);
+672:             // center 为世界坐标：换算到父物体（年代状态子物体）的局部坐标。
+673:             box.transform.localPosition = new Vector3(center.x, center.y, 0f) - parent.position;
+674:             box.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+675:             box.layer = parent.gameObject.layer;
+676:             var renderer = box.AddComponent<SpriteRenderer>();
+677:             renderer.sprite = ctx.White;
+678:             renderer.color = color;
+679:             renderer.sortingLayerName = "EraPlatform";
+680:             SizeSprite(renderer, size);
+681:             if (solid)
+682:             {
+683:                 var collider = box.AddComponent<BoxCollider2D>();
+684:                 collider.size = size;
+685:                 collider.sharedMaterial = ctx.Friction;
+686:             }
+687:         }
+688: 
+689:         private static void SlopeChild(RoomContext ctx, Transform parent, string name, Vector2 p1, Vector2 p2,
+690:             float thickness)
+691:         {
+692:             Vector2 direction = (p2 - p1).normalized;
+693:             Vector2 upNormal = new Vector2(-direction.y, direction.x);
+694:             if (upNormal.y < 0f)
+695:             {
+696:                 upNormal = -upNormal;
+697:             }
+698:             Vector2 center = (p1 + p2) * 0.5f - upNormal * (thickness * 0.5f);
+699:             float length = Vector2.Distance(p1, p2);
+700:             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+701:             BoxChild(ctx, parent, name, center, new Vector2(length, thickness), PresentColor, solid: true, angle);
+702:         }
+703:     }
+704: }

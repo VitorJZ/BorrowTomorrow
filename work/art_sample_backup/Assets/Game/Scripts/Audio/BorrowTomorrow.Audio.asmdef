@@ -1,0 +1,17 @@
+{
+    "name": "BorrowTomorrow.Audio",
+    "rootNamespace": "BorrowTomorrow.Audio",
+    "references": [
+        "BorrowTomorrow.Core",
+        "BorrowTomorrow.TimeBoundary"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

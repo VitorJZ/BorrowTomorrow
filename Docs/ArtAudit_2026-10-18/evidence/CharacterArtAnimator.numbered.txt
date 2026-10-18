@@ -1,0 +1,61 @@
+1: using System;
+2: using BorrowTomorrow.Core;
+3: using BorrowTomorrow.Core.Interfaces;
+4: using UnityEngine;
+5: namespace BorrowTomorrow.Player
+6: {
+7:     [DisallowMultipleComponent]
+8:     public sealed class CharacterArtAnimator : MonoBehaviour, ICharacterArt
+9:     {
+10:         [Serializable] public sealed class Clip { public string name; public Sprite[] frames; public float fps=12; public bool loop; }
+11:         public SpriteRenderer visual;
+12:         public Clip[] clips;
+13:         private PlayerMotor2D motor;
+14:         private Rigidbody2D body;
+15:         private Clip current;
+16:         private float time;
+17:         private string gesture;
+18:         private bool facingLeft;
+19:         private float landedTime;
+20:         private bool wasGrounded;
+21:         private void Awake(){motor=GetComponent<PlayerMotor2D>();body=GetComponent<Rigidbody2D>();}
+22:         private void OnEnable()=>ServiceRegistry.Register<ICharacterArt>(this);
+23:         private void OnDisable()=>ServiceRegistry.Unregister<ICharacterArt>(this);
+24:         public void PlayGesture(string name){gesture=name;Set(name,true);}
+25:         private Clip Find(string name){if(clips!=null)foreach(var c in clips)if(c.name==name)return c;return null;}
+26:         private void Set(string name,bool force=false){var c=Find(name);if(c==null)return;if(current!=c||force){current=c;time=0;}}
+27:         private void LateUpdate()
+28:         {
+29:             if(visual==null||motor==null||body==null)return;
+30:             var s=GameSession.Instance;if(s==null||s.State.IsPaused)return;
+31:             float dt=Time.deltaTime;
+32:             if(Mathf.Abs(body.velocity.x)>.08f)facingLeft=body.velocity.x<0;
+33:             if(motor.IsGrounded&&!wasGrounded)landedTime=.20f;
+34:             wasGrounded=motor.IsGrounded;landedTime=Mathf.Max(0,landedTime-dt);
+35:             if(gesture!=null)
+36:             {
+37:                 Set(gesture);time+=dt;
+38:                 if(current==null||time>=current.frames.Length/Mathf.Max(1,current.fps))gesture=null;
+39:             }
+40:             if(gesture==null)
+41:             {
+42:                 if(s.State.SubState==PlayingSubState.AdjustingBoundary){Set("Interact");time=.42f;}
+43:                 else if(motor.IsClimbingLadder)
+44:                 {
+45:                     Set("Climb");if(Mathf.Abs(body.velocity.y)>.05f)time+=dt;
+46:                 }
+47:                 else if(!motor.IsGrounded)
+48:                 {
+49:                     Set("JumpLand");
+50:                     time=(body.velocity.y>1f?5:body.velocity.y<-.8f?8:6)/Mathf.Max(1,current.fps);
+51:                 }
+52:                 else if(landedTime>0){Set("JumpLand");time=(10+(1-landedTime/.20f))/Mathf.Max(1,current.fps);}
+53:                 else {Set(Mathf.Abs(body.velocity.x)>.1f?"Walk":"Idle");time+=dt;}
+54:             }
+55:             if(current==null||current.frames==null||current.frames.Length==0)return;
+56:             int index=(int)(time*current.fps);
+57:             index=current.loop?index%current.frames.Length:Mathf.Min(index,current.frames.Length-1);
+58:             visual.sprite=current.frames[Mathf.Max(0,index)];visual.flipX=facingLeft;visual.color=Color.white;
+59:         }
+60:     }
+61: }

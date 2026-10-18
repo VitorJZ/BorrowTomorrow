@@ -1,0 +1,162 @@
+[
+  {
+    "id": "M04_Photo_Master",
+    "prompt": "Edit reference photo for BorrowTomorrow M04 unique master. Preserve EXACT grandmother face, child face, pose, hands, standing positions, courtyard brick wall, tree, photo paper border and watercolor/pencil textured warm nostalgic Chinese storybook art. Change ONLY child's cream top to a 1994 blue-and-white school tracksuit jacket: white body, muted navy blue collar and shoulder/sleeve panels, no crest, no lettering. Grandmother remains burgundy cardigan, dark trousers. Exactly TWO people. Output single 2304x1728 PNG, 4:3, no text, preserve all composition. This is the unique canonical photo that will be reused verbatim in all frames."
+  },
+  {
+    "id": "M01_Table_Base",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. Edit into M01 fixed clean tabletop BASE ONLY, 4:3 2304x1728. Preserve warm diagonal wooden tabletop, basket upper right and scissors lower right EXACTLY. Remove the white sleeve and BOTH fabric swatches, inpaint tabletop beneath. No hands. Full opaque background.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-9f0d8852-5d35-43a1-8b6c-877cacc8f426.png",
+    "transparent": false
+  },
+  {
+    "id": "M03_Quilt_Base",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M03 fixed 4:3 2304x1728 background edit: remove BOTH hands and arms and restore quilt underneath. Preserve EXACT existing viewpoint of grandmother lap, bed rails, sunlight, grid of red tiny-white-floral and pale blue gingham patchwork, all seams and positions. Change nothing else. Quilt at lower right has a small visibly rumpled corner reserved for smoothing. No people/hands/skin visible. Opaque base.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-2f73a192-88ef-44c2-992a-ee09f9768f3c.png",
+    "transparent": false
+  },
+  {
+    "id": "M02_Niche_Base",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M02 fixed 4:3 2304x1728 clean background illustration. Correct spatial story: viewed from COURTYARD OUTSIDE toward wall, the window occupies left half and a rectangular recessed cubby is immediately at the window's OUTSIDE UPPER RIGHT. Show an old cream plaster exterior wall, window wooden surround, dark empty cubby at image rectangle x=1350..2050 y=340..1150, front-facing enough to overlay a plank. Preserve blue-tin-box reference style but DO NOT draw box, cover board, hands or figures in base. Cubby interior dark, flat lower ledge. Wide enough to see full window and cubby. No extra exits.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-43712eaa-0c2e-45cb-a3b2-8fcd38418e1a.png",
+    "transparent": false
+  },
+  {
+    "id": "M05_Ward_Master",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M05 expand reference to 4:3 2304x1728 medium shot of same hospital room. Clearly show elderly Chinese grandmother age about 75 resting in pale mint metal hospital bed LEFT, silver hair softly tied, same burgundy cardigan sleeves, frail wrinkled hands; adult Chinese granddaughter age 37 RIGHT on chair at bedside, black hair tied back, cream blouse, gentle concerned expression, hands holding grandmother's. Same beige and faded rose horizontal cassette radio with cassette deck left, round speaker right and top carrying handle on nightstand at right. Same ivory cup, warm window light from left, modest lived-in room, no miraculous recovery, no blue box yet, no hospital text. Both people entirely in central 80% safe area; warm intimate natural faces, not anime. Preserve style of original, do not merely show hands.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-cf77b2e8-5196-4be1-80ab-f8172b89b609.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L00_Gate_1994",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M06 registered architecture MASTER, opaque background PNG 2560x1440 16:9. Architectural rear wall only, planar side-on courtyard elevation. Wall base y=1120 on 2560x1440 canvas. Beige plaster, gray tiled roof, narrow fixed wooden door surround at x=2250 with threshold at y=1120, no actual door leaf (separate prop). Remove foreground fence completely, leave uninterrupted plaster where it was. No alternate alley opening, no foreground tree or leaves. No rendered ground lip or walkable platform, muted unobtrusive wall. Keep important anchors within central 80% for 4:3 viewport; render to every edge, no decorative frame, no text, no people.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-923053f3-aae0-4c18-bec8-9befc1d2e913.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L01A_Canal_1994",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M06 registered architecture MASTER, opaque background PNG 2560x1440 16:9. Change view to flat SIDE ON horizontal canal background, no deep vanishing point. Courtyard wall with soft teal water occupying lower 20%. No bridge/plank, no stepping stones, no foreground banks or traversable props. Door surround fixed far right x=2390, base y=1020. Gray-brick and cream-plaster rear wall fills width, tiled roof above. Keep empty at bridge anchor around 60% width for separate gameplay bridge. Keep important anchors within central 80% for 4:3 viewport; render to every edge, no decorative frame, no text, no people.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-facb7b16-330d-4205-aa40-2835c15a3eb3.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L01B_Tree_1994",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M06 registered architecture MASTER, opaque background PNG 2560x1440 16:9. Use the reference wall texture and roof, but completely remove staircase, landing, all trees, sapling, kennel, chair, bucket, stool, hanging laundry, sewing machines. SINGLE flat beige plaster courtyard elevation. Ground baseline y=1150. Small narrow door surround (no door leaf) far right x=2420 with threshold y=870. Fixed wooden window upper right x=2030 y=520. Leave wall blank at left ladder x=706 and central tree root x=1589. Absolutely NO stairs, ladders, walkable ledges, or tree silhouettes. The gameplay props are separate layers. Keep important anchors within central 80% for 4:3 viewport; render to every edge, no decorative frame, no text, no people.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-297395f8-d60e-4c51-b8a2-f8559329c327.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L02_Yard_1994",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M06 registered architecture MASTER, opaque background PNG 2560x1440 16:9. Flat side-on elevation of same sewing-building exterior, cream plaster and brick texture. Remove ladder, balcony walking deck, railings, foreground stools baskets and ground props. Narrow upstairs doorway surround at x=200 with threshold y=650, fixed small wooden window x=700 y=440, ground baseline y=1160. Uninterrupted rear wall in right two thirds, no ramps, no stairs, no second route. Keep important anchors within central 80% for 4:3 viewport; render to every edge, no decorative frame, no text, no people.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-48c17c09-2b13-4d93-8ea0-42b8b01606eb.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L02_Room_1994",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M06 registered architecture MASTER, opaque background PNG 2560x1440 16:9. Flat side-on sewing room BACK WALL AND FLOOR ONLY. Preserve wooden window on LEFT, cupboard niche center, faded ceiling pendant upper right. Remove all tables, machines, chairs, uniform, cloth, baskets, floor clutter and freestanding cupboard, leaving uninterrupted room for separate props. Cream plaster wall; wooden floor seam at y=1120 with shallow floor strip only, no strong perspective. Door surround far right x=2390, threshold y=1120. Window x=570 y=470. Cozy 1994 warm lighting. Keep important anchors within central 80% for 4:3 viewport; render to every edge, no decorative frame, no text, no people.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-54a5255a-087c-4c91-a0e4-820556fc807a.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L03_Corridor_1994",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M06 registered architecture MASTER, opaque background PNG 2560x1440 16:9. Recompose into flat SIDE ON HORIZONTAL upstairs corridor, NOT a corridor receding into depth. Preserve wood ceiling, cream plaster, gray brick, open railing-like back wall details only high above route. No floor planks, walkway, platforms, photo, cabinet, boxes or foreground rail blocking player. Continuous rear architecture behind separate traversal layers. Door surround far right x=2440 with threshold y=940. Base wall seam y=1160. Warm 1994, geometry will remain same for 2024. Keep important anchors within central 80% for 4:3 viewport; render to every edge, no decorative frame, no text, no people.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-0af64b32-96f4-4d60-a3d5-4914715f8557.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L04_Attic_1994",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M06 registered architecture MASTER, opaque background PNG 2560x1440 16:9. Flat side-on exterior upper-story courtyard wall, gameplay backdrop, same cream plaster/tile textures. Absolutely no tree/sapling, no visible branches, no platforms or walkable roof. One window on right around x=1680 y=680 and ONE small dark cubby outside UPPER RIGHT around x=2180 y=490, visually same exterior wall as M02. Window ledge baseline y=880; cubby bottom y=760. Left 60% low contrast distant courtyard wall and pale sky for separate large tree. No perspective change. 1994 warm afternoon. Keep important anchors within central 80% for 4:3 viewport; render to every edge, no decorative frame, no text, no people.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-5926dd23-9c6a-440f-a454-d812c2772704.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L01A_Canal_2024",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. PRECISE LIGHTING / WEATHERING EDIT ONLY of provided 1994 architecture master. Make 2024 version of EXACT SAME background. Keep EVERY roof tile outline, door/window surround and threshold, floor seam, horizon, camera, perspective and image crop in IDENTICAL PIXEL POSITIONS. Do not redraw geometry or move openings. Only cool/desaturate warm cream into pale gray-green, add subtle moss, peeling plaster and dust INSIDE existing wall shapes, unlit existing lamp if any, reduce lively foliage saturation. Do not add vines crossing openings, trees, furniture, ladders, walkways, planks or foreground props. Opaque single background, 2560x1440 16:9. Exactly same framing as reference.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-6d810338-590a-4462-97cb-b542c808a599.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L00_Gate_2024",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. PRECISE LIGHTING / WEATHERING EDIT ONLY of provided 1994 architecture master. Make 2024 version of EXACT SAME background. Keep EVERY roof tile outline, door/window surround and threshold, floor seam, horizon, camera, perspective and image crop in IDENTICAL PIXEL POSITIONS. Do not redraw geometry or move openings. Only cool/desaturate warm cream into pale gray-green, add subtle moss, peeling plaster and dust INSIDE existing wall shapes, unlit existing lamp if any, reduce lively foliage saturation. Do not add vines crossing openings, trees, furniture, ladders, walkways, planks or foreground props. Opaque single background, 2560x1440 16:9. Exactly same framing as reference.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-815b08e7-8deb-4127-846c-fb234cd3163e.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L01B_Tree_2024",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. PRECISE LIGHTING / WEATHERING EDIT ONLY of provided 1994 architecture master. Make 2024 version of EXACT SAME background. Keep EVERY roof tile outline, door/window surround and threshold, floor seam, horizon, camera, perspective and image crop in IDENTICAL PIXEL POSITIONS. Do not redraw geometry or move openings. Only cool/desaturate warm cream into pale gray-green, add subtle moss, peeling plaster and dust INSIDE existing wall shapes, unlit existing lamp if any, reduce lively foliage saturation. Do not add vines crossing openings, trees, furniture, ladders, walkways, planks or foreground props. Opaque single background, 2560x1440 16:9. Exactly same framing as reference.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-e15a98d7-c833-4c7a-86fa-06343086496e.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L02_Yard_2024",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. PRECISE LIGHTING / WEATHERING EDIT ONLY of provided 1994 architecture master. Make 2024 version of EXACT SAME background. Keep EVERY roof tile outline, door/window surround and threshold, floor seam, horizon, camera, perspective and image crop in IDENTICAL PIXEL POSITIONS. Do not redraw geometry or move openings. Only cool/desaturate warm cream into pale gray-green, add subtle moss, peeling plaster and dust INSIDE existing wall shapes, unlit existing lamp if any, reduce lively foliage saturation. Do not add vines crossing openings, trees, furniture, ladders, walkways, planks or foreground props. Opaque single background, 2560x1440 16:9. Exactly same framing as reference.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-caafafeb-c5b1-41b3-b323-3db557a3cb40.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L02_Room_2024",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. PRECISE LIGHTING / WEATHERING EDIT ONLY of provided 1994 architecture master. Make 2024 version of EXACT SAME background. Keep EVERY roof tile outline, door/window surround and threshold, floor seam, horizon, camera, perspective and image crop in IDENTICAL PIXEL POSITIONS. Do not redraw geometry or move openings. Only cool/desaturate warm cream into pale gray-green, add subtle moss, peeling plaster and dust INSIDE existing wall shapes, unlit existing lamp if any, reduce lively foliage saturation. Do not add vines crossing openings, trees, furniture, ladders, walkways, planks or foreground props. Opaque single background, 2560x1440 16:9. Exactly same framing as reference.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-b63358ae-ed9e-42f3-a9b0-0315ca58e8ca.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L03_Corridor_2024",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. PRECISE LIGHTING / WEATHERING EDIT ONLY of provided 1994 architecture master. Make 2024 version of EXACT SAME background. Keep EVERY roof tile outline, door/window surround and threshold, floor seam, horizon, camera, perspective and image crop in IDENTICAL PIXEL POSITIONS. Do not redraw geometry or move openings. Only cool/desaturate warm cream into pale gray-green, add subtle moss, peeling plaster and dust INSIDE existing wall shapes, unlit existing lamp if any, reduce lively foliage saturation. Do not add vines crossing openings, trees, furniture, ladders, walkways, planks or foreground props. Opaque single background, 2560x1440 16:9. Exactly same framing as reference.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-956c2f85-b433-4a0a-98dc-cbc5fb95b466.png",
+    "transparent": false
+  },
+  {
+    "id": "M06_BG_L04_Attic_2024",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. PRECISE LIGHTING / WEATHERING EDIT ONLY of provided 1994 architecture master. Make 2024 version of EXACT SAME background. Keep EVERY roof tile outline, door/window surround and threshold, floor seam, horizon, camera, perspective and image crop in IDENTICAL PIXEL POSITIONS. Do not redraw geometry or move openings. Only cool/desaturate warm cream into pale gray-green, add subtle moss, peeling plaster and dust INSIDE existing wall shapes, unlit existing lamp if any, reduce lively foliage saturation. Do not add vines crossing openings, trees, furniture, ladders, walkways, planks or foreground props. Opaque single background, 2560x1440 16:9. Exactly same framing as reference.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-a72485c8-acbe-4c1b-a57c-93a555054aa4.png",
+    "transparent": false
+  },
+  {
+    "id": "M01_Fabric_Blue",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M01 compositing layer, full canvas 2304x1728 4:3. Do NOT trim or center content; keep ORIGINAL image coordinates and empty margins. Extract ONLY pale-blue gingham fabric swatch at lower left, exactly original placement/scale/perspective and complete shape. Remove everything else to genuine alpha transparency. Real transparent PNG, no opaque paper rectangle, no checkerboard painted into image. No text.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-0880e47e-1f30-48d1-a2a9-d3e235ede2f3.png",
+    "transparent": true
+  },
+  {
+    "id": "M01_Fabric_Red",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M01 compositing layer, full canvas 2304x1728 4:3. Do NOT trim or center content; keep ORIGINAL image coordinates and empty margins. Extract ONLY red tiny-white-floral fabric swatch at left, exactly original placement/scale/perspective and complete shape. Remove everything else to genuine alpha transparency. Real transparent PNG, no opaque paper rectangle, no checkerboard painted into image. No text.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-873d26ca-ae53-4b15-a537-c311f28c91c1.png",
+    "transparent": true
+  },
+  {
+    "id": "M01_Sleeve_Before",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M01 compositing layer, full canvas 2304x1728 4:3. Do NOT trim or center content; keep ORIGINAL image coordinates and empty margins. Extract ONLY school jacket sleeve, same placement diagonal upper left to mid lower right as original. Make it blue-and-white school uniform: ivory main body, muted navy stripe along sleeve side, ivory cuff. Cuff closed unturned, with no seam allowance exposed. No hands. Everything else transparent. Real transparent PNG, no opaque paper rectangle, no checkerboard painted into image. No text.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-a07ac13a-2dcc-4897-b39c-07eb9b636d17.png",
+    "transparent": true
+  },
+  {
+    "id": "M01_Sleeve_After",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M01 compositing layer, full canvas 2304x1728 4:3. Do NOT trim or center content; keep ORIGINAL image coordinates and empty margins. Extract ONLY exact original sleeve at same position, silhouette outside cuff unchanged, now matching blue-white school jacket: ivory main fabric, muted navy stripe at side. Turn cuff outward to reveal an obvious wide extra 7cm folded inner allowance and visible parallel hand-stitched seam lines. No hands. Everything else transparent. Real transparent PNG, no opaque paper rectangle, no checkerboard painted into image. No text.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-9eb7a5c1-9ca2-4428-9e42-23e0d74e1961.png",
+    "transparent": true
+  },
+  {
+    "id": "M01_Hand_00",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M01 compositing layer, full canvas 2304x1728 4:3. Do NOT trim or center content; keep ORIGINAL image coordinates and empty margins. One adult Chinese woman's right hand reaching from lower right in burgundy cardigan sleeve, open fingers just before touching cuff at 62% width 62% height. Draw ONLY this hand and forearm on transparent background; no actual sleeve garment being manipulated, no table, no scissors, no fabric. Hand full-size positioned to overlay reference. Real transparent PNG, no opaque paper rectangle, no checkerboard painted into image. No text.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-3a7ef94a-5fa8-40d2-ab88-422bc55b7bce.png",
+    "transparent": true
+  },
+  {
+    "id": "M01_Hand_01",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M01 compositing layer, full canvas 2304x1728 4:3. Do NOT trim or center content; keep ORIGINAL image coordinates and empty margins. Same right hand in burgundy sleeve pinching ivory cuff at 64% width 64% height between thumb and index finger. Draw ONLY this hand and forearm on transparent background; no actual sleeve garment being manipulated, no table, no scissors, no fabric. Hand full-size positioned to overlay reference. Real transparent PNG, no opaque paper rectangle, no checkerboard painted into image. No text.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-80c768be-df55-4de7-9b10-b65e767ed444.png",
+    "transparent": true
+  },
+  {
+    "id": "M01_Hand_02",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M01 compositing layer, full canvas 2304x1728 4:3. Do NOT trim or center content; keep ORIGINAL image coordinates and empty margins. Same right hand in burgundy sleeve lifting and rolling the cuff outward at 65% width 60% height; fingers anatomically clear. Draw ONLY this hand and forearm on transparent background; no actual sleeve garment being manipulated, no table, no scissors, no fabric. Hand full-size positioned to overlay reference. Real transparent PNG, no opaque paper rectangle, no checkerboard painted into image. No text.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-e6187d02-5f9c-4c36-9470-cddaf83cd144.png",
+    "transparent": true
+  },
+  {
+    "id": "M01_Hand_03",
+    "prompt": "BorrowTomorrow game production asset. Match reference warm nostalgic Chinese courtyard watercolor and colored-pencil illustration, fibrous paper texture WITHIN painted surfaces, restrained beige ochre wood-brown burgundy pale teal palette, believable anatomy, readable silhouettes, no lettering no watermark no UI. Preserve camera composition and all anchor locations. M01 compositing layer, full canvas 2304x1728 4:3. Do NOT trim or center content; keep ORIGINAL image coordinates and empty margins. Same right hand in burgundy sleeve gently holding the opened cuff edge at 67% width 64% height, paused to reveal extra fabric. Draw ONLY this hand and forearm on transparent background; no actual sleeve garment being manipulated, no table, no scissors, no fabric. Hand full-size positioned to overlay reference. Real transparent PNG, no opaque paper rectangle, no checkerboard painted into image. No text.",
+    "path": "/Users/edwin/.codex/generated_images/01a14bd7-4f2a-7770-9a46-8e89fbb09a42/exec-9cc66860-3626-406e-84d1-b3bae78c48da.png",
+    "transparent": true
+  }
+]

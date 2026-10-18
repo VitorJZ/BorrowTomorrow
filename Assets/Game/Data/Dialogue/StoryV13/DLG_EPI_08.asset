@@ -16,12 +16,11 @@ MonoBehaviour:
   speakerLabel: "\u6797\u6653\uFF08\u73B0\u5B9E\uFF09"
   subtitle: "\u6765\u3002"
   voiceClip: {fileID: 8300000, guid: ddb1eb7f6ba8440429ab7484490a1027, type: 3}
-  illustration: {fileID: 2800000, guid: 37a3af56d9c1e564fad688dfc062946d, type: 3}
+  illustration: {fileID: 2800000, guid: 590ab111aca3d463eaf94d941416d070, type: 3}
   blackBackground: 0
   nextId: 
   requiredFlags: []
-  setFlags:
-  - EpilogueSeen
+  setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
   source: Reality

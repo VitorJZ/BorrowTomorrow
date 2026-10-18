@@ -1,0 +1,21 @@
+{
+  "Assets/Game/Scenes/L01_Courtyard.scene": {
+    "physical_blocks_unchanged": true,
+    "blocks": 40
+  },
+  "Assets/Game/Prefabs/Player_Graybox.prefab": {
+    "physical_blocks_unchanged": true,
+    "blocks": 3
+  },
+  "Assets/Game/Scripts/Level/CameraRig2D.cs": {
+    "unchanged": true
+  },
+  "Assets/Game/Scripts/UI/BoundaryHandle.cs": {
+    "unchanged": true
+  },
+  "changed_existing_assets": [
+    "Assets/Game/Scenes/L01_Courtyard.scene",
+    "Assets/Game/Prefabs/Player_Graybox.prefab",
+    "Assets/Game/Scripts/EditorTools/ArtSampleInstaller.cs"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "reference_resolution": [
+    1920,
+    1080
+  ],
+  "files": {
+    "UI_Paper_9Slice_256x384.png": {
+      "border_left": 24,
+      "border_right": 24,
+      "border_top": 24,
+      "border_bottom": 24,
+      "draw_mode": "Sliced",
+      "text_safe_margin": 32
+    },
+    "UI_Button_Wood_Blank_1024x256.png": {
+      "border_left": 120,
+      "border_right": 120,
+      "border_top": 48,
+      "border_bottom": 48,
+      "draw_mode": "Sliced",
+      "minimum_click_target_at_720p": 44
+    }
+  },
+  "note": "文字由程序排版；纸面外缘做过轮廓裁切；不要复制旧滑杆到新纸面"
+}

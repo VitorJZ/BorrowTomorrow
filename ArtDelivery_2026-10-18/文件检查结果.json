@@ -1,0 +1,17 @@
+{
+  "png_count": 160,
+  "with_transparency": 129,
+  "hero_frames": 72,
+  "dog_frames": 16,
+  "box_pixels": 121848,
+  "closed_board_exposed_box_pixels": 0,
+  "checks": "passed",
+  "failures": [],
+  "limitations": [
+    "未执行游戏内接入或连续播放验收",
+    "背景门窗与两年代仍有局部像素偏移",
+    "L01B树枝上沿尚非碰撞精确描线",
+    "手势为局部姿态素材，连续动作时序仍需检查",
+    "生成原稿多数约1.5MP；交付尺寸部分为重采样放大"
+  ]
+}

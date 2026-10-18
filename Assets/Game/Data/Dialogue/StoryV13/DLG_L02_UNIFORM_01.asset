@@ -16,7 +16,7 @@ MonoBehaviour:
   speakerLabel: "\u6211"
   subtitle: "\u8896\u53E3\u7559\u4E86\u4E00\u5BF8\u3002\u660E\u5E74\u8FD8\u80FD\u7A7F\u3002"
   voiceClip: {fileID: 8300000, guid: fe51bafcf1aec1443bd641ca82fb7071, type: 3}
-  illustration: {fileID: 2800000, guid: c3cab964b0f9ef443a5d8f2d49b20037, type: 3}
+  illustration: {fileID: 2800000, guid: 68c013467e6e847d7b6f3f579d9e3404, type: 3}
   blackBackground: 0
   nextId: DLG_L02_UNIFORM_02
   requiredFlags:

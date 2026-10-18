@@ -18,8 +18,16 @@ namespace BorrowTomorrow.TimeBoundary
             float value=boundary.CommittedBoundary;
             if(value>=boundary.RangeMax-.01f)value=100000f;
             else if(value<=boundary.RangeMin+.01f)value=-100000f;
-            properties.SetFloat("_Boundary",value);
-            past?.SetPropertyBlock(properties);present?.SetPropertyBlock(properties);
+            Apply(past, value); Apply(present, value);
+        }
+        private void Apply(SpriteRenderer renderer, float value)
+        {
+            if (renderer == null || renderer.sprite == null) return;
+            // A SpriteRenderer also supplies texture properties. Never replace them with an empty block.
+            renderer.GetPropertyBlock(properties);
+            properties.SetTexture("_MainTex", renderer.sprite.texture);
+            properties.SetFloat("_Boundary", value);
+            renderer.SetPropertyBlock(properties);
         }
     }
 }

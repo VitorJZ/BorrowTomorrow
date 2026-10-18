@@ -32,7 +32,7 @@ namespace BorrowTomorrow.Narrative
 
         public string InteractPrompt => prompt;
 
-        public bool CanInteract => entry != null && (!IsCompleted || replayable)
+        public bool CanInteract => isActiveAndEnabled && entry != null && (!IsCompleted || replayable)
             && (IsCompleted || DialoguePlayer.RequirementsMet(entry.requiredFlags));
 
         private bool IsCompleted

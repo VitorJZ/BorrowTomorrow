@@ -1,0 +1,25 @@
+{
+    "name": "BorrowTomorrow.EditorTools",
+    "rootNamespace": "BorrowTomorrow.EditorTools",
+    "references": [
+        "BorrowTomorrow.Core",
+        "BorrowTomorrow.Player",
+        "BorrowTomorrow.TimeBoundary",
+        "BorrowTomorrow.Level",
+        "BorrowTomorrow.Narrative",
+        "BorrowTomorrow.Audio",
+        "BorrowTomorrow.Save",
+        "BorrowTomorrow.UI"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

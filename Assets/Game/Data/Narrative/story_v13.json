@@ -153,8 +153,8 @@
     "place": "L02_Sewing 完成外台谜题后进入的室内，缝纫桌校服。",
     "trigger": "靠近桌面按 E 调查；本关出口须完成此事件。",
     "guard": "UniformRead 未完成，玩家位于安全站位。",
-    "control": "锁移动，展示插画，按 E 继续。",
-    "visual": "外台解谜全程不加自语。室内展示 ILL_UNIFORM_CUFF：袖口内留一寸裕量，桌角清楚露出红底碎花布与浅蓝格子布。第 3 句录音结束后停顿约 1.2 秒，主角触摸花布，再说第 4 句。此处允许玩家猜中身份；不靠突然变老或改名确认。",
+    "control": "安全站位按 E 调查后锁移动；该次输入触发主角翻开袖口的短动作，动作结束才进入第 1 条。后续按 E 阅读，不设缝纫小游戏或反复操作。",
+    "visual": "外台解谜全程不加自语。主角熟练翻开袖口，露出内侧预留的一寸布；ILL_UNIFORM_CUFF 动作前后状态或局部手部动画表现，不能只弹出成品特写。桌角清楚露出红底碎花布与浅蓝格子布。第 3 句录音结束后停顿约 1.2 秒，主角触摸花布，再说第 4 句。此处允许玩家猜中身份；不靠突然变老或改名确认。",
     "flags": [
       "UniformRead"
     ],
@@ -202,7 +202,39 @@
         "voice": "vo_l02_uniform_04",
         "next": ""
       }
-    ]
+    ],
+    "action": {
+      "id": "ACT_L02_CUFF",
+      "before": "DLG_L02_UNIFORM_01",
+      "confirmBefore": "",
+      "confirmAfter": "",
+      "seconds": 1.4,
+      "sfx": "sfx_cloth_paper",
+      "gesture": "Interact",
+      "image": "ILL_UNIFORM_CUFF",
+      "beforeImage": "",
+      "cover": [
+        0.44,
+        0.4,
+        0.25,
+        0.23
+      ],
+      "coverColor": {
+        "r": 0.95,
+        "g": 0.94,
+        "b": 0.9,
+        "a": 1.0
+      },
+      "slide": {
+        "x": 0.03,
+        "y": -0.04
+      },
+      "zoom": 1.2,
+      "focus": {
+        "x": 0.56,
+        "y": 0.5
+      }
+    }
   },
   {
     "id": "EVT_L02_LEDGER",
@@ -445,8 +477,8 @@
     "place": "沿成年树枝抵达暗格交互点，约 x=26、y=4.5。",
     "trigger": "处于近距离调查范围，按 E。",
     "guard": "IdentityKnown 与 CompartmentSeen 已完成，BoxLocated 未完成；当前通路由 A 的已提交机关状态提供。",
-    "control": "锁移动，按 E 继续；完成后保存并转场。",
-    "visual": "先展示 ILL_BOX_IN_NICHE：木板后蓝铁盒；不取进背包，不开盒提前看信。随后切病房 ILL_HOSPITAL_HOLD，外婆在现实说出位置，晓晓回应。方位以 A 确认的最终视角为准。",
+    "control": "锁移动；第一次 E 触发拨板动作，显示盒子后等待该键释放。提示“[E] 告诉晓晓位置”，下一次独立按下 E 才进入第 1 条；后续按 E 阅读，整段完成后保存并转场。",
+    "visual": "先用木板遮挡态到打开态的变化表现拨板，展示 ILL_BOX_IN_NICHE 中蓝铁盒。玩家确认报告前停留在记忆中的盒子；确认后切 ILL_HOSPITAL_HOLD，由外婆在现实说位置、晓晓回应。盒子始终留在暗格，不进入背包，也不提前开盒读信。方位以 A 确认的最终视角为准。",
     "flags": [
       "BoxLocated"
     ],
@@ -484,7 +516,39 @@
         "voice": "vo_l04_box_03",
         "next": ""
       }
-    ]
+    ],
+    "action": {
+      "id": "ACT_L04_BOARD",
+      "before": "DLG_L04_BOX_01",
+      "confirmBefore": "",
+      "confirmAfter": "告诉晓晓位置",
+      "seconds": 1.2,
+      "sfx": "sfx_tin_box",
+      "gesture": "Interact",
+      "image": "ILL_BOX_IN_NICHE",
+      "beforeImage": "",
+      "cover": [
+        0.2,
+        0.38,
+        0.47,
+        0.48
+      ],
+      "coverColor": {
+        "r": 0.63,
+        "g": 0.5,
+        "b": 0.36,
+        "a": 1.0
+      },
+      "slide": {
+        "x": 0.25,
+        "y": 0.35
+      },
+      "zoom": 1.0,
+      "focus": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
   },
   {
     "id": "EVT_EPILOGUE_MAIN",
@@ -492,8 +556,8 @@
     "place": "Epilogue 病房床畔。",
     "trigger": "场景与画面就绪后自动启动。",
     "guard": "主流程要求 BoxLocated 已完成；回放模式不受通关标记阻止。",
-    "control": "无平台操作；除时间标题外按 E 阅读，可跳过整段。",
-    "visual": "先黑屏“两天后”。ILL_EPILOGUE_BOX_OPEN 显示真实盒子与现实中的林晓，打开后取出小被面与短信。ILL_EPILOGUE_LETTER 展开可读全文。第 5 句切 ILL_EPILOGUE_QUILT_LAP；第 6 句林晓盖上被面一角，第 7 句前外婆下意识抚平布角。第 8 句后手与布料停留约 3 秒再淡出。布面两种纹样必须对应 L02。",
+    "control": "无平台操作，除时间标题外按 E 阅读；第 6 条结束后暂停对白链，显示“[E] 抚平布角”。释放上一页确认键后再次按 E，触发外婆抚平动作；动作结束才播放第 7 条。可跳过整段，不设失败或操作挑战。",
+    "visual": "先黑屏“两天后”。ILL_EPILOGUE_BOX_OPEN 显示真实盒子与林晓，打开取出小被面与短信；ILL_EPILOGUE_LETTER 展开可读全文。第 5 条切 ILL_EPILOGUE_QUILT_LAP，第 6 条林晓盖上被面一角。随后等待玩家以外婆视角按 E 抚平布角，动作完成才接第 7、8 条。全程不切换操控角色。末句后手与布料停留约 3 秒再淡出，两种布纹对应 L02。",
     "flags": [
       "EpilogueSeen"
     ],
@@ -581,6 +645,38 @@
         "voice": "vo_epi_08",
         "next": ""
       }
-    ]
+    ],
+    "action": {
+      "id": "ACT_EPI_SMOOTH",
+      "before": "DLG_EPI_07",
+      "confirmBefore": "抚平布角",
+      "confirmAfter": "",
+      "seconds": 1.6,
+      "sfx": "sfx_cloth_paper",
+      "gesture": "",
+      "image": "ILL_EPILOGUE_QUILT_LAP",
+      "beforeImage": "",
+      "cover": [
+        0.08,
+        0.12,
+        0.5,
+        0.3
+      ],
+      "coverColor": {
+        "r": 0.3,
+        "g": 0.16,
+        "b": 0.12,
+        "a": 0.4
+      },
+      "slide": {
+        "x": 0.06,
+        "y": 0.0
+      },
+      "zoom": 1.1,
+      "focus": {
+        "x": 0.42,
+        "y": 0.35
+      }
+    }
   }
 ]

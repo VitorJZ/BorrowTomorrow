@@ -1,0 +1,14 @@
+using UnityEngine;
+using UnityEditor;
+using System.Linq;
+using BorrowTomorrow.Level;
+using BorrowTomorrow.Narrative;
+using BorrowTomorrow.Core;
+using BorrowTomorrow.TimeBoundary;
+foreach(var a in UnityEngine.Object.FindObjectsOfType<NarrativeAutoEvent>())a.enabled=false;
+foreach(var r in UnityEngine.Object.FindObjectsOfType<LevelRoot>())r.DeactivateRoom();
+var room=UnityEngine.Object.FindObjectsOfType<LevelRoot>().Single(r=>r.RoomId=="L01B");
+room.ActivateRoom();room.PlacePlayer("spawn_L01B_in");room.GetComponent<BoundaryController>().RestoreBoundary(53);
+GameSession.Instance.State.SetSubState(PlayingSubState.Free);
+EditorApplication.delayCall+=()=>ScreenCapture.CaptureScreenshot("Docs/ArtSample_2026-10-18/screenshots/L01B_mixed_v1.png");
+return "L01B active";
