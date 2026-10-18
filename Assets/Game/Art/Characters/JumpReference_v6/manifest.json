@@ -1,0 +1,377 @@
+{
+  "frameCount": 24,
+  "fps": 60,
+  "pixelsPerUnit": 155.75757575757578,
+  "standingHeightPx": 257,
+  "origin": [
+    160,
+    350
+  ],
+  "canvas": [
+    320,
+    384
+  ],
+  "preparationSeconds": 0.18,
+  "frames": [
+    {
+      "texture": "Frames/Jump_01.png",
+      "durationMs": 180,
+      "phase": "Stand",
+      "sourceRect": [
+        105,
+        12,
+        178,
+        275
+      ],
+      "registration": [
+        119,
+        90
+      ]
+    },
+    {
+      "texture": "Frames/Jump_02.png",
+      "durationMs": 60,
+      "phase": "Anticipation",
+      "sourceRect": [
+        326,
+        29,
+        438,
+        274
+      ],
+      "registration": [
+        104,
+        108
+      ]
+    },
+    {
+      "texture": "Frames/Jump_03.png",
+      "durationMs": 60,
+      "phase": "Anticipation",
+      "sourceRect": [
+        550,
+        47,
+        704,
+        274
+      ],
+      "registration": [
+        82,
+        126
+      ]
+    },
+    {
+      "texture": "Frames/Jump_04.png",
+      "durationMs": 60,
+      "phase": "Anticipation",
+      "sourceRect": [
+        798,
+        68,
+        967,
+        275
+      ],
+      "registration": [
+        71,
+        146
+      ]
+    },
+    {
+      "texture": "Frames/Jump_05.png",
+      "durationMs": 65,
+      "phase": "Anticipation",
+      "sourceRect": [
+        1046,
+        83,
+        1215,
+        275
+      ],
+      "registration": [
+        72,
+        161
+      ]
+    },
+    {
+      "texture": "Frames/Jump_06.png",
+      "durationMs": 55,
+      "phase": "Push-off",
+      "sourceRect": [
+        1328,
+        49,
+        1484,
+        276
+      ],
+      "registration": [
+        122,
+        126
+      ]
+    },
+    {
+      "texture": "Frames/Jump_07.png",
+      "durationMs": 50,
+      "phase": "Push-off",
+      "sourceRect": [
+        81,
+        282,
+        250,
+        543
+      ],
+      "registration": [
+        127,
+        92
+      ]
+    },
+    {
+      "texture": "Frames/Jump_08.png",
+      "durationMs": 65,
+      "phase": "Flight",
+      "sourceRect": [
+        305,
+        293,
+        532,
+        509
+      ],
+      "registration": [
+        61,
+        113
+      ]
+    },
+    {
+      "texture": "Frames/Jump_09.png",
+      "durationMs": 65,
+      "phase": "Flight",
+      "sourceRect": [
+        569,
+        293,
+        759,
+        504
+      ],
+      "registration": [
+        74,
+        108
+      ]
+    },
+    {
+      "texture": "Frames/Jump_10.png",
+      "durationMs": 70,
+      "phase": "Flight",
+      "sourceRect": [
+        799,
+        294,
+        1004,
+        495
+      ],
+      "registration": [
+        63,
+        111
+      ]
+    },
+    {
+      "texture": "Frames/Jump_11.png",
+      "durationMs": 70,
+      "phase": "Flight",
+      "sourceRect": [
+        1070,
+        304,
+        1237,
+        500
+      ],
+      "registration": [
+        84,
+        114
+      ]
+    },
+    {
+      "texture": "Frames/Jump_12.png",
+      "durationMs": 65,
+      "phase": "Flight",
+      "sourceRect": [
+        1305,
+        306,
+        1466,
+        520
+      ],
+      "registration": [
+        80,
+        116
+      ]
+    },
+    {
+      "texture": "Frames/Jump_13.png",
+      "durationMs": 60,
+      "phase": "Flight",
+      "sourceRect": [
+        58,
+        552,
+        244,
+        755
+      ],
+      "registration": [
+        86,
+        141
+      ]
+    },
+    {
+      "texture": "Frames/Jump_14.png",
+      "durationMs": 50,
+      "phase": "Contact",
+      "sourceRect": [
+        353,
+        535,
+        507,
+        754
+      ],
+      "registration": [
+        116,
+        134
+      ]
+    },
+    {
+      "texture": "Frames/Jump_15.png",
+      "durationMs": 50,
+      "phase": "Absorb",
+      "sourceRect": [
+        598,
+        559,
+        749,
+        753
+      ],
+      "registration": [
+        119,
+        159
+      ]
+    },
+    {
+      "texture": "Frames/Jump_16.png",
+      "durationMs": 50,
+      "phase": "Absorb",
+      "sourceRect": [
+        843,
+        571,
+        1005,
+        753
+      ],
+      "registration": [
+        112,
+        171
+      ]
+    },
+    {
+      "texture": "Frames/Jump_17.png",
+      "durationMs": 55,
+      "phase": "Absorb",
+      "sourceRect": [
+        1091,
+        568,
+        1219,
+        753
+      ],
+      "registration": [
+        107,
+        168
+      ]
+    },
+    {
+      "texture": "Frames/Jump_18.png",
+      "durationMs": 65,
+      "phase": "Absorb",
+      "sourceRect": [
+        1324,
+        583,
+        1448,
+        752
+      ],
+      "registration": [
+        105,
+        184
+      ]
+    },
+    {
+      "texture": "Frames/Jump_19.png",
+      "durationMs": 65,
+      "phase": "Recover",
+      "sourceRect": [
+        85,
+        802,
+        206,
+        1002
+      ],
+      "registration": [
+        101,
+        153
+      ]
+    },
+    {
+      "texture": "Frames/Jump_20.png",
+      "durationMs": 65,
+      "phase": "Recover",
+      "sourceRect": [
+        341,
+        790,
+        461,
+        1005
+      ],
+      "registration": [
+        104,
+        138
+      ]
+    },
+    {
+      "texture": "Frames/Jump_21.png",
+      "durationMs": 65,
+      "phase": "Recover",
+      "sourceRect": [
+        592,
+        775,
+        703,
+        1009
+      ],
+      "registration": [
+        106,
+        119
+      ]
+    },
+    {
+      "texture": "Frames/Jump_22.png",
+      "durationMs": 65,
+      "phase": "Recover",
+      "sourceRect": [
+        854,
+        764,
+        956,
+        1009
+      ],
+      "registration": [
+        108,
+        108
+      ]
+    },
+    {
+      "texture": "Frames/Jump_23.png",
+      "durationMs": 65,
+      "phase": "Recover",
+      "sourceRect": [
+        1120,
+        751,
+        1197,
+        1010
+      ],
+      "registration": [
+        120,
+        94
+      ]
+    },
+    {
+      "texture": "Frames/Jump_24.png",
+      "durationMs": 220,
+      "phase": "Stand",
+      "sourceRect": [
+        1370,
+        752,
+        1444,
+        1011
+      ],
+      "registration": [
+        119,
+        94
+      ]
+    }
+  ]
+}

@@ -135,7 +135,14 @@ namespace BorrowTomorrow.EditorTools
             string path="Assets/Game/Prefabs/Player_Graybox.prefab";var root=PrefabUtility.LoadPrefabContents(path);
             try{
                 var a=root.GetComponent<CharacterArtAnimator>();
-                foreach(var clip in a.clips)clip.frames=paths.Where(p=>p.Contains("/Hero/"+clip.name+"/")).OrderBy(p=>p,StringComparer.Ordinal).Select(p=>AssetDatabase.LoadAssetAtPath<Sprite>(p)).ToArray();
+                // Keep the approved Walk/Climb and phased Jump clips from the main branch.
+                // The sample pack only replaces idle and story gestures.
+                foreach(var clip in a.clips.Where(c=>c.name=="Idle"||c.name=="Interact"||c.name=="PickUp"||c.name=="Mantle"))
+                {
+                    var frames=paths.Where(p=>p.Contains("/Hero/"+clip.name+"/")).OrderBy(p=>p,StringComparer.Ordinal).Select(p=>AssetDatabase.LoadAssetAtPath<Sprite>(p)).ToArray();
+                    if(frames.Length==0||frames.Any(f=>f==null))throw new InvalidOperationException("Missing sample hero frames: "+clip.name);
+                    clip.frames=frames;
+                }
                 a.visual.sprite=a.clips.First(c=>c.name=="Idle").frames[0];
                 a.visual.transform.localScale=new Vector3(1.3f,1.3f,1);
                 PrefabUtility.SaveAsPrefabAsset(root,path);

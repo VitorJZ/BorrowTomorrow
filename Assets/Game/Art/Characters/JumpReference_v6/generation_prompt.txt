@@ -1,0 +1,37 @@
+Use case: illustration-story / identity-preserving game sprite animation.
+Create ONE production animation sprite sheet with EXACTLY 24 distinct FULL-BODY drawings of the SAME slim Chinese woman in the supplied character references. Six equal columns by four equal rows, chronological reading order left to right, top to bottom. Large landscape canvas, preferably 3072 x 2048, each cell 512 x 512. Actual transparent background (alpha), NO background, NO shadows, NO ground lines, NO text, NO labels, NO cell borders. Keep large transparent gutters so no character touches a cell boundary.
+
+INPUT ROLES:
+Image 1 (preview_00.png) is the PRIMARY character identity, build, clothing and drawing-style reference. Preserve her slim narrow shoulders, slim waist and legs, same small head, dark hair in a low bun, muted dark burgundy cardigan with pale patterned cuffs/placket, charcoal straight trousers, black cloth shoes with pale soles. Preserve the delicate hand-painted textured 2D illustration style, side profile facing RIGHT, same face, same proportions and same garments in every frame.
+Image 2 (Keys_12.png) is supporting wardrobe and rendering reference ONLY. Do NOT repeat its jump poses; user rejected the overly tucked jump and abrupt transitions.
+Image 3 (Flashback_contact.jpg) is the APPROVED MOTION reference ONLY. Borrow its continuous forward-lean, push-off, modestly asymmetric forward jump, feet unfolding and soft landing recovery. DO NOT copy that man's identity, clothes, pixels or grey background.
+
+MOTION GOAL: a coherent modest forward platform jump with weight, NOT a high athletic split leap or acrobatics. Same fixed side camera, no perspective changes. The woman stays centered about the same local pelvis X within every cell; horizontal travel will be animated by the game. All grounded frames share exactly the same local floor at 90% cell height. Standing head is about 28% cell height, leaving room for flight; in airborne frames whole body rises slightly with the jump arc while legs articulate. Keep all head, hands and shoes fully inside the SAME cell, never clipped. Her anatomy MUST remain slender and constant, no swelling torso or changing limb lengths. Each sprite is a complete newly drawn person, never detached limbs, never a cutout puppet or duplicated pose with only position changed.
+
+EXACT 24-pose sequence:
+row1 frame01 neutral relaxed standing, arms down;
+02 slight knee bend and slight forward tilt, hands start moving backward;
+03 deeper knee bend, hips descend, arms further behind;
+04 crouch grows smoothly, torso inclines forward, both feet still planted;
+05 deepest anticipation, hips low, hands behind, heels ready to lift;
+06 push begins: knees start extending, hips and chest rise together, arms swing forward, balls of feet still press into ground.
+row2 frame07 final push: legs extend, heels up, toes make last contact, front knee begins moving forward;
+08 early airborne: front knee moves forward, trailing leg still extends diagonally behind, arms forward, toes now clearly off ground;
+09 rising: front thigh comes forward modestly, rear knee starts bending, ankles follow continuous arcs;
+10 near apex: compact modest forward-stride silhouette, one leg forward and one trailing, no legs folded tightly against belly;
+11 apex: legs begin drawing back UNDER hips for landing, arms lower slightly, torso stable;
+12 just past apex: front lower leg gradually unfolds down and forward, rear foot follows, no abrupt jump in foot position.
+row3 frame13 descending: front shoe approaches floor with heel slightly forward, rear knee still a little bent;
+14 late descent: both feet lower UNDER body, front shoe nearly level with rear, arms forward for balance;
+15 first contact: front foot touches local floor, rear shoe just above it, knees still only slightly bent;
+16 both feet now grounded, knees bend to absorb impact, torso settles forward, shoes stop moving;
+17 compression continues smoothly, hips descend, arms lower slightly;
+18 deepest landing cushion, knees bent about 40 degrees, heels down, feet remain absolutely fixed, hands near knees.
+row4 frame19 begin recovery: knees extend a little, hips slightly higher, feet fixed;
+20 half recovery: knees less bent, torso starts straightening, arms smoothly relax down;
+21 three-quarter recovery: shallow knee bend, head and chest rise together;
+22 almost upright: tiny remaining knee bend and forward lean, hands settle by thighs;
+23 standing settled with minimal residual movement;
+24 same neutral standing pose/proportions as frame01 for a clean loop.
+
+CRITICAL: Each next pose must look like the same continuous performance a few milliseconds later. Hands, both knees, both ankles and both shoes move GRADUALLY, especially 06-09 push-off and 15-23 landing recovery. Match foot sizes, trouser width, cardigan silhouette and head size exactly. Draw BOTH legs recognizably, use subtle overlap, not extra legs. No blurred motion, no ghost limbs, no stretchy squash, no chibi, no bulkier body. Each of the 24 cells contains exactly one complete woman, always facing right.

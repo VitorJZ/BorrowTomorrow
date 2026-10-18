@@ -38,15 +38,20 @@ namespace BorrowTomorrow.Player
         [Tooltip("跳跃预输入窗口（秒）")]
         [SerializeField] private float jumpBufferTime = 0.12f;
 
+        [Tooltip("完整人物起跳准备姿态的短暂蓄力时长")]
+        [SerializeField] private float jumpAnticipation = 0.08f;
+
         [Header("检测")]
         [Tooltip("可站立表面层（Ground + Temporal）")]
         [SerializeField] private LayerMask groundMask = ~0;
 
-        [Tooltip("脚下探测盒中心相对胶囊底部中心再向下的偏移")]
+        [Tooltip("腾空落地时允许提前探测支撑面的距离")]
         [SerializeField] private float groundProbeDrop = 0.03f;
 
-        [Tooltip("脚下探测盒尺寸")]
-        [SerializeField] private Vector2 groundProbeSize = new Vector2(0.5f, 0.12f);
+        [Tooltip("可行走坡面的最大角度")]
+        [SerializeField, Range(0f,80f)] private float maxGroundAngle = 50f;
+        [Tooltip("连续走下坡或跨小接缝时的贴地距离")]
+        [SerializeField] private float groundSnapDistance = 0.12f;
 
         [Header("音效（稳定 id，由 B 组在 SfxLibrary 登记，策划 09）")]
         [SerializeField] private string footstepSfxId = "player_footstep";
@@ -64,30 +69,49 @@ namespace BorrowTomorrow.Player
         private int ladderZoneCount;
         private bool wasGrounded;
         private float cachedGravityScale;
-        private readonly Collider2D[] groundHits = new Collider2D[24];
+        private float jumpPreparationTimer;
+        private readonly ContactPoint2D[] groundContacts = new ContactPoint2D[24];
+        private readonly RaycastHit2D[] groundCasts = new RaycastHit2D[24];
         private readonly Collider2D[] ladderHits = new Collider2D[24];
+        private static PhysicsMaterial2D frictionlessMovement;
 
         /// <summary>是否落地（本物理步）。</summary>
         public bool IsGrounded { get; private set; }
 
         /// <summary>当前脚下地面碰撞体；腾空为 null（供支撑撤除校验使用）。</summary>
         public Collider2D GroundCollider { get; private set; }
+        public Vector2 GroundNormal { get; private set; } = Vector2.up;
 
         /// <summary>是否处于梯子攀爬状态。</summary>
         public bool IsClimbingLadder { get; private set; }
 
         /// <summary>落地瞬间触发（音效/尘土等订阅）。</summary>
         public event System.Action Landed;
+        public event System.Action JumpStarted;
+        public event System.Action MotionReset;
+        public bool IsPreparingJump => jumpPreparationTimer > 0f;
+        public float JumpPreparationProgress => jumpAnticipation > 0f ? 1f-jumpPreparationTimer/jumpAnticipation : 1f;
 
         private void Awake()
         {
             body = GetComponent<Rigidbody2D>();
             capsule = GetComponent<CapsuleCollider2D>();
+            // Horizontal input presses into a wall every physics step. Default
+            // friction can balance gravity and leave an airborne body hanging.
+            // Grounded stopping and slope adhesion are handled by this motor.
+            if (capsule.sharedMaterial == null || capsule.sharedMaterial.friction > 0f
+                || capsule.sharedMaterial.bounciness > 0f)
+            {
+                if (frictionlessMovement == null)
+                    frictionlessMovement = new PhysicsMaterial2D("PlayerSlide")
+                    { friction = 0f, bounciness = 0f, hideFlags = HideFlags.HideAndDontSave };
+                capsule.sharedMaterial = frictionlessMovement;
+            }
             body.freezeRotation = true; // 冻结 Z 旋转（策划 11.3）
             cachedGravityScale = fallAcceleration / Mathf.Abs(Physics2D.gravity.y);
             body.gravityScale = cachedGravityScale;
-            // 地面探测走 Simple 重载 + layerMask（Ground|Temporal）。
-            // 梯子 Trigger 在独立的 Ladder 层上，不在该掩码内——不会把攀爬 Trigger 当成支撑（策划 11.3）。
+            // Ground support uses contact normals and a downward capsule cast.
+            // Triggers and the player itself are excluded from support queries.
         }
 
         private BorrowTomorrow.Player.PlayerContext registeredContext;
@@ -172,27 +196,59 @@ namespace BorrowTomorrow.Player
 
         private void UpdateWalking(bool controlAllowed, float move, float climb)
         {
-            // 水平移动。
-            body.velocity = new Vector2(controlAllowed ? move * moveSpeed : 0f, body.velocity.y);
+            if (!controlAllowed) jumpPreparationTimer = 0f;
+            if (IsGrounded)
+            {
+                // Uphill velocity has positive world Y but remains grounded.
+                Vector2 tangent = new Vector2(GroundNormal.y,-GroundNormal.x);
+                body.gravityScale = 0f;
+                body.velocity = tangent * (controlAllowed ? move * moveSpeed : 0f);
+            }
+            else
+            {
+                body.gravityScale = cachedGravityScale;
+                body.velocity = new Vector2(controlAllowed ? move * moveSpeed : 0f,body.velocity.y);
+            }
 
             // 进入攀爬：在梯子区内按上下键（策划 11.3：梯子用 Trigger 与攀爬状态控制）。
             if (controlAllowed && Mathf.Abs(climb) > 0.1f && !(IsGrounded && climb < 0f)
                 && IsInsideLadderZone())
             {
                 IsClimbingLadder = true;
+                jumpPreparationTimer = 0f;
                 body.gravityScale = 0f;
                 body.velocity = Vector2.zero;
                 return;
             }
 
-            // 跳跃：需要落地或离地宽容（策划 4.5：腾空时不能开始拖动，但主动跳跃允许）。
+            if (IsPreparingJump)
+            {
+                jumpPreparationTimer = Mathf.Max(0f,jumpPreparationTimer-Time.fixedDeltaTime);
+                if (jumpPreparationTimer <= 0f) LaunchJump();
+                return;
+            }
+            // A ground jump has a short visual preparation, then applies the
+            // original physical impulse. Coyote jumps stay immediate.
             if (controlAllowed && jumpBufferTimer > 0f && coyoteTimer > 0f)
             {
-                body.velocity = new Vector2(body.velocity.x, jumpVelocity);
                 jumpBufferTimer = 0f;
-                coyoteTimer = 0f;
-                PlaySfx(jumpSfxId);
+                if (IsGrounded && jumpAnticipation > 0f) jumpPreparationTimer = jumpAnticipation;
+                else LaunchJump();
             }
+        }
+
+        private void LaunchJump()
+        {
+            jumpPreparationTimer = 0f;
+            IsGrounded = false;
+            GroundCollider = null;
+            GroundNormal = Vector2.up;
+            body.gravityScale = cachedGravityScale;
+            body.velocity = new Vector2(body.velocity.x,jumpVelocity);
+            jumpBufferTimer = 0f;
+            coyoteTimer = 0f;
+            PlaySfx(jumpSfxId);
+            JumpStarted?.Invoke();
         }
 
         private void UpdateClimbing(bool controlAllowed, float climb, float move)
@@ -226,8 +282,13 @@ namespace BorrowTomorrow.Player
             body.gravityScale = cachedGravityScale;
             if (withJump)
             {
+                IsGrounded = false;
+                GroundCollider = null;
+                GroundNormal = Vector2.up;
                 body.velocity = new Vector2(body.velocity.x, jumpVelocity * 0.8f);
                 jumpBufferTimer = 0f;
+                coyoteTimer = 0f;
+                JumpStarted?.Invoke();
             }
         }
 
@@ -237,37 +298,68 @@ namespace BorrowTomorrow.Player
             {
                 IsGrounded = false;
                 GroundCollider = null;
+                GroundNormal = Vector2.up;
                 return;
             }
-            // 探测盒以脚底为基准：中心在脚底稍下方（drop），跨过脚底与地面接触缝隙。
-            // Simple 重载按项目"查询命中触发器"设置工作——梯子 Trigger 已隔离在 Ladder 层外（见 LadderContent）。
-            Collider2D hit = body.velocity.y > 0.2f ? null : FindSupport();
-            IsGrounded = hit != null;
-            GroundCollider = hit;
+            Collider2D support;Vector2 normal;float gap;
+            bool found = TryFindSupport(out support,out normal,out gap);
+            if (found && !wasGrounded && Vector2.Dot(body.velocity,normal) > .5f) found=false;
+            if (found && !wasGrounded && gap > Mathf.Max(.02f,groundProbeDrop)) found=false;
+            IsGrounded = found;
+            GroundCollider = found ? support : null;
+            GroundNormal = found ? normal : Vector2.up;
+            if (found && gap > .01f) body.position += Vector2.down * (gap-.01f);
         }
 
         private Vector2 Feet => new Vector2(capsule.bounds.center.x, capsule.bounds.min.y);
 
         private Collider2D FindSupport()
         {
-            Vector2 feet = Feet;
-            var filter = new ContactFilter2D { useTriggers = false, useLayerMask = true, layerMask = groundMask };
-            int count = Physics2D.OverlapBox(feet + Vector2.down * groundProbeDrop,
-                groundProbeSize, 0f, filter, groundHits);
-            Collider2D best = null;
-            float distance = float.MaxValue;
-            for (int i = 0; i < count; i++)
+            Collider2D support;Vector2 normal;float gap;
+            return TryFindSupport(out support,out normal,out gap) ? support : null;
+        }
+
+        private bool TryFindSupport(out Collider2D support,out Vector2 normal,out float gap)
+        {
+            support=null;normal=Vector2.up;gap=0;
+            var filter=new ContactFilter2D{useTriggers=false,useLayerMask=true,layerMask=groundMask};
+            float minUp=Mathf.Cos(maxGroundAngle*Mathf.Deg2Rad);
+            int count=capsule.GetContacts(filter,groundContacts);
+            float bestUp=-1;
+            for(int i=0;i<count;i++)
             {
-                Collider2D hit = groundHits[i];
-                if (hit == null || hit == capsule || hit.attachedRigidbody == body || hit.isTrigger) continue;
-                Vector2 nearest = hit.ClosestPoint(feet);
-                // A side wall, or the underside of a one-way landing, is not support.
-                if (nearest.y > feet.y + 0.08f) continue;
-                if (hit.usedByEffector && hit.bounds.max.y > feet.y + 0.12f) continue;
-                float d = (nearest - feet).sqrMagnitude;
-                if (d < distance) { best = hit; distance = d; }
+                var contact=groundContacts[i];
+                var other=contact.collider==capsule ? contact.otherCollider : contact.collider;
+                if(other==null||other==capsule||other.attachedRigidbody==body||other.isTrigger)continue;
+                Vector2 n=contact.normal;
+                if(Vector2.Dot(n,(Vector2)capsule.bounds.center-contact.point)<0)n=-n;
+                if(n.y<minUp||contact.point.y>capsule.bounds.center.y)continue;
+                if(other.usedByEffector&&other.bounds.max.y>Feet.y+.12f)continue;
+                if(n.y>bestUp){bestUp=n.y;support=other;normal=n;}
             }
-            return best;
+            if(support!=null)return true;
+
+            count=capsule.Cast(Vector2.down,filter,groundCasts,Mathf.Max(.04f,groundSnapDistance));
+            float nearest=float.PositiveInfinity;
+            for(int i=0;i<count;i++)
+            {
+                var hit=groundCasts[i];var other=hit.collider;
+                if(other==null||other==capsule||other.attachedRigidbody==body||other.isTrigger)continue;
+                Vector2 n=hit.normal;
+                if(hit.distance<=.0001f)
+                {
+                    // An overlapping cast reports -castDirection even for a
+                    // wall. Recover the actual direction to the nearest surface.
+                    Vector2 origin=Feet+Vector2.up*.02f;
+                    Vector2 delta=origin-other.ClosestPoint(origin);
+                    if(delta.sqrMagnitude<.000001f)continue;
+                    n=delta.normalized;
+                }
+                if(n.y<minUp)continue;
+                if(other.usedByEffector&&other.bounds.max.y>Feet.y+.12f)continue;
+                if(hit.distance<nearest){nearest=hit.distance;support=other;normal=n;gap=hit.distance;}
+            }
+            return support!=null;
         }
 
         private bool IsInsideLadderZone()
@@ -344,7 +436,7 @@ namespace BorrowTomorrow.Player
         /// 是否可以开始拖动时间边界：必须落地或站稳，
         /// 攀爬与腾空时不能开始（策划 4.5）。另由状态机保证子状态合法。
         /// </summary>
-        public bool CanBeginBoundaryAdjust => IsGrounded && !IsClimbingLadder && IsControlAllowed;
+        public bool CanBeginBoundaryAdjust => IsGrounded && !IsClimbingLadder && !IsPreparingJump && IsControlAllowed;
 
         /// <summary>存档/检查点恢复用：直接放置（策划 12.2：先恢复环境再放人）。</summary>
         public void TeleportTo(Vector2 position)
@@ -354,12 +446,16 @@ namespace BorrowTomorrow.Player
             IsClimbingLadder = false;
             body.gravityScale = cachedGravityScale;
             jumpBufferTimer = 0f;
+            jumpPreparationTimer = 0f;
             coyoteTimer = 0f;
             footstepTimer = 0f;
             ladderZoneCount = 0;
             IsGrounded = false;
             GroundCollider = null;
             Physics2D.SyncTransforms();
+            GroundNormal = Vector2.up;
+            wasGrounded = false;
+            MotionReset?.Invoke();
         }
 
         private void OnDrawGizmosSelected()
@@ -367,8 +463,11 @@ namespace BorrowTomorrow.Player
             Gizmos.color = IsGrounded ? Color.green : Color.red;
             CapsuleCollider2D shape = capsule != null ? capsule : GetComponent<CapsuleCollider2D>();
             if (shape == null) return;
-            Vector2 origin = new Vector2(shape.bounds.center.x, shape.bounds.min.y - groundProbeDrop);
-            Gizmos.DrawWireCube(origin, groundProbeSize);
+            float distance=Mathf.Max(.04f,groundSnapDistance);
+            Vector3 feet=new Vector3(shape.bounds.center.x,shape.bounds.min.y,shape.bounds.center.z);
+            Gizmos.DrawLine(feet,feet+Vector3.down*distance);
+            Gizmos.DrawWireCube(shape.bounds.center+Vector3.down*distance,shape.bounds.size);
+            if(Application.isPlaying&&IsGrounded)Gizmos.DrawLine(feet,feet+(Vector3)GroundNormal*.4f);
         }
     }
 }

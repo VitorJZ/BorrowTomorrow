@@ -50,9 +50,7 @@ namespace BorrowTomorrow.TimeBoundary
 
                 // 检查一：新实体将覆盖玩家身体（策划 4.5）。
                 bool checkOverlap = policy == SafetyPolicy.BlockIfCoveringPlayer || policy == SafetyPolicy.FullCheck;
-                if (checkOverlap && obj.HasColliderIn(targetEra)
-                    && obj.TryGetStateBounds(targetEra, out UnityEngine.Bounds newBounds)
-                    && newBounds.Intersects(player.BodyBounds))
+                if (checkOverlap && obj.OverlapsBodyIn(targetEra, player.BodyBounds))
                 {
                     return SafetyBlockReason.BodyOverlapped;
                 }
@@ -74,8 +72,8 @@ namespace BorrowTomorrow.TimeBoundary
         {
             return reason switch
             {
-                SafetyBlockReason.BodyOverlapped => "先到稳固的地方。",
-                SafetyBlockReason.SupportRemoved => "先到稳固的地方。",
+                SafetyBlockReason.BodyOverlapped => "新障碍会挡住你，先离开它的位置。",
+                SafetyBlockReason.SupportRemoved => "脚下的平台会消失，先站到固定平台上。",
                 _ => string.Empty,
             };
         }

@@ -233,6 +233,57 @@ namespace BorrowTomorrow.TimeBoundary
             return found;
         }
 
+        /// <summary>
+        /// Check each configured target collider rather than the union of a
+        /// whole tree/stair assembly. Inactive boxes are read without enabling
+        /// them; oriented geometry keeps the empty space around slopes empty.
+        /// </summary>
+        public bool OverlapsBodyIn(Era era, Bounds body)
+        {
+            GameObject root = era == Era.Past ? pastRoot : presentRoot;
+            if (root == null) return false;
+            // Merely touching a supporting surface is not being covered by it.
+            body.Expand(new Vector3(-.02f, -.02f, 0f));
+            foreach (Collider2D collider in root.GetComponentsInChildren<Collider2D>(true))
+            {
+                if (!collider.enabled || collider.isTrigger) continue;
+                if (collider is BoxCollider2D box)
+                {
+                    if (BoxOverlapsBody(box, body)) return true;
+                }
+                else
+                {
+                    // Current room geometry consists of boxes. Keep a
+                    // conservative fallback for future non-box obstacles.
+                    Bounds bounds = collider.bounds;
+                    if (bounds.size.sqrMagnitude <= .000001f)
+                    {
+                        if (TryGetStateBounds(era, out bounds) && bounds.Intersects(body)) return true;
+                    }
+                    else if (bounds.Intersects(body)) return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool BoxOverlapsBody(BoxCollider2D box, Bounds body)
+        {
+            Vector2 center = box.transform.TransformPoint(box.offset);
+            Vector2 u = box.transform.TransformVector(new Vector3(box.size.x * .5f, 0, 0));
+            Vector2 v = box.transform.TransformVector(new Vector3(0, box.size.y * .5f, 0));
+            Vector2 delta = (Vector2)body.center - center;
+            bool Separated(Vector2 axis)
+            {
+                if (axis.sqrMagnitude < .000001f) return false;
+                axis.Normalize();
+                float targetRadius = Mathf.Abs(Vector2.Dot(u, axis)) + Mathf.Abs(Vector2.Dot(v, axis));
+                float bodyRadius = Mathf.Abs(axis.x) * body.extents.x + Mathf.Abs(axis.y) * body.extents.y;
+                return Mathf.Abs(Vector2.Dot(delta, axis)) >= targetRadius + bodyRadius;
+            }
+            return !Separated(Vector2.right) && !Separated(Vector2.up)
+                && !Separated(new Vector2(-u.y, u.x)) && !Separated(new Vector2(-v.y, v.x));
+        }
+
         /// <summary>目标年代须在原脚底高度实际承接玩家，远处或更低的实体不算支撑。</summary>
         public bool SupportsBodyIn(Era era, Bounds body)
         {

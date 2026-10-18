@@ -1,0 +1,478 @@
+{
+  "fps": 24,
+  "duration": 1.0,
+  "wholeCharacter": true,
+  "frames": [
+    {
+      "texture": "Keys_12.png",
+      "rect": [
+        224,
+        684,
+        87,
+        326
+      ],
+      "pivot": [
+        0.5287356321839081,
+        0.006134969325153374
+      ],
+      "ppu": 195.15151515151516,
+      "hipToFoot": 0.7788819875776397,
+      "index": 0,
+      "sourceIndex": 0,
+      "poseLift": 0,
+      "sourceKind": "key"
+    },
+    {
+      "texture": "Inbetweens_12.png",
+      "rect": [
+        165,
+        682,
+        176,
+        322
+      ],
+      "pivot": [
+        0.5340909090909091,
+        0.006211180124223602
+      ],
+      "ppu": 200.60606060606062,
+      "hipToFoot": 0.7626888217522658,
+      "index": 1,
+      "sourceIndex": 0,
+      "poseLift": 0,
+      "sourceKind": "between"
+    },
+    {
+      "texture": "Keys_12.png",
+      "rect": [
+        519,
+        684,
+        142,
+        297
+      ],
+      "pivot": [
+        0.528169014084507,
+        0.006734006734006734
+      ],
+      "ppu": 195.15151515151516,
+      "hipToFoot": 0.6712732919254658,
+      "index": 2,
+      "sourceIndex": 1,
+      "poseLift": 0,
+      "sourceKind": "key"
+    },
+    {
+      "texture": "Inbetweens_12.png",
+      "rect": [
+        506,
+        682,
+        196,
+        287
+      ],
+      "pivot": [
+        0.5663265306122449,
+        0.006968641114982578
+      ],
+      "ppu": 200.60606060606062,
+      "hipToFoot": 0.6530211480362538,
+      "index": 3,
+      "sourceIndex": 1,
+      "poseLift": 0,
+      "sourceKind": "between"
+    },
+    {
+      "texture": "Keys_12.png",
+      "rect": [
+        811,
+        684,
+        190,
+        252
+      ],
+      "pivot": [
+        0.5,
+        0.007936507936507936
+      ],
+      "ppu": 195.15151515151516,
+      "hipToFoot": 0.5944099378881987,
+      "index": 4,
+      "sourceIndex": 2,
+      "poseLift": 0,
+      "sourceKind": "key"
+    },
+    {
+      "texture": "Inbetweens_12.png",
+      "rect": [
+        901,
+        682,
+        226,
+        295
+      ],
+      "pivot": [
+        0.26991150442477874,
+        0.006779661016949152
+      ],
+      "ppu": 200.60606060606062,
+      "hipToFoot": 0.7178247734138972,
+      "index": 5,
+      "sourceIndex": 2,
+      "poseLift": 0,
+      "sourceKind": "between"
+    },
+    {
+      "texture": "Keys_12.png",
+      "rect": [
+        1182,
+        684,
+        190,
+        337
+      ],
+      "pivot": [
+        0.3736842105263158,
+        0.005934718100890208
+      ],
+      "ppu": 195.15151515151516,
+      "index": 6,
+      "sourceIndex": 3,
+      "poseLift": -0.16397515527950313,
+      "sourceKind": "key"
+    },
+    {
+      "texture": "Inbetweens_12.png",
+      "rect": [
+        1197,
+        669,
+        249,
+        343
+      ],
+      "pivot": [
+        0.39357429718875503,
+        0.0058309037900874635
+      ],
+      "ppu": 200.60606060606062,
+      "index": 7,
+      "sourceIndex": 3,
+      "poseLift": -0.17821771030755662,
+      "sourceKind": "between"
+    },
+    {
+      "texture": "Keys_12.png",
+      "rect": [
+        212,
+        350,
+        178,
+        324
+      ],
+      "pivot": [
+        0.45224719101123595,
+        0.006172839506172839
+      ],
+      "ppu": 195.15151515151516,
+      "index": 8,
+      "sourceIndex": 4,
+      "poseLift": -0.1076086956521739,
+      "sourceKind": "key"
+    },
+    {
+      "texture": "Inbetweens_12.png",
+      "rect": [
+        184,
+        357,
+        208,
+        314
+      ],
+      "pivot": [
+        0.4326923076923077,
+        0.006369426751592357
+      ],
+      "ppu": 200.60606060606062,
+      "index": 9,
+      "sourceIndex": 4,
+      "poseLift": -0.008731305473719697,
+      "sourceKind": "between"
+    },
+    {
+      "texture": "Keys_12.png",
+      "rect": [
+        563,
+        378,
+        146,
+        280
+      ],
+      "pivot": [
+        0.2808219178082192,
+        0.007142857142857143
+      ],
+      "ppu": 195.15151515151516,
+      "index": 10,
+      "sourceIndex": 5,
+      "poseLift": 0.09223602484472049,
+      "sourceKind": "key"
+    },
+    {
+      "texture": "Inbetweens_12.png",
+      "rect": [
+        570,
+        385,
+        197,
+        263
+      ],
+      "pivot": [
+        0.24873096446700507,
+        0.0076045627376425855
+      ],
+      "ppu": 200.60606060606062,
+      "index": 11,
+      "sourceIndex": 5,
+      "poseLift": 0.19564935917884818,
+      "sourceKind": "between"
+    },
+    {
+      "texture": "Keys_12.png",
+      "rect": [
+        862,
+        432,
+        152,
+        232
+      ],
+      "pivot": [
+        0.21052631578947367,
+        0.008620689655172414
+      ],
+      "ppu": 195.15151515151516,
+      "index": 12,
+      "sourceIndex": 6,
+      "poseLift": 0.3074534161490683,
+      "sourceKind": "key"
+    },
+    {
+      "texture": "Inbetweens_12.png",
+      "rect": [
+        879,
+        395,
+        202,
+        249
+      ],
+      "pivot": [
+        0.20297029702970298,
+        0.008032128514056224
+      ],
+      "ppu": 200.60606060606062,
+      "index": 13,
+      "sourceIndex": 6,
+      "poseLift": 0.22057383047794188,
+      "sourceKind": "between"
+    },
+    {
+      "texture": "Keys_12.png",
+      "rect": [
+        1193,
+        365,
+        149,
+        313
+      ],
+      "pivot": [
+        0.2751677852348993,
+        0.006389776357827476
+      ],
+      "ppu": 195.15151515151516,
+      "index": 14,
+      "sourceIndex": 7,
+      "poseLift": -0.07173913043478264,
+      "sourceKind": "key"
+    },
+    {
+      "texture": "Inbetweens_12.png",
+      "rect": [
+        1242,
+        351,
+        175,
+        307
+      ],
+      "pivot": [
+        0.3028571428571429,
+        0.006514657980456026
+      ],
+      "ppu": 200.60606060606062,
+      "index": 15,
+      "sourceIndex": 7,
+      "poseLift": -0.0037464112139009575,
+      "sourceKind": "between"
+    },
+    {
+      "texture": "Keys_12.png",
+      "rect": [
+        223,
+        23,
+        153,
+        323
+      ],
+      "pivot": [
+        0.35947712418300654,
+        0.006191950464396285
+      ],
+      "ppu": 195.15151515151516,
+      "index": 16,
+      "sourceIndex": 8,
+      "poseLift": -0.06149068322981366,
+      "sourceKind": "key"
+    },
+    {
+      "texture": "Inbetweens_12.png",
+      "rect": [
+        212,
+        18,
+        187,
+        313
+      ],
+      "pivot": [
+        0.40106951871657753,
+        0.006389776357827476
+      ],
+      "ppu": 200.60606060606062,
+      "index": 17,
+      "sourceIndex": 8,
+      "poseLift": 0.01120827156555515,
+      "sourceKind": "between"
+    },
+    {
+      "texture": "Keys_12.png",
+      "rect": [
+        545,
+        26,
+        195,
+        291
+      ],
+      "pivot": [
+        0.27692307692307694,
+        0.006872852233676976
+      ],
+      "ppu": 195.15151515151516,
+      "hipToFoot": 0.717391304347826,
+      "index": 18,
+      "sourceIndex": 9,
+      "poseLift": 0,
+      "sourceKind": "key"
+    },
+    {
+      "texture": "Inbetweens_12.png",
+      "rect": [
+        546,
+        22,
+        223,
+        283
+      ],
+      "pivot": [
+        0.3004484304932735,
+        0.007067137809187279
+      ],
+      "ppu": 200.60606060606062,
+      "hipToFoot": 0.6629909365558911,
+      "index": 19,
+      "sourceIndex": 9,
+      "poseLift": 0,
+      "sourceKind": "between"
+    },
+    {
+      "texture": "Keys_12.png",
+      "rect": [
+        867,
+        27,
+        151,
+        234
+      ],
+      "pivot": [
+        0.4370860927152318,
+        0.008547008547008548
+      ],
+      "ppu": 195.15151515151516,
+      "hipToFoot": 0.37406832298136644,
+      "index": 20,
+      "sourceIndex": 10,
+      "poseLift": 0,
+      "sourceKind": "key"
+    },
+    {
+      "texture": "Inbetweens_12.png",
+      "rect": [
+        900,
+        22,
+        151,
+        315
+      ],
+      "pivot": [
+        0.5761589403973509,
+        0.006349206349206349
+      ],
+      "ppu": 200.60606060606062,
+      "hipToFoot": 0.6031722054380664,
+      "index": 21,
+      "sourceIndex": 10,
+      "poseLift": 0,
+      "sourceKind": "between"
+    },
+    {
+      "texture": "Keys_12.png",
+      "rect": [
+        1211,
+        23,
+        89,
+        327
+      ],
+      "pivot": [
+        0.5168539325842697,
+        0.0061162079510703364
+      ],
+      "ppu": 195.15151515151516,
+      "hipToFoot": 0.7942546583850931,
+      "index": 22,
+      "sourceIndex": 11,
+      "poseLift": 0,
+      "sourceKind": "key"
+    },
+    {
+      "texture": "Inbetweens_12.png",
+      "rect": [
+        1266,
+        18,
+        93,
+        335
+      ],
+      "pivot": [
+        0.5698924731182796,
+        0.005970149253731343
+      ],
+      "ppu": 200.60606060606062,
+      "hipToFoot": 0.8075528700906344,
+      "index": 23,
+      "sourceIndex": 11,
+      "poseLift": 0,
+      "sourceKind": "between"
+    }
+  ],
+  "phases": [
+    {
+      "name": "Prepare",
+      "start": 0,
+      "count": 6
+    },
+    {
+      "name": "Rise",
+      "start": 6,
+      "count": 6
+    },
+    {
+      "name": "Apex",
+      "start": 12,
+      "count": 2
+    },
+    {
+      "name": "Fall",
+      "start": 14,
+      "count": 4
+    },
+    {
+      "name": "Land",
+      "start": 18,
+      "count": 6
+    }
+  ]
+}

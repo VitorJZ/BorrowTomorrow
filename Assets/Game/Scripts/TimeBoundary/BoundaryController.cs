@@ -30,6 +30,8 @@ namespace BorrowTomorrow.TimeBoundary
         private bool keyboardHeld;
         private float pendingTarget;
         private float resolveRetryTimer;
+        private string lastFeedback;
+        private float feedbackAt = -10f;
 
         /// <summary>统一受阻提示（策划 4.5）。</summary>
         private const string BlockedMessage = "先到稳固的地方。";
@@ -90,21 +92,23 @@ namespace BorrowTomorrow.TimeBoundary
             if (GameSession.Instance.State.IsPaused) return;
             if (!IsAdjusting && GameSession.Instance.State.SubState == PlayingSubState.AdjustingBoundary)
                 GameSession.Instance.State.SetSubState(PlayingSubState.Free);
+            if (input == null) ServiceRegistry.TryGet<IInputSource>(out input);
+            float nudge = input != null ? input.BoundaryNudgeDirection : 0f;
             if (GameSession.Instance.State.SubState != PlayingSubState.Free
                 && GameSession.Instance.State.SubState != PlayingSubState.AdjustingBoundary)
             {
+                if (Mathf.Abs(nudge) > .01f)
+                    ReportBlocked("当前演出或交互结束后可调整时间。");
                 ForceEndAdjust();
                 return;
             }
-            if (input == null) ServiceRegistry.TryGet<IInputSource>(out input);
             if (input != null && CanProcessAdjustment())
             {
-                float nudge = input.BoundaryNudgeDirection;
                 if (Mathf.Abs(nudge) > 0.01f)
                 {
                     if (TryBeginAdjust(ref keyboardHeld))
                     {
-                        pendingTarget = committedB + nudge * keyboardAdjustSpeed * Time.deltaTime;
+                        pendingTarget = KeyboardTarget(nudge);
                         ProcessAdjustment(pendingTarget);
                     }
                 }
@@ -153,15 +157,9 @@ namespace BorrowTomorrow.TimeBoundary
             // 拖动只能在落地或站稳的情况下开始，爬梯和腾空时不能开始（策划 4.5）。
             if (player == null || !player.CanBeginBoundaryAdjustSafe())
             {
-                // 灰盒诊断：阻塞时输出玩家状态全分量（策划 15.4 调试叠层的临时实现）。
-                Debug.LogWarning(
-                    $"[Boundary诊断] 无法开始调整：player={(player != null ? "已注册" : "未注册")}" +
-                    $", present={(player?.IsPresent == true ? "在场" : "缺席")}" +
-                    $", grounded={(player?.IsGrounded == true ? "落地" : "悬空")}" +
-                    $", climbing={(player?.IsClimbingLadder == true ? "攀爬中" : "否")}" +
-                    $", pos={player?.Position}, groundCollider={(player?.GroundCollider != null ? player.GroundCollider.name : "无")}");
-                OnAdjustBlocked?.Invoke(BlockedMessage);
-                NotifyBlockedHud(BlockedMessage);
+                ReportBlocked(player == null || !player.IsPresent ? "角色正在就位，请稍候。"
+                    : player.IsClimbingLadder ? "先离开梯子，站到平台上。"
+                    : !player.IsGrounded ? "落地站稳后再调整时间。" : BlockedMessage);
                 return false;
             }
             sourceFlag = true;
@@ -246,9 +244,26 @@ namespace BorrowTomorrow.TimeBoundary
             }
             if (TryBeginAdjust(ref keyboardHeld))
             {
-                pendingTarget = committedB + directionSign * keyboardAdjustSpeed * Time.deltaTime;
+                pendingTarget = KeyboardTarget(directionSign);
                 ProcessAdjustment(pendingTarget);
             }
+        }
+
+        private float KeyboardTarget(float direction)
+        {
+            float speed = keyboardAdjustSpeed;
+            var camera = Camera.main;
+            if (camera != null)
+            {
+                float screenX = camera.WorldToViewportPoint(new Vector3(committedB, 0, 0)).x;
+                if ((screenX < 0 && direction > 0) || (screenX > 1 && direction < 0))
+                {
+                    // A long room can start with B far outside the viewport;
+                    // the clamped handle otherwise looks stuck for seconds.
+                    speed *= 3f;
+                }
+            }
+            return committedB + direction * speed * Time.deltaTime;
         }
 
         /// <summary>
@@ -265,6 +280,8 @@ namespace BorrowTomorrow.TimeBoundary
             float clamped = Mathf.Clamp(targetX, rangeMin, rangeMax);
             if (Mathf.Abs(clamped - committedB) < 0.000001f)
             {
+                if (targetX < rangeMin) ReportBlocked("边界已到房间最左端。");
+                else if (targetX > rangeMax) ReportBlocked("边界已到房间最右端。");
                 return;
             }
             EnsurePlayerResolved();
@@ -279,8 +296,7 @@ namespace BorrowTomorrow.TimeBoundary
                     // 边界停在切换阈值之前，标记反馈（策划 4.5）。
                     CommitBoundary(step.SafeBoundaryBefore);
                     string message = TemporalSafetyResolver.ToDisplayText(reason);
-                    OnAdjustBlocked?.Invoke(message);
-                    NotifyBlockedHud(message);
+                    ReportBlocked(message);
                     return;
                 }
 
@@ -307,8 +323,12 @@ namespace BorrowTomorrow.TimeBoundary
             }
         }
 
-        private void NotifyBlockedHud(string message)
+        private void ReportBlocked(string message)
         {
+            if (message == lastFeedback && Time.unscaledTime - feedbackAt < .8f) return;
+            lastFeedback = message;
+            feedbackAt = Time.unscaledTime;
+            OnAdjustBlocked?.Invoke(message);
             if (ServiceRegistry.TryGet<IHudService>(out var hud))
             {
                 hud.ShowBoundaryBlocked(message);

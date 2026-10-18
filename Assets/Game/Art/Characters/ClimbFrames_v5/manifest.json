@@ -1,0 +1,368 @@
+{
+  "version": 5,
+  "fps": 10,
+  "frame_count": 15,
+  "cell": [
+    480,
+    640
+  ],
+  "columns": 4,
+  "rows": 4,
+  "pivot": [
+    0.5,
+    0.46875
+  ],
+  "pixels_per_unit": 222.92993630573247,
+  "review_only": false,
+  "mirrored_frames": 0,
+  "frames": [
+    {
+      "index": 0,
+      "source_phase": 1,
+      "file": "Frames/Climb_01.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-1057de51-0f59-48cc-a7e8-11c2d34ebe2c.png",
+      "sha256": "45a942e01ee8f4cc6e160b84f712e906a2bb9a63e0ceaff0bdeea6af4cc1e155",
+      "center_x": 545.0,
+      "waist_y": 700,
+      "crown_y": 142,
+      "source_bbox": [
+        287,
+        14,
+        703,
+        1442
+      ],
+      "uniform_scale": 0.31362007168458783,
+      "feet_y": [
+        439,
+        571
+      ],
+      "review_rise_px": 0.0
+    },
+    {
+      "index": 1,
+      "source_phase": 2,
+      "file": "Frames/Climb_02.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-6274242b-ae3a-46e0-a091-2c586389c66b.png",
+      "sha256": "c1071a18462026f99d638b350d26dc4b48b9025b31f42938713181698a8a7f95",
+      "center_x": 579.5,
+      "waist_y": 671,
+      "crown_y": 174,
+      "source_bbox": [
+        352,
+        50,
+        747,
+        1319
+      ],
+      "uniform_scale": 0.352112676056338,
+      "feet_y": [
+        437,
+        566
+      ],
+      "review_rise_px": 0.0
+    },
+    {
+      "index": 2,
+      "source_phase": 3,
+      "file": "Frames/Climb_03.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-fa45ffd3-7195-46c5-88f0-8cc873af3916.png",
+      "sha256": "cd801339530f1d8596c334d0c1bf33c9cdda317e384004721955af432fff37fc",
+      "center_x": 576.0,
+      "waist_y": 654,
+      "crown_y": 152,
+      "source_bbox": [
+        358,
+        115,
+        759,
+        1318
+      ],
+      "uniform_scale": 0.34860557768924305,
+      "feet_y": [
+        439,
+        570
+      ],
+      "review_rise_px": 0.0
+    },
+    {
+      "index": 3,
+      "source_phase": 4,
+      "file": "Frames/Climb_04.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-9c3b509e-4198-4832-ab06-148bb9bbc518.png",
+      "sha256": "8128c129c7c84025421a7a76cd57bc1372a13055b53cc48e1f8be43fd0fb9dc4",
+      "center_x": 560.0,
+      "waist_y": 666,
+      "crown_y": 139,
+      "source_bbox": [
+        333,
+        124,
+        755,
+        1270
+      ],
+      "uniform_scale": 0.33206831119544594,
+      "feet_y": [
+        467,
+        540
+      ],
+      "review_rise_px": 28.0
+    },
+    {
+      "index": 4,
+      "source_phase": 5,
+      "file": "Frames/Climb_05.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-ae013ef7-3f9d-4e58-8ec4-8c31dd432e4d.png",
+      "sha256": "808245e0f2f49e94f1148b74eaf304f9d8d6f06a38dfcc22ed57c333ca9653b3",
+      "center_x": 561.5,
+      "waist_y": 778,
+      "crown_y": 191,
+      "source_bbox": [
+        361,
+        21,
+        786,
+        1276
+      ],
+      "uniform_scale": 0.2981260647359455,
+      "feet_y": [
+        486,
+        488
+      ],
+      "review_rise_px": 47.0
+    },
+    {
+      "index": 5,
+      "source_phase": "5.5",
+      "file": "Frames/Climb_06.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-8932c2c4-ad38-4bdb-a9d5-8e079a4d55af.png",
+      "sha256": "d1f24ce86b1e033b836e6bb1af51c55426860c34d4c52aa877e680c89a8b1b19",
+      "center_x": 560.0,
+      "waist_y": 754,
+      "crown_y": 190,
+      "source_bbox": [
+        366,
+        57,
+        782,
+        1225
+      ],
+      "uniform_scale": 0.3102836879432624,
+      "feet_y": [
+        485,
+        463
+      ],
+      "review_rise_px": 47.0
+    },
+    {
+      "index": 6,
+      "source_phase": 6,
+      "file": "Frames/Climb_07.png",
+      "source_path": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\climb-v5\\selected_06.png",
+      "sha256": "e855eb0d975977f293e3973066d0ffd9ffc3f9a519601927ee66e77beaa63d4b",
+      "center_x": 171.5,
+      "waist_y": 238,
+      "crown_y": 67,
+      "source_bbox": [
+        111,
+        20,
+        252,
+        406
+      ],
+      "uniform_scale": 1.023391812865497,
+      "feet_y": [
+        510,
+        421
+      ],
+      "review_rise_px": 71.0
+    },
+    {
+      "index": 7,
+      "source_phase": 7,
+      "file": "Frames/Climb_08.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-00a83eeb-9692-4b71-971c-b9cdf01d5e5d.png",
+      "sha256": "d176ac10d7e6acb3c065611c1e443301bbc036560712e5efe734c791b006d3ba",
+      "center_x": 547.0,
+      "waist_y": 727,
+      "crown_y": 194,
+      "source_bbox": [
+        358,
+        19,
+        793,
+        1359
+      ],
+      "uniform_scale": 0.32833020637898686,
+      "feet_y": [
+        547,
+        419
+      ],
+      "review_rise_px": 108.0
+    },
+    {
+      "index": 8,
+      "source_phase": 8,
+      "file": "Frames/Climb_09.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-7179ecec-7bb0-4231-8d78-a77be73a2e95.png",
+      "sha256": "755028e60566251605ff1c6aea3c2a59eaa86caafd0ee0f729262546e0c6794a",
+      "center_x": 558.5,
+      "waist_y": 711,
+      "crown_y": 202,
+      "source_bbox": [
+        388,
+        92,
+        771,
+        1322
+      ],
+      "uniform_scale": 0.343811394891945,
+      "feet_y": [
+        549,
+        441
+      ],
+      "review_rise_px": 130.0
+    },
+    {
+      "index": 9,
+      "source_phase": 9,
+      "file": "Frames/Climb_10.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-cd0fe666-2a41-473d-baf4-eeb4e5cae32d.png",
+      "sha256": "97daab80777b4dca9cf1fd92611bac9d01a6b80dbb62fda0f8271f68d1e054d6",
+      "center_x": 553.5,
+      "waist_y": 640,
+      "crown_y": 111,
+      "source_bbox": [
+        356,
+        46,
+        775,
+        1361
+      ],
+      "uniform_scale": 0.33081285444234404,
+      "feet_y": [
+        575,
+        453
+      ],
+      "review_rise_px": 142.0
+    },
+    {
+      "index": 10,
+      "source_phase": 10,
+      "file": "Frames/Climb_11.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-19c8ffce-f43d-455a-9db6-81b1a30d6935.png",
+      "sha256": "8b2d46fd20362229be1c0481fed44a960cb2ffe8e5f9b7b94c8fe1c342383b4f",
+      "center_x": 554.0,
+      "waist_y": 739,
+      "crown_y": 219,
+      "source_bbox": [
+        347,
+        167,
+        772,
+        1284
+      ],
+      "uniform_scale": 0.33653846153846156,
+      "feet_y": [
+        522,
+        467
+      ],
+      "review_rise_px": 156.0
+    },
+    {
+      "index": 11,
+      "source_phase": 11,
+      "file": "Frames/Climb_12.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-f8919669-7305-4929-8dcd-29e0bf9884fe.png",
+      "sha256": "04f2d3dc7b716313f96dbaad85b7a8795de5bd6691f32b56360991457a67c304",
+      "center_x": 582.0,
+      "waist_y": 753,
+      "crown_y": 195,
+      "source_bbox": [
+        347,
+        89,
+        782,
+        1197
+      ],
+      "uniform_scale": 0.31362007168458783,
+      "feet_y": [
+        476,
+        478
+      ],
+      "review_rise_px": 167.0
+    },
+    {
+      "index": 12,
+      "source_phase": "11.5",
+      "file": "Frames/Climb_13.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-2a66c007-f8c0-4a38-b600-cf198427c581.png",
+      "sha256": "dc9705d9010941a438ea08f5b8e959dc7f3bf4841d9f7fff197e4b18ab86d917",
+      "center_x": 592.0,
+      "waist_y": 794,
+      "crown_y": 261,
+      "source_bbox": [
+        353,
+        182,
+        791,
+        1362
+      ],
+      "uniform_scale": 0.32833020637898686,
+      "feet_y": [
+        439,
+        525
+      ],
+      "review_rise_px": 214.0
+    },
+    {
+      "index": 13,
+      "source_phase": 12,
+      "file": "Frames/Climb_14.png",
+      "source_path": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\climb-v5\\selected_12.png",
+      "sha256": "1b5c5795601ab56da95174b68098cf31c49c662e709464555b8d488b2ab08411",
+      "center_x": 171.0,
+      "waist_y": 217,
+      "crown_y": 48,
+      "source_bbox": [
+        93,
+        8,
+        235,
+        392
+      ],
+      "uniform_scale": 1.0355029585798816,
+      "feet_y": [
+        418,
+        521
+      ],
+      "review_rise_px": 214.0
+    },
+    {
+      "index": 14,
+      "source_phase": "12.5",
+      "file": "Frames/Climb_15.png",
+      "source_path": "C:\\Users\\chris\\.codex\\generated_images\\01a14bac-156f-70b1-a60e-a0271571f605\\exec-4eba6a35-dbd5-4299-a6e6-46ea6a80f047.png",
+      "sha256": "44618a79536a56619f81c0db4b6c4e6a529ae13dec60beb32f1756d23996aa82",
+      "center_x": 580.5,
+      "waist_y": 686,
+      "crown_y": 174,
+      "source_bbox": [
+        353,
+        15,
+        741,
+        1341
+      ],
+      "uniform_scale": 0.341796875,
+      "feet_y": [
+        451,
+        563
+      ],
+      "review_rise_px": 252.0
+    }
+  ],
+  "review_ladder": {
+    "rail_x": [
+      194,
+      280
+    ],
+    "base_y": 439.0,
+    "rung_px": 130.0,
+    "cycle_rise_px": 260.0
+  },
+  "user_approved": true,
+  "gameplay_integration": {
+    "prefab": "Assets/Game/Prefabs/Player_Graybox.prefab",
+    "clip_name": "Climb",
+    "frame_count": 15,
+    "playback": "Actual vertical movement drives phase; downward movement reverses; stopping holds the current frame.",
+    "facing": "Rear view does not flip; ordinary movement facing resumes on ladder exit.",
+    "build": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\outputs\\BorrowTomorrow_Climb_v5\\BorrowTomorrow.exe"
+  }
+}

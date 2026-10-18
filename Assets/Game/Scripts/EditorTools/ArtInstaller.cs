@@ -51,6 +51,20 @@ namespace BorrowTomorrow.EditorTools
             sprites["NearFloor"]=MakeSprite("NearFloor","Assets/Game/Art/Props/Temporal/PROP_WoodFloor_1994.png",new float[]{600,850,800,180},new Vector2(.5f,.5f),100);
             sprites["TreeBranchBark"]=MakeSprite("TreeBranchBark","Assets/Game/Art/Props/Temporal/PROP_TreeAttic_Grown_2024.png",new float[]{1800,1000,350,120},new Vector2(.5f,.5f),100);
             hero=m.clips.Select(c=>new CharacterArtAnimator.Clip{name=c.name,fps=c.fps,loop=c.loop,frames=c.frames.Select((f,i)=>MakeSprite("Hero_"+c.name+"_"+i.ToString("00"),c.path,f.rect,new Vector2(f.pivot[0],f.pivot[1]),c.ppu)).ToArray()}).ToArray();
+            // User-approved v3 walk: reuse the exact reviewed Sprite/AnimationClip
+            // assets rather than slicing or re-timing the old twelve-pose sheet.
+            WalkCandidateInstaller.Create();
+            const string walkRoot="Assets/Game/Art/Characters/WalkCandidate_v3";
+            var approvedWalk=hero.First(c=>c.name=="Walk");
+            approvedWalk.frames=Enumerable.Range(0,8).Select(i=>AssetDatabase.LoadAssetAtPath<Sprite>(walkRoot+"/Frames/Walk_"+i.ToString("00")+".asset")).ToArray();
+            approvedWalk.animation=AssetDatabase.LoadAssetAtPath<AnimationClip>(walkRoot+"/Hero_Walk.anim");
+            approvedWalk.fps=10;approvedWalk.loop=true;
+            if(approvedWalk.animation==null||approvedWalk.frames.Any(f=>f==null))throw new InvalidOperationException("Approved walk assets are missing.");
+            int climbIndex=Array.FindIndex(hero,c=>c.name=="Climb");
+            if(climbIndex<0)throw new InvalidOperationException("Player art manifest is missing Climb.");
+            hero[climbIndex]=ClimbFrameV5Installer.CreateGameplayClip(hero.First(c=>c.name=="Idle").frames[0]);
+            var jump=JumpReferenceV6Installer.CreateGameplayClips(hero.First(c=>c.name=="Idle").frames[0]);
+            hero=hero.Where(c=>!c.name.StartsWith("Jump",StringComparison.Ordinal)).Concat(jump).ToArray();
             AssetDatabase.SaveAssets();
         }
         private static void SkinPlayer()
@@ -62,6 +76,9 @@ namespace BorrowTomorrow.EditorTools
                 renderer.drawMode=SpriteDrawMode.Simple;renderer.color=Color.white;renderer.sprite=hero.First(c=>c.name=="Idle").frames[0];
                 renderer.transform.localPosition=Vector3.zero;renderer.transform.localScale=Vector3.one;
                 var animator=root.GetComponent<CharacterArtAnimator>()??root.AddComponent<CharacterArtAnimator>();animator.visual=renderer;animator.clips=hero;
+                var motor=new SerializedObject(root.GetComponent<PlayerMotor2D>());
+                motor.FindProperty("jumpAnticipation").floatValue=JumpReferenceV6Installer.PreparationSeconds;
+                motor.ApplyModifiedPropertiesWithoutUndo();
                 PrefabUtility.SaveAsPrefabAsset(root,path);
             }
             finally{PrefabUtility.UnloadPrefabContents(root);}
@@ -365,7 +382,7 @@ namespace BorrowTomorrow.EditorTools
             }
             AssetDatabase.SaveAssets();EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");
             if(!File.Exists("Assets/Game/Data/Art/enabled.json"))File.WriteAllText("Assets/Game/Data/Art/enabled.json","{\"enabled\":true}");
-            Debug.Log("[ArtInstaller] Applied 72 hero frames, room backgrounds, prop skins and UI without changing puzzle colliders.");
+            Debug.Log("[ArtInstaller] Applied "+hero.Sum(c=>c.frames.Length)+" hero frames, room backgrounds, prop skins and UI without changing puzzle colliders.");
         }
         [MenuItem("BorrowTomorrow/仅重建暂停菜单")]
         public static void RebuildPauseMenu()
