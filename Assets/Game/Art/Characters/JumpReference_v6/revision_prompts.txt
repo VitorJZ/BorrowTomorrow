@@ -1,0 +1,40 @@
+Create SIX full-body hand-painted game animation inbetween drawings on a transparent-alpha background. Exactly 3 columns x 2 rows, equal cells. This is a LANDING RECOVERY sequence for the SAME slim Chinese woman. Image1 is the deep crouch START, Image2 is upright END. Preserve identical face, slender build, head size and limb lengths, dark low bun, burgundy cardigan with pale patterned placket and cuffs, charcoal trousers, black cloth shoes. Side profile facing RIGHT in all six. Match reference textured illustration style precisely. No background, shadow, grid, text, labels, detached body parts, extra figures or motion blur.
+
+The task is to fill the GAP between the supplied deep squat and standing, NOT six almost-standing poses. Keep BOTH FEET planted in the same positions relative to one another throughout all six drawings. Arms begin hanging forward near the knees and progressively relax down beside thighs. Hips, knees and torso extend in coordinated very small increments.
+Use a fixed drawing SCALE across all six cells: head stays exactly same size, limbs exactly same length. Each cell has same local floor at 94% cell height, the woman is fully contained, large safe margins, complete head/hands/shoes visible.
+Sequence:
+TOP LEFT 1: still a deep squat, just barely above Image1. Knees ~65 degrees flexion, torso forward ~30 degrees, hands beside kneecaps. Head-to-floor height only 69% of upright Image2. This MUST be much closer to the crouch than standing.
+TOP MIDDLE 2: slightly higher squat, knees ~50 degrees flexion, torso forward ~26 degrees, hands lower relative to torso. Height 76% of upright.
+TOP RIGHT 3: half rise, knees ~37 degrees, torso forward ~20 degrees. Height 82% of upright.
+BOTTOM LEFT 4: shallow squat, knees ~24 degrees, torso forward ~13 degrees. Height 90% of upright.
+BOTTOM MIDDLE 5: almost upright, knees ~10 degrees, torso forward ~5 degrees. Height 96% of upright.
+BOTTOM RIGHT 6: relaxed neutral standing exactly like Image2, arms down. Height100%.
+Do NOT make her thicker when crouching; her slender torso simply tilts and hips hinge. Show gradual knee/ankle transitions. All drawings are a complete person, independently drawn, no sliced limb rigging. Think traditional animation of ONE uninterrupted slow recovery after landing. Exact count SIX women arranged 3x2.
+
+---
+
+Edit Image1, the 24-frame character animation sheet. Keep the first THREE rows completely unchanged. Correct ONLY the six complete people in the BOTTOM ROW (frames19-24). Preserve the exact 1536x1024 sheet layout, six columns and four rows, transparent alpha background.
+
+The problem: the bottom row starts almost upright, but frame18 (last drawing in row3) is a deep crouch. This creates a pop. Redraw bottom-row frames19-24 as a gradual recovery FROM THAT DEEP CROUCH to standing. Image2 gives a rough six-stage recovery idea ONLY; DO NOT copy its larger head or its drawing scale. Use the EXACT same small head, slim anatomy, garment detail, face, pixel drawing scale and textured illustration as Image1. Every head must be the same size as frame24 of Image1, about 30-35px tall excluding bun. Fully redraw the COMPLETE woman each time, not cut-up body parts.
+
+For Image1 row4, keep the soles on y=1005 and keep foot positions fixed within each column; all six are facing right. Columns centers about x=140,396,652,908,1164,1420. Important: standing character height is 252px. Do NOT resize each pose to fill the cell; bending must naturally reduce height while head size stays constant.
+Frame19 first in bottom row: DEEP CROUCH, almost the same as frame18 above but rising a little. Total head-to-sole height about179px, so head top about826. Knees deeply bent, forward torso, hands beside knees.
+Frame20: still crouched, slightly taller196px (head top809), knees unbend a little, hands still forward near knees.
+Frame21: half rise, height215px (head top790), knees visibly bent, torso forward.
+Frame22: shallow bend, height234px (head top771), hands slowly lowering beside thighs.
+Frame23: almost upright height247px (head top758), knees very slightly bent.
+Frame24: fully upright height252px (head top753), matching the original sheet frame24.
+These are consistent anatomy HEIGHT TARGETS, not text to add. Bottom row first three heads MUST be visibly LOWER than bottom row last three. Do not put all six heads at the same height.
+Keep feet planted in all six; original cardigan dark red, narrow torso, charcoal trousers, black cloth shoes, low black bun, side view. Keep entire head, hands and shoes inside each cell. Never bulk up her build. No text, labels, floor, shadows or added backgrounds. First18 figures untouched.
+
+---
+
+Make a precise animation correction to the supplied transparent 24-frame character sheet (6 columns x4 rows). Preserve exactly this same slim Chinese woman, small head, black low bun, burgundy patterned-cuff cardigan, charcoal straight trousers and black cloth shoes. Same 1536x1024 layout, same per-character scale and textured hand-drawn art. Every pose is a complete person facing right. Preserve transparency, no background, no text.
+
+ONLY redraw these FOUR complete figures, keeping all others as they are:
+1) Frame06 = row1 column6. Currently she rises too far directly from frame05. Make this an INBETWEEN push: body still crouched but beginning to extend, hips a little higher than frame05, knees bent about45 degrees, torso tilting forward about20 degrees. Arms swinging forward at about waist height, not lifted above shoulders. BOTH soles still on the local ground y270, heels only slightly raised. Head top around y55, giving head-to-ground height215px, BETWEEN frame05 height186 and frame07 height255. Keep small head about35px, not larger.
+2) Frame14 = row3 column2. This is the FIRST GROUND CONTACT pose, before the deep squats. She should be mostly extended with knees only slightly bent about12 degrees, torso slightly forward, both shoes reaching ground y748, arms forward balancing. Head top about515-520 (height230px). Whole person inside column2 with no overlaps.
+3) Frame15 = row3 column3. Landing absorption begins: knees bend about25 degrees, hips lower, torso leans forward, arms forward. Both feet fixed to ground y748. Head top about533 (height215px).
+4) Frame16 = row3 column4. Landing absorption progresses: knees bend about38 degrees, hips lower again, torso forward, arms forward slightly lower. Both feet fixed to ground y748. Head top about550 (height198px).
+
+The unmodified frame17 has height178 and frame18 height163, so corrected frames14-18 must descend GRADUALLY from almost-straight contact to deepest landing. Corrected frame06 must likewise bridge deep crouch to extension. NO changes to woman proportions, NO widening body, no puppet parts. Exact24 complete women 6x4, with frames19-24 recovery already good.

@@ -63,8 +63,8 @@ namespace BorrowTomorrow.EditorTools
             int climbIndex=Array.FindIndex(hero,c=>c.name=="Climb");
             if(climbIndex<0)throw new InvalidOperationException("Player art manifest is missing Climb.");
             hero[climbIndex]=ClimbFrameV5Installer.CreateGameplayClip(hero.First(c=>c.name=="Idle").frames[0]);
-            var jump=JumpRecoveryInstaller.CreateGameplayClips(hero.First(c=>c.name=="Idle").frames[0]);
-            hero=hero.Where(c=>c.name!="JumpLand").Concat(jump).ToArray();
+            var jump=JumpReferenceV6Installer.CreateGameplayClips(hero.First(c=>c.name=="Idle").frames[0]);
+            hero=hero.Where(c=>!c.name.StartsWith("Jump",StringComparison.Ordinal)).Concat(jump).ToArray();
             AssetDatabase.SaveAssets();
         }
         private static void SkinPlayer()
@@ -76,6 +76,9 @@ namespace BorrowTomorrow.EditorTools
                 renderer.drawMode=SpriteDrawMode.Simple;renderer.color=Color.white;renderer.sprite=hero.First(c=>c.name=="Idle").frames[0];
                 renderer.transform.localPosition=Vector3.zero;renderer.transform.localScale=Vector3.one;
                 var animator=root.GetComponent<CharacterArtAnimator>()??root.AddComponent<CharacterArtAnimator>();animator.visual=renderer;animator.clips=hero;
+                var motor=new SerializedObject(root.GetComponent<PlayerMotor2D>());
+                motor.FindProperty("jumpAnticipation").floatValue=JumpReferenceV6Installer.PreparationSeconds;
+                motor.ApplyModifiedPropertiesWithoutUndo();
                 PrefabUtility.SaveAsPrefabAsset(root,path);
             }
             finally{PrefabUtility.UnloadPrefabContents(root);}

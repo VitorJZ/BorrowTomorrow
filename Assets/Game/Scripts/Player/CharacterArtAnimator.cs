@@ -18,7 +18,7 @@ namespace BorrowTomorrow.Player
             public float visualScale=1f;
             // Positive only for locomotion that follows actual world movement.
             public float distancePerCycle;
-            // Authored holds for the accepted jump, including the two recovery frames.
+            // Authored holds for complete-character jump phases.
             public float[] frameDurations;
         }
         public SpriteRenderer visual;
@@ -104,7 +104,7 @@ namespace BorrowTomorrow.Player
             // airborne sequence may trigger landing frames and restart locomotion.
             unsupportedTime=motor.IsGrounded||motor.IsClimbingLadder?0:unsupportedTime+dt;
             bool airborne=!motor.IsClimbingLadder&&!motor.IsGrounded&&(body.velocity.y>1f||unsupportedTime>.1f);
-            bool supported=motor.IsGrounded&&!motor.IsClimbingLadder&&body.velocity.y<=.2f;
+            bool supported=motor.IsGrounded&&!motor.IsClimbingLadder;
             if(supported&&visiblyAirborne){jumpActive=false;landingElapsed=0;}
             else if(landingElapsed>=0)landingElapsed+=dt;
             airborne=!motor.IsClimbingLadder&&(jumpActive||airborne);
@@ -139,7 +139,7 @@ namespace BorrowTomorrow.Player
                 }
                 else if(airborne)
                 {
-                    if(body.velocity.y>.85f)Phase("JumpRise",1f-body.velocity.y/launchSpeed);
+                    if(body.velocity.y>.85f)Phase("JumpRise",(launchSpeed-body.velocity.y)/Mathf.Max(.01f,launchSpeed-.85f));
                     else if(body.velocity.y>=-.85f&&jumpActive)Phase("JumpApex",0);
                     else Phase("JumpFall",(-body.velocity.y-.85f)/Mathf.Max(1,launchSpeed-.85f));
                 }

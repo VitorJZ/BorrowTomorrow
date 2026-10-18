@@ -143,7 +143,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: bfa62f30e412b6f4fb706161d526afca, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -164,7 +164,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: bfa62f30e412b6f4fb706161d526afca, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -210,12 +210,13 @@ MonoBehaviour:
   climbHorizontalSpeed: 1.2
   coyoteTime: 0.1
   jumpBufferTime: 0.12
-  jumpAnticipation: 0.08
+  jumpAnticipation: 0.18
   groundMask:
     serializedVersion: 2
     m_Bits: 2560
   groundProbeDrop: 0.03
-  groundProbeSize: {x: 0.5, y: 0.12}
+  maxGroundAngle: 50
+  groundSnapDistance: 0.12
   footstepSfxId: player_footstep
   footstepInterval: 0.34
   landSfxId: player_land
@@ -348,74 +349,92 @@ MonoBehaviour:
     frameDurations: []
   - name: JumpPrepare
     frames:
-    - {fileID: 21300000, guid: cb6d0957eb1a12540b5bbb6a500cfaa9, type: 2}
-    - {fileID: 21300000, guid: 28f14b7bfff0b3f40a710844bfb2cfff, type: 2}
-    - {fileID: 21300000, guid: 394a93eb982dca14a957034a3fa79fc8, type: 2}
-    fps: 12
+    - {fileID: 21300000, guid: fb95e54f3f44e0942b90ff81e1d1e3e2, type: 2}
+    - {fileID: 21300000, guid: 51de979244694d2419750ecbb2b57087, type: 2}
+    - {fileID: 21300000, guid: d81c472ec54c26a479583a2ed1e5b290, type: 2}
+    - {fileID: 21300000, guid: 69a2aa589cf4d0c40abd919b6c116ff1, type: 2}
+    - {fileID: 21300000, guid: 38020739d1b19704fa27eb7a3a69f445, type: 2}
+    - {fileID: 21300000, guid: 1338f08195197544f815ab8c531d0bab, type: 2}
+    fps: 60
     loop: 0
-    animation: {fileID: 7400000, guid: 2c07acf494c793f428fe28980f35220d, type: 2}
-    visualOffset: {x: 0, y: 0.0033501328}
-    visualScale: 0.98672736
+    animation: {fileID: 7400000, guid: 54e2ef7b409d3eb4a9151c3e72b54a60, type: 2}
+    visualOffset: {x: 0, y: -0.006762266}
+    visualScale: 1.0020491
     distancePerCycle: 0
     frameDurations:
-    - 0.033548385
-    - 0.023225807
-    - 0.023225807
+    - 0.030857144
+    - 0.030857144
+    - 0.030857144
+    - 0.033428572
+    - 0.028285716
+    - 0.025714288
   - name: JumpRise
     frames:
-    - {fileID: 21300000, guid: 0228b965d3d905c4eb1a1a4712eb873f, type: 2}
-    - {fileID: 21300000, guid: 9f46e383ea3838c4ebe92216aa37cfe9, type: 2}
-    - {fileID: 21300000, guid: 5ff54ccbbcea323408a054abff4233b4, type: 2}
-    fps: 12
+    - {fileID: 21300000, guid: 1a0f2ef22903b47438dbe3944855b534, type: 2}
+    - {fileID: 21300000, guid: 9beb8855e5c996f4a8941e510e56fbf4, type: 2}
+    - {fileID: 21300000, guid: 39d5538ce5f744e49996f8475e85e683, type: 2}
+    fps: 60
     loop: 0
-    animation: {fileID: 7400000, guid: 5a74bd3e380941440a1f407a8f3133f8, type: 2}
-    visualOffset: {x: 0, y: 0.0033501328}
-    visualScale: 0.98672736
+    animation: {fileID: 7400000, guid: 602c8167c3fe3544785d3dea42b77113, type: 2}
+    visualOffset: {x: 0, y: -0.006762266}
+    visualScale: 1.0020491
     distancePerCycle: 0
     frameDurations:
+    - 0.065
+    - 0.065
     - 0.07
-    - 0.07
-    - 0.08
   - name: JumpApex
     frames:
-    - {fileID: 21300000, guid: 1240d00eccf78ee44b52d98c1d652f4b, type: 2}
-    fps: 12
+    - {fileID: 21300000, guid: 59d98004547fe7042afd166bed38fedf, type: 2}
+    fps: 60
     loop: 0
-    animation: {fileID: 7400000, guid: dbfb70b44e3ec034592769eb404566c1, type: 2}
-    visualOffset: {x: 0, y: 0.0033501328}
-    visualScale: 0.98672736
+    animation: {fileID: 7400000, guid: 5d86bffcd00bb9a499e63cb22a9a5962, type: 2}
+    visualOffset: {x: 0, y: -0.006762266}
+    visualScale: 1.0020491
     distancePerCycle: 0
     frameDurations:
-    - 0.11
+    - 0.07
   - name: JumpFall
     frames:
-    - {fileID: 21300000, guid: ba8a90c3773faf947b328b5364d8a776, type: 2}
-    - {fileID: 21300000, guid: c6ef8f503221fa240ae1ce3ffdf6e9cc, type: 2}
-    fps: 12
+    - {fileID: 21300000, guid: 377239e45bb732644a70af447c132575, type: 2}
+    - {fileID: 21300000, guid: 30b11ee24f0783547ab0e335c99ce209, type: 2}
+    fps: 60
     loop: 0
-    animation: {fileID: 7400000, guid: 9eee64ce280a57f49af55a6bf9e79e80, type: 2}
-    visualOffset: {x: 0, y: 0.0033501328}
-    visualScale: 0.98672736
+    animation: {fileID: 7400000, guid: 71b83960225da0946ac839cf4e3c8600, type: 2}
+    visualOffset: {x: 0, y: -0.006762266}
+    visualScale: 1.0020491
     distancePerCycle: 0
     frameDurations:
-    - 0.08
-    - 0.07
+    - 0.065
+    - 0.06
   - name: JumpRecover
     frames:
-    - {fileID: 21300000, guid: dab5e7ba22ed7914b9b1aeaaf43bc207, type: 2}
-    - {fileID: 21300000, guid: 9e3934ff7eb21ae4a86bebc4fb7fa172, type: 2}
-    - {fileID: 21300000, guid: 4fc19253ea1161d48a78e7147aa2cb64, type: 2}
-    - {fileID: 21300000, guid: 4a0375d37bbea56429eb5920b5f246a4, type: 2}
-    - {fileID: 21300000, guid: a39db7a2541be1649ba18f3cff47ccbf, type: 2}
-    fps: 12
+    - {fileID: 21300000, guid: 4b146706e51e1654998132c45cb05845, type: 2}
+    - {fileID: 21300000, guid: b354374b5a59b484184b48ce1ee47c62, type: 2}
+    - {fileID: 21300000, guid: 2b13b0ea85adf41419a718293d045811, type: 2}
+    - {fileID: 21300000, guid: 75ae5704544071041a56b3c296a32b7b, type: 2}
+    - {fileID: 21300000, guid: 83fd04bd23633f648ad0b2e020894da5, type: 2}
+    - {fileID: 21300000, guid: 11f798cb5d66e5947b60050060214894, type: 2}
+    - {fileID: 21300000, guid: 2882833c4bec3ab498b2f7c5d77f1337, type: 2}
+    - {fileID: 21300000, guid: b15419352199b3149a08ecaccc433efa, type: 2}
+    - {fileID: 21300000, guid: 6d33eb2436e5baa4282fb1ccb38b71c1, type: 2}
+    - {fileID: 21300000, guid: 14caf8d892f569845868302078487b29, type: 2}
+    - {fileID: 21300000, guid: 2c8aedd724e7ecf4fbc03b8bd139308d, type: 2}
+    fps: 60
     loop: 0
-    animation: {fileID: 7400000, guid: 4ddd99f4c3c06fe41892adcd7f565107, type: 2}
-    visualOffset: {x: 0, y: 0.0033501328}
-    visualScale: 0.98672736
+    animation: {fileID: 7400000, guid: 5923ac0a4de8a07468ca2fa585cc48cb, type: 2}
+    visualOffset: {x: 0, y: -0.006762266}
+    visualScale: 1.0020491
     distancePerCycle: 0
     frameDurations:
-    - 0.09
-    - 0.1
-    - 0.08
-    - 0.08
-    - 0.28
+    - 0.05
+    - 0.05
+    - 0.05
+    - 0.055
+    - 0.065
+    - 0.065
+    - 0.065
+    - 0.065
+    - 0.065
+    - 0.065
+    - 0.22

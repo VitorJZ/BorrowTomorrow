@@ -114,6 +114,10 @@ namespace BorrowTomorrow.EditorTools
         public static void IntegrateAndBuild()
         {
             Integrate();
+            BuildCurrent();
+        }
+        public static void BuildCurrent()
+        {
             string output=Environment.GetEnvironmentVariable("APPROVED_MOVEMENT_OUTPUT")??Path.GetFullPath("Builds/ApprovedMovement/BorrowTomorrow.exe");
             Directory.CreateDirectory(Path.GetDirectoryName(output));
             var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=EditorBuildSettings.scenes.Where(s=>s.enabled).Select(s=>s.path).ToArray(),target=BuildTarget.StandaloneWindows64,locationPathName=output,options=BuildOptions.Development});
