@@ -27,6 +27,7 @@ namespace BorrowTomorrow.Narrative
         [Tooltip("关键剧情调查完成后是否可重复查看（可选项设 true）")]
         [SerializeField] private bool replayable = false;
         [SerializeField] private DialogueEntry replayEntry;
+        [SerializeField] private bool replayWholeChain;
 
         public string InteractId => interactId;
 
@@ -54,7 +55,7 @@ namespace BorrowTomorrow.Narrative
                 if (dialogue.IsPlaying) return false;
                 if (IsCompleted && replayable && dialogue is DialoguePlayer player)
                 {
-                    player.PlayReadOnly(replayEntry != null ? replayEntry : entry);
+                    player.PlayReadOnly(replayEntry != null ? replayEntry : entry, replayWholeChain);
                     return true;
                 }
                 dialogue.Play(entry, priority);

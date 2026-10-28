@@ -1,4 +1,4 @@
-using BorrowTomorrow.Core;
+﻿using BorrowTomorrow.Core;
 using BorrowTomorrow.Core.Data;
 using BorrowTomorrow.Core.Interfaces;
 using BorrowTomorrow.Narrative;
@@ -8,7 +8,7 @@ using UnityEngine.UI;
 namespace BorrowTomorrow.UI
 {
     // Builds its own responsive overlay; the existing gameplay HUD remains intact.
-    public sealed class NarrativePresentation : MonoBehaviour, INarrativePresentation, INarrativeActionView
+    public sealed class NarrativePresentation : MonoBehaviour, INarrativePresentation, INarrativeActionView, INarrativeTargetView
     {
         private static readonly Vector2 PictureCenter = new Vector2(0, 110);
         private static readonly Vector2 PictureMax = new Vector2(1380, 720);
@@ -30,6 +30,9 @@ namespace BorrowTomorrow.UI
         private GameObject panel;
         private Image backdrop;
         private RawImage picture;
+        private RawImage focusGlow;
+        private Material focusMaterial;
+        public Material photoFocusMaterial;
         private Text speaker;
         private Text body;
         private Text title;
@@ -61,6 +64,9 @@ namespace BorrowTomorrow.UI
             frame = Node<RectMask2D>("IllustrationFrame", panel.transform, PictureCenter, PictureMax);
             picture = Node<RawImage>("Illustration", frame.transform, Vector2.zero, Vector2.zero, true);
             picture.raycastTarget = false;
+            focusGlow=Node<RawImage>("PhotoChildFocus",frame.transform,Vector2.zero,Vector2.zero,true);focusGlow.raycastTarget=false;
+            if(photoFocusMaterial!=null){focusMaterial=new Material(photoFocusMaterial);focusGlow.material=focusMaterial;}
+            focusGlow.gameObject.SetActive(false);
             var layersGo = new GameObject("ActionLayers", typeof(RectTransform));
             layersGo.transform.SetParent(frame.transform, false);
             layerRoot = (RectTransform)layersGo.transform;
@@ -94,11 +100,13 @@ namespace BorrowTomorrow.UI
             ServiceRegistry.Unregister<INarrativePresentation>(this);
             if (canvas != null) Destroy(canvas.gameObject);
             if (patchMaterial != null) Destroy(patchMaterial);
+            if(focusMaterial!=null)Destroy(focusMaterial);
         }
         private void Update()
         {
             var session = GameSession.Instance;
             if (session == null) return;
+            if(focusMaterial!=null && focusGlow.gameObject.activeSelf)focusMaterial.SetFloat("_Pulse",.35f+.3f*(.5f+.5f*Mathf.Sin(Time.unscaledTime*3f)));
             canvas.enabled = !session.State.IsPaused;
             if (session.State.IsPaused) wasPaused = true;
             else if (wasPaused) { wasPaused = false; ApplySubtitleSettings(); }
@@ -123,6 +131,7 @@ namespace BorrowTomorrow.UI
         }
         public void Present(DialogueEntry entry, string text, bool locksControl, int page, int pages)
         {
+            focusGlow.gameObject.SetActive(false);
             displayed = entry;
             blocking = locksControl;
             panel.SetActive(true);
@@ -152,9 +161,9 @@ namespace BorrowTomorrow.UI
             speaker.color = entry.source == "Tape" ? new Color(0.96f,0.77f,0.43f) : entry.source == "Reality" ? new Color(0.65f,0.86f,0.94f) : Color.white;
             if(subtitleSkin!=null) speaker.color=entry.source=="Reality"?new Color(.1f,.25f,.29f):new Color(.3f,.17f,.07f);
             body.text = text;
-            help.gameObject.SetActive(!isTitle);
-            help.text = locksControl ? "E / 鼠标左键继续" + (pages > 1 ? "    " + page + " / " + pages : "") : string.Empty;
-            next.SetActive(locksControl && entry.holdForConfirm && !isTitle);
+            help.gameObject.SetActive(true);
+            help.text = (locksControl ? "E / 鼠标左键继续" : "E / 继续按钮") + (pages > 1 ? "    " + page + " / " + pages : "");
+            next.SetActive(true);
             skip.SetActive(locksControl && !isTitle);
             ApplySubtitleSettings();
         }
@@ -174,6 +183,15 @@ namespace BorrowTomorrow.UI
             RenderLayers(action, progress);
             picture.rectTransform.pivot = action.focus;
             picture.rectTransform.localScale = Vector3.one * Mathf.Lerp(1f, Mathf.Max(1f, action.zoom), t);
+            bool turning=action.turnPhoto&&string.IsNullOrEmpty(prompt);
+            if(turning)
+            {
+                float edge=Mathf.Max(.025f,Mathf.Abs(Mathf.Cos(t*Mathf.PI)));
+                picture.rectTransform.localScale=new Vector3(edge,1-.035f*Mathf.Sin(t*Mathf.PI),1);
+                picture.rectTransform.localRotation=Quaternion.Euler(0,0,3*Mathf.Sin(t*Mathf.PI));
+                float shade=1-.3f*Mathf.Sin(t*Mathf.PI);picture.color=new Color(shade,shade,shade,1);
+            }
+            else picture.rectTransform.localRotation=Quaternion.identity;
             // Placeholder before-state until dedicated art exists: a cover over the changed area moves away.
             bool useCover = action.stageBackground == null && action.beforeImage == null && action.coverRect.width > 0f && t < 1f;
             cover.gameObject.SetActive(useCover);
@@ -187,10 +205,13 @@ namespace BorrowTomorrow.UI
                 cover.color = c;
             }
             title.gameObject.SetActive(false);
-            panel.transform.Find("ReadingPanel").gameObject.SetActive(!string.IsNullOrEmpty(prompt));
+            panel.transform.Find("ReadingPanel").gameObject.SetActive(!string.IsNullOrEmpty(prompt)||turning);
             speaker.gameObject.SetActive(false); body.gameObject.SetActive(false);
-            actionPrompt.gameObject.SetActive(!string.IsNullOrEmpty(prompt));
-            actionPrompt.text = string.IsNullOrEmpty(prompt) ? string.Empty : "[E] " + prompt;
+            actionPrompt.gameObject.SetActive(!string.IsNullOrEmpty(prompt)||turning);
+            actionPrompt.text = turning ? action.turnCaption : string.IsNullOrEmpty(prompt) ? string.Empty : (action.requireTargetClick?"点击小女孩，翻看照片背面":"[E] " + prompt);
+            bool targetVisible=action.requireTargetClick&&!string.IsNullOrEmpty(prompt)&&progress<=0;
+            focusGlow.gameObject.SetActive(targetVisible&&focusMaterial!=null);
+            if(targetVisible&&focusMaterial!=null){focusGlow.texture=action.beforeImage;focusMaterial.SetVector("_TargetRect",new Vector4(action.targetRegion.x,action.targetRegion.y,action.targetRegion.width,action.targetRegion.height));}
             actionPrompt.color = new Color(1f,.95f,.78f);
             help.gameObject.SetActive(false);
             next.SetActive(false);
@@ -209,6 +230,7 @@ namespace BorrowTomorrow.UI
         {
             picture.rectTransform.pivot = new Vector2(.5f,.5f);
             picture.rectTransform.localScale = Vector3.one;
+            picture.rectTransform.localRotation=Quaternion.identity;
             cover.gameObject.SetActive(false);
             layerRoot.gameObject.SetActive(false);
         }
@@ -266,7 +288,13 @@ namespace BorrowTomorrow.UI
             body.gameObject.SetActive(enabled || readableObject);
             speaker.gameObject.SetActive(enabled || readableObject);
         }
-        public void Close() { displayed = null; if (panel != null) panel.SetActive(false); }
+        public bool IsActionTargetHit(NarrativeAction action,Vector2 screenPosition)
+        {
+            if(!RectTransformUtility.ScreenPointToLocalPointInRectangle(FrameRect,screenPosition,null,out var point))return false;
+            Rect rect=FrameRect.rect;Vector2 uv=new Vector2((point.x-rect.xMin)/rect.width,(point.y-rect.yMin)/rect.height);
+            return action.targetRegion.Contains(uv);
+        }
+        public void Close() { focusGlow.gameObject.SetActive(false);displayed = null; if (panel != null) panel.SetActive(false); }
         private T Node<T>(string name, Transform parent, Vector2 position, Vector2 size, bool stretch=false) where T : Component
         {
             var go = new GameObject(name, typeof(RectTransform)); go.transform.SetParent(parent,false);

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using BorrowTomorrow.Core;
 using BorrowTomorrow.Core.Data;
@@ -29,6 +29,17 @@ namespace BorrowTomorrow.Save
         {
             saveDirectory = Path.Combine(Application.persistentDataPath, "BorrowTomorrow");
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
+            bool levelPreview = Array.Exists(Environment.GetCommandLineArgs(), a => a == "--l01b-preview");
+#if UNITY_EDITOR
+            levelPreview |= UnityEditor.SessionState.GetBool("BorrowTomorrow.L01BPreview",false);
+#endif
+            if (levelPreview)
+                saveDirectory = Path.Combine(Application.persistentDataPath, "BorrowTomorrow_L01BPreview_v7");
+            bool corridorPreview=Array.Exists(Environment.GetCommandLineArgs(),a=>a=="--l03-preview");
+#if UNITY_EDITOR
+            corridorPreview |= UnityEditor.SessionState.GetBool("BorrowTomorrow.L03Preview",false);
+#endif
+            if(corridorPreview)saveDirectory=Path.Combine(Application.persistentDataPath,"BorrowTomorrow_L03Preview_v2");
             if (Array.Exists(Environment.GetCommandLineArgs(), a => a == "--verify-playable"))
             {
                 string output = Environment.GetEnvironmentVariable("BORROWTOMORROW_WALKTHROUGH_OUTPUT");

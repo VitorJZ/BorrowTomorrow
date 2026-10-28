@@ -29,6 +29,9 @@ namespace BorrowTomorrow.UI
 
         private void Awake()
         {
+            // A headless scene save may serialize a zero screen-space canvas scale.
+            // Restore a valid transform before the scaler/layout system runs.
+            if (transform.localScale.sqrMagnitude < .000001f) transform.localScale = Vector3.one;
             // Keep panel behaviours running; hide their presentation without disabling timers.
             var root = new GameObject("GameplayHud", typeof(RectTransform), typeof(CanvasGroup));
             var rect = (RectTransform)root.transform;

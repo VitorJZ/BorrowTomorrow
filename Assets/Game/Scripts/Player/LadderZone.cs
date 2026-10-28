@@ -8,6 +8,11 @@ namespace BorrowTomorrow.Player
     /// </summary>
     public sealed class LadderZone : MonoBehaviour
     {
+        [Tooltip("触发区超过梯顶落脚面的高度；现有梯子均高出平台 0.7 单位。")]
+        [SerializeField, Min(0f)] private float topOverrun = .7f;
+
+        public float TopLandingY(Collider2D zone) => zone.bounds.max.y - topOverrun;
+
         private void Reset()
         {
             Collider2D col = GetComponent<Collider2D>();

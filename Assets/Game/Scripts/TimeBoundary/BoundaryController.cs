@@ -20,6 +20,7 @@ namespace BorrowTomorrow.TimeBoundary
         private TemporalObjectRegistry registry;
         private IPlayerContext player;
         private IInputSource input;
+        private ITemporalDependencyGuard[] dependencyGuards = new ITemporalDependencyGuard[0];
 
         private float committedB;
         private float rangeMin;
@@ -75,6 +76,10 @@ namespace BorrowTomorrow.TimeBoundary
         private void Start()
         {
             ServiceRegistry.TryGet<IInputSource>(out input);
+            var guards = new System.Collections.Generic.List<ITemporalDependencyGuard>();
+            if (registry != null) foreach (var behaviour in registry.GetComponentsInChildren<MonoBehaviour>(true))
+                if (behaviour is ITemporalDependencyGuard guard) guards.Add(guard);
+            dependencyGuards = guards.ToArray();
         }
 
         private void Update()
@@ -294,6 +299,13 @@ namespace BorrowTomorrow.TimeBoundary
             {
                 var switching = step.GetPayloads<TemporalObject>();
                 SafetyBlockReason reason = TemporalSafetyResolver.Evaluate(switching, step.TargetEra, player);
+                if (reason == SafetyBlockReason.None && player != null && player.IsPresent)
+                {
+                    string[] ids = new string[switching.Count];
+                    for (int i=0; i<switching.Count; i++) ids[i] = switching[i].ObjectId;
+                    foreach (var guard in dependencyGuards)
+                        if (!guard.AllowsChange(ids, step.TargetEra, player)) { reason = SafetyBlockReason.SupportRemoved; break; }
+                }
                 if (reason != SafetyBlockReason.None)
                 {
                     // 边界停在切换阈值之前，标记反馈（策划 4.5）。

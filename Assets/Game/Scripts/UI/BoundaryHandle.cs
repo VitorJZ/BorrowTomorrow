@@ -69,6 +69,9 @@ namespace BorrowTomorrow.UI
             {
                 worldCamera = Camera.main;
             }
+            // Camera follow, resizing and Game-view changes move the projected boundary
+            // even when B itself has not changed.
+            if (boundary != null && visible) SyncHandleToBoundary(boundary.CommittedBoundary);
         }
 
         private void OnDestroy()

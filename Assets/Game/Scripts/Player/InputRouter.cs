@@ -11,7 +11,7 @@ namespace BorrowTomorrow.Player
     /// 挂在系统根上，注册为 IInputSource。
     /// </summary>
     [DefaultExecutionOrder(-800)]
-    public sealed class InputRouter : MonoBehaviour, IInputSource, IBootInitializable
+    public sealed class InputRouter : MonoBehaviour, IInputSource, IPointerInputSource, IBootInitializable
     {
         [SerializeField] private InputBindings bindings = new InputBindings();
 
@@ -67,5 +67,10 @@ namespace BorrowTomorrow.Player
         public bool ObjectiveHeld => bindings.AnyHeld(bindings.objectiveRecords);
 
         public bool PausePressedThisFrame => bindings.AnyDown(bindings.pause);
+        public Vector2 PointerPosition => Input.mousePosition;
+        public bool PrimaryPressedThisFrame => Input.GetMouseButtonDown(0);
+        public bool PrimaryHeld => Input.GetMouseButton(0);
+        public bool SecondaryPressedThisFrame => Input.GetMouseButtonDown(1);
+        public bool HintPressedThisFrame => Input.GetKeyDown(KeyCode.H);
     }
 }

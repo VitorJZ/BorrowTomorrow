@@ -1,0 +1,177 @@
+﻿{
+  "events": [
+    {
+      "id": "L01B_CLOTH",
+      "flag": "Memory_L01B_ClothHeard",
+      "lines": [
+        {
+          "id": "V4_0101",
+          "speaker": "磁带·童年晓晓",
+          "source": "Tape",
+          "text": "外婆，快点，我手酸了。",
+          "auto": false,
+          "delay": 0,
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0101.mp3"
+        },
+        {
+          "id": "V4_0102",
+          "speaker": "磁带·年轻外婆",
+          "source": "Tape",
+          "text": "好了好了，夹上这个就行。",
+          "auto": false,
+          "delay": 0,
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0102.mp3"
+        },
+        {
+          "id": "V4_0103",
+          "speaker": "磁带·童年晓晓",
+          "source": "Tape",
+          "text": "你每次都说就剩一个。",
+          "auto": false,
+          "delay": 0,
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0103.mp3"
+        },
+        {
+          "id": "V4_0104",
+          "speaker": "磁带·年轻外婆",
+          "source": "Tape",
+          "text": "那你松手，去玩吧。",
+          "auto": false,
+          "delay": 0,
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0104.mp3"
+        },
+        {
+          "id": "V4_0109",
+          "speaker": "磁带·童年晓晓",
+          "source": "Tape",
+          "text": "……这边还没夹呢。",
+          "auto": false,
+          "delay": 0,
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0109.mp3"
+        },
+        {
+          "id": "V4_0110",
+          "speaker": "磁带·年轻外婆",
+          "source": "Tape",
+          "text": "我自己来。",
+          "auto": false,
+          "delay": 0,
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0110.mp3"
+        },
+        {
+          "id": "V4_0111",
+          "speaker": "磁带·童年晓晓",
+          "source": "Tape",
+          "text": "你还得弯腰捡。我给你拿着吧。",
+          "auto": false,
+          "delay": 0,
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0111.mp3"
+        },
+        {
+          "id": "V4_0112",
+          "speaker": "磁带·童年晓晓",
+          "source": "Tape",
+          "text": "外婆，晾衣绳怎么绑在小树上了？",
+          "auto": false,
+          "delay": 0,
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0112.mp3"
+        },
+        {
+          "id": "V4_0113",
+          "speaker": "磁带·年轻外婆",
+          "source": "Tape",
+          "text": "这头没地方拴。等衣服收了，你帮我解下来。",
+          "auto": false,
+          "delay": 0,
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0113.mp3"
+        }
+      ]
+    },
+    {
+      "id": "L01B_TREE",
+      "flag": "HeightMarksSeen",
+      "lines": [
+        {
+          "id": "V4_0105",
+          "speaker": "磁带·年轻外婆",
+          "source": "Tape",
+          "text": "脚跟放下，踮着不算。",
+          "auto": false,
+          "delay": 0,
+          "image": "Assets/Game/Art/Story/HeightMemory_v1/ILL_HEIGHT_TIPTOE.png",
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0105.mp3"
+        },
+        {
+          "id": "V4_0106",
+          "speaker": "磁带·童年晓晓",
+          "source": "Tape",
+          "text": "我没踮！",
+          "auto": false,
+          "delay": 0,
+          "image": "Assets/Game/Art/Story/HeightMemory_v1/ILL_HEIGHT_TIPTOE.png",
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0106.mp3"
+        },
+        {
+          "id": "V4_0107",
+          "speaker": "磁带·年轻外婆",
+          "source": "Tape",
+          "text": "那你怎么一说话就矮了？",
+          "auto": false,
+          "delay": 0,
+          "image": "Assets/Game/Art/Story/HeightMemory_v1/ILL_HEIGHT_FLAT.png",
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0107.mp3"
+        },
+        {
+          "id": "V4_0108",
+          "speaker": "磁带·童年晓晓",
+          "source": "Tape",
+          "text": "外婆，我跟院里那棵树，谁长得快？",
+          "auto": false,
+          "delay": 0,
+          "image": "Assets/Game/Art/Story/HeightMemory_v1/ILL_HEIGHT_TREE_WINDOW.png",
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0108.mp3"
+        },
+        {
+          "id": "V4_0114",
+          "speaker": "磁带·年轻外婆",
+          "source": "Tape",
+          "text": "它可比你高多了。",
+          "auto": false,
+          "delay": 0,
+          "image": "Assets/Game/Art/Story/HeightMemory_v1/ILL_HEIGHT_TREE_WINDOW.png",
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0114.mp3"
+        },
+        {
+          "id": "V4_0115",
+          "speaker": "磁带·童年晓晓",
+          "source": "Tape",
+          "text": "等它长到窗户那儿，我就不用走楼梯了。",
+          "auto": false,
+          "delay": 0,
+          "image": "Assets/Game/Art/Story/HeightMemory_v1/ILL_HEIGHT_TREE_WINDOW.png",
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0115.mp3"
+        },
+        {
+          "id": "V4_0116",
+          "speaker": "磁带·年轻外婆",
+          "source": "Tape",
+          "text": "楼梯好好的，你非要爬树。",
+          "auto": false,
+          "delay": 0,
+          "image": "Assets/Game/Art/Story/HeightMemory_v1/ILL_HEIGHT_TREE_WINDOW.png",
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0116.mp3"
+        },
+        {
+          "id": "V4_0117",
+          "speaker": "磁带·童年晓晓",
+          "source": "Tape",
+          "text": "走楼梯多没意思。",
+          "auto": false,
+          "delay": 0,
+          "image": "Assets/Game/Art/Story/HeightMemory_v1/ILL_HEIGHT_TREE_WINDOW.png",
+          "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0117.mp3"
+        }
+      ]
+    }
+  ]
+}

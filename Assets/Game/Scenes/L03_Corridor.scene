@@ -4054,10 +4054,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactId: photo
   prompt: "\u67E5\u770B\u7167\u7247"
-  entry: {fileID: 11400000, guid: a0d4e569ffff7ef41bb7d57b0b34f098, type: 2}
+  entry: {fileID: 11400000, guid: 3426425a8665c184494137e171ace889, type: 2}
   priority: 2
   replayable: 1
-  replayEntry: {fileID: 11400000, guid: d34f3526cd9785d49b954812877ebe2b, type: 2}
+  replayEntry: {fileID: 0}
+  replayWholeChain: 1
 --- !u!212 &2057182765
 SpriteRenderer:
   m_ObjectHideFlags: 0

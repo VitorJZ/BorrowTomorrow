@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f993672bdb89944b81673ee9b42134, type: 3}
+  m_Name: V4_0103
+  m_EditorClassIdentifier: 
+  entryId: V4_0103
+  speakerLabel: "\u78C1\u5E26\xB7\u7AE5\u5E74\u6653\u6653"
+  subtitle: "\u4F60\u6BCF\u6B21\u90FD\u8BF4\u5C31\u5269\u4E00\u4E2A\u3002"
+  voiceClip: {fileID: 8300000, guid: 47d7b0b7637db86489786de2bfe30a26, type: 3}
+  illustration: {fileID: 2800000, guid: 98bb55782afb57048a27d572d80c04e2, type: 3}
+  blackBackground: 0
+  nextId: V4_0104
+  requiredFlags: []
+  setFlags: []
+  holdForConfirm: 1
+  minDurationSeconds: 2.5
+  source: Tape
+  eventId: L01B_CLOTH
+  completionFlags: []
+  objectiveAfter: 
+  centeredTitle: 0
+  delayBefore: 0
+  sfxId: 
+  endHoldSeconds: 0

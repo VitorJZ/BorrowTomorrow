@@ -1,0 +1,37 @@
+{
+  "tool": "built-in image_gen",
+  "transparent_background": true,
+  "assets": [
+    {
+      "file": "PROP_ServiceRecess.png",
+      "prompt": "Use case: stylized-concept game environment cutout. Reference image is the art style of an old Chinese courtyard gallery, not the composition to copy. Create a wide 3:1 cutaway architectural SERVICE RECESS for a 2D side-view platform puzzle: a long missing bay below a rotten gallery floor, exposing deep warm charcoal-brown plaster and rough aged masonry inside the wall. Uneven broken plaster and chipped brick jambs at far left and right, subtle irregular stone/brick rim along the bottom. TOP EDGE IS OPEN with a few broken timber ends confined to far left and right, NO continuous horizontal beam across the opening. Centre remains a legible empty dark recessed surface with restrained texture and some vertical wall joints; not pitch black, not a flat gray panel. Front-on orthographic side view, no perspective floor, no top-down view. Single continuous cohesive architectural cutout, isolated on genuine transparency outside the ragged boundary. Fill almost the entire wide canvas with the recess. No platform, walkway, ladder, handles, metal mechanism or people inside; these will be separately layered game objects. Same muted hand-painted realistic plaster/wood/brick texture as the reference, soft even daylight, no theatrical glow. No text, arrows, labels, modern UI, frames, fences, or watermark.",
+      "source": "C:/Users/chris/.codex/generated_images/01a148a6-03f5-7780-9c58-5fd11795c762/exec-da4309e8-7b68-4319-852b-e9b910179e43.png"
+    },
+    {
+      "file": "PROP_DeckModule.png",
+      "prompt": "Use case: game prop cutout. Create one modular telescoping maintenance walkway section for a side-view 2D puzzle in a weathered Chinese courtyard gallery, year 2024. Orthographic FRONT/SIDE ELEVATION, a single long narrow horizontal steel grating deck, approximately five times wider than tall, level walkable top edge, a thin rectangular box beam underneath, two nested slide rails visible on its front face and small bolt plates near the ends. Muted blue-gray old painted steel with worn rusty edges and warm dust, sound sturdy structure rather than broken scrap. No railings, no legs, no ground, no brick, no support bracket, no crank, no shadows cast on an invisible floor. Realistic hand-painted texture with clean readable silhouette and restrained contrast, consistent with a 1990s courtyard building repaired later. Entire piece visible, filling most width of a wide 3:1 canvas with transparent margins above and below. Genuine transparent background, isolated cutout. Exactly one flat platform module, no exploded diagram, no alternate states, no arrows, lettering, numbers, UI or watermark. Top tread must be level and clearly recognizable as a walking surface.",
+      "source": "C:/Users/chris/.codex/generated_images/01a148a6-03f5-7780-9c58-5fd11795c762/exec-7a72f23f-417b-4b7b-ba4f-b0d11a14d946.png"
+    },
+    {
+      "file": "PROP_ReceiverShoe.png",
+      "prompt": "Use case: game prop cutout. One mechanical RECEIVER SHOE fixed to the LEFT leading end of an old blue-gray telescoping maintenance walkway, 2024. Front-on orthographic 2D side view. A compact L-shaped riveted steel bracket with a broad horizontal ledge projecting LEFT, and a short upright back fixed on the RIGHT to the walkway end. The ledge has a visibly worn pale top bearing surface and a small retaining lip UNDER the plank level, leaving the opening to the left unobstructed. It must clearly look able to receive the right end of a wooden floor plank from the left, not a hook for rope or a separate table. A triangular gusset underneath, rusty worn bolts, faded blue-gray paint consistent with weathered metal grating. Entire bracket visible, a clear clean silhouette, realistic hand-painted game texture. No timber inside, no loose bolt on the floor, no ground, wall, walkway or other props. Genuine transparent background. No diagram, labels, text, arrows, numbers, UI, frame or watermark.",
+      "source": "C:/Users/chris/.codex/generated_images/01a148a6-03f5-7780-9c58-5fd11795c762/exec-6492d7e1-fda5-4dd0-8662-a33fb33ee926.png"
+    },
+    {
+      "file": "PROP_LeverBase.png",
+      "prompt": "Use case: game prop cutout. A small stationary wall-mounted mechanical LEVER BASE HOUSING for a weathered maintenance walkway in a Chinese courtyard, 2024. Front elevation orthographic for a 2D side-view game. Compact round pivot axle in a sturdy oval or square bolted mounting plate, faded blue-gray paint, warm rusty edges and dust, clean readable silhouette. A small linkage socket at upper right. NO LEVER ARM and NO handle attached: the rotating lever will be a separate sprite. No exposed electric switches, no touchscreen, no words, no icons, no red/green indicator lamps. Simple believable manual mechanical hardware, same realistic hand-painted style as old steel grating, not photoreal product on a studio floor. Entire housing visible, genuine transparent background, no background wall, no ground, no captions, arrows or watermark.",
+      "source": "C:/Users/chris/.codex/generated_images/01a148a6-03f5-7780-9c58-5fd11795c762/exec-f7f30e85-568b-459b-b864-de7f3d3c7885.png"
+    },
+    {
+      "file": "PROP_LeverArm.png",
+      "prompt": "Use case: game prop cutout. A single straight mechanical LEVER ARM for an old blue-gray wall-mounted maintenance mechanism, isolated on genuine transparent background. FRONT elevation for a 2D side-view game. At the very bottom a small round pivot eye facing the viewer, attached to a long narrow upright iron shaft, with a distinct comfortable dark brown wooden grip at its upper end. The arm is roughly six times taller than wide, rests perfectly VERTICAL so it can be rotated around the bottom eye in-engine. Faded blue-gray steel, small rusty flecks, worn edges; wooden grip smooth from use, realistic hand-painted texture matching old courtyard repair hardware. Entire bottom pivot and top handle visible with small transparent margins. This is ONLY the separate lever arm, no mounting base, no full mechanism, no wall, no ground, no hands, no shadows on a background. Exactly one lever arm, no alternate views, diagram, arrows, writing, numbers, labels, UI or watermark.",
+      "source": "C:/Users/chris/.codex/generated_images/01a148a6-03f5-7780-9c58-5fd11795c762/exec-66f2321d-d8a9-44de-91cb-d80bcfd67c5e.png"
+    }
+  ],
+  "reuse": [
+    "CorridorFloor_v1 wood/joists/edge",
+    "existing ladder and stone platform",
+    "collapsed brickwork",
+    "canonical family photo, back inscription, old hands and hospital CG"
+  ]
+}

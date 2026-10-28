@@ -1,0 +1,139 @@
+﻿{
+  "lines": [
+    {
+      "entryId": "V5_L03_001",
+      "speakerLabel": "我",
+      "subtitle": "这不是那件校服吗？",
+      "source": "Self",
+      "illustration": "Assets/Game/Art/SampleV1/02_剧情插画_Illustrations/ILL_L03_Photo_Canonical_2304x1728.png",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_001.mp3"
+    },
+    {
+      "entryId": "V5_L03_002",
+      "speakerLabel": "照片背面的旧题字",
+      "subtitle": "1994年秋。晓晓七岁，和外婆在新种的桂花树旁。",
+      "source": "Note",
+      "illustration": "Assets/Game/Art/Story/L03_Identity_v5/ILL_PhotoBack_Inscribed.png"
+    },
+    {
+      "entryId": "V5_L03_003",
+      "speakerLabel": "我",
+      "subtitle": "晓晓……我外孙女，那时候才这么点儿大。",
+      "source": "Self",
+      "illustration": "Assets/Game/Art/SampleV1/02_剧情插画_Illustrations/ILL_L03_Photo_Canonical_2304x1728.png",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_003.mp3"
+    },
+    {
+      "entryId": "V5_L03_004",
+      "speakerLabel": "我",
+      "subtitle": "牵着她的……是我。我是她外婆啊。",
+      "source": "Self",
+      "illustration": "Assets/Game/Art/SampleV1/02_剧情插画_Illustrations/ILL_L03_Photo_Canonical_2304x1728.png",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_004.mp3"
+    },
+    {
+      "entryId": "V5_L03_005",
+      "speakerLabel": "林晓（现实）",
+      "subtitle": "外婆？",
+      "source": "Reality",
+      "illustration": "Assets/Game/Art/Story/L03_Identity_v5/ILL_OldHands_HospitalBed.png",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_005.mp3"
+    },
+    {
+      "entryId": "V5_L03_006",
+      "speakerLabel": "我（外婆）",
+      "subtitle": "晓晓？",
+      "source": "Self",
+      "illustration": "Assets/Game/Art/Story/L03_Identity_v5/ILL_OldHands_HospitalBed.png",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_006.mp3"
+    },
+    {
+      "entryId": "V5_L03_007",
+      "speakerLabel": "林晓（现实）",
+      "subtitle": "嗯，是我。",
+      "source": "Reality",
+      "illustration": "Assets/Game/Art/Illustrations/ILL_HOSPITAL_HOLD.jpg",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_007.mp3"
+    },
+    {
+      "entryId": "V5_L03_008",
+      "speakerLabel": "我（外婆）",
+      "subtitle": "刚才还听见你小时候说话呢。",
+      "source": "Reality",
+      "illustration": "Assets/Game/Art/Illustrations/ILL_HOSPITAL_HOLD.jpg",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_008.mp3"
+    },
+    {
+      "entryId": "V5_L03_009",
+      "speakerLabel": "林晓（现实）",
+      "subtitle": "我们在医院呢。我在老房子找到了这盘磁带，就带来放给你听。",
+      "source": "Reality",
+      "illustration": "Assets/Game/Art/Illustrations/ILL_HOSPITAL_HOLD.jpg",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_009.mp3"
+    },
+    {
+      "entryId": "V5_L03_010",
+      "speakerLabel": "我（外婆）",
+      "subtitle": "我还想着，你那件校服是不是又小了。",
+      "source": "Reality",
+      "illustration": "Assets/Game/Art/Illustrations/ILL_HOSPITAL_HOLD.jpg",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_010.mp3"
+    },
+    {
+      "entryId": "V5_L03_011",
+      "speakerLabel": "林晓（现实）",
+      "subtitle": "我都三十七啦。",
+      "source": "Reality",
+      "illustration": "Assets/Game/Art/Illustrations/ILL_HOSPITAL_HOLD.jpg",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_011.mp3"
+    },
+    {
+      "entryId": "V5_L03_012",
+      "speakerLabel": "林晓（现实）",
+      "subtitle": "你最近总念叨老房子里的蓝盒子，可又想不起放在哪儿。",
+      "source": "Reality",
+      "illustration": "Assets/Game/Art/Illustrations/ILL_HOSPITAL_HOLD.jpg",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_012.mp3"
+    },
+    {
+      "entryId": "V5_L03_013",
+      "speakerLabel": "我（外婆）",
+      "subtitle": "那块被面，是我给你做的，还没拿给你呢。",
+      "source": "Reality",
+      "illustration": "Assets/Game/Art/Illustrations/ILL_HOSPITAL_HOLD.jpg",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_013.mp3"
+    },
+    {
+      "entryId": "V5_L03_014",
+      "speakerLabel": "我（外婆）",
+      "subtitle": "本来想等你安顿下来再给。你那次回来，行李都装满了，我就又收起来了。后来……就给忘了。",
+      "source": "Reality",
+      "illustration": "Assets/Game/Art/Illustrations/ILL_HOSPITAL_HOLD.jpg",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_014.mp3"
+    },
+    {
+      "entryId": "V5_L03_015",
+      "speakerLabel": "林晓（现实）",
+      "subtitle": "那我这次拿走。你想起放哪儿了，就告诉我，我回老屋去拿。",
+      "source": "Reality",
+      "illustration": "Assets/Game/Art/Illustrations/ILL_HOSPITAL_HOLD.jpg",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_015.mp3"
+    },
+    {
+      "entryId": "V5_L03_016",
+      "speakerLabel": "我（外婆）",
+      "subtitle": "在阁楼……朝院子那扇窗边。具体在哪儿……我再看看。",
+      "source": "Self",
+      "illustration": "Assets/Game/Art/Illustrations/ILL_HOSPITAL_HOLD.jpg",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_016.mp3"
+    },
+    {
+      "entryId": "V5_L03_017",
+      "speakerLabel": "林晓（现实）",
+      "subtitle": "不着急，你慢慢想。",
+      "source": "Reality",
+      "illustration": "Assets/Game/Art/Illustrations/ILL_HOSPITAL_HOLD.jpg",
+      "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_017.mp3"
+    }
+  ]
+}
