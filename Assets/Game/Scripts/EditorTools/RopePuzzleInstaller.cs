@@ -67,7 +67,7 @@ namespace BorrowTomorrow.EditorTools
         public static void Install()
         {
             AssetDatabase.Refresh();Import();
-            var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/L01_Courtyard.scene");
+            var scene=EditorSceneManager.OpenScene(L01TreeSceneInstaller.AuthoredTreeScenePath);
             var room=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<LevelRoot>(true)).Single(r=>r.RoomId=="L01B");
             Transform content=room.transform.Find("Content");
             // Restore the known rack geometry, not the full scene scaffolder.

@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/L01_Courtyard.scene
     guid: eb1d520cf0b3c9e459718e89c652212c
   - enabled: 1
+    path: Assets/Game/Scenes/L01_TreeCourtyard.scene
+    guid: 870bdcf40cafd42138c106e7c603073b
+  - enabled: 1
     path: Assets/Game/Scenes/L02_Sewing.scene
     guid: 99f99400a596ba345827ab7829ec8d1d
   - enabled: 1

@@ -80,7 +80,7 @@ namespace BorrowTomorrow.EditorTools
                 importer.wrapMode=TextureWrapMode.Clamp;importer.SaveAndReimport();
             }
             UpdateAssets();
-            var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/L01_Courtyard.scene");
+            var scene=EditorSceneManager.OpenScene(L01TreeSceneInstaller.AuthoredTreeScenePath);
             var room=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<LevelRoot>(true)).Single(r=>r.RoomId=="L01B");
             L01BWallMemoryInstaller.Configure(room);
             var peg=room.GetComponentsInChildren<NarrativeInteractable>(true).Single(n=>n.name=="ClothMemory_v7");

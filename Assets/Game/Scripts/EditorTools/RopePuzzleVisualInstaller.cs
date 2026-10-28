@@ -129,7 +129,7 @@ namespace BorrowTomorrow.EditorTools
         public static void Install()
         {
             AssetDatabase.Refresh();
-            var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/L01_Courtyard.scene");
+            var scene=EditorSceneManager.OpenScene(L01TreeSceneInstaller.AuthoredTreeScenePath);
             var room=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<LevelRoot>(true)).Single(r=>r.RoomId=="L01B");
             Configure(room);EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();
             EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");

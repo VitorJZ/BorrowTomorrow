@@ -40,8 +40,9 @@ namespace BorrowTomorrow.EditorTools
                     {"L00", L00}, {"L01A", L01A}, {"L01B", L01B}, {"L02", L02}, {"L02Indoor", L02Indoor},
                     {"L03", L03}, {"L04", L04}, {"Epilogue", EpilogueRoom},
                 };
-                foreach (string sceneName in new[] { "L00_Gate", "L01_Courtyard", "L02_Sewing", "L03_Corridor", "L04_Attic", "Epilogue" })
+                foreach (string sceneName in new[] { "L00_Gate", "L01_Courtyard", "L01_TreeCourtyard", "L02_Sewing", "L03_Corridor", "L04_Attic", "Epilogue" })
                 {
+                    if (sceneName == "L01_TreeCourtyard" && !System.IO.File.Exists(L01TreeSceneInstaller.ScenePath)) continue;
                     var scene = EditorSceneManager.OpenScene("Assets/Game/Scenes/" + sceneName + ".scene", OpenSceneMode.Single);
                     bool touched = false;
                     foreach (var room in scene.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<LevelRoot>(true)))

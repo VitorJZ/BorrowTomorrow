@@ -42,7 +42,7 @@ namespace BorrowTomorrow.EditorTools
             try
             {
                 ConfigureHeroScale();
-                var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/L01_Courtyard.scene");
+                var scene=EditorSceneManager.OpenScene(L01TreeSceneInstaller.AuthoredTreeScenePath);
                 ApplyTreeComposition(scene);EditorSceneManager.SaveScene(scene);
             }
             finally{EditorSceneManager.RestoreSceneManagerSetup(setup);}
@@ -70,7 +70,7 @@ namespace BorrowTomorrow.EditorTools
             ConfigureActions(); ConfigureStory(); ConfigureHero();
             try
             {
-                var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/L01_Courtyard.scene");
+                var scene=EditorSceneManager.OpenScene(L01TreeSceneInstaller.AuthoredTreeScenePath);
                 BuildTreeSample(scene);
                 ConfigurePresentation(scene);
                 EditorSceneManager.SaveScene(scene);

@@ -150,8 +150,9 @@ namespace BorrowTomorrow.EditorTools
         public static void Install()
         {
             var map=ImportDialogue();
-            foreach(string name in new[]{"Bootstrap","L00_Gate","L01_Courtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
+            foreach(string name in new[]{"Bootstrap","L00_Gate","L01_Courtyard","L01_TreeCourtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
             {
+                if (name == "L01_TreeCourtyard" && !System.IO.File.Exists(L01TreeSceneInstaller.ScenePath)) continue;
                 Scene scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/"+name+".scene");
                 InstallScene(scene,map);
                 EditorSceneManager.SaveScene(scene);
@@ -160,6 +161,7 @@ namespace BorrowTomorrow.EditorTools
             EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");
             if(File.Exists("Assets/Game/Data/Art/enabled.json"))ArtInstaller.Install();
             L02IndoorSceneInstaller.Install();
+            L01TreeSceneInstaller.Install();
             Debug.Log("[NarrativeInstaller] Full v1.4 narrative installed without rebuilding existing puzzle geometry.");
         }
         public static void InstallAndBuild()
@@ -232,7 +234,9 @@ namespace BorrowTomorrow.EditorTools
                     notice.gameObject.AddComponent<PresentOnlyInvestigation>().anchorX=12.5f;
                     break;
                 case "L01_Courtyard":
-                    var treeRoom=rooms.First(r=>r.RoomId=="L01B");var treeCtx=Context(treeRoom,map);
+                case "L01_TreeCourtyard":
+                    var treeRoom=rooms.FirstOrDefault(r=>r.RoomId=="L01B");
+                    if(treeRoom==null) break;var treeCtx=Context(treeRoom,map);
                     Auto(treeCtx,treeRoom,"DLG_L01B_TREE_01",44f);
                     var marks=Investigate(treeCtx,"height_marks","查看墙面",new Vector2(44.5f,1f),"DLG_L01B_TREE_01",true);
                     LevelLayouts.SetObject(marks,"replayEntry",Entry(map,"DLG_L01B_TREE_03"));

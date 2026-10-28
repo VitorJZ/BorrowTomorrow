@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelId: L01
   sceneName: L01_Courtyard
-  displayName: "\u6C34\u6E20\u4E0E\u6811"
+  displayName: "\u6C34\u6E20"
   initialObjective: "\u53BB\u9601\u697C\uFF0C\u627E\u5230\u84DD\u8272\u94C1\u76AE\u76D2\u3002"
   boundaryMin: 0
   boundaryMax: 20

@@ -186,6 +186,28 @@ namespace BorrowTomorrow.Core
             readDialogueIds.Clear();
             if (data.readDialogueIds != null)
                 foreach (string id in data.readDialogueIds) RecordDialogue(id);
+            // L01 used to contain both rooms. Resolve explicit room, then legacy checkpoint,
+            // then the last boundary snapshot (the same fallback used by CheckpointService).
+            if (data.currentLevelId == "L01")
+            {
+                string roomId = data.checkpointRoomId;
+                if (string.IsNullOrEmpty(roomId))
+                {
+                    if (!string.IsNullOrEmpty(data.checkpointId) && data.checkpointId.StartsWith("cp_L01B_")) roomId = "L01B";
+                    else if (data.checkpointId == "spawn_L01B_in") roomId = "L01B";
+                    else if (!string.IsNullOrEmpty(data.checkpointId) &&
+                        (data.checkpointId.StartsWith("cp_L01A_") || data.checkpointId == "spawn_courtyard_in")) roomId = "L01A";
+                    else if (data.roomBoundaries != null && data.roomBoundaries.Count > 0)
+                        roomId = data.roomBoundaries[data.roomBoundaries.Count - 1].roomId;
+                }
+                if (roomId == "L01B" || roomId == "L01A")
+                {
+                    if (roomId == "L01B") data.currentLevelId = "L01B";
+                    data.checkpointRoomId = roomId;
+                    data.roomBoundaries?.RemoveAll(r => r.roomId != roomId);
+                    data.mechanismStates?.RemoveAll(m => !m.objectId.StartsWith(roomId + "_"));
+                }
+            }
             // Before the sewing-room split, its checkpoint belonged to L02 and
             // used world coordinates 40..58. Keep existing interior saves usable.
             if (data.currentLevelId == "L02" && data.checkpointRoomId == "L02Indoor")

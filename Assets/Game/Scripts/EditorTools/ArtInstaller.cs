@@ -398,8 +398,9 @@ namespace BorrowTomorrow.EditorTools
         public static void Install()
         {
             Import();SkinPlayer();
-            foreach(var name in new[]{"Bootstrap","MainMenu","L00_Gate","L01_Courtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
+            foreach(var name in new[]{"Bootstrap","MainMenu","L00_Gate","L01_Courtyard","L01_TreeCourtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
             {
+                if (name == "L01_TreeCourtyard" && !System.IO.File.Exists(L01TreeSceneInstaller.ScenePath)) continue;
                 var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/"+name+".scene");
                 if(name=="Bootstrap")SkinHud(scene);
                 else if(name=="MainMenu")SkinMenu(scene);
@@ -450,8 +451,9 @@ namespace BorrowTomorrow.EditorTools
         private static void ExportPreviews()
         {
             string output=Path.Combine(Path.GetDirectoryName(BuildRoot),"Previews");Directory.CreateDirectory(output);
-            foreach(var level in new[]{"L00_Gate","L01_Courtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
+            foreach(var level in new[]{"L00_Gate","L01_Courtyard","L01_TreeCourtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
             {
+                if (level == "L01_TreeCourtyard" && !System.IO.File.Exists(L01TreeSceneInstaller.ScenePath)) continue;
                 var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/"+level+".scene");
                 var rooms=All<LevelRoot>(scene).ToArray();
                 foreach(var room in rooms)
