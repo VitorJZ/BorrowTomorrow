@@ -29,8 +29,7 @@ namespace BorrowTomorrow.Narrative
                     else if (room.RoomId == "L00") text = "去阁楼，找到蓝色铁皮盒。";
                     else if (room.RoomId == "L01A") text = f.HasFlag("Mechanism_L01A_BridgeLowered") || f.HasFlag("HintPassed_L01A_Canal")
                         ? "沿放下的木桥过渠，进入院子。" : "借过去的摇柄装置，放下水渠木桥。";
-                    else if (room.RoomId == "L01B") text = f.HasFlag("Mechanism_L01B_RackRaised") || f.HasFlag("HintPassed_L01B_Climb")
-                        ? "保留过去的晾晒架与现在的粗枝，走上窗台。" : "爬上过去的木梯，在平台拉起晾晒架。";
+                    else if (room.RoomId == "L01B") text = "登上楼上的阳台。";
                     else if (room.RoomId == "L02") text = "通过后院外台，进入缝纫间。";
                     else if (room.RoomId == "L02Indoor") text = "查看缝纫桌上的校服。";
                     else text = "穿过楼上回廊，前往阁楼门前。";

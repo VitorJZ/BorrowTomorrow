@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f993672bdb89944b81673ee9b42134, type: 3}
+  m_Name: V4_0305
+  m_EditorClassIdentifier: 
+  entryId: V4_0305
+  speakerLabel: "\u6797\u6653\uFF08\u73B0\u5B9E\uFF09"
+  subtitle: "\u6211\u4EEC\u5728\u533B\u9662\u5462\u3002\u6211\u628A\u5C0F\u65F6\u5019\u90A3\u76D8\u78C1\u5E26\u5E26\u6765\u4E86\uFF0C\u521A\u624D\u4E00\u76F4\u653E\u7ED9\u4F60\u542C\u3002\u4F60\u542C\u5F97\u5165\u795E\uFF0C\u6211\u53EB\u4F60\u90FD\u6CA1\u5E94\u3002"
+  voiceClip: {fileID: 0}
+  illustration: {fileID: 2800000, guid: c847bad3c0eff1c4db883ce68bc27e75, type: 3}
+  blackBackground: 0
+  nextId: V4_0306
+  requiredFlags: []
+  setFlags: []
+  holdForConfirm: 1
+  minDurationSeconds: 0.1
+  source: Reality
+  eventId: EVT_L03_PHOTO_REVEAL
+  completionFlags: []
+  objectiveAfter: 
+  centeredTitle: 0
+  delayBefore: 0
+  sfxId: 
+  endHoldSeconds: 0

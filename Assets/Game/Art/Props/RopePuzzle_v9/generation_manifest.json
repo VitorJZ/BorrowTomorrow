@@ -1,0 +1,35 @@
+{
+  "tool": "built-in image_gen",
+  "version": 9,
+  "preserve_previous_assets": true,
+  "assets": [
+    {
+      "file": "PROP_Sapling_RopeTied_1994.png",
+      "source": "C:/Users/chris/.codex/generated_images/01a148a6-03f5-7780-9c58-5fd11795c762/exec-15d0ffb8-1a31-4818-9139-89378e442e20.png",
+      "prompt": "Edit transparent sapling sprite. Remove entire circular wooden fence and posts. Reveal slim trunk, natural roots and small earth patch. Preserve foliage, flowers, three hemp wraps, right-hand knot, tassel and left-extending rope. Preserve composition and scale; no new props, text or fence.",
+      "pivot": [
+        0.565,
+        0.03
+      ]
+    },
+    {
+      "file": "PROP_Sapling_RopeFree_1994.png",
+      "prompt": "Remove only all hemp rope, wraps, knot, tassel and left-extending length from the new no-fence sapling. Restore bark. Preserve exact canvas, placement, foliage, roots, silhouette and colors. Transparent background; no new props.",
+      "pivot": [
+        0.585,
+        0.03
+      ],
+      "source": "C:/Users/chris/.codex/generated_images/01a148a6-03f5-7780-9c58-5fd11795c762/exec-6e33a760-eb63-4861-bca7-4ca05921a9ce.png"
+    },
+    {
+      "file": "PROP_Osmanthus_ClothesPole_2024.png",
+      "source": "C:/Users/chris/.codex/generated_images/01a148a6-03f5-7780-9c58-5fd11795c762/exec-ebb76e38-d563-495c-bd2c-db80d1f6578d.png",
+      "prompt": "Edit the whole mature tree, drawing a long old bamboo clothes-drying pole resting on two tree branches as one coherent transparent sprite. Small faded white cloth and two wooden pegs on the pole. Exposed left pole end for rope routing. Preserve overall tree, roots, lower right walkable branch and muted hand-painted style. No ring, pulley, short bracket, rope, arrows or text.",
+      "ropeContactUVFromTop": [
+        0.15,
+        0.36
+      ],
+      "design": "User requested the whole tree and a real long clothes-drying pole be generated together."
+    }
+  ]
+}

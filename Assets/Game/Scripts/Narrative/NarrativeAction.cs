@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace BorrowTomorrow.Narrative
 {
@@ -14,6 +14,10 @@ namespace BorrowTomorrow.Narrative
         public string beforeEntryId;
         [Tooltip("动作开始前的确认提示（如“抚平布角”）；为空则动作随事件输入直接开始")]
         public string confirmBefore;
+        public bool requireTargetClick;
+        public bool turnPhoto;
+        public string turnCaption;
+        public Rect targetRegion = new Rect(0,0,1,1);
         [Tooltip("动作结束后的确认提示（如“告诉晓晓位置”）；为空则直接进入对白")]
         public string confirmAfter;
         public float seconds = 1.2f;
@@ -56,6 +60,11 @@ namespace BorrowTomorrow.Narrative
         public float zoom = 1f;
         [Tooltip("推近中心（插画归一化坐标）")]
         public Vector2 focus = new Vector2(0.5f, 0.5f);
+    }
+
+    public interface INarrativeTargetView
+    {
+        bool IsActionTargetHit(NarrativeAction action, Vector2 screenPosition);
     }
 
     /// <summary>动作阶段画面；由 UI 层实现，progress 0→1，prompt 为空表示不等待确认。</summary>

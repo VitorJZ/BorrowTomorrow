@@ -1,0 +1,33 @@
+{
+  "tool": "built-in image_gen",
+  "version": "L01B_DryingRack_v2",
+  "directory": "Assets/Game/Art/Props/DryingRack_v2",
+  "assets": [
+    {
+      "name": "PROP_RackBrace_Adjustable.png",
+      "prompt": "Horizontal telescopic wood and forged iron rack brace; two clear adjustment holes; pivot eyes; transparent side-view sprite.",
+      "source": "exec-73e9d25e-665f-4a59-816b-704901b70fe2.png"
+    },
+    {
+      "name": "PROP_Osmanthus_LoadBranch.png",
+      "prompt": "Natural thick grey-brown osmanthus limb rising gently left to right; readable upper contour; small leaves and flowers; transparent sprite.",
+      "source": "exec-99184439-b906-46ec-9391-7d4a0e086d4a.png"
+    },
+    {
+      "name": "PROP_ClothesPeg.png",
+      "prompt": "One worn honey-wood spring clothes peg; side view; vertical; true transparency.",
+      "source": "exec-650a7566-56c5-4cb0-832f-0025e3bc9e61.png"
+    },
+    {
+      "name": "ILL_ClothMemory.png",
+      "prompt": "1994 Chinese courtyard close-up; child holds plain cream cloth, middle-aged woman clips it to line; only hands; no faces, no elderly hands. Final edit removes sewn floral borders to keep cloth chronology correct.",
+      "source": "exec-8bfb8e95-3d8c-4d92-ba2d-81ebd359c75a.png"
+    }
+  ],
+  "reused": [
+    "DryingRack_v1 rack leaf and mount sprites, open/closed latch, damaged present rack",
+    "existing rope/wood/latch sounds",
+    "existing approved character animations"
+  ],
+  "new_voice": "not generated; revised dialogue uses full subtitles without mismatched legacy audio"
+}

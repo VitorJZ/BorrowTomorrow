@@ -1,0 +1,206 @@
+{
+  "date": "2026-10-26",
+  "level": "L01B",
+  "design": "outputs/借一点明天_L01B重新设计_v7.md",
+  "status": "art_delivery_only_not_integrated",
+  "generated_count": 11,
+  "reused_count": 11,
+  "assets": [
+    {
+      "file": "PROP_RopeCleat_Empty_1994.png",
+      "label": "过去：空绕绳钩",
+      "origin": "generated",
+      "role": "sprite",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-49c5a340-70bb-4db6-ab5f-39ec92797834.png",
+      "tool": "built-in image_gen",
+      "prompt": "One isolated rope cleat, true alpha. Short vertical honey wood backing, top/bottom bolts, horizontal dark iron two-horn cleat, sound 1994 condition. Painterly old Chinese courtyard prop, clean silhouette, no rope, wall, text, UI, characters or external shadow.",
+      "transparent": true
+    },
+    {
+      "file": "PROP_RopeCleat_Secured_1994.png",
+      "label": "过去：绳尾收住参考",
+      "origin": "generated",
+      "role": "contact_reference",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-353d33a7-562c-4a94-90b3-78671bee642c.png",
+      "tool": "built-in image_gen",
+      "prompt": "Edit the same cleat to show snug figure-eight hemp wrapping on both horns. Full object within margins, short incoming stub and hanging tail. Remove opaque background and glow; true alpha. Preserve two bolt registration points. Final cutout revision used.",
+      "transparent": true
+    },
+    {
+      "file": "PROP_RopeCleat_Broken_2024.png",
+      "label": "现在：断裂锈坏绕绳钩",
+      "origin": "generated",
+      "role": "sprite",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-e6ec697c-70df-480c-acbb-906f04b5d209.png",
+      "tool": "built-in image_gen",
+      "prompt": "Edit the empty cleat: right iron horn snapped off with jagged rust fracture, left horn bent downward, grey split backing missing a corner, short rotted rope remnant. Same fixture and two bolts. True alpha, no background or labels.",
+      "transparent": true
+    },
+    {
+      "file": "PROP_Knot_Tied_1994.png",
+      "label": "过去：树后绳结",
+      "origin": "generated",
+      "role": "sprite",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-8772cbea-bb43-44fc-8581-7db5915f8e6a.png",
+      "tool": "built-in image_gen",
+      "prompt": "Isolated continuous pale tan hemp rope tied around an invisible post. One oval loop LEFT of a compact knot; both rope ends emerge on RIGHT, standing end upper-right and pullable end lower-right. Exactly two ends, no Y junction on left loop or floating fragments. True alpha inside and outside loop.",
+      "transparent": true
+    },
+    {
+      "file": "PROP_Knot_Released_1994.png",
+      "label": "过去：解开的松绳",
+      "origin": "generated",
+      "role": "result_sprite",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-0f69bedf-e0c6-4d56-bdc2-7cfac06fc462.png",
+      "tool": "built-in image_gen",
+      "prompt": "One single continuous pale tan hemp length in a loose open C curve. Exactly two frayed ends on right with clear gap. No knot, junction, extra tail or detached fragments. Hand-painted fibers, zero-alpha empty background and center.",
+      "transparent": true
+    },
+    {
+      "file": "PROP_RopeEnd_Grab.png",
+      "label": "可拖动的绳尾与结头",
+      "origin": "generated",
+      "role": "sprite",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-62b0624b-5d85-4dcf-9ba8-b867dd9229a2.png",
+      "tool": "built-in image_gen",
+      "prompt": "One isolated short vertical hanging hemp rope end, gentle bend, small stopper knot at bottom and short frayed tassel. Consistent braided fibers, entire silhouette in margins, transparent alpha, no hands or background.",
+      "transparent": true
+    },
+    {
+      "file": "TEX_Rope_Hemp_Strip.png",
+      "label": "连续绳索绘制纹理",
+      "origin": "generated",
+      "role": "rope_texture",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-4e3b4b62-3b47-4cf9-9d01-94fc25645c7e.png",
+      "tool": "built-in image_gen",
+      "prompt": "One perfectly straight horizontal hemp strip from left to right edge of 3:1 canvas, constant thickness, centered in transparent space. No ends, knots or bends. Fine pale tan twisted fibers for a game rope renderer; even lighting, no shadow or background.",
+      "transparent": true
+    },
+    {
+      "file": "PROP_BranchFork_Bare_2024.png",
+      "label": "现在：承绳粗枝凹口",
+      "origin": "generated",
+      "role": "sprite",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-53488dc2-ce28-4625-91d0-6a83c8016bac.png",
+      "tool": "built-in image_gen",
+      "prompt": "Isolated mature osmanthus branch fork, grey-brown living bark, broad rounded U crotch suitable for resting clothesline, sparse muted olive leaves and tiny yellow flowers. Upper load contour clear. No rope, metal, characters or background, true alpha.",
+      "transparent": true
+    },
+    {
+      "file": "REF_BranchFork_Routed_2024.png",
+      "label": "绳索搭过枝杈的接触参考",
+      "origin": "generated",
+      "role": "contact_reference",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-e10b9d8c-6140-4843-9534-16e23153db55.png",
+      "tool": "built-in image_gen",
+      "prompt": "Edit exact bare fork to add a short continuous hemp line resting on the central saddle, short ends falling on opposite sides. Rope contacts bark with correct front/back relation, no floating bow. Keep tree and transparency.",
+      "transparent": true
+    },
+    {
+      "file": "PROP_TrunkFront_Occluder_2024.png",
+      "label": "现在：遮住旧绳结的树干前景层",
+      "origin": "generated",
+      "role": "occluder",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-f6c66d78-f901-4273-8aef-562761cfe1b0.png",
+      "tool": "built-in image_gen",
+      "prompt": "Isolated convex front bark layer of a standing mature osmanthus trunk, tall irregular grey-brown column with natural burls and pale lichen. No cut end rings, branches, leaves, rope or text. Transparent outer edges, no aura or background.",
+      "transparent": true
+    },
+    {
+      "file": "ILL_KnotCloseup_BG_1994.png",
+      "label": "过去：解绳结近景底图",
+      "origin": "generated",
+      "role": "background",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-93b93293-8af4-40d4-a8f9-92e3fadcd57a.png",
+      "tool": "built-in image_gen",
+      "prompt": "16:9 painterly close-up of slender young osmanthus trunk left of center in 1994 Chinese courtyard, ivory plaster wall, small support stake, muted leaves and earth. Center-right uncluttered for rope layer, bottom calm for subtitles. No rope, knot, hands, characters, text or UI.",
+      "transparent": false
+    },
+    {
+      "file": "Reused/PROP_RackLeaf_1994.png",
+      "label": "过去完整架面",
+      "origin": "reused",
+      "role": "existing_asset",
+      "source": "Assets/Game/Art/Props/DryingRack_v1/PROP_RackLeaf_1994.png"
+    },
+    {
+      "file": "Reused/PROP_RackLeaf_2024.png",
+      "label": "现在损坏架面",
+      "origin": "reused",
+      "role": "existing_asset",
+      "source": "Assets/Game/Art/Props/DryingRack_v1/PROP_RackLeaf_2024.png"
+    },
+    {
+      "file": "Reused/PROP_RackMount_1994.png",
+      "label": "过去固定座与铰链",
+      "origin": "reused",
+      "role": "existing_asset",
+      "source": "Assets/Game/Art/Props/DryingRack_v1/PROP_RackMount_1994.png"
+    },
+    {
+      "file": "Reused/PROP_RackMount_2024.png",
+      "label": "现在损坏固定座",
+      "origin": "reused",
+      "role": "existing_asset",
+      "source": "Assets/Game/Art/Props/DryingRack_v1/PROP_RackMount_2024.png"
+    },
+    {
+      "file": "Reused/PROP_HingeStop_Reference.png",
+      "label": "小型金属止挡备选件，安装方向待灰盒确定",
+      "origin": "reused",
+      "role": "existing_asset",
+      "source": "Assets/Game/Art/Props/DryingRack_v1/PROP_RackLatch_Closed.png"
+    },
+    {
+      "file": "Reused/PROP_TreeYoung_1994.png",
+      "label": "过去的小桂花树",
+      "origin": "reused",
+      "role": "existing_asset",
+      "source": "Assets/Game/Art/SampleV1/Tree/L01B_Sapling_v2.png"
+    },
+    {
+      "file": "Reused/PROP_TreeMature_2024.png",
+      "label": "现在的成年桂花树",
+      "origin": "reused",
+      "role": "existing_asset",
+      "source": "Assets/Game/Art/Props/DryingRack_v1/PROP_Osmanthus_Natural_2024.png"
+    },
+    {
+      "file": "Reused/PROP_BranchTransition.png",
+      "label": "连接枝条备选，启用范围由灰盒确定",
+      "origin": "reused",
+      "role": "existing_asset",
+      "source": "Assets/Game/Art/Props/DryingRack_v2/PROP_Osmanthus_LoadBranch.png"
+    },
+    {
+      "file": "Reused/PROP_ClothesPeg.png",
+      "label": "夹子剧情道具",
+      "origin": "reused",
+      "role": "existing_asset",
+      "source": "Assets/Game/Art/Props/DryingRack_v2/PROP_ClothesPeg.png"
+    },
+    {
+      "file": "Reused/ILL_ClothMemory.png",
+      "label": "祖孙晾布剧情插画",
+      "origin": "reused",
+      "role": "existing_asset",
+      "source": "Assets/Game/Art/Props/DryingRack_v2/ILL_ClothMemory.png"
+    },
+    {
+      "file": "Reused/Strip_Wood.png",
+      "label": "固定平台等现有木件材质",
+      "origin": "reused",
+      "role": "existing_asset",
+      "source": "Assets/Game/Art/Delivery/Fixed/Strip_Wood.png"
+    }
+  ],
+  "integration_notes": [
+    "场景和旧升架逻辑保持回退版本；本包没有接入游戏、重建场景或生成exe。",
+    "带绳枝杈与收绳钩整图是接触关系参考；运行时优先保留空物件，用连续绳线绘制绳索，避免整图切换引起物件跳动。",
+    "绳结与松绳是状态图，不是经过动作配准的逐帧动画；解结过渡应由连续绳线与局部遮挡表现。",
+    "两个绕绳钩年代状态以固定螺栓配准，不可直接按整图中心替换。",
+    "绳纹理提供源图；重复UV接缝、线宽、透明留白的UV裁定需要接入时确定，未声称无缝平铺已验证。",
+    "保留现有L01B场景背景；不因打包复用资源而替换同事的背景或剧情资产。",
+    "最终绳长、枝杈位置、碰撞、受力与拖动行程需要灰盒确认。"
+  ]
+}

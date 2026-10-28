@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using BorrowTomorrow.Core;
 using BorrowTomorrow.Core.Data;
@@ -15,6 +15,7 @@ namespace BorrowTomorrow.Narrative
         private AudioSource voiceSource;
         private AudioSource tapeSource;
         private DialogueEntry current;
+        private bool replayWholeChain;
         private DialogueEntry first;
         private DialoguePriority currentPriority;
         private Action onCompleted;
@@ -30,6 +31,9 @@ namespace BorrowTomorrow.Narrative
         private bool readOnly;
         private bool voicePaused;
         private int lastAdvanceFrame = -1;
+        private bool pendingManualAdvance;
+        private int dialogueBeginFrame;
+        private readonly List<UnityEngine.EventSystems.RaycastResult> pointerHits = new List<UnityEngine.EventSystems.RaycastResult>();
         private enum ActionPhase { None, WaitBefore, Playing, WaitAfter }
         private ActionPhase actionPhase;
         private NarrativeAction action;
@@ -91,15 +95,21 @@ namespace BorrowTomorrow.Narrative
                 End(false);
             }
             currentPriority = priority;
+            replayWholeChain = false;
             Begin(entry, priority >= DialoguePriority.Story, false, callback);
         }
-        public void PlayReadOnly(DialogueEntry entry)
+        public void PlayReadOnly(DialogueEntry entry, bool wholeChain = false)
         {
-            if (entry != null && !IsPlaying) Begin(entry, true, true, null);
+            if (entry != null && !IsPlaying)
+            {
+                replayWholeChain = wholeChain;
+                Begin(entry, true, true, null);
+            }
         }
         private void Begin(DialogueEntry entry, bool blocking, bool replay, Action callback)
         {
             first = entry;
+            pendingManualAdvance=false;dialogueBeginFrame=Time.frameCount;
             readOnly = replay;
             ownsControl = blocking;
             onCompleted = callback;
@@ -116,7 +126,8 @@ namespace BorrowTomorrow.Narrative
         // An action stage belongs to the same event: it gates the line without adding entries or flags.
         private void EnterLine(DialogueEntry entry)
         {
-            NarrativeAction gate = readOnly || !ServiceRegistry.TryGet<DialogueLibrary>(out var lib) ? null : lib.FindAction(entry.entryId);
+            NarrativeAction gate = !ServiceRegistry.TryGet<DialogueLibrary>(out var lib) ? null : lib.FindAction(entry.entryId);
+            if(readOnly && gate!=null && !gate.requireTargetClick && !gate.turnPhoto)gate=null;
             if (gate == null) { BeginLine(entry); return; }
             action = gate;
             actionTarget = entry;
@@ -171,7 +182,10 @@ namespace BorrowTomorrow.Narrative
         private void UpdateAction()
         {
             stageTime += Time.deltaTime;
-            if (pointerReleasedFrame < 0 && !Input.GetMouseButton(0)) pointerReleasedFrame = Time.frameCount;
+            ServiceRegistry.TryGet<IInputSource>(out var source);
+            var pointer=source as IPointerInputSource;
+            bool pointerHeld=pointer!=null?pointer.PrimaryHeld:Input.GetMouseButton(0);
+            if (pointerReleasedFrame < 0 && !pointerHeld) pointerReleasedFrame = Time.frameCount;
             if (actionPhase == ActionPhase.Playing)
             {
                 actionTimer += Time.deltaTime;
@@ -181,8 +195,15 @@ namespace BorrowTomorrow.Narrative
                 else EnterStage(ActionPhase.WaitAfter);
                 return;
             }
-            if (ServiceRegistry.TryGet<IInputSource>(out var input) && input.ConsumeInteract()) ConfirmAction();
-            else if (ownsControl && Input.GetMouseButtonDown(0)) ConfirmAction();
+            if(actionPhase==ActionPhase.WaitBefore && action.requireTargetClick)
+            {
+                bool pressed=pointer!=null?pointer.PrimaryPressedThisFrame:Input.GetMouseButtonDown(0);
+                Vector2 position=pointer!=null?pointer.PointerPosition:(Vector2)Input.mousePosition;
+                if(pressed && ServiceRegistry.TryGet<INarrativePresentation>(out var v) && v is INarrativeTargetView target && target.IsActionTargetHit(action,position))ConfirmAction();
+                return;
+            }
+            if (source!=null && source.ConsumeInteract()) ConfirmAction();
+            else if (ownsControl && (pointer!=null?pointer.PrimaryPressedThisFrame:Input.GetMouseButtonDown(0))) ConfirmAction();
         }
         private void BeginLine(DialogueEntry entry)
         {
@@ -194,8 +215,8 @@ namespace BorrowTomorrow.Narrative
             presented = false;
             voiceSource.Stop();
             tapeSource.Stop();
-            if (ServiceRegistry.TryGet<INarrativePresentation>(out var view)) view.Close();
-            if (ServiceRegistry.TryGet<IHudService>(out var hud)) hud.HideSubtitle();
+            // Retain the previous line's view until the next line is ready, so delays
+            // cannot flash the gameplay camera or cancel an in-progress UI click.
             if (!readOnly && !history.Contains(entry)) history.Add(entry);
             if (timer >= 0f) PresentLine();
         }
@@ -241,6 +262,7 @@ namespace BorrowTomorrow.Narrative
             }
             if (session.State.IsPaused)
             {
+                pendingManualAdvance=false;
                 if (!voicePaused) { voiceSource.Pause(); tapeSource.Pause(); voicePaused = true; }
                 return;
             }
@@ -259,19 +281,42 @@ namespace BorrowTomorrow.Narrative
                 return;
             }
             if (!presented) { if (timer >= 0f) PresentLine(); return; }
-            if (!current.holdForConfirm)
+            if(pendingManualAdvance && timer>=.18f)
             {
-                if (timer >= current.minDurationSeconds && !voiceSource.isPlaying) Advance();
-                return;
+                pendingManualAdvance=false;Advance();return;
             }
             if (ServiceRegistry.TryGet<IInputSource>(out var input) && input.ConsumeInteract()) Advance();
-            else if (ownsControl && Input.GetMouseButtonDown(0)) Advance();
+            else if (ownsControl && DialoguePointerPressed()) Advance();
+        }
+        private bool DialoguePointerPressed()
+        {
+            ServiceRegistry.TryGet<IInputSource>(out var source);
+            var pointer=source as IPointerInputSource;
+            bool pressed=pointer!=null?pointer.PrimaryPressedThisFrame:Input.GetMouseButtonDown(0);
+            if(!pressed)return false;
+            // Buttons dispatch on click-up. Do not also advance from their click-down.
+            if(UnityEngine.EventSystems.EventSystem.current!=null)
+            {
+                Vector2 position=pointer!=null?pointer.PointerPosition:(Vector2)Input.mousePosition;
+                var data=new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current){position=position};
+                pointerHits.Clear();UnityEngine.EventSystems.EventSystem.current.RaycastAll(data,pointerHits);
+                foreach(var hit in pointerHits)
+                    if(hit.gameObject.GetComponentInParent<UnityEngine.UI.Button>()!=null)return false;
+            }
+            return true;
         }
         public void Advance()
         {
-            if (IsPlaying && actionPhase != ActionPhase.None) { ConfirmAction(); return; }
-            if (!IsPlaying || !presented || endingTimer >= 0f || timer < 0.18f
-                || GameSession.Instance.State.IsPaused || lastAdvanceFrame == Time.frameCount) return;
+            if (IsPlaying && actionPhase != ActionPhase.None) { if(actionPhase!=ActionPhase.WaitBefore || !action.requireTargetClick)ConfirmAction(); return; }
+            if (!IsPlaying || endingTimer >= 0f || GameSession.Instance.State.IsPaused
+                || lastAdvanceFrame == Time.frameCount || Time.frameCount==dialogueBeginFrame) return;
+            if(!presented || timer<.18f)
+            {
+                // Preserve one fresh press during the short anti-double-advance interval.
+                pendingManualAdvance=true;
+                return;
+            }
+            pendingManualAdvance=false;
             lastAdvanceFrame = Time.frameCount;
             if (page + 1 < pages.Length)
             {
@@ -284,7 +329,7 @@ namespace BorrowTomorrow.Narrative
             voiceSource.Stop();
             if (!readOnly && current.setFlags != null)
                 foreach (string flag in current.setFlags) pendingFlags.Add(flag);
-            if (!readOnly && !string.IsNullOrEmpty(current.nextId))
+            if ((!readOnly || replayWholeChain) && !string.IsNullOrEmpty(current.nextId))
             {
                 DialogueEntry next = FindNext(current.nextId);
                 if (next == null || visited.Contains(next.entryId))
@@ -328,7 +373,7 @@ namespace BorrowTomorrow.Narrative
                 session.StoryFlags.SetFlags(pendingFlags);
                 session.SaveProgressNow();
             }
-            IsPlaying = false;
+            IsPlaying = false;pendingManualAdvance=false;
             if (ServiceRegistry.TryGet<INarrativePresentation>(out var view)) view.Close();
             if (ServiceRegistry.TryGet<IHudService>(out var hud)) hud.HideSubtitle();
             if (ServiceRegistry.TryGet<IAudioService>(out var audio)) audio.SetDialogueDucking(false);

@@ -1,0 +1,20 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "file": "ILL_PhotoBack_Inscribed.png",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-5c05fde6-9daf-4057-9b8a-f6b3318cfaaa.png",
+      "prompt": "Reference canonical photograph. Generate same loose aged photograph reverse on cream table; three legible handwritten lines: 1994年秋 / 晓晓七岁 / 和外婆在新种的桂花树旁. Same warm watercolor. No frame or hands."
+    },
+    {
+      "file": "ILL_OldHands_CanonicalPhoto.png",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-deb6a588-f45e-4c48-9dc0-7216026260b7.png",
+      "prompt": "First person aged grandmother hands in burgundy knitted cuffs hold loose canonical courtyard photo; same woman and seven-year-old granddaughter at sapling, no extra people or wood frame, soft old interior background, watercolor."
+    },
+    {
+      "file": "ILL_OldHands_HospitalBed.png",
+      "source": "C:\\Users\\chris\\.codex\\generated_images\\01a148a6-03f5-7780-9c58-5fd11795c762\\exec-df1a22a3-b60f-4e12-99e1-2e1583ed1d9f.png",
+      "prompt": "Edit original: preserve canonical two-person photograph and aged hands/burgundy cuffs exactly. Replace environment with first person hospital bed, off-white duvet, pale mint wall, metal bed rail, bedside cassette recorder. Remove old living room. Same watercolor style."
+    }
+  ]
+}

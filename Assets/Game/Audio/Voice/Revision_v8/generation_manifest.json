@@ -1,0 +1,582 @@
+[
+  {
+    "id": "V4_0101",
+    "task_id": "6ae21476f20f39f1434b5d85",
+    "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+    "args": {
+      "prompt": "外婆，快点，我手酸了。",
+      "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0101.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0101.mp3",
+    "duration": 2.664,
+    "peak": 21856,
+    "rms": 3753.9933369561822,
+    "sha256": "fa34741a745b18b139ed49d7bc5bd38310379f561b0dfdd0ee671244b33f58ef",
+    "validated": true
+  },
+  {
+    "id": "V4_0102",
+    "task_id": "6ae2148f839b362c457adc63",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "好了好了，夹上这个就行。",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0102.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0102.mp3",
+    "duration": 2.4,
+    "peak": 24706,
+    "rms": 2960.1929459170888,
+    "sha256": "5ef941ccde12c3a526b0859fcc3d82e0c2c5aaaa3520923c14735db481cec25f",
+    "validated": true
+  },
+  {
+    "id": "V4_0103",
+    "task_id": "6ae214768a16bbb72bc4e811",
+    "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+    "args": {
+      "prompt": "你每次都说就剩一个。",
+      "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0103.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0103.mp3",
+    "duration": 2.256,
+    "peak": 19187,
+    "rms": 2498.2612380940664,
+    "sha256": "552ffbf14ae022d8d2ef8b32a04774b9615af5fc16bdda830bbb4dcb9104554a",
+    "validated": true
+  },
+  {
+    "id": "V4_0104",
+    "task_id": "6ae2148ff20f39f1434b5f69",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "那你松手，去玩吧。",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0104.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0104.mp3",
+    "duration": 1.9625,
+    "peak": 20283,
+    "rms": 3153.3089790246454,
+    "sha256": "21564dc988a83e33458c94678d71ad98eee3bcb2223cd86b56c2d155af3fd7bd",
+    "validated": true
+  },
+  {
+    "id": "V4_0105",
+    "task_id": "6ae2148f839b362c457adc81",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "脚跟放下，踮着不算。",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0105.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0105.mp3",
+    "duration": 2.1875,
+    "peak": 27150,
+    "rms": 3035.54200045772,
+    "sha256": "1c6e369500c2273f739d35d4a2237ae8992cf6b08e4500a531dba209425f56e3",
+    "validated": true
+  },
+  {
+    "id": "V4_0106",
+    "task_id": "6ae2147751686a353f2b1c41",
+    "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+    "args": {
+      "prompt": "我没踮！",
+      "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0106.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0106.mp3",
+    "duration": 1.248,
+    "peak": 17561,
+    "rms": 2622.4136010461666,
+    "sha256": "1b0272dac6372cd9c6efd184712399a41de0dea0a7cbe4f810be9b1d42bfa2de",
+    "validated": true
+  },
+  {
+    "id": "V4_0107",
+    "task_id": "6ae2148f8a16bbb72bc4ec61",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "那你怎么一说话就矮了？",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0107.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0107.mp3",
+    "duration": 2.575,
+    "peak": 28450,
+    "rms": 3809.184037255809,
+    "sha256": "de82083137fa7a31912422e8cd370b381d41a5729fb06573a994df9530b60dbe",
+    "validated": true
+  },
+  {
+    "id": "V4_0108",
+    "task_id": "6ae21477839b362c457adb47",
+    "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+    "args": {
+      "prompt": "外婆，我跟院里那棵树，谁长得快？",
+      "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0108.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0108.mp3",
+    "duration": 3.48,
+    "peak": 19234,
+    "rms": 2937.6880585498293,
+    "sha256": "4224542252485e5bb349db99dc17d41c99269098a79690c119f44a4b4865cb7c",
+    "validated": true
+  },
+  {
+    "id": "V4_0109",
+    "task_id": "6ae2147751686a353f2b1c61",
+    "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+    "args": {
+      "prompt": "……这边还没夹呢。",
+      "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0109.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0109.mp3",
+    "duration": 1.632,
+    "peak": 13899,
+    "rms": 2285.5039505419168,
+    "sha256": "c4b8e2a8d6ebb2e8972266973b566afe63daa91f98feccfecb43bf5da02f0147",
+    "validated": true
+  },
+  {
+    "id": "V4_0110",
+    "task_id": "6ae21490f20f39f1434b5f90",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "我自己来。",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0110.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0110.mp3",
+    "duration": 1.075,
+    "peak": 18700,
+    "rms": 3681.9839186279564,
+    "sha256": "c1ea53c63c557717f9d79ef0a4b47c33255d45d3f893028fd2866fe37a226508",
+    "validated": true
+  },
+  {
+    "id": "V4_0111",
+    "task_id": "6ae21477839b362c457adb7d",
+    "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+    "args": {
+      "prompt": "你还得弯腰捡。我给你拿着吧。",
+      "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0111.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0111.mp3",
+    "duration": 3.048,
+    "peak": 21747,
+    "rms": 2889.2545536131197,
+    "sha256": "44886ff453457f15551a0e3ebe0a250d66ea32ce377cf75f6a5c5e55aa6b457e",
+    "validated": true
+  },
+  {
+    "id": "V4_0112",
+    "task_id": "6ae2147751686a353f2b1c7f",
+    "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+    "args": {
+      "prompt": "外婆，晾衣绳怎么绑在小树上了？",
+      "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0112.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0112.mp3",
+    "duration": 3.48,
+    "peak": 20124,
+    "rms": 3184.1915235626843,
+    "sha256": "10e75ac7e8c64246271ec53eb93467ead6803888380e9e2cac488b77df554bed",
+    "validated": true
+  },
+  {
+    "id": "V4_0113",
+    "task_id": "6ae2149051686a353f2b1d34",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "这头没地方拴。等衣服收了，你帮我解下来。",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0113.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0113.mp3",
+    "duration": 3.5875,
+    "peak": 25355,
+    "rms": 3689.904706188105,
+    "sha256": "fca3016294ef6d1e725c960d98a36c0e5e6396f2f7319c72a29ab60d793db87b",
+    "validated": true
+  },
+  {
+    "id": "V4_0114",
+    "task_id": "6ae214908a16bbb72bc4ec88",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "它可比你高多了。",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0114.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0114.mp3",
+    "duration": 1.5875,
+    "peak": 19522,
+    "rms": 4113.24286069556,
+    "sha256": "e6614da9abd3d7aa257298bc647bc5a9cd9d1b179acb9a2cb86c1c3d8b4741ff",
+    "validated": true
+  },
+  {
+    "id": "V4_0115",
+    "task_id": "6ae21478839b362c457adb9f",
+    "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+    "args": {
+      "prompt": "等它长到窗户那儿，我就不用走楼梯了。",
+      "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0115.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0115.mp3",
+    "duration": 3.072,
+    "peak": 21490,
+    "rms": 3138.8246109675397,
+    "sha256": "8a7d494cd155d25178f1c89647167025d30ba0e0ae081c8a5c11c3117b1dac8d",
+    "validated": true
+  },
+  {
+    "id": "V4_0116",
+    "task_id": "6ae21490839b362c457adca2",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "楼梯好好的，你非要爬树。",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0116.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0116.mp3",
+    "duration": 2.575,
+    "peak": 20020,
+    "rms": 3329.2979994549537,
+    "sha256": "edd8b553ddd506e1261d76b3ca95d42c148fb6996ea8b53ad61977a3cb21ea23",
+    "validated": true
+  },
+  {
+    "id": "V4_0117",
+    "task_id": "6ae21478839b362c457adbbd",
+    "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+    "args": {
+      "prompt": "走楼梯多没意思。",
+      "voice_id": "volc:ICL_uranus_zh_female_huoponvhai_tob",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V4_0117.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v4_0117.mp3",
+    "duration": 2.04,
+    "peak": 17925,
+    "rms": 2635.152663518571,
+    "sha256": "06df4fba29fecc3f24a9abdc46dbf8b793a14cd9de15a9f50e640d5554fa1241",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_001",
+    "task_id": "6ae213c98a16bbb72bc4dcb7",
+    "voice_id": "minimax:Chinese (Mandarin)_Wise_Women",
+    "args": {
+      "prompt": "这不是那件校服吗？",
+      "voice_id": "minimax:Chinese (Mandarin)_Wise_Women",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_001.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_001.mp3",
+    "duration": 1.8375,
+    "peak": 16798,
+    "rms": 2392.3109410156953,
+    "sha256": "c8140efcf58ffd3cfb508f03e582b10e30c100ac425ee25b83c48d60c01d9375",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_003",
+    "task_id": "6ae214b4f20f39f1434b60e8",
+    "voice_id": "minimax:Chinese (Mandarin)_Wise_Women",
+    "args": {
+      "prompt": "晓晓……我外孙女，那时候才这么点儿大。",
+      "voice_id": "minimax:Chinese (Mandarin)_Wise_Women",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_003.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_003.mp3",
+    "duration": 4.225,
+    "peak": 14447,
+    "rms": 2384.67736196444,
+    "sha256": "6af4d89ab7b7fcfd399cc16aa577722865fb484627ca19b283ce1fde516c1123",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_004",
+    "task_id": "6ae214b451686a353f2b203c",
+    "voice_id": "minimax:Chinese (Mandarin)_Wise_Women",
+    "args": {
+      "prompt": "牵着她的……是我。我是她外婆啊。",
+      "voice_id": "minimax:Chinese (Mandarin)_Wise_Women",
+      "audio_format": "mp3"
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_004.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_004.mp3",
+    "duration": 3.925469,
+    "peak": 17121,
+    "rms": 2149.377031673022,
+    "sha256": "e330f7d87ed19f0b89586b5f454b8047c8af03c976fc5635a5ccfffe5315174d",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_005",
+    "task_id": "6ae214abf20f39f1434b607f",
+    "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+    "args": {
+      "prompt": "外婆？",
+      "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+      "audio_format": "mp3",
+      "speed": 0.95
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_005.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_005.mp3",
+    "duration": 1.125,
+    "peak": 16393,
+    "rms": 3609.5667365811832,
+    "sha256": "bc1b914a19bc797c76d4b061399872ba93de90099188b7df8f735a32bc114f2a",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_006",
+    "task_id": "6ae214b48a16bbb72bc4ee1d",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "晓晓？",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3",
+      "speed": 0.95,
+      "pitch": -2
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_006.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_006.mp3",
+    "duration": 1.0375,
+    "peak": 21096,
+    "rms": 3162.111058420171,
+    "sha256": "ac1d656bac766126837bbbc42e0435a0ea0a0497f9b1ea71d496631bd3f2415d",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_007",
+    "task_id": "6ae214ac839b362c457ae04c",
+    "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+    "args": {
+      "prompt": "嗯，是我。",
+      "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+      "audio_format": "mp3",
+      "speed": 0.95
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_007.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_007.mp3",
+    "duration": 1.275,
+    "peak": 20124,
+    "rms": 3337.920315943482,
+    "sha256": "45c4a2d8a5ebe8a823f67fc08a2a66401b042478a5c41ffdaae80a6e4ac83a2c",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_008",
+    "task_id": "6ae214b48a16bbb72bc4ee46",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "刚才还听见你小时候说话呢。",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3",
+      "speed": 0.95,
+      "pitch": -2
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_008.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_008.mp3",
+    "duration": 2.925,
+    "peak": 22415,
+    "rms": 4048.641615263835,
+    "sha256": "5ccaeafdf62797f5772f271fde69464f990f291be1f2040e73090eb2e328c563",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_009",
+    "task_id": "6ae214ac8a16bbb72bc4ed64",
+    "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+    "args": {
+      "prompt": "我们在医院呢。我在老房子找到了这盘磁带，就带来放给你听。",
+      "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+      "audio_format": "mp3",
+      "speed": 0.95
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_009.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_009.mp3",
+    "duration": 5.575,
+    "peak": 25181,
+    "rms": 4212.954114315436,
+    "sha256": "ad019dd03fa522bec1455cc25eb731445f3bc3bdbbd4bb690dfe08e85f7baf3c",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_010",
+    "task_id": "6ae214b4f20f39f1434b610b",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "我还想着，你那件校服是不是又小了。",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3",
+      "speed": 0.95,
+      "pitch": -2
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_010.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_010.mp3",
+    "duration": 3.775,
+    "peak": 28714,
+    "rms": 3858.81506796988,
+    "sha256": "bd4228e2f7909603bb2d7467aed8c5df49b84ed04ae36f58e379621cafa779ca",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_011",
+    "task_id": "6ae214ac839b362c457ae200",
+    "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+    "args": {
+      "prompt": "我都三十七啦。",
+      "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+      "audio_format": "mp3",
+      "speed": 0.95
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_011.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_011.mp3",
+    "duration": 1.4375,
+    "peak": 19817,
+    "rms": 3946.9880972601177,
+    "sha256": "516a0b6cb18806d486a8411831eeeebf727ea96a77fce625b9215df87e08e40f",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_012",
+    "task_id": "6ae214ac8a16bbb72bc4ed84",
+    "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+    "args": {
+      "prompt": "你最近总念叨老房子里的蓝盒子，可又想不起放在哪儿。",
+      "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+      "audio_format": "mp3",
+      "speed": 0.95
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_012.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_012.mp3",
+    "duration": 5.125,
+    "peak": 21863,
+    "rms": 4333.834762624402,
+    "sha256": "f7a71f82ef79acc3a093a3351a4394104401ccf4f744e57c7f678419690a1a9f",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_013",
+    "task_id": "6ae214b5f20f39f1434b6129",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "那块被面，是我给你做的，还没拿给你呢。",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3",
+      "speed": 0.95,
+      "pitch": -2
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_013.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_013.mp3",
+    "duration": 4.075,
+    "peak": 21481,
+    "rms": 3270.1386511359688,
+    "sha256": "405724703ac2aac729dfe3443590fb3edca067d4bf68ceaf9527dcaee4ec2bf3",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_014",
+    "task_id": "6ae214b551686a353f2b2066",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "本来想等你安顿下来再给。你那次回来，行李都装满了，我就又收起来了。后来……就给忘了。",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3",
+      "speed": 0.95,
+      "pitch": -2
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_014.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_014.mp3",
+    "duration": 9.7125,
+    "peak": 22797,
+    "rms": 3343.5277596739684,
+    "sha256": "30d669ff54e5623812debcfb964692cfe1f8b7f23198e980919227bc7051fc69",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_015",
+    "task_id": "6ae214ac839b362c457ae21e",
+    "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+    "args": {
+      "prompt": "那我这次拿走。你想起放哪儿了，就告诉我，我回老屋去拿。",
+      "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+      "audio_format": "mp3",
+      "speed": 0.95
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_015.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_015.mp3",
+    "duration": 4.9,
+    "peak": 22623,
+    "rms": 3531.7070189504793,
+    "sha256": "de22d23507b45b2aff88eafda528be26677247437d1465d90c800589dcc2679b",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_016",
+    "task_id": "6ae214b58a16bbb72bc4ee6c",
+    "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+    "args": {
+      "prompt": "在阁楼……朝院子那扇窗边。具体在哪儿……我再看看。",
+      "voice_id": "minimax:Chinese (Mandarin)_Kind-hearted_Antie",
+      "audio_format": "mp3",
+      "speed": 0.95,
+      "pitch": -2
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_016.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_016.mp3",
+    "duration": 5.525,
+    "peak": 25072,
+    "rms": 3865.644783042689,
+    "sha256": "508fafb2b4739490d949325cd50fff7bf4c741a70688b779794d36dcbcd616c3",
+    "validated": true
+  },
+  {
+    "id": "V5_L03_017",
+    "task_id": "6ae214ad8a16bbb72bc4eda2",
+    "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+    "args": {
+      "prompt": "不着急，你慢慢想。",
+      "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+      "audio_format": "mp3",
+      "speed": 0.95
+    },
+    "audio_file": "C:\\Users\\chris\\Documents\\Codex\\2026-10-17\\tu-a\\work\\voice-completion-v8\\audio\\V5_L03_017.mp3",
+    "audio_path": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_017.mp3",
+    "duration": 1.9875,
+    "peak": 25062,
+    "rms": 3437.0266954202502,
+    "sha256": "daf29715a4531f070826e2c7acb28b28989fa465e1165342b8cd480cbd5fd8ae",
+    "validated": true
+  }
+]

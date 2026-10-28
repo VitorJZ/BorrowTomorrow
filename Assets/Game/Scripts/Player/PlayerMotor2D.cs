@@ -28,8 +28,11 @@ namespace BorrowTomorrow.Player
         [Tooltip("梯子攀爬速度")]
         [SerializeField] private float climbSpeed = 3f;
 
-        [Tooltip("攀爬中允许的横向微调速度（便于爬出梯顶落到平台）")]
+        [Tooltip("攀爬时向梯子中心回正的最大速度；横向行走在梯顶退出后恢复")]
         [SerializeField] private float climbHorizontalSpeed = 1.2f;
+
+        [Tooltip("身体中心距梯子中心不超过此距离才能抓梯，防止在梯侧爬墙")]
+        [SerializeField, Min(.01f)] private float climbGrabDistance = .22f;
 
         [Header("容错（策划 6.2）")]
         [Tooltip("离地后仍可起跳的宽容时间（秒）")]
@@ -66,7 +69,8 @@ namespace BorrowTomorrow.Player
         private float coyoteTimer;
         private float jumpBufferTimer;
         private float footstepTimer;
-        private int ladderZoneCount;
+        private Collider2D activeLadder;
+        private bool ladderNeedsRelease;
         private bool wasGrounded;
         private float cachedGravityScale;
         private float jumpPreparationTimer;
@@ -169,6 +173,9 @@ namespace BorrowTomorrow.Player
             bool controlAllowed = IsControlAllowed;
             float move = controlAllowed ? input.MoveAxis : 0f;
             float climb = controlAllowed ? input.ClimbAxis : 0f;
+            // Leaving a ladder consumes the current vertical gesture. Held W+D
+            // must not re-enter climbing on the next physics step at a landing.
+            if (Mathf.Abs(input.ClimbAxis) < .1f) ladderNeedsRelease = false;
 
             DetectGround();
 
@@ -211,9 +218,12 @@ namespace BorrowTomorrow.Player
             }
 
             // 进入攀爬：在梯子区内按上下键（策划 11.3：梯子用 Trigger 与攀爬状态控制）。
-            if (controlAllowed && Mathf.Abs(climb) > 0.1f && !(IsGrounded && climb < 0f)
-                && IsInsideLadderZone())
+            Collider2D ladder = null;
+            if (controlAllowed && !ladderNeedsRelease && Mathf.Abs(climb) > .1f && !(IsGrounded && climb < 0f))
+                ladder = FindLadderZone(requireAligned: true);
+            if (ladder != null && (climb < 0 || Feet.y < LadderTop(ladder) - .08f) && TryAlignToLadder(ladder))
             {
+                activeLadder = ladder;
                 IsClimbingLadder = true;
                 jumpPreparationTimer = 0f;
                 body.gravityScale = 0f;
@@ -253,32 +263,67 @@ namespace BorrowTomorrow.Player
 
         private void UpdateClimbing(bool controlAllowed, float climb, float move)
         {
-            // At a landing, horizontal movement must release the ladder so that
-            // the player can stand on the permanent platform and adjust time.
-            if (controlAllowed && Mathf.Abs(move) > 0.1f && FindSupport() != null)
+            if (controlAllowed && jumpBufferTimer > 0f)
             {
-                ExitLadder(false);
-                body.velocity = new Vector2(move * moveSpeed, 0f);
-                DetectGround();
+                ExitLadder(true);
                 return;
             }
-            // 攀爬中暂停重力（策划 11.3）；横向允许微调，方便爬出梯顶落到相邻平台。
+            if (activeLadder == null || !activeLadder.enabled || !activeLadder.gameObject.activeInHierarchy
+                || FindLadderZone() == null)
+            {
+                ExitLadder(false);
+                return;
+            }
+            float landingY = LadderTop(activeLadder);
+            // Stop the FEET at the platform, rather than letting the whole
+            // capsule travel out of the trigger above it.
+            if (controlAllowed && climb > .1f && Feet.y + climb * climbSpeed * Time.fixedDeltaTime >= landingY)
+            {
+                FinishLadderAtTop(landingY, move);
+                return;
+            }
+            // At a landing, horizontal movement must release the ladder so that
+            // the player can stand on the permanent platform and adjust time.
+            if (controlAllowed && Mathf.Abs(move) > .1f && Feet.y >= landingY - .12f && FindSupport() != null)
+            {
+                FinishLadderAtTop(landingY, move);
+                return;
+            }
+            // Stay on the rungs. A/D cannot slide the climbing pose onto the wall;
+            // horizontal walking resumes at the top, or after jumping off.
             body.gravityScale = 0f;
             float vertical = controlAllowed ? climb * climbSpeed : 0f;
-            float horizontal = controlAllowed ? move * climbHorizontalSpeed : 0f;
+            float centerDelta = activeLadder.bounds.center.x - capsule.bounds.center.x;
+            float horizontal = controlAllowed ? Mathf.Clamp(centerDelta / Time.fixedDeltaTime,
+                -climbHorizontalSpeed, climbHorizontalSpeed) : 0f;
             body.velocity = new Vector2(horizontal, vertical);
 
             // 跳离梯子或脱离梯区后恢复正常重力。
-            bool jumpOff = controlAllowed && jumpBufferTimer > 0f;
-            if (jumpOff || !IsInsideLadderZone())
+            if (controlAllowed && climb < -.1f && FindSupport() != null)
             {
-                ExitLadder(jumpOff);
+                body.velocity = new Vector2(horizontal, 0f);
+                ExitLadder(false);
+                DetectGround();
             }
+        }
+
+        private void FinishLadderAtTop(float landingY, float move)
+        {
+            float correction = landingY + .005f - Feet.y;
+            if (Mathf.Abs(correction) <= Mathf.Max(.14f, climbSpeed * Time.fixedDeltaTime + .08f))
+                body.position += Vector2.up * correction;
+            body.velocity = new Vector2(move * moveSpeed, 0f);
+            ExitLadder(false);
+            Physics2D.SyncTransforms();
+            DetectGround();
+            if (IsGrounded) body.gravityScale = 0f;
         }
 
         private void ExitLadder(bool withJump)
         {
             IsClimbingLadder = false;
+            activeLadder = null;
+            ladderNeedsRelease = true;
             body.gravityScale = cachedGravityScale;
             if (withJump)
             {
@@ -362,7 +407,38 @@ namespace BorrowTomorrow.Player
             return support!=null;
         }
 
-        private bool IsInsideLadderZone()
+        private static float LadderTop(Collider2D zone)
+        {
+            return zone.GetComponentInParent<LadderZone>().TopLandingY(zone);
+        }
+
+        private bool TryAlignToLadder(Collider2D ladder)
+        {
+            float delta = ladder.bounds.center.x - capsule.bounds.center.x;
+            float distance = Mathf.Abs(delta);
+            if (distance > climbGrabDistance) return false;
+            if (distance > .001f)
+            {
+                Vector2 direction = new Vector2(Mathf.Sign(delta), 0f);
+                var filter = new ContactFilter2D { useTriggers = false, useLayerMask = true, layerMask = groundMask };
+                int count = capsule.Cast(direction, filter, groundCasts, distance);
+                for (int i=0; i<count; i++)
+                {
+                    var hit = groundCasts[i];
+                    // One-way decks allow lateral passage from below; their
+                    // overlap-cast normals must not prevent grabbing a ladder.
+                    if (hit.collider != null && hit.collider.usedByEffector) continue;
+                    if (hit.collider != null && hit.collider.attachedRigidbody != body
+                        && Vector2.Dot(hit.normal, direction) < -.5f && hit.distance < distance - .001f)
+                        return false;
+                }
+                body.position += Vector2.right * delta;
+                Physics2D.SyncTransforms();
+            }
+            return true;
+        }
+
+        private Collider2D FindLadderZone(bool requireAligned = false)
         {
             Bounds bounds = capsule.bounds;
             var filter = new ContactFilter2D { useTriggers = true, useLayerMask = false };
@@ -370,9 +446,11 @@ namespace BorrowTomorrow.Player
             for (int i = 0; i < count; i++)
             {
                 Collider2D hit = ladderHits[i];
-                if (hit != null && hit.isTrigger && hit.GetComponentInParent<LadderZone>() != null) return true;
+                if (hit == null || !hit.isTrigger || hit.GetComponentInParent<LadderZone>() == null) continue;
+                if (requireAligned && Mathf.Abs(bounds.center.x - hit.bounds.center.x) > climbGrabDistance) continue;
+                return hit;
             }
-            return false;
+            return null;
         }
 
         private void UpdateFootsteps(bool controlAllowed)
@@ -399,26 +477,6 @@ namespace BorrowTomorrow.Player
             if (ServiceRegistry.TryGet<IAudioService>(out var audio))
             {
                 audio.PlaySfx(sfxId);
-            }
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.GetComponentInParent<LadderZone>() != null)
-            {
-                ladderZoneCount++;
-            }
-        }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            if (other.GetComponentInParent<LadderZone>() != null)
-            {
-                ladderZoneCount = Mathf.Max(0, ladderZoneCount - 1);
-                if (IsClimbingLadder && ladderZoneCount <= 0)
-                {
-                    ExitLadder(false);
-                }
             }
         }
 
@@ -449,7 +507,8 @@ namespace BorrowTomorrow.Player
             jumpPreparationTimer = 0f;
             coyoteTimer = 0f;
             footstepTimer = 0f;
-            ladderZoneCount = 0;
+            activeLadder = null;
+            ladderNeedsRelease = false;
             IsGrounded = false;
             GroundCollider = null;
             Physics2D.SyncTransforms();

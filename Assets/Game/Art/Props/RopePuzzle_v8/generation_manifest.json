@@ -1,0 +1,45 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "file": "PROP_BranchFork_Worn_2024.png",
+      "source": "exec-d44986cd-13db-4ad8-9219-b61e2b653be1.png",
+      "reference": "RopePuzzle_v7/PROP_BranchFork_Bare_2024.png",
+      "instruction": "Preserve fork geometry and alpha; add pale rope wear groove and two short frayed ends of old rope at the saddle."
+    },
+    {
+      "file": "PROP_Sapling_RopeTied_1994.png",
+      "source": "exec-130f4217-66bf-42d0-9d37-76b4850933aa.png",
+      "reference": "SampleV1/Tree/L01B_Sapling_v2.png",
+      "instruction": "Wrap a thick braided rope three times around the bare lower trunk above the fence; add a front-right knot, hanging frayed tail and left rope lead, preserving the full original tree and transparent framing."
+    },
+    {
+      "file": "PROP_Sapling_RopeFree_1994.png",
+      "source": "exec-cd5aae4d-5353-4c0b-ae33-4dfed0e4ec60.png",
+      "reference": "PROP_Sapling_RopeTied_1994.png",
+      "instruction": "Remove the rope only and restore bark/fence; retain tree, framing and transparent background for the untied state."
+    }
+  ],
+  "tree_registration": {
+    "ppu": 100,
+    "scale": [
+      0.23,
+      0.23,
+      1
+    ],
+    "world_position": [
+      54.4,
+      0,
+      0
+    ],
+    "tied_pivot": [
+      0.54,
+      0.03
+    ],
+    "free_pivot": [
+      0.565,
+      0.005
+    ]
+  },
+  "camera": "Original fixed framing restored. No per-room follow mode."
+}
