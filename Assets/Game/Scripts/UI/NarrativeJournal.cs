@@ -22,7 +22,11 @@ namespace BorrowTomorrow.UI
             var go=new GameObject("JournalCanvas",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler),typeof(GraphicRaycaster));UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(go,gameObject.scene);
             canvas=go.GetComponent<Canvas>();canvas.renderMode=RenderMode.ScreenSpaceOverlay;canvas.sortingOrder=60;
             var scaler=go.GetComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(1920,1080);scaler.screenMatchMode=CanvasScaler.ScreenMatchMode.Expand;
-            hint=Label(go.transform,"J 查看已读对白",new Vector2(700,-495),new Vector2(400,40),22);
+            hint=Label(go.transform,"J  查看已读对白",Vector2.zero,new Vector2(300,36),20);
+            // Bottom-right corner on every aspect ratio, clear of the dialogue buttons.
+            var hr=hint.rectTransform;hr.anchorMin=hr.anchorMax=hr.pivot=new Vector2(1,0);hr.anchoredPosition=new Vector2(-36,22);
+            hint.alignment=TextAnchor.MiddleRight;hint.color=new Color(.95f,.9f,.8f,.7f);
+            var shadow=hint.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(0,0,0,.6f);shadow.effectDistance=new Vector2(1.5f,-1.5f);
             panel=new GameObject("Records",typeof(RectTransform));panel.transform.SetParent(go.transform,false);var rt=panel.GetComponent<RectTransform>();rt.anchorMin=Vector2.zero;rt.anchorMax=Vector2.one;rt.offsetMin=rt.offsetMax=Vector2.zero;
             var bg=panel.AddComponent<Image>();bg.color=new Color(.06f,.055f,.045f,.98f);
             if(journalSkin!=null){bg.sprite=journalSkin;bg.color=Color.white;}
@@ -39,7 +43,8 @@ namespace BorrowTomorrow.UI
         {
             var session=GameSession.Instance;if(session==null||canvas==null)return;
             canvas.enabled=!session.State.IsPaused;
-            hint.enabled=session.State.Phase==GamePhase.Playing && session.State.SubState==PlayingSubState.Free;
+            hint.enabled=session.State.Phase==GamePhase.Playing && session.State.SubState==PlayingSubState.Free
+                && !(ServiceRegistry.TryGet<IDialogueService>(out var playing) && playing.IsPlaying);
             if(session.State.Phase!=GamePhase.Playing) { opened=false;panel.SetActive(false);return; }
             if(Input.GetKeyDown(KeyCode.J) && !session.State.IsPaused)
             {

@@ -245,25 +245,11 @@ namespace BorrowTomorrow.EditorTools
         {
             foreach(var presenter in All<NarrativePresentation>(scene))
             {
-                presenter.subtitleSkin=S("UI_SubtitleBar");presenter.buttonSkin=S("UI_SubtitleBar");presenter.creditsBackground=AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Game/Art/UI/UI_CreditsBackground.jpg");
+                presenter.creditsBackground=AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Game/Art/UI/UI_CreditsBackground.jpg");
             }
             foreach(var journal in All<NarrativeJournal>(scene))journal.journalSkin=S("UI_TabRecordsPanel");
             SkinPause(scene);
-            foreach(var panel in All<ObjectivePanel>(scene))
-            {
-                var root=panel.transform.Find("Root");if(root!=null){PanelImage(root,"ArtPaper",S("UI_ObjectiveCard"),Color.white);PanelImage(root,"ArtShade",null,new Color(.08f,.06f,.04f,.78f));}
-                foreach(var text in panel.GetComponentsInChildren<Text>(true))text.color=new Color(1,.94f,.8f);
-            }
-            foreach(var handle in All<BoundaryHandle>(scene))
-            {
-                var image=handle.GetComponent<Image>();if(image!=null){image.sprite=S("UI_BoundaryHandle");image.color=Color.white;image.preserveAspect=true;}
-                foreach(var label in handle.GetComponentsInChildren<Text>(true)){label.text="拖动";label.color=new Color(.2f,.12f,.06f);}
-            }
-            foreach(var prompt in All<InteractionPrompt>(scene))
-            {
-                var root=prompt.transform.Find("Root");if(root!=null){PanelImage(root,"ArtPaper",S("UI_SubtitleBar"),Color.white);}
-                foreach(var text in prompt.GetComponentsInChildren<Text>(true))text.color=Color.white;
-            }
+            SkinDialogue(scene);
         }
         private static RectTransform UiRect(Transform parent,string name,Vector2 pos,Vector2 size)
         {
@@ -282,6 +268,25 @@ namespace BorrowTomorrow.EditorTools
                 importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;importer.mipmapEnabled=false;importer.alphaIsTransparency=true;importer.SaveAndReimport();
             }
             return AssetDatabase.LoadAssetAtPath<Sprite>(path);
+        }
+        // Dialogue art: wood plank (9-sliced, ends kept intact), paper name tag and ticket-style buttons.
+        private static Sprite DialogPlank(string file="UI_DialogPlank")
+        {
+            string path="Assets/Game/Art/UI/"+file+".png";var sprite=UiSprite(file);var importer=(TextureImporter)AssetImporter.GetAtPath(path);
+            var border=new Vector4(120,0,120,0);
+            if(importer.spriteBorder!=border){importer.spriteBorder=border;importer.SaveAndReimport();sprite=AssetDatabase.LoadAssetAtPath<Sprite>(path);}
+            return sprite;
+        }
+        private static void DialogSkins(NarrativePresentation presenter)
+        {
+            presenter.subtitleSkin=DialogPlank();presenter.buttonSkin=UiSprite("UI_DialogButton");presenter.nameTagSkin=UiSprite("UI_DialogNameTag");
+        }
+        // Single-line panels use the seamless one-board variant so the seam never cuts through text.
+        private static void PlankPanel(Transform root,string name)
+        {
+            var sprite=DialogPlank("UI_DialogPlankSingle");var image=PanelImage(root,name,sprite,Color.white);image.type=Image.Type.Sliced;
+            float height=((RectTransform)root).rect.height;if(height<1)height=((RectTransform)root.parent).rect.height;
+            image.pixelsPerUnitMultiplier=sprite.rect.height*(100f/sprite.pixelsPerUnit)/Mathf.Max(1,height);
         }
         private static RectTransform UiStretch(Transform parent,string name,Vector2 min,Vector2 max)
         {
@@ -303,6 +308,44 @@ namespace BorrowTomorrow.EditorTools
             slider.handleRect=handle.rectTransform;slider.targetGraphic=handle;
             var colors=slider.colors;colors.normalColor=Color.white;colors.highlightedColor=new Color(1,.96f,.88f);colors.pressedColor=new Color(.85f,.78f,.68f);colors.selectedColor=Color.white;slider.colors=colors;
             UiText(parent,label,new Vector2(-205,y),new Vector2(100,36),font,24).color=Ink;return slider;
+        }
+        // Top strip: a ticket-style handle with era captions underneath, both legible on sky and on dark rooms.
+        private static void SkinTopBar(Scene scene)
+        {
+            foreach(var handle in All<BoundaryHandle>(scene))
+            {
+                var image=handle.GetComponent<Image>();
+                if(image!=null){image.sprite=UiSprite("UI_DialogButton");image.color=Color.white;image.type=Image.Type.Simple;image.preserveAspect=true;}
+                foreach(var label in handle.GetComponentsInChildren<Text>(true)){label.text="拖动";label.color=Ink;Halos(label);}
+            }
+            foreach(var name in new[]{"EraLabelPast","EraLabelPresent"})
+            {
+                var label=scene.GetRootGameObjects().SelectMany(x=>x.GetComponentsInChildren<RectTransform>(true)).FirstOrDefault(x=>x.name==name);
+                if(label==null)continue;
+                // Corner captions on the top edge; BoundaryHandle fades them out as the handle reaches them.
+                var p=label.anchoredPosition;p.y=-24f;label.anchoredPosition=p;
+                foreach(var text in label.GetComponents<Text>()){text.color=Ink;text.alignment=TextAnchor.MiddleCenter;var halo=text.GetComponent<Shadow>();if(halo!=null)UnityEngine.Object.DestroyImmediate(halo);}
+                // A small ticket plate keeps the caption readable on pale skies and dark rooms alike.
+                string plateName=label.name+"Plate";
+                var plate=label.parent.Find(plateName) as RectTransform;
+                if(plate==null)
+                {
+                    var go=new GameObject(plateName,typeof(RectTransform),typeof(Image));plate=(RectTransform)go.transform;
+                    plate.SetParent(label.parent,false);plate.SetSiblingIndex(label.GetSiblingIndex());
+                }
+                plate.anchorMin=label.anchorMin;plate.anchorMax=label.anchorMax;plate.pivot=label.pivot;
+                Vector2 plateSize=new Vector2(label.sizeDelta.x+34,label.sizeDelta.y+12);
+                plate.sizeDelta=plateSize;
+                // Same pivot, larger rect: offset so the caption stays centred on the plate.
+                plate.anchoredPosition=label.anchoredPosition+Vector2.Scale(new Vector2(.5f,.5f)-label.pivot,label.sizeDelta-plateSize);
+                var image=plate.GetComponent<Image>();image.sprite=UiSprite("UI_DialogButton");image.color=new Color(1,1,1,.92f);image.raycastTarget=false;
+                EditorUtility.SetDirty(plate);EditorUtility.SetDirty(label);
+            }
+        }
+        private static void Halos(Text text)
+        {
+            var halo=text.GetComponent<Shadow>()??text.gameObject.AddComponent<Shadow>();
+            halo.effectColor=new Color(1f,.98f,.92f,.55f);halo.effectDistance=new Vector2(1.5f,-1.5f);
         }
         private static void SkinPause(Scene scene)
         {
@@ -345,24 +388,11 @@ namespace BorrowTomorrow.EditorTools
                 LevelLayouts.SetObject(pause,"subtitlesToggle",toggle);
                 var hint=UiText(root,"Esc  继续游戏",new Vector2(0,-336+o),new Vector2(300,30),font,18);hint.color=new Color(Ink.r,Ink.g,Ink.b,.55f);
             }
-            foreach(var confirm in All<ResumeConfirmDialog>(scene))
-            {
-                var root=confirm.transform.Find("Root");if(root!=null){PanelImage(root,"ArtConfirm",S("UI_SubtitleBar"),Color.white);foreach(var text in root.GetComponentsInChildren<Text>(true))text.color=Color.white;}
-            }
         }
         private static void SkinMenu(Scene scene)
         {
-            var menu=All<MainMenuUi>(scene).First();var canvas=menu.GetComponent<Canvas>();
-            PanelImage(canvas.transform,"ArtMainMenu",S("UI_TitleScreen"),Color.white);
-            foreach(var text in menu.GetComponentsInChildren<Text>(true))text.enabled=false;
-            var so=new SerializedObject(menu);
-            foreach(var item in new[]{("newGameButton",-70f),("continueButton",-225f),("quitButton",-383f)})
-            {
-                var button=so.FindProperty(item.Item1).objectReferenceValue as Button;if(button==null)continue;
-                var rt=button.GetComponent<RectTransform>();rt.anchorMin=rt.anchorMax=new Vector2(.5f,.5f);rt.anchoredPosition=new Vector2(0,item.Item2);rt.sizeDelta=new Vector2(430,116);
-                var image=button.GetComponent<Image>();image.sprite=null;image.color=Color.white;
-                var colors=button.colors;colors.normalColor=Color.clear;colors.highlightedColor=new Color(1,1,1,.12f);colors.pressedColor=new Color(.25f,.15f,.05f,.25f);colors.disabledColor=new Color(0,0,0,.45f);button.colors=colors;button.targetGraphic.canvasRenderer.SetColor(Color.clear);
-            }
+            // 主菜单已改为真正的木牌按钮；复用独立安装器，避免此处再次铺一张“按钮底图”。
+            MainMenuUiInstaller.Apply(scene,S("UI_TitleScreen"));
         }
         [MenuItem("BorrowTomorrow/本地接入生成美术（保留碰撞与剧情）")]
         public static void Install()
@@ -384,6 +414,38 @@ namespace BorrowTomorrow.EditorTools
         public static void RebuildPauseMenu()
         {
             Import();var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");SkinPause(scene);EditorSceneManager.SaveScene(scene);
+        }
+        [MenuItem("BorrowTomorrow/仅重建 HUD 与对白皮肤")]
+        public static void RebuildHud()
+        {
+            // Only reskins dialogue-related panels; no Import(), no pause-menu rebuild.
+            var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");SkinDialogue(scene);EditorSceneManager.SaveScene(scene);
+        }
+        private static void SkinDialogue(Scene scene)
+        {
+            SkinTopBar(scene);
+            foreach(var presenter in All<NarrativePresentation>(scene)){DialogSkins(presenter);EditorUtility.SetDirty(presenter);}
+            foreach(var prompt in All<InteractionPrompt>(scene))
+            {
+                var root=prompt.transform.Find("Root");if(root!=null)PlankPanel(root,"ArtPaper");
+                foreach(var text in prompt.GetComponentsInChildren<Text>(true))text.color=new Color(.98f,.94f,.86f);
+            }
+            foreach(var confirm in All<ResumeConfirmDialog>(scene))
+            {
+                var root=confirm.transform.Find("Root");if(root!=null){PlankPanel(root,"ArtConfirm");foreach(var text in root.GetComponentsInChildren<Text>(true))text.color=new Color(.98f,.94f,.86f);}
+            }
+            foreach(var panel in All<ObjectivePanel>(scene))
+            {
+                // The square paper card distorted into a smear at 640x90; use the strip plank instead.
+                var root=panel.transform.Find("Root");if(root==null)continue;
+                var shade=root.Find("ArtShade");if(shade!=null)UnityEngine.Object.DestroyImmediate(shade.gameObject);
+                PlankPanel(root,"ArtPaper");
+                foreach(var text in panel.GetComponentsInChildren<Text>(true))
+                {
+                    text.color=new Color(.98f,.94f,.86f);text.rectTransform.sizeDelta=new Vector2(((RectTransform)root).rect.width-90,text.rectTransform.sizeDelta.y);
+                    var shadow=text.GetComponent<Shadow>()??text.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(.08f,.04f,.01f,.8f);shadow.effectDistance=new Vector2(1.5f,-1.5f);
+                }
+            }
         }
         private static void ExportPreviews()
         {
@@ -436,7 +498,7 @@ namespace BorrowTomorrow.EditorTools
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
             camera=new GameObject("PreviewCamera").AddComponent<Camera>();camera.transform.position=new Vector3(0,0,-10);camera.orthographic=true;camera.orthographicSize=5;
             var root=new GameObject("NarrativeArtPreview");var presenter=root.AddComponent<NarrativePresentation>();
-            presenter.font=AssetDatabase.LoadAssetAtPath<Font>("Assets/Game/Art/UI/Fonts/PlaceholderChinese.ttf");presenter.subtitleSkin=S("UI_SubtitleBar");presenter.buttonSkin=S("UI_SubtitleBar");
+            presenter.font=AssetDatabase.LoadAssetAtPath<Font>("Assets/Game/Art/UI/Fonts/PlaceholderChinese.ttf");DialogSkins(presenter);
             typeof(NarrativePresentation).GetMethod("Awake",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).Invoke(presenter,null);
             var entry=AssetDatabase.LoadAssetAtPath<DialogueEntry>("Assets/Game/Data/Dialogue/StoryV13/DLG_L02_UNIFORM_01.asset");
             presenter.Present(entry,entry.subtitle,true,1,1);CaptureUi(camera,Path.Combine(output,"Dialogue.png"));
