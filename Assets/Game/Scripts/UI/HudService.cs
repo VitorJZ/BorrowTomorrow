@@ -46,7 +46,8 @@ namespace BorrowTomorrow.UI
                 if (child.GetComponent<SubtitlePanel>() != null || child.GetComponent<ObjectivePanel>() != null
                     || child.GetComponent<InteractionPrompt>() != null || child.GetComponent<BoundaryHandle>() != null
                     || child.GetComponent<EraBadge>() != null
-                    || child.name == "EraLabelPast" || child.name == "EraLabelPresent" || child.name == "BlockedToast")
+                    || child.name == "EraLabelPast" || child.name == "EraLabelPresent" || child.name == "BlockedToast"
+                    || child.name == "EraLabelPastPlate" || child.name == "EraLabelPresentPlate")
                     child.SetParent(rect, false);
             }
             SetGameplayVisible(false);

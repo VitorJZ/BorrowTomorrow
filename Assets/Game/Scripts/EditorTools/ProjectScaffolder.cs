@@ -431,7 +431,7 @@ namespace BorrowTomorrow.EditorTools
             LevelLayouts.SetObject(objectivePanel, "root", objectiveRoot);
             LevelLayouts.SetObject(objectivePanel, "objectiveText", objectiveText);
 
-            Anchor((RectTransform)objective.transform, Vector2.up, Vector2.up, new Vector2(32f, -96f));
+            Anchor((RectTransform)objective.transform, Vector2.up, Vector2.up, new Vector2(32f, -104f));
 
             // 顶部年代把手（命中区 ≥44px，策划 5.3）：灰条背景 + 提示文字，让“可拖动”可被发现。
             var handle = CreateChild<UI.BoundaryHandle>(uiRoot.transform, "BoundaryHandle");
@@ -446,6 +446,7 @@ namespace BorrowTomorrow.EditorTools
                 new Vector2(-700f, 480f), new Vector2(120f, 40f));
             Text eraLabelFuture = MakeText(uiRoot.transform, "EraLabelPresent", "▸ 2024", font, 24, TextAnchor.MiddleRight,
                 new Vector2(700f, 480f), new Vector2(120f, 40f));
+            // Corner captions on the top edge; the handle fades them out when it reaches them.
             Anchor(eraLabelPast.rectTransform, Vector2.up, Vector2.up, new Vector2(32f, -24f));
             Anchor(eraLabelFuture.rectTransform, Vector2.one, Vector2.one, new Vector2(-32f, -24f));
             eraLabelPast.rectTransform.sizeDelta = eraLabelFuture.rectTransform.sizeDelta = new Vector2(140f, 44f);
