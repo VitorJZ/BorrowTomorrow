@@ -15,20 +15,25 @@ namespace BorrowTomorrow.UI
         [SerializeField] private Button newGameButton;
         [SerializeField] private Button quitButton;
         [SerializeField] private GameObject corruptedWarning;
+        [SerializeField] private AudioClip clickClip;
+        [SerializeField, Range(0f, 1f)] private float clickVolume = 0.45f;
 
         private void Start()
         {
             if (continueButton != null)
             {
                 continueButton.interactable = ServiceRegistry.TryGet<ISaveService>(out var save) && save.HasProgressSave();
+                continueButton.onClick.AddListener(PlayClick);
                 continueButton.onClick.AddListener(OnContinue);
             }
             if (newGameButton != null)
             {
+                newGameButton.onClick.AddListener(PlayClick);
                 newGameButton.onClick.AddListener(OnNewGame);
             }
             if (quitButton != null)
             {
+                quitButton.onClick.AddListener(PlayClick);
                 quitButton.onClick.AddListener(QuitGame);
             }
             if (corruptedWarning != null)
@@ -63,10 +68,12 @@ namespace BorrowTomorrow.UI
             {
                 corruptedWarning = new GameObject("CorruptedSaveWarning", typeof(RectTransform), typeof(Text));
                 var rect = (RectTransform)corruptedWarning.transform;
-                rect.SetParent(transform, false);
+                // 跟随 16:9 舞台缩放，位置在三个按钮下方，不遮挡按钮。
+                Transform stage = transform.Find("MenuStage");
+                rect.SetParent(stage != null ? stage : transform, false);
                 rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
-                rect.anchoredPosition = new Vector2(0f, -200f);
-                rect.sizeDelta = new Vector2(900f, 80f);
+                rect.anchoredPosition = new Vector2(0f, -500f);
+                rect.sizeDelta = new Vector2(900f, 70f);
                 var text = corruptedWarning.GetComponent<Text>();
                 var label = newGameButton != null ? newGameButton.GetComponentInChildren<Text>() : null;
                 text.font = label != null ? label.font : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
@@ -83,6 +90,28 @@ namespace BorrowTomorrow.UI
         public void OnNewGame()
         {
             GameSession.Instance?.StartNewGame();
+        }
+
+        /// <summary>
+        /// 主菜单按钮的木质点击声。挂在常驻对象上，
+        /// 这样切场景/退出时点击声不会被随场景销毁的 AudioSource 截断。
+        /// </summary>
+        private void PlayClick()
+        {
+            if (clickClip == null)
+            {
+                return;
+            }
+            var player = new GameObject("MainMenuClick");
+            player.hideFlags = HideFlags.DontSave;
+            DontDestroyOnLoad(player);
+            var source = player.AddComponent<AudioSource>();
+            source.playOnAwake = false;
+            source.spatialBlend = 0f;
+            source.clip = clickClip;
+            source.volume = clickVolume;
+            source.Play();
+            Destroy(player, clickClip.length + 0.15f);
         }
 
         /// <summary>退出游戏（公开方法：供主菜单按钮 onClick 绑定）。</summary>

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BorrowTomorrow.Core;
 using BorrowTomorrow.Core.Interfaces;
 using BorrowTomorrow.TimeBoundary;
@@ -12,6 +13,8 @@ namespace BorrowTomorrow.UI
     /// 屏幕顶部把手，至少 44 像素舒适命中区；
     /// 鼠标位置先转换到当前房间世界坐标，再交给边界系统约束；
     /// 拖动期间镜头保持不动；禁止点背景任何位置瞬移边界，防止误触。
+    /// 把手中心始终贴着已提交边界线，靠近角落年代角标时让角标淡出，
+    /// 不再把把手硬停在“1994 / 2024”告示牌外侧。
     /// Q/R 键盘调整时把手视觉同步到已提交边界。
     /// </summary>
     [RequireComponent(typeof(RectTransform))]
@@ -20,6 +23,8 @@ namespace BorrowTomorrow.UI
     {
         [Tooltip("世界 X 与屏幕 X 的换算：使用的正交相机（空则用主相机）")]
         [SerializeField] private Camera worldCamera;
+        [Tooltip("把手压到年代角标时，角标淡出的过渡距离（UI 像素）；值越大越提前让位")]
+        [SerializeField] private float eraLabelFadeDistance = 56f;
 
         private IBoundaryContext boundary;
         private bool subscribed;
@@ -29,6 +34,12 @@ namespace BorrowTomorrow.UI
         private CanvasGroup presentation;
         private bool visible;
 
+        private readonly List<CanvasGroup> eraPastGroups = new List<CanvasGroup>(2);
+        private readonly List<CanvasGroup> eraPresentGroups = new List<CanvasGroup>(2);
+        private RectTransform eraPastLabel;
+        private RectTransform eraPresentLabel;
+        private bool eraLabelsResolved;
+
         public void SetPresentationVisible(bool value)
         {
             visible = value;
@@ -37,6 +48,11 @@ namespace BorrowTomorrow.UI
             presentation.blocksRaycasts = value;
             presentation.interactable = value;
             if (guide != null) guide.gameObject.SetActive(value);
+            if (!value)
+            {
+                SetEraAlpha(eraPastGroups, 1f);
+                SetEraAlpha(eraPresentGroups, 1f);
+            }
             if (!value && dragging) OnEndDrag(null);
         }
 
@@ -146,7 +162,7 @@ namespace BorrowTomorrow.UI
             {
                 worldCamera = Camera.main;
             }
-            if (worldCamera == null)
+            if (worldCamera == null || boundary == null)
             {
                 return;
             }
@@ -165,6 +181,8 @@ namespace BorrowTomorrow.UI
                     float anchorX = Mathf.Lerp(parent.rect.xMin, parent.rect.xMax,
                         (handle.anchorMin.x + handle.anchorMax.x) * 0.5f);
                     float half = handle.rect.width * 0.5f;
+                    // 把手中心就是边界线本身：只保证整块把手留在屏幕内，
+                    // 不再为了避让年代角标把它硬停在角落。
                     float handleX = Mathf.Clamp(local.x, parent.rect.xMin + half, parent.rect.xMax - half);
                     handle.anchoredPosition = new Vector2(handleX - anchorX, handle.anchoredPosition.y);
                     if (guide == null)
@@ -181,7 +199,70 @@ namespace BorrowTomorrow.UI
                     guide.gameObject.SetActive(visible);
                     guide.sizeDelta = new Vector2(2f, parent.rect.height * 0.84f);
                     guide.anchoredPosition = new Vector2(local.x, 0f);
+
+                    SyncEraLabels(parent, handleX, half);
                 }
+            }
+        }
+
+        /// <summary>把手扫到角落时让“1994 / 2024”告示牌平滑淡出，避免遮挡与硬停。</summary>
+        private void SyncEraLabels(RectTransform parent, float handleX, float half)
+        {
+            if (!eraLabelsResolved) ResolveEraLabels(parent);
+            if (!visible)
+            {
+                SetEraAlpha(eraPastGroups, 1f);
+                SetEraAlpha(eraPresentGroups, 1f);
+                return;
+            }
+            SetEraAlpha(eraPastGroups, EraLabelAlpha(eraPastLabel, parent, handleX, half));
+            SetEraAlpha(eraPresentGroups, EraLabelAlpha(eraPresentLabel, parent, handleX, half));
+        }
+
+        private float EraLabelAlpha(RectTransform label, RectTransform parent, float handleX, float half)
+        {
+            if (label == null) return 1f;
+            Vector3 localCenter = parent.InverseTransformPoint(label.TransformPoint(label.rect.center));
+            float distance = Mathf.Abs(handleX - localCenter.x);
+            float contact = half + label.rect.width * 0.5f;
+            return Mathf.Clamp01((distance - contact) / Mathf.Max(1f, eraLabelFadeDistance));
+        }
+
+        private void ResolveEraLabels(RectTransform parent)
+        {
+            eraPastLabel = parent.Find("EraLabelPast") as RectTransform;
+            eraPresentLabel = parent.Find("EraLabelPresent") as RectTransform;
+            if (eraPastLabel == null || eraPresentLabel == null) return;
+            eraLabelsResolved = true;
+            CollectEraGroups(eraPastLabel, "EraLabelPastPlate", eraPastGroups);
+            CollectEraGroups(eraPresentLabel, "EraLabelPresentPlate", eraPresentGroups);
+            // 把手压在告示牌之上，淡出过渡期间不会被半透明的牌子盖住。
+            transform.SetAsLastSibling();
+        }
+
+        private static void CollectEraGroups(RectTransform label, string plateName, List<CanvasGroup> groups)
+        {
+            groups.Clear();
+            AddGroup(label, groups);
+            Transform parent = label != null ? label.parent : null;
+            if (parent != null) AddGroup(parent.Find(plateName) as RectTransform, groups);
+        }
+
+        private static void AddGroup(RectTransform rect, List<CanvasGroup> groups)
+        {
+            if (rect == null) return;
+            if (!rect.TryGetComponent(out CanvasGroup group))
+            {
+                group = rect.gameObject.AddComponent<CanvasGroup>();
+            }
+            groups.Add(group);
+        }
+
+        private static void SetEraAlpha(List<CanvasGroup> groups, float alpha)
+        {
+            for (int i = 0; i < groups.Count; i++)
+            {
+                if (groups[i] != null) groups[i].alpha = alpha;
             }
         }
     }
