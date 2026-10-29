@@ -17,6 +17,7 @@ MonoBehaviour:
   subtitle: "\u8896\u53E3\u91CC\uFF0C\u6211\u591A\u7F1D\u8FDB\u53BB\u4E00\u5BF8\u5E03\u3002\u660E\u5E74\u5979\u957F\u9AD8\u4E86\uFF0C\u62C6\u5F00\u653E\u4E0B\u6765\u8FD8\u80FD\u7A7F\u3002"
   voiceClip: {fileID: 8300000, guid: fe51bafcf1aec1443bd641ca82fb7071, type: 3}
   illustration: {fileID: 2800000, guid: c3cab964b0f9ef443a5d8f2d49b20037, type: 3}
+  documentMode: 0
   blackBackground: 0
   nextId: DLG_L02_UNIFORM_02
   requiredFlags:
@@ -24,6 +25,9 @@ MonoBehaviour:
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Self
   eventId: EVT_L02_UNIFORM
   completionFlags:

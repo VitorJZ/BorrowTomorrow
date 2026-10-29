@@ -123,8 +123,10 @@ namespace BorrowTomorrow.Core
                 {
                     State.ExitPause(); // Esc 再按一次恢复（灰盒期无暂停菜单按钮时的退路）
                 }
-                else
+                else if (!(CurrentLevel != null && CurrentLevel.levelId == "L00"
+                    && !StoryFlags.HasFlag(StoryFlagIds.IntroPlayed)))
                 {
+                    // 黑屏开场期间暂停菜单会被转场黑幕遮住，完成后才允许暂停（策划 5.1）。
                     State.EnterPause();
                 }
             }
@@ -267,12 +269,18 @@ namespace BorrowTomorrow.Core
             ActiveRoom = null;
             State.SetPhase(GamePhase.Loading);
 
+            // 新游戏第一次进入 L00：黑屏播放两句磁带开场，等第三句开始时再淡入画面。
+            bool openingTape = definition != null && definition.levelId == "L00"
+                && !StoryFlags.HasFlag(StoryFlagIds.IntroPlayed);
+
+            // 从主菜单出发时给渐黑留足时间；关内转场保持原来的轻快节奏。
+            float fadeOutSeconds = CurrentLevel == null ? 0.8f : 0.35f;
             // 转场淡出（FadeScreen 由 HUD 提供，策划 4.6 转场共用的淡入淡出层）。
             if (ServiceRegistry.TryGet<IHudService>(out var fadeHud))
             {
-                fadeHud.FadeOut(0.35f);
+                fadeHud.FadeOut(fadeOutSeconds);
             }
-            yield return new WaitForSeconds(0.35f);
+            yield return new WaitForSeconds(fadeOutSeconds);
 
             AsyncOperation op = SceneManager.LoadSceneAsync(definition.sceneName);
             if (op == null)
@@ -324,12 +332,57 @@ namespace BorrowTomorrow.Core
                     entryCheckpoint.Capture(definition.spawnId);
             }
 
-            if (ServiceRegistry.TryGet<IHudService>(out var fadeInHud))
+            if (openingTape)
             {
-                fadeInHud.FadeIn(0.5f);
+                // 保持黑屏并锁住移动，由 OpeningTapeIntro 接管开场演出。
+                State.SetPhase(GamePhase.Playing);
+                State.SetSubState(PlayingSubState.Cutscene);
+                StartCoroutine(OpeningIntroWatchdog());
             }
-            State.SetPhase(GamePhase.Playing);
+            else
+            {
+                if (ServiceRegistry.TryGet<IHudService>(out var fadeInHud))
+                {
+                    fadeInHud.FadeIn(0.5f);
+                }
+                State.SetPhase(GamePhase.Playing);
+            }
             loadRoutineRunning = false;
+        }
+
+        /// <summary>
+        /// 开场演出未启动时的兜底：避免黑屏一直卡住玩家。
+        /// 正常情况下一旦对白开始播放就退出监视。
+        /// </summary>
+        private IEnumerator OpeningIntroWatchdog()
+        {
+            float waited = 0f;
+            while (waited < 4f)
+            {
+                if (StoryFlags.HasFlag(StoryFlagIds.IntroPlayed))
+                {
+                    yield break;
+                }
+                if (ServiceRegistry.TryGet<IDialogueService>(out var dialogue) && dialogue.IsPlaying)
+                {
+                    yield break;
+                }
+                waited += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            if (StoryFlags.HasFlag(StoryFlagIds.IntroPlayed))
+            {
+                yield break;
+            }
+            Debug.LogWarning("[GameSession] 开场磁带未启动，自动淡入以免黑屏卡死。");
+            if (State.SubState == PlayingSubState.Cutscene)
+            {
+                State.SetSubState(PlayingSubState.Free);
+            }
+            if (ServiceRegistry.TryGet<IHudService>(out var hud))
+            {
+                hud.FadeIn(0.6f);
+            }
         }
 
         /// <summary>同场景房间转场（如 L01 水渠房 → 树房）。策划 7.7：出口经 E 确认转场。</summary>

@@ -208,6 +208,7 @@ MonoBehaviour:
   fallAcceleration: 18
   climbSpeed: 3
   climbHorizontalSpeed: 1.2
+  climbGrabDistance: 0.22
   coyoteTime: 0.1
   jumpBufferTime: 0.12
   jumpAnticipation: 0.18
@@ -263,6 +264,11 @@ MonoBehaviour:
     - {fileID: 21300000, guid: a6415422cb95448ca9c1235118ae7c73, type: 3}
     fps: 8
     loop: 1
+    animation: {fileID: 0}
+    visualOffset: {x: 0, y: 0}
+    visualScale: 1
+    distancePerCycle: 0
+    frameDurations: []
   - name: Climb
     frames:
     - {fileID: 21300000, guid: 39ec3b7c96456ba458230627cfcd195b, type: 3}
@@ -299,6 +305,11 @@ MonoBehaviour:
     - {fileID: 21300000, guid: cc90d19835d35450a9ffa950ee081c79, type: 3}
     fps: 10
     loop: 0
+    animation: {fileID: 0}
+    visualOffset: {x: 0, y: 0}
+    visualScale: 1
+    distancePerCycle: 0
+    frameDurations: []
   - name: PickUp
     frames:
     - {fileID: 21300000, guid: 859bee656e1e746dbb22aace8e2ac011, type: 3}
@@ -315,6 +326,11 @@ MonoBehaviour:
     - {fileID: 21300000, guid: b197e592f07414993a45d8721bc1f178, type: 3}
     fps: 12
     loop: 0
+    animation: {fileID: 0}
+    visualOffset: {x: 0, y: 0}
+    visualScale: 1
+    distancePerCycle: 0
+    frameDurations: []
   - name: Walk
     frames:
     - {fileID: 21300000, guid: cdfecfcfe7d78f54389187178cce5b7f, type: 2}
@@ -439,3 +455,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: c8726250dbd8443fb9c8b99744bf2d0e, type: 3}
     fps: 12
     loop: 0
+    animation: {fileID: 0}
+    visualOffset: {x: 0, y: 0}
+    visualScale: 1
+    distancePerCycle: 0
+    frameDurations: []

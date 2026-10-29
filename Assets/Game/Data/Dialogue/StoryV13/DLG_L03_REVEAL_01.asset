@@ -17,6 +17,7 @@ MonoBehaviour:
   subtitle: "1994\u5E74\u79CB\uFF0C\u9662\u91CC\u6842\u82B1\u6811\u79CD\u4E0B\u7684\u7B2C\u4E00\u5E74\u3002\u5916\u5A46\u4E0E\u4E03\u5C81\u7684\u6653\u6653\u3002"
   voiceClip: {fileID: 0}
   illustration: {fileID: 2800000, guid: 8de05d5e436a1b04c9c4327658b826f8, type: 3}
+  documentMode: 0
   blackBackground: 0
   nextId: DLG_L03_REVEAL_02
   requiredFlags:
@@ -25,6 +26,9 @@ MonoBehaviour:
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Note
   eventId: EVT_L03_PHOTO_REVEAL
   completionFlags:

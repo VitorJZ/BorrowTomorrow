@@ -16,18 +16,24 @@ MonoBehaviour:
   speakerLabel: "\u817E\u7A7A\u901A\u77E5"
   subtitle: "\u9752\u77F3\u5DF7\u8001\u5B85\u79FB\u4EA4\u544A\u77E5\uFF1A\u8BF7\u4E8E\u5341\u6708\u4E8C\u5341\u65E5\u524D\u6E05\u7A7A\u5C4B\u5185\u65E7\u7269\u3002"
   voiceClip: {fileID: 0}
-  illustration: {fileID: 0}
+  illustration: {fileID: 2800000, guid: 910de59403b1b412587e3c3a521d06cd, type: 3}
+  documentMode: 1
   blackBackground: 0
-  nextId: 
-  requiredFlags: []
+  nextId: DLG_L00_INTRO_03
+  requiredFlags:
+  - IntroPlayed
+  - '!NoticeRead'
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Note
   eventId: EVT_L00_NOTICE
   completionFlags:
   - NoticeRead
-  objectiveAfter: 
+  objectiveAfter: "\u53BB\u9601\u697C\uFF0C\u627E\u5230\u84DD\u8272\u94C1\u76AE\u76D2\u3002"
   centeredTitle: 0
   delayBefore: 0
   sfxId: sfx_cloth_paper

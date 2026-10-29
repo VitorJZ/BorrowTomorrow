@@ -17,6 +17,7 @@ MonoBehaviour:
   subtitle: "\u7B49\u6811\u957F\u9AD8\u4E86\uFF0C\u957F\u5230\u697C\u4E0A\u7A97\u53E3\uFF0C\u6211\u5C31\u4E0D\u7528\u8D70\u697C\u68AF\u4E86\u3002"
   voiceClip: {fileID: 8300000, guid: eb03393aa8bd08d4a9f4c38bd001ce3e, type: 3}
   illustration: {fileID: 0}
+  documentMode: 0
   blackBackground: 0
   nextId: DLG_L01B_TREE_02
   requiredFlags:
@@ -24,6 +25,9 @@ MonoBehaviour:
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Tape
   eventId: EVT_L01B_HEIGHT_MARKS
   completionFlags:

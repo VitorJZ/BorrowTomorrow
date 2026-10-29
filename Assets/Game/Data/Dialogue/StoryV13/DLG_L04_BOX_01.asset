@@ -17,6 +17,7 @@ MonoBehaviour:
   subtitle: "\u6653\u6653\uFF0C\u6211\u60F3\u8D77\u6765\u4E86\u2014\u2014\u4E1C\u8FB9\u9601\u697C\uFF0C\u671D\u9662\u5B50\u90A3\u6247\u7A97\uFF0C\u5916\u5934\u53F3\u4E0A\u8FB9\u3002"
   voiceClip: {fileID: 8300000, guid: 7006e32f32d138647b7a45e5bb38d9d1, type: 3}
   illustration: {fileID: 2800000, guid: c847bad3c0eff1c4db883ce68bc27e75, type: 3}
+  documentMode: 0
   blackBackground: 0
   nextId: DLG_L04_BOX_02
   requiredFlags:
@@ -26,6 +27,9 @@ MonoBehaviour:
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Reality
   eventId: EVT_L04_OPEN_NICHE
   completionFlags:

@@ -15,8 +15,17 @@ MonoBehaviour:
   actionId: ACT_EPI_SMOOTH
   beforeEntryId: DLG_EPI_07
   confirmBefore: "\u629A\u5E73\u5E03\u89D2"
+  requireTargetClick: 0
+  turnPhoto: 0
+  turnCaption: 
+  targetRegion:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   confirmAfter: 
-  seconds: 2
+  seconds: 1.6
   sfxId: sfx_cloth_paper
   gesture: 
   stageBackground: {fileID: 2800000, guid: ef965943f53754e7ebcb05d650660b57, type: 3}
@@ -87,11 +96,11 @@ MonoBehaviour:
   afterImage: {fileID: 2800000, guid: 590ab111aca3d463eaf94d941416d070, type: 3}
   coverRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
+    x: 0.08
+    y: 0.12
+    width: 0.5
+    height: 0.3
   coverColor: {r: 0.3, g: 0.16, b: 0.12, a: 0.4}
   coverSlide: {x: 0.06, y: 0}
-  zoom: 1
-  focus: {x: 0.5, y: 0.5}
+  zoom: 1.1
+  focus: {x: 0.42, y: 0.35}

@@ -26,6 +26,7 @@ namespace BorrowTomorrow.UI
         public Sprite subtitleSkin;
         public Sprite buttonSkin;
         public Sprite nameTagSkin;
+        public TutorialHintSkin tutorialHintSkin;
         public Texture2D creditsBackground;
         private Canvas canvas;
         private GameObject panel;
@@ -41,6 +42,7 @@ namespace BorrowTomorrow.UI
         private Text body;
         private Text title;
         private Text help;
+        private Text documentHint;
         private GameObject next;
         private GameObject skip;
         private bool blocking;
@@ -98,6 +100,9 @@ namespace BorrowTomorrow.UI
             body.lineSpacing = 1.1f; body.color = new Color(.98f,.94f,.86f); Shade(body);
             help = Label("ContinueHint",dock,new Vector2(-460,-480),new Vector2(620,36),20,TextAnchor.MiddleLeft);
             help.color = new Color(.94f,.87f,.74f,.9f); Shade(help);
+            documentHint = Label("DocumentHint",dock,new Vector2(0,-500),new Vector2(900,44),24,TextAnchor.MiddleCenter);
+            documentHint.color = new Color(.97f,.93f,.85f,.95f); Shade(documentHint);
+            documentHint.gameObject.SetActive(false);
             actionPrompt = Label("ActionPrompt",dock,new Vector2(0,-414),new Vector2(1400,80),34,TextAnchor.MiddleCenter);
             Shade(actionPrompt);
             actionPrompt.gameObject.SetActive(false);
@@ -142,6 +147,7 @@ namespace BorrowTomorrow.UI
         public void Present(DialogueEntry entry, string text, bool locksControl, int page, int pages)
         {
             focusGlow.gameObject.SetActive(false);
+            documentHint.gameObject.SetActive(false);
             displayed = entry;
             blocking = locksControl;
             panel.SetActive(true);
@@ -150,6 +156,26 @@ namespace BorrowTomorrow.UI
             // Blocking background clicks also avoids dragging the time handle underneath an illustration.
             backdrop.raycastTarget = locksControl;
             frame.gameObject.SetActive(image);
+            if (entry.documentMode && image)
+            {
+                // 整页文书：只显示居中的通知图片和一行收起提示，不套对话框。
+                heldAction = null;
+                ResetActionView();
+                ShowDocument(entry.illustration);
+                backdrop.color = new Color(0.02f, 0.018f, 0.016f, .78f);
+                backdrop.raycastTarget = locksControl;
+                actionPrompt.gameObject.SetActive(false);
+                title.gameObject.SetActive(false);
+                ShowSpeaker(false);
+                body.gameObject.SetActive(false);
+                readingPanel.SetActive(false);
+                help.gameObject.SetActive(false);
+                next.SetActive(false);
+                skip.SetActive(false);
+                documentHint.gameObject.SetActive(true);
+                documentHint.text = locksControl ? "E / 鼠标左键 收起通知" : "E / 收起通知";
+                return;
+            }
             // The line right after an action keeps its close-up; any later line returns to the full picture.
             bool keepClose = heldAction != null && heldAction.afterImage == entry.illustration;
             if (!keepClose) { heldAction = null; ResetActionView(); }
@@ -164,21 +190,30 @@ namespace BorrowTomorrow.UI
             }
             actionPrompt.gameObject.SetActive(false);
             bool isTitle = entry.centeredTitle;
+            // 黑屏居中开场：不显示对话框、按钮或继续提示，只留屏幕中央的文字。
+            bool cinematic = isTitle && entry.blackBackground;
             title.gameObject.SetActive(isTitle); title.text = isTitle ? text : string.Empty;
+            if (isTitle)
+            {
+                title.fontSize = cinematic ? 44 : 52;
+                title.rectTransform.sizeDelta = cinematic ? new Vector2(1520f, 320f) : new Vector2(1200f, 160f);
+                title.color = cinematic ? new Color(.98f, .95f, .88f) : Color.white;
+            }
             speaker.text = entry.speakerLabel;
             speaker.color = entry.source == "Reality" ? new Color(.1f,.25f,.29f) : new Color(.3f,.17f,.07f);
             ShowSpeaker(!isTitle); body.gameObject.SetActive(!isTitle);
             readingPanel.SetActive(!isTitle);
             body.text = text;
-            help.gameObject.SetActive(true);
+            help.gameObject.SetActive(!cinematic);
             help.text = (locksControl ? "E / 鼠标左键继续" : "E / 继续按钮") + (pages > 1 ? "    " + page + " / " + pages : "");
-            next.SetActive(true);
+            next.SetActive(!cinematic);
             skip.SetActive(locksControl && !isTitle);
             ApplySubtitleSettings();
         }
         public void PresentAction(NarrativeAction action, float progress, string prompt, bool locksControl)
         {
             displayed = null;
+            documentHint.gameObject.SetActive(false);
             heldAction = action;
             blocking = locksControl;
             panel.SetActive(true);
@@ -231,12 +266,28 @@ namespace BorrowTomorrow.UI
             picture.texture = texture;
             picture.color = Color.white;
             FrameRect.anchoredPosition = PictureCenter;
+            FrameRect.localRotation = Quaternion.identity;
             float ratio = (float)texture.width / texture.height;
             FrameRect.sizeDelta = ratio > PictureMax.x / PictureMax.y
                 ? new Vector2(PictureMax.x, PictureMax.x / ratio) : new Vector2(PictureMax.y * ratio, PictureMax.y);
         }
+        private void ShowDocument(Texture2D texture)
+        {
+            picture.texture = texture;
+            picture.color = Color.white;
+            const float maxWidth = 700f;
+            const float maxHeight = 900f;
+            float ratio = (float)texture.width / texture.height;
+            FrameRect.anchoredPosition = Vector2.zero;
+            // 极轻的倾斜，让纸像被放在桌上，而不是一张贴在屏幕上的矩形。
+            FrameRect.localRotation = Quaternion.Euler(0f, 0f, -0.7f);
+            FrameRect.sizeDelta = ratio > maxWidth / maxHeight
+                ? new Vector2(maxWidth, maxWidth / ratio)
+                : new Vector2(maxHeight * ratio, maxHeight);
+        }
         private void ResetActionView()
         {
+            FrameRect.localRotation = Quaternion.identity;
             picture.rectTransform.pivot = new Vector2(.5f,.5f);
             picture.rectTransform.localScale = Vector3.one;
             picture.rectTransform.localRotation=Quaternion.identity;
@@ -290,7 +341,7 @@ namespace BorrowTomorrow.UI
         }
         private void ApplySubtitleSettings()
         {
-            if (displayed == null || displayed.centeredTitle) return;
+            if (displayed == null || displayed.centeredTitle || displayed.documentMode) return;
             bool readableObject = displayed.source == "Note";
             bool enabled = !ServiceRegistry.TryGet<ISaveService>(out var save) || save.LoadSettings().subtitlesEnabled;
             // Object text remains readable even when spoken subtitles are disabled.
@@ -303,7 +354,13 @@ namespace BorrowTomorrow.UI
             Rect rect=FrameRect.rect;Vector2 uv=new Vector2((point.x-rect.xMin)/rect.width,(point.y-rect.yMin)/rect.height);
             return action.targetRegion.Contains(uv);
         }
-        public void Close() { focusGlow.gameObject.SetActive(false);displayed = null; if (panel != null) panel.SetActive(false); }
+        public void Close()
+        {
+            focusGlow.gameObject.SetActive(false);
+            displayed = null;
+            if (documentHint != null) documentHint.gameObject.SetActive(false);
+            if (panel != null) panel.SetActive(false);
+        }
         private T Node<T>(string name, Transform parent, Vector2 position, Vector2 size, bool stretch=false) where T : Component
         {
             var go = new GameObject(name, typeof(RectTransform)); go.transform.SetParent(parent,false);

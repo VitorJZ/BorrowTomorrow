@@ -52,8 +52,19 @@ namespace BorrowTomorrow.EditorTools
                     entry.setFlags=Array.Empty<string>();
                     entry.objectiveAfter=i==0?Objective(e.objective):null;
                     entry.voiceClip=string.IsNullOrEmpty(l.voice)?null:AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Game/Audio/Voice/"+l.voice+".mp3");
-                    entry.illustration=Illustration(l.id);entry.blackBackground=l.id=="DLG_L00_INTRO_01"||l.id=="DLG_L00_INTRO_02";
-                    entry.centeredTitle=l.source=="Title";
+                    // 开场两句磁带：黑屏居中；所有“自动”模式台词（狗回声、树、尾声标题）也自动推进。
+                    bool openingTape=l.id=="DLG_L00_INTRO_01"||l.id=="DLG_L00_INTRO_02";
+                    // 腾空通知改为整页文书图片居中展示，不再使用对白框。
+                    bool noticeDocument=l.id=="DLG_L00_NOTICE_01";
+                    entry.documentMode=noticeDocument;
+                    entry.illustration=noticeDocument
+                        ?AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Game/Art/Illustrations/ILL_L00_NOTICE.png")
+                        :Illustration(l.id);
+                    entry.blackBackground=openingTape;
+                    entry.centeredTitle=l.source=="Title"||openingTape;
+                    entry.autoAdvance=l.mode=="自动";
+                    entry.autoAdvanceDelay=0.75f;
+                    entry.fadeInOnStart=false;
                     entry.delayBefore=l.id=="DLG_L02_UNIFORM_04"?1.2f:0f;
                     entry.endHoldSeconds=l.id=="DLG_EPI_08"?3f:0f;
                     entry.sfxId=l.source=="Note"?"sfx_cloth_paper":l.source=="Tape"?"sfx_tape_click":null;
@@ -95,6 +106,8 @@ namespace BorrowTomorrow.EditorTools
             switch(id)
             {
                 case "EVT_L00_INTRO":return new[]{"!IntroPlayed"};
+                case "EVT_L00_NOTICE":return new[]{"IntroPlayed","!NoticeRead"};
+                case "EVT_L00_CRATE":return new[]{"IntroPlayed","NoticeRead","!CrateBlocked"};
                 case "EVT_L00_DOG_ECHO":return new[]{"IntroPlayed","!DogEchoPlayed"};
                 case "EVT_L01B_HEIGHT_MARKS":return new[]{"!HeightMarksSeen"};
                 case "EVT_L02_UNIFORM":return new[]{"!UniformRead"};
@@ -189,7 +202,24 @@ namespace BorrowTomorrow.EditorTools
             if(scene.name=="Bootstrap")
             {
                 var library=All<DialogueLibrary>(scene).First();
-                Objects(library,"entries",map.Values.Select(AssetDatabase.LoadAssetAtPath<DialogueEntry>).Cast<UnityEngine.Object>().ToArray());
+                // 只合并/更新 StoryV13 条目，保留库中其它旧版对白（庭院 V4、回廊 V5 等场景仍在引用）。
+                // 历史上这里整体覆盖 entries，会删掉旧登记并造成 nextId 断链。
+                var imported=map.Values.Select(AssetDatabase.LoadAssetAtPath<DialogueEntry>).Where(e=>e!=null).ToArray();
+                var importedById=new Dictionary<string,DialogueEntry>();
+                foreach(var entry in imported) importedById[entry.entryId]=entry;
+                var merged=new List<DialogueEntry>();
+                var seenIds=new HashSet<string>();
+                foreach(var entry in library.Entries)
+                {
+                    if(entry==null||!seenIds.Add(entry.entryId)) continue;
+                    DialogueEntry replacement;
+                    merged.Add(importedById.TryGetValue(entry.entryId,out replacement)?replacement:entry);
+                }
+                foreach(var entry in imported)
+                {
+                    if(seenIds.Add(entry.entryId)) merged.Add(entry);
+                }
+                Objects(library,"entries",merged.Cast<UnityEngine.Object>().ToArray());
                 var actions=ImportActions();
                 Objects(library,"actions",actions.Cast<UnityEngine.Object>().ToArray());
                 var ui=All<HudService>(scene).First();
@@ -206,6 +236,15 @@ namespace BorrowTomorrow.EditorTools
                     }
                 }
                 presenter.font=AssetDatabase.LoadAssetAtPath<Font>("Assets/Game/Art/UI/Fonts/PlaceholderChinese.ttf");
+                presenter.tutorialHintSkin=new TutorialHintSkin
+                {
+                    card=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Game/Art/UI/UI_DialogNameTag.png"),
+                    keycap=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Game/Art/UI/UI_HintKeycap_Square.png"),
+                    keycapWide=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Game/Art/UI/UI_HintKeycap_Wide.png"),
+                    clock=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Game/Art/UI/UI_HintClock.png"),
+                    arrow=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Game/Art/UI/UI_HintArrow.png"),
+                    ornament=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Game/Art/UI/UI_PauseOrnament.png")
+                };
                 var journal=ui.GetComponent<NarrativeJournal>()??ui.gameObject.AddComponent<NarrativeJournal>();journal.font=presenter.font;
                 if(ui.GetComponent<StoryRoomFlow>()==null)ui.gameObject.AddComponent<StoryRoomFlow>();
                 ConfigureAudio(scene);
@@ -226,12 +265,23 @@ namespace BorrowTomorrow.EditorTools
             {
                 case "L00_Gate":
                     Auto(ctx,main,"DLG_L00_INTRO_01");
-                    var dogEcho=Auto(ctx,main,"DLG_L00_DOG_01",13.5f,false);
-                    var dogObject=new GameObject("AHuangEcho");dogObject.transform.SetParent(ctx.Content,false);dogObject.transform.position=new Vector3(14,.12f,0);
+                    var openingGo=main.transform.Find("OpeningTapeIntro");
+                    if(openingGo==null){var go=new GameObject("OpeningTapeIntro");go.transform.SetParent(main.transform,false);openingGo=go.transform;}
+                    var opening=openingGo.GetComponent<OpeningTapeIntro>()??openingGo.gameObject.AddComponent<OpeningTapeIntro>();
+                    LevelLayouts.SetObject(opening,"firstLine",Entry(map,"DLG_L00_INTRO_01"));
+                    var dogEcho=Auto(ctx,main,"DLG_L00_DOG_01",14.9f,false);
+                    var dogObject=new GameObject("AHuangEcho");dogObject.transform.SetParent(ctx.Content,false);dogObject.transform.position=new Vector3(16,.12f,0);
                     var dog=dogObject.AddComponent<NarrativeDogEcho>();ArtDeliveryInstaller.ConfigureDog(dog);
                     dogEcho.requiredVisibleDog=dog;dogEcho.maximumX=dog.anchorX+2f;
-                    var notice=Investigate(ctx,"notice","查看通知",new Vector2(12.5f,.9f),"DLG_L00_NOTICE_01",true);
-                    notice.gameObject.AddComponent<PresentOnlyInvestigation>().anchorX=12.5f;
+                    // 新流程：先在 2024 年读到通知，再向前撞见只存在于现在的木箱；三者彼此留出间距。
+                    var notice=Investigate(ctx,"notice","查看通知",new Vector2(7.6f,.9f),"DLG_L00_NOTICE_01",true);
+                    notice.gameObject.AddComponent<PresentOnlyInvestigation>().anchorX=7.6f;
+                    SkinNotice(notice.transform);
+                    var crate=Auto(ctx,main,"DLG_L00_CRATE_01",9.3f,true);
+                    crate.maximumX=11.4f;crate.presentMechanism="L00_fence_gate";
+                    var tutorialGo=new GameObject("IntroTutorial");tutorialGo.transform.SetParent(ctx.Content,false);
+                    tutorialGo.AddComponent<IntroTutorialDirector>().crateAnchorX=12f;
+                    L00ObstacleInstaller.ConfigureRoom(main);
                     break;
                 case "L01_Courtyard":
                 case "L01_TreeCourtyard":
@@ -285,18 +335,37 @@ namespace BorrowTomorrow.EditorTools
             var renderer=go.AddComponent<SpriteRenderer>();renderer.sprite=s;renderer.sortingLayerName="EraPlatform";
             go.transform.localScale=new Vector3(size.x/s.bounds.size.x,size.y/s.bounds.size.y,1);
         }
+        /// <summary>
+        /// 只重建 L00 叙事内容时，通知的美术皮也要一并补回；
+        /// 否则 ArtInstaller 未参与本次安装，场景里只剩被禁用的灰盒。
+        /// </summary>
+        private static void SkinNotice(Transform notice)
+        {
+            if(notice==null)return;
+            var sprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Game/Data/Art/Sprites/DECOR_VacateNotice.asset");
+            if(sprite==null)return;
+            var graybox=notice.GetComponent<SpriteRenderer>();
+            if(graybox!=null)graybox.enabled=false;
+            var go=new GameObject("ArtSkin");
+            go.transform.SetParent(notice,false);
+            go.transform.localPosition=Vector3.zero;
+            var size=new Vector2(.7f,1f);
+            go.transform.localScale=new Vector3(size.x/sprite.bounds.size.x,size.y/sprite.bounds.size.y,1f);
+            var renderer=go.AddComponent<SpriteRenderer>();
+            renderer.sprite=sprite;renderer.sortingLayerName="EraPlatform";renderer.sortingOrder=2;
+        }
         private static void ConfigureAudio(Scene scene)
         {
             var audio=All<BorrowTomorrow.Audio.AudioService>(scene).First();
             BoundaryAudioInstaller.Configure(audio.gameObject);
             foreach(var pair in new[]{("musicPast","BGM_Past_1994"),("musicPresent","BGM_Present_2024"),("musicEpilogue","BGM_Epilogue")})
                 LevelLayouts.SetObject(audio,pair.Item1,AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Game/Audio/Music/"+pair.Item2+".wav"));
-            string hissPath=AssetDatabase.FindAssets("SFX_staticloop01 t:AudioClip").Select(AssetDatabase.GUIDToAssetPath).FirstOrDefault(p=>Path.GetFileNameWithoutExtension(p)=="SFX_staticloop01");
-            if(hissPath!=null)LevelLayouts.SetObject(All<DialoguePlayer>(scene).First(),"tapeHiss",AssetDatabase.LoadAssetAtPath<AudioClip>(hissPath));
+            var tapeHissClip=AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Game/Audio/SFX/Tape/TapeHissLoop.wav");
+            if(tapeHissClip!=null)LevelLayouts.SetObject(All<DialoguePlayer>(scene).First(),"tapeHiss",tapeHissClip);
             var lib=All<BorrowTomorrow.Audio.SfxLibrary>(scene).First();
             LevelLayouts.SetObject(audio,"sfxLibrary",lib);
             var so=new SerializedObject(lib);var entries=so.FindProperty("entries");
-            var sounds=new[]{("sfx_tape_click","Interactions_TapePlayer_Start_01"),("sfx_tape_hiss","SFX_staticloop01"),
+            var sounds=new[]{("sfx_tape_click","Interactions_TapePlayer_Start_01"),("sfx_tape_hiss","TapeHissLoop"),
                 ("sfx_cloth_paper","FABRIC_Flap_01_mono"),("sfx_tin_box","ACTION_Open_Metal_Hatch_01_mono"),("sfx_dog_soft","dog_bark_small_01"),
                 ("door_open","SFX_DoorSqueakOldDoorWoodSlowOpening"),("player_footstep","SFX_FootstepFemaleSlipperWoodNoSqueakv1"),
                 ("player_land","Footsteps_Jump_Land_01"),("player_jump","Footsteps_Jump_Start_01")};

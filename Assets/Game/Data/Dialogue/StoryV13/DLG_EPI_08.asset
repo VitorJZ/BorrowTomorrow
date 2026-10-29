@@ -17,12 +17,16 @@ MonoBehaviour:
   subtitle: "\u6765\u3002"
   voiceClip: {fileID: 8300000, guid: ddb1eb7f6ba8440429ab7484490a1027, type: 3}
   illustration: {fileID: 2800000, guid: 590ab111aca3d463eaf94d941416d070, type: 3}
+  documentMode: 0
   blackBackground: 0
   nextId: 
   requiredFlags: []
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Reality
   eventId: EVT_EPILOGUE_MAIN
   completionFlags: []

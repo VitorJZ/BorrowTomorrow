@@ -17,12 +17,16 @@ MonoBehaviour:
   subtitle: "\u5148\u770B\u770B\u7F1D\u7EAB\u684C\u4E0A\u7684\u65E7\u6821\u670D\u5427\u3002"
   voiceClip: {fileID: 8300000, guid: 48ba1a0b8507d064f9d96fd6398370aa, type: 3}
   illustration: {fileID: 0}
+  documentMode: 0
   blackBackground: 0
   nextId: 
   requiredFlags: []
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Self
   eventId: EVT_L02_EXIT_LOCKED
   completionFlags: []

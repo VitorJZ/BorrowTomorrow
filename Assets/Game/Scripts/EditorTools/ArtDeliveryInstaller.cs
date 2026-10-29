@@ -270,7 +270,9 @@ namespace BorrowTomorrow.EditorTools
             dog.sleep = Frames("AHuang_Sleep_0").Take(4).ToArray();
             dog.alert = Frames("AHuang_Alert");
             dog.wag = Frames("AHuang_Wag");
-            dog.transform.position = new Vector3(14.6f, 0f, 0f);
+            // 与木箱之间留出明显间距，狗窝不再压住箱体。
+            dog.transform.position = new Vector3(16f, 0f, 0f);
+            dog.anchorX = 16f;
             var sr = dog.GetComponent<SpriteRenderer>(); if (sr == null) sr = dog.gameObject.AddComponent<SpriteRenderer>();
             sr.sortingLayerName = "EraPlatform"; sr.sortingOrder = 5; sr.sprite = dog.sleep[0];
             // 材质为空时 SpriteRenderer 不出图（阿黄曾因此在过去态“消失”），透明逐帧用默认精灵材质。
@@ -278,7 +280,7 @@ namespace BorrowTomorrow.EditorTools
             var kennel = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Game/Data/Art/Sprites/DECOR_DogBowlAndKennel_2024.asset");
             if (kennel != null)
             {
-                var r = PutByBounds(dog.transform, "PresentKennel", kennel, new Vector2(14.6f, 0f), 1.5f, "EraPlatform", 4);
+                var r = PutByBounds(dog.transform, "PresentKennel", kennel, new Vector2(16f, 0f), 1.5f, "EraPlatform", 4);
                 dog.presentProps = r;
             }
             EditorUtility.SetDirty(dog);

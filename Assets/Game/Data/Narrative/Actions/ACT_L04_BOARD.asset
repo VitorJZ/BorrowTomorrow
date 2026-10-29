@@ -15,8 +15,17 @@ MonoBehaviour:
   actionId: ACT_L04_BOARD
   beforeEntryId: DLG_L04_BOX_01
   confirmBefore: 
+  requireTargetClick: 0
+  turnPhoto: 0
+  turnCaption: 
+  targetRegion:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   confirmAfter: "\u544A\u8BC9\u6653\u6653\u4F4D\u7F6E"
-  seconds: 1.8
+  seconds: 1.2
   sfxId: sfx_tin_box
   gesture: Interact
   stageBackground: {fileID: 2800000, guid: be4d4caefa63c4b31b27e7ed11956861, type: 3}
@@ -59,14 +68,14 @@ MonoBehaviour:
       y: 0
       width: 1
       height: 1
-  beforeImage: {fileID: 2800000, guid: d5f069963e1c74345a0fef6d5347e1d3, type: 3}
-  afterImage: {fileID: 2800000, guid: fde121dac86634a35b4477bc4686f491, type: 3}
+  beforeImage: {fileID: 0}
+  afterImage: {fileID: 2800000, guid: d4f8768e56aa10a4eaf0e7ecd9c39f7c, type: 3}
   coverRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
+    x: 0.2
+    y: 0.38
+    width: 0.47
+    height: 0.48
   coverColor: {r: 0.63, g: 0.5, b: 0.36, a: 1}
   coverSlide: {x: 0.25, y: 0.35}
   zoom: 1

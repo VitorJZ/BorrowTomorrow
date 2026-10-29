@@ -28,6 +28,9 @@ namespace BorrowTomorrow.Core.Data
         [Tooltip("本条演出插画；不参与玩法碰撞") ]
         public Texture2D illustration;
 
+        [Tooltip("以整页文书图片居中展示，隐藏对白框、说话人与按钮；仍由 E/点击推进")]
+        public bool documentMode;
+
         public bool blackBackground;
 
         [Header("流转")]
@@ -46,6 +49,15 @@ namespace BorrowTomorrow.Core.Data
 
         [Tooltip("字幕停留秒数下限（配音时长不足时保底）")]
         public float minDurationSeconds = 1.2f;
+
+        [Tooltip("为真时本条在配音结束并停顿后自动进入下一条，无需玩家按键")]
+        public bool autoAdvance;
+
+        [Tooltip("自动推进前，配音结束后的停顿秒数")]
+        public float autoAdvanceDelay = 0.75f;
+
+        [Tooltip("本条开始时淡入游戏画面（用于黑屏开场后的第一句）")]
+        public bool fadeInOnStart;
 
         [Header("完整剧情 v1.3")]
         public string source;

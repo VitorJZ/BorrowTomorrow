@@ -156,7 +156,8 @@ namespace BorrowTomorrow.EditorTools
                 {
                     string id=temporal.ObjectId;bool past=IsPast(original.transform,temporal.transform);
                     if(name=="Bar"||name.StartsWith("Rung_")||name=="BrokenStub"){original.enabled=false;continue;}
-                    if(id=="L00_fence_gate")asset=past?"PROP_Fence_1994":"PROP_Fence_2024";
+                    // L00 的挡路物已改为 2024 年木箱，由 L00ObstacleInstaller 负责贴图，不能再套栅栏皮。
+                    if(id=="L00_fence_gate")continue;
                     else if(id=="L01A_plank_bridge")asset=past?"PROP_BridgePlank_1994":"PROP_BridgePlank_2024";
                     else if(id=="L02_maintenance")asset="PROP_MetalWalkway_2024";
                     else if(id=="L03_floor")asset="PROP_WoodFloor_1994";

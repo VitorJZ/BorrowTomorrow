@@ -15,8 +15,17 @@ MonoBehaviour:
   actionId: ACT_L02_CUFF
   beforeEntryId: DLG_L02_UNIFORM_01
   confirmBefore: 
+  requireTargetClick: 0
+  turnPhoto: 0
+  turnCaption: 
+  targetRegion:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   confirmAfter: 
-  seconds: 2.2
+  seconds: 1.4
   sfxId: sfx_cloth_paper
   gesture: Interact
   stageBackground: {fileID: 2800000, guid: 590ed3317adb44fbf905f622e0db86e2, type: 3}
@@ -119,15 +128,15 @@ MonoBehaviour:
       y: 0
       width: 1
       height: 1
-  beforeImage: {fileID: 2800000, guid: b2435472f3bc543be957ad67e472fa2d, type: 3}
-  afterImage: {fileID: 2800000, guid: 68c013467e6e847d7b6f3f579d9e3404, type: 3}
+  beforeImage: {fileID: 0}
+  afterImage: {fileID: 2800000, guid: c3cab964b0f9ef443a5d8f2d49b20037, type: 3}
   coverRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
+    x: 0.44
+    y: 0.4
+    width: 0.25
+    height: 0.23
   coverColor: {r: 0.95, g: 0.94, b: 0.9, a: 1}
   coverSlide: {x: 0.03, y: -0.04}
-  zoom: 1
-  focus: {x: 0.5, y: 0.5}
+  zoom: 1.2
+  focus: {x: 0.56, y: 0.5}

@@ -17,6 +17,7 @@ MonoBehaviour:
   subtitle: "\u963F\u9EC4\uFF0C\u4F60\u53C8\u5728\u95E8\u53E3\u6253\u778C\u7761\u5440\u3002"
   voiceClip: {fileID: 8300000, guid: 1868f064b85691040993d97cae5aafcb, type: 3}
   illustration: {fileID: 0}
+  documentMode: 0
   blackBackground: 0
   nextId: 
   requiredFlags:
@@ -25,6 +26,9 @@ MonoBehaviour:
   setFlags: []
   holdForConfirm: 0
   minDurationSeconds: 3
+  autoAdvance: 1
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Tape
   eventId: EVT_L00_DOG_ECHO
   completionFlags:

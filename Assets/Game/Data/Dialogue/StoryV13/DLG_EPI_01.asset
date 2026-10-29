@@ -17,6 +17,7 @@ MonoBehaviour:
   subtitle: "\u4E24\u5929\u540E"
   voiceClip: {fileID: 0}
   illustration: {fileID: 0}
+  documentMode: 0
   blackBackground: 0
   nextId: DLG_EPI_02
   requiredFlags:
@@ -25,6 +26,9 @@ MonoBehaviour:
   setFlags: []
   holdForConfirm: 0
   minDurationSeconds: 2.5
+  autoAdvance: 1
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Title
   eventId: EVT_EPILOGUE_MAIN
   completionFlags:
