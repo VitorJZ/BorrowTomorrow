@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0be260cc297d44a4bbb93eaf2549bcea, type: 3}
+  m_Name: ACT_V10_L03_ClickGrandmother
+  m_EditorClassIdentifier: 
+  actionId: ACT_V10_L03_ClickGrandmother
+  beforeEntryId: V5_L03_002
+  confirmBefore: "\u70B9\u51FB\u7EA2\u8863\u7684\u4EBA\uFF0C\u7FFB\u770B\u7167\u7247\u80CC\u9762"
+  requireTargetClick: 1
+  turnPhoto: 1
+  turnCaption: "\u7FFB\u770B\u7167\u7247\u80CC\u9762"
+  targetRegion:
+    serializedVersion: 2
+    x: 0.405
+    y: 0.11
+    width: 0.18
+    height: 0.64
+  confirmAfter: 
+  seconds: 0.9
+  sfxId: sfx_cloth_paper
+  gesture: 
+  stageBackground: {fileID: 0}
+  layers: []
+  beforeImage: {fileID: 2800000, guid: 4a12b44b52b9f44b398fae666a1d09a4, type: 3}
+  afterImage: {fileID: 2800000, guid: 1f36fa4ec535d0f4c8f20bdb401ea888, type: 3}
+  coverRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  coverColor: {r: 1, g: 1, b: 1, a: 1}
+  coverSlide: {x: 0, y: 0}
+  zoom: 1
+  focus: {x: 0.5, y: 0.5}

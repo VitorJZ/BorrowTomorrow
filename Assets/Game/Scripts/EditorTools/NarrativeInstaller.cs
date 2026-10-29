@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -298,12 +298,14 @@ namespace BorrowTomorrow.EditorTools
                 ("player_land","Footsteps_Jump_Land_01"),("player_jump","Footsteps_Jump_Start_01")};
             foreach(var pair in sounds)
             {
-                string path=AssetDatabase.FindAssets(pair.Item2+" t:AudioClip").Select(AssetDatabase.GUIDToAssetPath).FirstOrDefault(p=>Path.GetFileNameWithoutExtension(p)==pair.Item2);
+                string path=pair.Item1=="sfx_dog_soft" ? "Assets/Game/Audio/SFX/Animals/sfx_dog_greeting_v17.wav" : null;
+                if(path==null||AssetDatabase.LoadAssetAtPath<AudioClip>(path)==null)
+                    path=AssetDatabase.FindAssets(pair.Item2+" t:AudioClip").Select(AssetDatabase.GUIDToAssetPath).FirstOrDefault(p=>Path.GetFileNameWithoutExtension(p)==pair.Item2);
                 if(path==null)continue;
                 int index=-1;for(int i=0;i<entries.arraySize;i++)if(entries.GetArrayElementAtIndex(i).FindPropertyRelative("id").stringValue==pair.Item1)index=i;
                 if(index<0){index=entries.arraySize;entries.arraySize++;}
                 var e=entries.GetArrayElementAtIndex(index);e.FindPropertyRelative("id").stringValue=pair.Item1;
-                e.FindPropertyRelative("clip").objectReferenceValue=AssetDatabase.LoadAssetAtPath<AudioClip>(path);e.FindPropertyRelative("volume").floatValue=pair.Item1=="sfx_dog_soft"?.18f:.3f;
+                e.FindPropertyRelative("clip").objectReferenceValue=AssetDatabase.LoadAssetAtPath<AudioClip>(path);e.FindPropertyRelative("volume").floatValue=pair.Item1=="sfx_dog_soft"?.38f:.3f;
             }
             so.ApplyModifiedPropertiesWithoutUndo();
         }

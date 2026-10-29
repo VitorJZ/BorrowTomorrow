@@ -1,0 +1,22 @@
+{
+  "tool": "built-in image_gen",
+  "canonical_photo": "Assets/Game/Art/SampleV1/02_剧情插画_Illustrations/ILL_L03_Photo_Canonical_2304x1728.png",
+  "assets": [
+    {
+      "file": "ILL_PhotoWorkbench.png",
+      "source_file": "exec-b7dea619-4df5-4ced-ae59-d46e10c407c4.png",
+      "sha256": "e7f287f7d4b945225d1c0a3a15de62e3a7689d48cb30b2f2d36e05ef395f9dd4"
+    },
+    {
+      "file": "ILL_Photo2001_Front.png",
+      "source_file": "exec-47586796-4fd4-4b2a-a11f-48c38f9fb485.png",
+      "sha256": "7aa8fe353bd7e1c71f014d1d2b019d021e01174346538b44105b0c29dc92a7f6"
+    },
+    {
+      "file": "ILL_Photo2001_Back.png",
+      "source_file": "exec-222f83b5-11d4-40f3-b447-cfed8e631153.png",
+      "sha256": "6d440743f1eac4b2f356e452c0ded760b199e73cc7b6abd10cb758598722c8be"
+    }
+  ],
+  "rules": "1994 target photo unchanged; 2001 comparison uses same family seven years later. Fragments rendered by UV meshes, source textures remain whole."
+}

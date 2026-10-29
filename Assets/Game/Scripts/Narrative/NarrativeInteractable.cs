@@ -31,9 +31,14 @@ namespace BorrowTomorrow.Narrative
 
         public string InteractId => interactId;
 
-        public string InteractPrompt => prompt;
+        public string InteractPrompt
+        {
+            get { var gate=GetComponent<NarrativeInteractionGate>();return IsCompleted&&gate!=null&&gate.HasCompletedView&&!string.IsNullOrEmpty(gate.CompletedPrompt)?gate.CompletedPrompt:prompt; }
+        }
 
-        public bool CanInteract => isActiveAndEnabled && entry != null && (!IsCompleted || replayable)
+        private bool HasCompletedView => GetComponent<NarrativeInteractionGate>()?.HasCompletedView == true;
+
+        public bool CanInteract => isActiveAndEnabled && entry != null && (!IsCompleted || replayable || HasCompletedView)
             && (IsCompleted || DialoguePlayer.RequirementsMet(entry.requiredFlags));
 
         private bool IsCompleted
@@ -53,6 +58,10 @@ namespace BorrowTomorrow.Narrative
             if (ServiceRegistry.TryGet<IDialogueService>(out var dialogue))
             {
                 if (dialogue.IsPlaying) return false;
+                var gate = GetComponent<NarrativeInteractionGate>();
+                if (IsCompleted && gate != null && gate.HasCompletedView) return gate.OpenCompleted();
+                if (!IsCompleted && gate != null && gate.ShouldOpen)
+                    return gate.Open(() => { if (this != null) dialogue.Play(entry, priority); });
                 if (IsCompleted && replayable && dialogue is DialoguePlayer player)
                 {
                     player.PlayReadOnly(replayEntry != null ? replayEntry : entry, replayWholeChain);

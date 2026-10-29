@@ -1,4 +1,4 @@
-﻿{
+{
   "lines": [
     {
       "entryId": "V5_L03_001",
@@ -7,6 +7,14 @@
       "source": "Self",
       "illustration": "Assets/Game/Art/SampleV1/02_剧情插画_Illustrations/ILL_L03_Photo_Canonical_2304x1728.png",
       "voice": "Assets/Game/Audio/Voice/Revision_v8/vo_v5_l03_001.mp3"
+    },
+    {
+      "entryId": "V10_L03_001A",
+      "speakerLabel": "我",
+      "subtitle": "这件红外套……怎么跟我身上的一样？",
+      "source": "Self",
+      "illustration": "Assets/Game/Art/SampleV1/02_剧情插画_Illustrations/ILL_L03_Photo_Canonical_2304x1728.png",
+      "voice": "Assets/Game/Audio/Voice/Revision_v10/vo_v10_l03_red_cardigan.mp3"
     },
     {
       "entryId": "V5_L03_002",

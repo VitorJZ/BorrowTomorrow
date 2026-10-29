@@ -64,7 +64,7 @@ namespace BorrowTomorrow.UI
             frame = Node<RectMask2D>("IllustrationFrame", panel.transform, PictureCenter, PictureMax);
             picture = Node<RawImage>("Illustration", frame.transform, Vector2.zero, Vector2.zero, true);
             picture.raycastTarget = false;
-            focusGlow=Node<RawImage>("PhotoChildFocus",frame.transform,Vector2.zero,Vector2.zero,true);focusGlow.raycastTarget=false;
+            focusGlow=Node<RawImage>("PhotoPersonFocus",frame.transform,Vector2.zero,Vector2.zero,true);focusGlow.raycastTarget=false;
             if(photoFocusMaterial!=null){focusMaterial=new Material(photoFocusMaterial);focusGlow.material=focusMaterial;}
             focusGlow.gameObject.SetActive(false);
             var layersGo = new GameObject("ActionLayers", typeof(RectTransform));
@@ -208,7 +208,7 @@ namespace BorrowTomorrow.UI
             panel.transform.Find("ReadingPanel").gameObject.SetActive(!string.IsNullOrEmpty(prompt)||turning);
             speaker.gameObject.SetActive(false); body.gameObject.SetActive(false);
             actionPrompt.gameObject.SetActive(!string.IsNullOrEmpty(prompt)||turning);
-            actionPrompt.text = turning ? action.turnCaption : string.IsNullOrEmpty(prompt) ? string.Empty : (action.requireTargetClick?"点击小女孩，翻看照片背面":"[E] " + prompt);
+            actionPrompt.text = turning ? action.turnCaption : string.IsNullOrEmpty(prompt) ? string.Empty : (action.requireTargetClick?prompt:"[E] " + prompt);
             bool targetVisible=action.requireTargetClick&&!string.IsNullOrEmpty(prompt)&&progress<=0;
             focusGlow.gameObject.SetActive(targetVisible&&focusMaterial!=null);
             if(targetVisible&&focusMaterial!=null){focusGlow.texture=action.beforeImage;focusMaterial.SetVector("_TargetRect",new Vector4(action.targetRegion.x,action.targetRegion.y,action.targetRegion.width,action.targetRegion.height));}
