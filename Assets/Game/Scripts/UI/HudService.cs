@@ -2,6 +2,7 @@ using BorrowTomorrow.Core;
 using BorrowTomorrow.Core.Data;
 using BorrowTomorrow.Core.Interfaces;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BorrowTomorrow.UI
 {
@@ -24,6 +25,7 @@ namespace BorrowTomorrow.UI
 
         private CanvasGroup gameplayGroup;
         private GameSession session;
+        private TutorialHints tutorialHints;
 
         public int InitializeOrder => -60;
 
@@ -32,6 +34,7 @@ namespace BorrowTomorrow.UI
             // A headless scene save may serialize a zero screen-space canvas scale.
             // Restore a valid transform before the scaler/layout system runs.
             if (transform.localScale.sqrMagnitude < .000001f) transform.localScale = Vector3.one;
+            EnsureFadeCanvas();
             // Keep panel behaviours running; hide their presentation without disabling timers.
             var root = new GameObject("GameplayHud", typeof(RectTransform), typeof(CanvasGroup));
             var rect = (RectTransform)root.transform;
@@ -51,6 +54,55 @@ namespace BorrowTomorrow.UI
                     child.SetParent(rect, false);
             }
             SetGameplayVisible(false);
+            EnsureTutorialHints();
+        }
+
+        private void EnsureTutorialHints()
+        {
+            if (tutorialHints != null || gameplayGroup == null)
+            {
+                return;
+            }
+            Font font = null;
+            foreach (Text text in GetComponentsInChildren<Text>(true))
+            {
+                if (text.font != null)
+                {
+                    font = text.font;
+                    break;
+                }
+            }
+            var presentation = GetComponent<NarrativePresentation>();
+            tutorialHints = TutorialHints.Create(gameplayGroup.transform, font,
+                presentation != null ? presentation.tutorialHintSkin : null);
+        }
+
+        /// <summary>
+        /// 转场淡入淡出必须盖住主菜单画布（排序 0），又不能盖住黑屏开场的居中文字
+        /// （NarrativeCanvas 排序 50）。因此把它移到独立画布（排序 40）。
+        /// </summary>
+        private void EnsureFadeCanvas()
+        {
+            if (fadeScreen == null)
+            {
+                fadeScreen = GetComponentInChildren<FadeScreen>(true);
+            }
+            if (fadeScreen == null)
+            {
+                return;
+            }
+            var fadeCanvasObject = new GameObject("FadeCanvas", typeof(RectTransform), typeof(Canvas));
+            Transform root = transform.parent != null ? transform.parent : transform;
+            fadeCanvasObject.transform.SetParent(root, false);
+            var fadeCanvas = fadeCanvasObject.GetComponent<Canvas>();
+            fadeCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            fadeCanvas.sortingOrder = 40;
+            fadeScreen.transform.SetParent(fadeCanvasObject.transform, false);
+            var rect = (RectTransform)fadeScreen.transform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            rect.localScale = Vector3.one;
         }
 
         private System.Collections.Generic.IEnumerable<Transform> GetChildren()
@@ -84,6 +136,8 @@ namespace BorrowTomorrow.UI
             SetInteractionPrompt(false);
             CancelInvoke(nameof(HideBlockedToast));
             HideBlockedToast();
+            HideControlsHint();
+            HideTimelineHint();
             if (eraBadge != null) eraBadge.Hide();
             if (boundaryHandle != null) boundaryHandle.ResetBinding();
             if (next == GamePhase.MainMenu && fadeScreen != null) fadeScreen.FadeIn(0f);
@@ -177,6 +231,28 @@ namespace BorrowTomorrow.UI
             {
                 blockedToastText.enabled = false;
             }
+        }
+
+        public void ShowControlsHint()
+        {
+            EnsureTutorialHints();
+            tutorialHints?.ShowControls();
+        }
+
+        public void HideControlsHint()
+        {
+            tutorialHints?.HideControls();
+        }
+
+        public void ShowTimelineHint()
+        {
+            EnsureTutorialHints();
+            tutorialHints?.ShowTimeline();
+        }
+
+        public void HideTimelineHint()
+        {
+            tutorialHints?.HideTimeline();
         }
 
         public void FlashEraBadge(Era dominantEra)

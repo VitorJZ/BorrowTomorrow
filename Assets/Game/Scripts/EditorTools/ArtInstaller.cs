@@ -156,7 +156,8 @@ namespace BorrowTomorrow.EditorTools
                 {
                     string id=temporal.ObjectId;bool past=IsPast(original.transform,temporal.transform);
                     if(name=="Bar"||name.StartsWith("Rung_")||name=="BrokenStub"){original.enabled=false;continue;}
-                    if(id=="L00_fence_gate")asset=past?"PROP_Fence_1994":"PROP_Fence_2024";
+                    // L00 的挡路物已改为 2024 年木箱，由 L00ObstacleInstaller 负责贴图，不能再套栅栏皮。
+                    if(id=="L00_fence_gate")continue;
                     else if(id=="L01A_plank_bridge")asset=past?"PROP_BridgePlank_1994":"PROP_BridgePlank_2024";
                     else if(id=="L02_maintenance")asset="PROP_MetalWalkway_2024";
                     else if(id=="L03_floor")asset="PROP_WoodFloor_1994";
@@ -398,8 +399,9 @@ namespace BorrowTomorrow.EditorTools
         public static void Install()
         {
             Import();SkinPlayer();
-            foreach(var name in new[]{"Bootstrap","MainMenu","L00_Gate","L01_Courtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
+            foreach(var name in new[]{"Bootstrap","MainMenu","L00_Gate","L01_Courtyard","L01_TreeCourtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
             {
+                if (name == "L01_TreeCourtyard" && !System.IO.File.Exists(L01TreeSceneInstaller.ScenePath)) continue;
                 var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/"+name+".scene");
                 if(name=="Bootstrap")SkinHud(scene);
                 else if(name=="MainMenu")SkinMenu(scene);
@@ -450,8 +452,9 @@ namespace BorrowTomorrow.EditorTools
         private static void ExportPreviews()
         {
             string output=Path.Combine(Path.GetDirectoryName(BuildRoot),"Previews");Directory.CreateDirectory(output);
-            foreach(var level in new[]{"L00_Gate","L01_Courtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
+            foreach(var level in new[]{"L00_Gate","L01_Courtyard","L01_TreeCourtyard","L02_Sewing","L03_Corridor","L04_Attic","Epilogue"})
             {
+                if (level == "L01_TreeCourtyard" && !System.IO.File.Exists(L01TreeSceneInstaller.ScenePath)) continue;
                 var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/"+level+".scene");
                 var rooms=All<LevelRoot>(scene).ToArray();
                 foreach(var room in rooms)

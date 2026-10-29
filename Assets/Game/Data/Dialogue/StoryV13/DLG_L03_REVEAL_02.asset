@@ -17,12 +17,16 @@ MonoBehaviour:
   subtitle: "\u7EA2\u6BDB\u8863\uFF0C\u4E00\u6837\u7684\u8896\u53E3\u2026\u2026\u7167\u7247\u91CC\u7684\u5916\u5A46\uFF0C\u662F\u6211\u3002"
   voiceClip: {fileID: 8300000, guid: b7c480344353df44a9e338a2029c8870, type: 3}
   illustration: {fileID: 2800000, guid: e88bcd6d20e4f4542aa41fae56b049c9, type: 3}
+  documentMode: 0
   blackBackground: 0
   nextId: DLG_L03_REVEAL_03
   requiredFlags: []
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Self
   eventId: EVT_L03_PHOTO_REVEAL
   completionFlags: []

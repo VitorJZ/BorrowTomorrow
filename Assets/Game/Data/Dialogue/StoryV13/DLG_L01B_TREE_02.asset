@@ -17,12 +17,16 @@ MonoBehaviour:
   subtitle: "\u6811\u8981\u6162\u6162\u957F\uFF0C\u6653\u6653\u4E5F\u662F\u3002\u6025\u4EC0\u4E48\u3002"
   voiceClip: {fileID: 8300000, guid: 2b0f4658776a47f4885361b6d813a405, type: 3}
   illustration: {fileID: 0}
+  documentMode: 0
   blackBackground: 0
   nextId: DLG_L01B_TREE_03
   requiredFlags: []
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Tape
   eventId: EVT_L01B_HEIGHT_MARKS
   completionFlags: []

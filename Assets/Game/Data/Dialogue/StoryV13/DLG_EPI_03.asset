@@ -17,12 +17,16 @@ MonoBehaviour:
   subtitle: "\u6653\u6653\uFF1A\u4F60\u8BF4\u957F\u5927\u4E86\u8981\u53BB\u5F88\u8FDC\u7684\u5730\u65B9\u3002\u6211\u4E0D\u77E5\u9053\u90A3\u8FB9\u51AC\u5929\u51B7\u4E0D\u51B7\uFF0C\u5C31\u628A\u4F60\u5C0F\u65F6\u5019\u559C\u6B22\u7684\u82B1\u5E03\uFF0C\u62FC\u6210\u4E86\u4E00\u5E8A\u5C0F\u88AB\u5B50\u3002"
   voiceClip: {fileID: 8300000, guid: 1a8dfb6f91c45f078d1f23afccdc42a8, type: 3}
   illustration: {fileID: 2800000, guid: fffe5068612c2954fa4b6726e5751f03, type: 3}
+  documentMode: 0
   blackBackground: 0
   nextId: DLG_EPI_04
   requiredFlags: []
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Note
   eventId: EVT_EPILOGUE_MAIN
   completionFlags: []

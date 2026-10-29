@@ -80,7 +80,7 @@ namespace BorrowTomorrow.Diagnostics
             yield return Move(19.5f);
             Shot("02-L01A-canal");
             yield return PressE();
-            yield return Until(() => Boundary.RoomId == "L01B" && Free(), 10f, "Transition to tree room");
+            yield return Level("L01B");
             yield return Settle();
             yield return Move(48f);
             yield return ClimbTo(2.06f);

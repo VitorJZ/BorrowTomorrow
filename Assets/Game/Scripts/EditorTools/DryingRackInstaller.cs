@@ -150,7 +150,7 @@ namespace BorrowTomorrow.EditorTools
         public static void Install()
         {
             AssetDatabase.Refresh();Import();
-            var scene=EditorSceneManager.OpenScene("Assets/Game/Scenes/L01_Courtyard.scene");
+            var scene=EditorSceneManager.OpenScene(L01TreeSceneInstaller.AuthoredTreeScenePath);
             Configure(scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<LevelRoot>(true)).Single(r=>r.RoomId=="L01B"));
             EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();
             File.WriteAllText(Art+"installed.txt","L01B drying rack enabled");AssetDatabase.Refresh();

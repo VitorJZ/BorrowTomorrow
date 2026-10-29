@@ -17,6 +17,7 @@ MonoBehaviour:
   subtitle: "\u771F\u957F\u5230\u7A97\u53E3\u4E86\u2026\u2026\u6653\u6653\uFF0C\u8FD9\u56DE\u4F60\u4E0D\u7528\u8D70\u697C\u68AF\u4E86\u3002"
   voiceClip: {fileID: 8300000, guid: c13e94c8ce085f44c9e04c7ec5402845, type: 3}
   illustration: {fileID: 0}
+  documentMode: 0
   blackBackground: 0
   nextId: 
   requiredFlags:
@@ -26,6 +27,9 @@ MonoBehaviour:
   setFlags: []
   holdForConfirm: 0
   minDurationSeconds: 3
+  autoAdvance: 1
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Self
   eventId: EVT_L04_TREE_GROWN
   completionFlags:

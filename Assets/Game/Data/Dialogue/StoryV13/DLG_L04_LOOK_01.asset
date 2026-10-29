@@ -17,6 +17,7 @@ MonoBehaviour:
   subtitle: "\u5C31\u662F\u8FD9\u6247\u7A97\u2026\u2026\u53EF\u5230\u5E95\u662F\u54EA\u5757\u6728\u677F\uFF1F\u5F97\u518D\u9760\u8FD1\u4E9B\u770B\u770B\u3002"
   voiceClip: {fileID: 8300000, guid: ceab4058dacad3f4084a3358570a62de, type: 3}
   illustration: {fileID: 0}
+  documentMode: 0
   blackBackground: 0
   nextId: 
   requiredFlags:
@@ -25,6 +26,9 @@ MonoBehaviour:
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.2
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Self
   eventId: EVT_L04_LOOK_NICHE
   completionFlags:

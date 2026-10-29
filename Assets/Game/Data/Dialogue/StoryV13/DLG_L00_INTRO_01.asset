@@ -17,19 +17,23 @@ MonoBehaviour:
   subtitle: "\u6211\u53EB\u6797\u6653\uFF0C\u5C0F\u540D\u6653\u6653\uFF0C\u4ECA\u5E74\u4E03\u5C81\u3002\u8FD9\u76D8\u78C1\u5E26\uFF0C\u662F\u5F55\u7ED9\u957F\u5927\u4EE5\u540E\u7684\u6211\u542C\u7684\uFF01"
   voiceClip: {fileID: 8300000, guid: c74f5116d2912ad41adc49ca2491df53, type: 3}
   illustration: {fileID: 0}
+  documentMode: 0
   blackBackground: 1
   nextId: DLG_L00_INTRO_02
   requiredFlags:
   - '!IntroPlayed'
   setFlags: []
-  holdForConfirm: 1
-  minDurationSeconds: 0.2
+  holdForConfirm: 0
+  minDurationSeconds: 3
+  autoAdvance: 1
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Tape
   eventId: EVT_L00_INTRO
   completionFlags:
   - IntroPlayed
-  objectiveAfter: "\u53BB\u9601\u697C\uFF0C\u627E\u5230\u84DD\u8272\u94C1\u76AE\u76D2\u3002"
-  centeredTitle: 0
+  objectiveAfter: 
+  centeredTitle: 1
   delayBefore: 0
   sfxId: sfx_tape_click
   endHoldSeconds: 0

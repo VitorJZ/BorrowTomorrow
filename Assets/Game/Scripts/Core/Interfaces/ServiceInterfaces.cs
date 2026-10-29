@@ -124,6 +124,16 @@ namespace BorrowTomorrow.Core.Interfaces
         /// <summary>显示边界受阻提示：“先到稳固的地方。”（策划 4.5）。</summary>
         void ShowBoundaryBlocked(string reason);
 
+        /// <summary>开场操作提示：A/D 移动、空格跳跃。</summary>
+        void ShowControlsHint();
+
+        void HideControlsHint();
+
+        /// <summary>木箱受阻后的时间边界拖动提示。</summary>
+        void ShowTimelineHint();
+
+        void HideTimelineHint();
+
         /// <summary>章节角标：过门转场后重新标清两侧年代（策划 4.2）。</summary>
         void FlashEraBadge(BorrowTomorrow.Core.Data.Era dominantEra);
 

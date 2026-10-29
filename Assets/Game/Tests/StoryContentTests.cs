@@ -24,11 +24,11 @@ namespace BorrowTomorrow.Tests
             }
             return result;
         }
-        [Test] public void AllThirtyFiveEntries_KeepPerLineSetFlagsEmpty()
+        [Test] public void AllThirtyNineEntries_KeepPerLineSetFlagsEmpty()
         {
             var all = AssetDatabase.FindAssets("t:DialogueEntry", new[] { Dir.TrimEnd('/') })
                 .Select(g => AssetDatabase.LoadAssetAtPath<DialogueEntry>(AssetDatabase.GUIDToAssetPath(g))).ToList();
-            Assert.AreEqual(35, all.Count);
+            Assert.AreEqual(39, all.Count);
             foreach (var entry in all) Assert.IsEmpty(entry.setFlags ?? new string[0], entry.entryId + " 的逐句 setFlags 必须留空（规格 4.1）");
         }
         [TestCase("DLG_L00_INTRO_01", StoryFlags.IntroPlayed)]

@@ -9,6 +9,12 @@ namespace BorrowTomorrow.Core
         /// <summary>开场磁带录音已播放。</summary>
         public const string IntroPlayed = "IntroPlayed";
 
+        /// <summary>院门内的腾空通知已读，回屋动机已由独白引出。</summary>
+        public const string NoticeRead = "NoticeRead";
+
+        /// <summary>玩家已被 2024 年的木箱挡住，并获知时间边界可拖动。</summary>
+        public const string CrateBlocked = "CrateBlocked";
+
         /// <summary>身高刻线与儿童画已看过。</summary>
         public const string HeightMarksSeen = "HeightMarksSeen";
 

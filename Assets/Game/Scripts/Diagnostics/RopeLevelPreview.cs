@@ -29,8 +29,8 @@ namespace BorrowTomorrow.Diagnostics
             while(GameSession.Instance==null || GameSession.Instance.State.Phase!=GamePhase.MainMenu)
             {if(Time.realtimeSinceStartup>deadline){Destroy(gameObject);yield break;}yield return null;}
             var s=GameSession.Instance;
-            var definition=Resources.FindObjectsOfTypeAll<LevelDefinition>().FirstOrDefault(d=>d.levelId=="L01");
-            if(definition==null){Debug.LogError("[L01BPreview] Missing L01 definition");Destroy(gameObject);yield break;}
+            var definition=Resources.FindObjectsOfTypeAll<LevelDefinition>().FirstOrDefault(d=>d.levelId=="L01B");
+            if(definition==null){Debug.LogError("[L01BPreview] Missing L01B definition");Destroy(gameObject);yield break;}
             s.StoryFlags.Clear();s.StoryFlags.SetFlag("IntroPlayed");
             if(ServiceRegistry.TryGet<ICheckpointService>(out var cp))cp.RestoreFrom(null);
             s.LoadLevel(definition);

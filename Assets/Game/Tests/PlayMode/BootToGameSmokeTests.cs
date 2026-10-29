@@ -128,7 +128,7 @@ namespace BorrowTomorrow.Tests
             var boundary = (BoundaryController)ServiceRegistry.Get<IBoundaryContext>();
             var notice = Object.FindObjectOfType<PresentOnlyInvestigation>();
             var crates = Object.FindObjectsOfType<TemporalObject>().Single(t => t.ObjectId == "L00_fence_gate");
-            Assert.Greater(notice.anchorX, crates.AnchorX, "通知应位于木箱之后的必经路上");
+            Assert.Less(notice.anchorX, crates.AnchorX, "通知应位于木箱之前的必经路上");
             Assert.Less(notice.anchorX, Object.FindObjectOfType<NarrativeDogEcho>().anchorX, "通知应在阿黄之前");
             var interaction = notice.GetComponent<NarrativeInteractable>();
             var art = notice.transform.Find("ArtSkin").GetComponent<SpriteRenderer>();
@@ -152,16 +152,21 @@ namespace BorrowTomorrow.Tests
             var input = new WalkInput { MoveAxis = 1f };
             typeof(PlayerMotor2D).GetField("input", BindingFlags.Instance | BindingFlags.NonPublic)
                 .SetValue(motor, input);
-            boundary.RestoreBoundary(26f);
+            boundary.RestoreBoundary(0f);
             motor.TeleportTo(new Vector2(7f, .05f));
             yield return new WaitForSeconds(1.5f);
-            Assert.Less(motor.transform.position.x, 8f, "过去堆放的木箱必须阻挡玩家");
+            Assert.Less(motor.transform.position.x, crates.AnchorX, "2024 年堆放的木箱必须阻挡玩家");
+            // 靠近木箱会触发教学独白；先跳过，避免锁住后续移动断言。
+            float crateDialogueDeadline = Time.realtimeSinceStartup + 2f;
+            while (!dialogue.IsPlaying && Time.realtimeSinceStartup < crateDialogueDeadline) yield return null;
+            if (dialogue.IsPlaying) dialogue.SkipCurrent();
+            yield return null;
 
-            boundary.RestoreBoundary(0f);
+            boundary.RestoreBoundary(26f);
             yield return new WaitForSeconds(1.5f);
-            Assert.Greater(motor.transform.position.x, 12f, "现在木箱清走后应能从左侧沿平地通过");
+            Assert.Greater(motor.transform.position.x, 12f, "1994 年木箱清走后应能从左侧沿平地通过");
             input.MoveAxis = -1f;
-            yield return new WaitForSeconds(1.8f);
+            yield return new WaitForSeconds(2.2f);
             Assert.Less(motor.transform.position.x, 8f, "清空后的巷道也应能向左返回");
             input.MoveAxis = 0f;
         }
@@ -188,22 +193,22 @@ namespace BorrowTomorrow.Tests
             Assert.AreSame(dog, dogEvent.requiredVisibleDog, "场景事件必须使用实际阿黄的年代条件");
             var player = ServiceRegistry.Get<IPlayerContext>();
             boundary.RestoreBoundary(0f);
-            player.TeleportToPosition(new Vector2(14f, .05f));
+            player.TeleportToPosition(new Vector2(15.5f, .05f));
             yield return new WaitForSeconds(1f);
             Assert.IsTrue(player.IsGrounded);
-            Assert.IsFalse(dog.GetComponent<SpriteRenderer>().enabled);
+            Assert.IsFalse(dog.GetComponent<SpriteRenderer>().enabled, "现在态不得显示阿黄本体");
             Assert.IsFalse(dialogue.IsPlaying, "现代空狗窝旁不得触发阿黄台词");
-            Assert.IsFalse(session.StoryFlags.HasFlag("DogEchoPlayed"));
+            Assert.IsFalse(session.StoryFlags.HasFlag("DogEchoPlayed"), "现在态不得完成阿黄回声");
 
             boundary.RestoreBoundary(dog.anchorX);
             yield return new WaitForSeconds(.2f);
             Assert.IsFalse(dialogue.IsPlaying, "边界恰在锚点时，阿黄仍属现在态");
-            player.TeleportToPosition(new Vector2(18f, .05f));
+            player.TeleportToPosition(new Vector2(18.5f, .05f));
             boundary.RestoreBoundary(26f);
             yield return new WaitForSeconds(.8f);
             Assert.IsFalse(dialogue.IsPlaying, "离开阿黄附近后不得补播回声");
 
-            player.TeleportToPosition(new Vector2(14f, .05f));
+            player.TeleportToPosition(new Vector2(15.5f, .05f));
             yield return new WaitForSeconds(.3f);
             Assert.IsTrue(dog.GetComponent<SpriteRenderer>().enabled);
             Assert.AreEqual("DLG_L00_DOG_01", dialogue.Current?.entryId);
@@ -226,8 +231,9 @@ namespace BorrowTomorrow.Tests
             yield return new WaitForSeconds(.2f);
             Assert.AreEqual("DLG_L00_DOG_01", dialogue.Current?.entryId, "切回过去后仍可触发");
             float echoSeconds = Mathf.Max(3f, dialogue.Current.voiceClip != null ? dialogue.Current.voiceClip.length : 0f);
-            yield return new WaitForSeconds(echoSeconds + .3f);
-            Assert.IsFalse(dialogue.IsPlaying);
+            float echoDeadline = Time.realtimeSinceStartup + echoSeconds + 2f;
+            while (dialogue.IsPlaying && Time.realtimeSinceStartup < echoDeadline) yield return null;
+            Assert.IsFalse(dialogue.IsPlaying, "阿黄回声应在配音与自动停留结束后收尾");
             Assert.IsTrue(session.StoryFlags.HasFlag("DogEchoPlayed"));
             boundary.RestoreBoundary(0f);
             yield return null;

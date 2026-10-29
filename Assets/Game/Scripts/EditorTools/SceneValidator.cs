@@ -48,7 +48,7 @@ namespace BorrowTomorrow.EditorTools
             string id = def.levelId;
 
             LevelRoot[] rooms = FindObjects<LevelRoot>();
-            int expectedRooms = id == "L01" ? 2 : 1;
+            int expectedRooms = 1;
             if (rooms.Length != expectedRooms)
             {
                 failures.Add($"{id}: 房间数 {rooms.Length}，应为 {expectedRooms}");
@@ -124,7 +124,7 @@ namespace BorrowTomorrow.EditorTools
 
             int expectedTemporal = id switch
             {
-                "L00" => 1, "L01" => 3, "L02" => 2, "L02Indoor" => 5, "L03" => 3, "L04" => 3, _ => 0,
+                "L00" => 1, "L01" => 1, "L01B" => 3, "L02" => 2, "L02Indoor" => 5, "L03" => 3, "L04" => 3, _ => 0,
             };
             if (totalTemporal != expectedTemporal)
             {
@@ -133,7 +133,7 @@ namespace BorrowTomorrow.EditorTools
 
             // 出口（策划 7.7）：L04 以 BoxLocated 标记通关，其余关卡应有出口门。
             var doors = FindObjects<ExitDoor>();
-            int expectedDoors = id switch { "L00" => 1, "L01" => 2, "L02" => 1, "L03" => 1, "L04" => 0, _ => 1 };
+            int expectedDoors = id switch { "L00" => 1, "L01" => 1, "L02" => 1, "L03" => 1, "L04" => 0, _ => 1 };
             if (id == "L04")
             {
                 var director = FindObjects<LevelDirector>().FirstOrDefault(d => d != null);

@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: L00_fence_gate
   m_EditorClassIdentifier: 
   objectId: L00_fence_gate
-  anchorX: 10
+  anchorX: 12
   pastState:
-    stateId: stored_crates
-    sprite: {fileID: 0}
-    canStand: 1
-    blocksMovement: 1
-  presentState:
     stateId: cleared_lane
     sprite: {fileID: 0}
     canStand: 0
     blocksMovement: 0
+  presentState:
+    stateId: stored_crates
+    sprite: {fileID: 0}
+    canStand: 0
+    blocksMovement: 1
   safetyPolicy: 3
   anchorHysteresis: 0.05
   switchSfxId: temporal_switch

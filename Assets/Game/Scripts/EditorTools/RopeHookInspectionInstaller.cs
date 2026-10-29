@@ -33,7 +33,7 @@ namespace BorrowTomorrow.EditorTools
         public static void Install()
         {
             if (EditorApplication.isPlaying) throw new InvalidOperationException("Stop Play Mode before installation");
-            var scene = EditorSceneManager.OpenScene("Assets/Game/Scenes/L01_Courtyard.scene");
+            var scene = EditorSceneManager.OpenScene(L01TreeSceneInstaller.AuthoredTreeScenePath);
             var room = scene.GetRootGameObjects().SelectMany(x => x.GetComponentsInChildren<LevelRoot>(true)).Single(x => x.RoomId == "L01B");
             Configure(room.GetComponentInChildren<RopeDryingRack>(true));
             EditorSceneManager.MarkSceneDirty(scene);

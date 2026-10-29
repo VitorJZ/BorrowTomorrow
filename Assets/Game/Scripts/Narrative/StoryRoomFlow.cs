@@ -26,6 +26,8 @@ namespace BorrowTomorrow.Narrative
                         text = room.RoomId == "L04" && f.HasFlag("CompartmentSeen") ? "靠近窗边，确认铁盒藏处。" : Objectives.TellXiaoxaoBoxLocation;
                     else if (room.RoomId == "L04") text = Objectives.TellXiaoxaoBoxLocation;
                     else if (f.HasFlag("UniformRead")) text = "穿过楼上回廊，前往阁楼门前。";
+                    // L00 开场只教操作；读完腾空通知、由独白引出铁盒后才显示首个目标。
+                    else if (room.RoomId == "L00" && !f.HasFlag("NoticeRead") && !f.HasFlag("CrateBlocked")) text = null;
                     else if (room.RoomId == "L00") text = "去阁楼，找到蓝色铁皮盒。";
                     else if (room.RoomId == "L01A") text = f.HasFlag("Mechanism_L01A_BridgeLowered") || f.HasFlag("HintPassed_L01A_Canal")
                         ? "沿放下的木桥过渠，进入院子。" : "借过去的摇柄装置，放下水渠木桥。";

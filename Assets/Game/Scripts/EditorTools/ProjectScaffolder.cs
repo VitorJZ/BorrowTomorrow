@@ -69,6 +69,8 @@ namespace BorrowTomorrow.EditorTools
             var indoor = AssetDatabase.LoadAssetAtPath<LevelDefinition>("Assets/Game/Data/Levels/L02Indoor_L02_SewingRoom.asset");
             var expanded = new List<LevelDefinition>(catalog);
             if (indoor != null) expanded.Insert(expanded.FindIndex(d => d.levelId == "L02") + 1, indoor);
+            var tree = AssetDatabase.LoadAssetAtPath<LevelDefinition>(L01TreeSceneInstaller.DefinitionPath);
+            if (tree != null) expanded.Insert(expanded.FindIndex(d => d.levelId == "L01") + 1, tree);
             return expanded.ToArray();
         }
 

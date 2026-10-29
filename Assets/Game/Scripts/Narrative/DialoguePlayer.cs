@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using BorrowTomorrow.Core;
 using BorrowTomorrow.Core.Data;
@@ -12,8 +13,15 @@ namespace BorrowTomorrow.Narrative
     {
         [SerializeField, Range(0f, 1f)] private float voiceVolume = 1f;
         [SerializeField] private AudioClip tapeHiss;
+        [Tooltip("黑屏开场两句录音的磁带底噪音量（相对语音音量）")]
+        [SerializeField, Range(0f, 1f)] private float introTapeHissVolume = 0.55f;
+        [SerializeField] private float tapeHissFadeSeconds = 0.35f;
+        [Tooltip("黑屏开场后淡入关卡的时长")]
+        [SerializeField] private float sceneRevealFadeSeconds = 1.2f;
         private AudioSource voiceSource;
         private AudioSource tapeSource;
+        private Coroutine tapeFade;
+        private float tapeTargetVolume;
         private DialogueEntry current;
         private bool replayWholeChain;
         private DialogueEntry first;
@@ -25,6 +33,7 @@ namespace BorrowTomorrow.Narrative
         private string[] pages;
         private int page;
         private float timer;
+        private float autoTimer;
         private float endingTimer = -1f;
         private bool presented;
         private bool ownsControl;
@@ -47,6 +56,7 @@ namespace BorrowTomorrow.Narrative
         public IReadOnlyList<DialogueEntry> History => history;
         public int InitializeOrder => -20;
         public DialogueEntry Current => current;
+        public float SceneRevealFadeSeconds => sceneRevealFadeSeconds;
         public event Action<DialogueEntry> LineStarted;
 
         private void Awake()
@@ -212,9 +222,14 @@ namespace BorrowTomorrow.Narrative
             page = 0;
             pages = SplitPages(entry.subtitle, entry.centeredTitle ? 100 : 52);
             timer = -entry.delayBefore;
+            autoTimer = 0f;
             presented = false;
             voiceSource.Stop();
-            tapeSource.Stop();
+            // 连续两条磁带时让底噪自然延续，非磁带台词才淡出。
+            if (entry.source != "Tape")
+            {
+                StopTapeHiss();
+            }
             // Retain the previous line's view until the next line is ready, so delays
             // cannot flash the gameplay camera or cancel an in-progress UI click.
             if (!readOnly && !history.Contains(entry)) history.Add(entry);
@@ -223,15 +238,15 @@ namespace BorrowTomorrow.Narrative
         private void PresentLine()
         {
             presented = true;
+            autoTimer = 0f;
             GameSession.Instance?.RecordDialogue(current.entryId);
             if (ServiceRegistry.TryGet<ICharacterArt>(out var character)
                 && (current.entryId == "DLG_L03_REVEAL_01" || current.entryId == "DLG_L04_LOOK_01"))
                 character.PlayGesture("Interact");
             if (current.source == "Tape" && tapeHiss != null)
             {
-                tapeSource.clip = tapeHiss;
-                tapeSource.volume = voiceSource.volume * 0.045f;
-                tapeSource.Play();
+                bool cinematic = current.centeredTitle && current.blackBackground;
+                PlayTapeHiss(voiceSource.volume * (cinematic ? introTapeHissVolume : 0.045f));
             }
             if (current.voiceClip != null)
             {
@@ -241,12 +256,15 @@ namespace BorrowTomorrow.Narrative
             if (!string.IsNullOrEmpty(current.sfxId) && ServiceRegistry.TryGet<IAudioService>(out var audio))
                 audio.PlaySfx(current.sfxId);
             ShowPage();
+            if (current.fadeInOnStart && ServiceRegistry.TryGet<IHudService>(out var fadeHud))
+                fadeHud.FadeIn(sceneRevealFadeSeconds);
             LineStarted?.Invoke(current);
         }
         private void ShowPage()
         {
             string text = pages[page];
-            if (current.source == "Tape") text = "「" + text + "」";
+            // 黑屏居中开场保持干净排版，不加引用括号。
+            if (current.source == "Tape" && !current.centeredTitle) text = "「" + text + "」";
             if (ServiceRegistry.TryGet<INarrativePresentation>(out var view))
                 view.Present(current, text, ownsControl, page + 1, pages.Length);
             else if (ServiceRegistry.TryGet<IHudService>(out var hud)) hud.ShowSubtitle(current.speakerLabel, text);
@@ -269,7 +287,12 @@ namespace BorrowTomorrow.Narrative
             if (voicePaused)
             {
                 if (ServiceRegistry.TryGet<ISaveService>(out var save)) voiceSource.volume = voiceVolume * save.LoadSettings().volumeVoice;
-                tapeSource.volume = voiceSource.volume * 0.045f;
+                if (current != null && current.source == "Tape" && tapeHiss != null)
+                {
+                    bool cinematic = current.centeredTitle && current.blackBackground;
+                    tapeTargetVolume = voiceSource.volume * (cinematic ? introTapeHissVolume : 0.045f);
+                }
+                tapeSource.volume = tapeTargetVolume;
                 voiceSource.UnPause(); tapeSource.UnPause(); voicePaused = false;
             }
             if (actionPhase != ActionPhase.None) { UpdateAction(); return; }
@@ -281,6 +304,12 @@ namespace BorrowTomorrow.Narrative
                 return;
             }
             if (!presented) { if (timer >= 0f) PresentLine(); return; }
+            autoTimer += Time.deltaTime;
+            if (current.autoAdvance && autoTimer >= AutoAdvanceTime())
+            {
+                Advance();
+                return;
+            }
             if(pendingManualAdvance && timer>=.18f)
             {
                 pendingManualAdvance=false;Advance();return;
@@ -322,6 +351,7 @@ namespace BorrowTomorrow.Narrative
             {
                 page++;
                 timer = 0f;
+                autoTimer = 0f;
                 ShowPage();
                 return;
             }
@@ -360,7 +390,7 @@ namespace BorrowTomorrow.Narrative
         private void End(bool completed)
         {
             voiceSource.Stop();
-            tapeSource.Stop();
+            StopTapeHiss();
             voicePaused = false;
             actionPhase = ActionPhase.None;
             action = null;
@@ -385,6 +415,79 @@ namespace BorrowTomorrow.Narrative
             onCompleted = null;
             if (completed) callback?.Invoke();
         }
+        /// <summary>自动推进时间：配音播完后再停留一段自然停顿。</summary>
+        private float AutoAdvanceTime()
+        {
+            if (current == null)
+            {
+                return 0f;
+            }
+            float voice = current.voiceClip != null ? current.voiceClip.length : 0f;
+            return Mathf.Max(current.minDurationSeconds, voice) + Mathf.Max(0f, current.autoAdvanceDelay);
+        }
+
+        private void PlayTapeHiss(float targetVolume)
+        {
+            if (tapeHiss == null)
+            {
+                return;
+            }
+            if (tapeSource.clip != tapeHiss)
+            {
+                tapeSource.Stop();
+                tapeSource.clip = tapeHiss;
+                tapeSource.volume = 0f;
+            }
+            if (!tapeSource.isPlaying)
+            {
+                tapeSource.volume = 0f;
+                tapeSource.Play();
+            }
+            tapeTargetVolume = Mathf.Clamp01(targetVolume);
+            if (tapeFade != null)
+            {
+                StopCoroutine(tapeFade);
+            }
+            tapeFade = StartCoroutine(FadeTapeHiss(tapeTargetVolume, Mathf.Max(0.01f, tapeHissFadeSeconds), false));
+        }
+
+        private void StopTapeHiss()
+        {
+            if (tapeSource == null)
+            {
+                return;
+            }
+            tapeTargetVolume = 0f;
+            if (!tapeSource.isPlaying)
+            {
+                tapeSource.Stop();
+                return;
+            }
+            if (tapeFade != null)
+            {
+                StopCoroutine(tapeFade);
+            }
+            tapeFade = StartCoroutine(FadeTapeHiss(0f, Mathf.Max(0.01f, tapeHissFadeSeconds), true));
+        }
+
+        private IEnumerator FadeTapeHiss(float target, float seconds, bool stopWhenDone)
+        {
+            float start = tapeSource.volume;
+            float t = 0f;
+            while (t < seconds)
+            {
+                t += Time.deltaTime;
+                tapeSource.volume = Mathf.Lerp(start, target, t / seconds);
+                yield return null;
+            }
+            tapeSource.volume = target;
+            if (stopWhenDone)
+            {
+                tapeSource.Stop();
+            }
+            tapeFade = null;
+        }
+
         private DialogueEntry FindNext(string id) => ServiceRegistry.TryGet<DialogueLibrary>(out var lib) ? lib.Find(id) : null;
         private static string[] SplitPages(string text, int limit)
         {
