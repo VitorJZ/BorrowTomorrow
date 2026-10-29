@@ -2543,6 +2543,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eae7eaa6201aef24e86a0a1d8a0af3b9, type: 2}
   - {fileID: 11400000, guid: d938ea46d8f635840a3dcd22f640181f, type: 2}
   - {fileID: 11400000, guid: 3426425a8665c184494137e171ace889, type: 2}
+  - {fileID: 11400000, guid: 575e69933f822714c9d3e6c74f5280fc, type: 2}
   - {fileID: 11400000, guid: 96085786833f1ee4c8ccca884f62a7e5, type: 2}
   - {fileID: 11400000, guid: 1112e7734ba5ce04c906a63db2c0fcff, type: 2}
   - {fileID: 11400000, guid: 824ff32df176dbb41b69e7cc643561fd, type: 2}
@@ -2567,6 +2568,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f05fc714b75e64367bfd069a92cdd26f, type: 2}
   - {fileID: 11400000, guid: c29e22fdf67a84fecbf64c5bb6822eb8, type: 2}
   - {fileID: 11400000, guid: dc8abe4bc8700421a8f15d2e9911b5da, type: 2}
+  - {fileID: 11400000, guid: c7a95eafea0613849bd6b98770da7702, type: 2}
+  - {fileID: 11400000, guid: 7dbff9d1ce854b146bdd9015fa713ea2, type: 2}
+  - {fileID: 11400000, guid: fc31cf33677258e4f923ff39a461b667, type: 2}
 --- !u!114 &896203968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2606,8 +2610,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: ad1570def9d7433cabe3a839f2b7c7ed, type: 3}
     volume: 0.3
   - id: sfx_dog_soft
-    clip: {fileID: 8300000, guid: 416cdf9ef30a45dea240ad14e1b49a64, type: 3}
-    volume: 0.18
+    clip: {fileID: 8300000, guid: d0815b90a68e31447947b970c8d65861, type: 3}
+    volume: 0.38
   - id: door_open
     clip: {fileID: 8300000, guid: 432bfd19a2cf478fb16cc48d3c784580, type: 3}
     volume: 0.3

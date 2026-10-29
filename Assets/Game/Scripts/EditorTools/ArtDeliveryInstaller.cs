@@ -387,18 +387,9 @@ namespace BorrowTomorrow.EditorTools
         {
             float viewW = Backdrop(room, "BG_L03_Corridor_1994_v2", "BG_L03_Corridor_2024_v2", 31f, 15.5f, 3f, .80f, .80f, V2);
             MoveExit(room, 15.5f - viewW * .5f + .945f * viewW);
-            // 缺失地板的下方是深坑：覆盖背景画出的连续地梁，避免把缺口读成可走路面。
+            // 深坑方案已撤回；保留原背景的楼下墙梁，不再叠加整块矩形压暗。
             var content = room.transform.Find("Content");
-            RemoveChild(content, "PitFill");
-            var pit = new GameObject("PitFill");
-            pit.transform.SetParent(content, false);
-            var white = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Game/Art/Props/Constant/WhiteRect.png");
-            if (white == null) white = AssetDatabase.FindAssets("WhiteRect t:Sprite").Select(g => AssetDatabase.LoadAssetAtPath<Sprite>(AssetDatabase.GUIDToAssetPath(g))).FirstOrDefault(sp => sp != null);
-            var pitSr = Put(pit.transform, "Pit", white, new Vector2(11.25f, 1.2f), new Vector2(13.5f, 3.2f), "FarBuildings", -40);
-            pitSr.drawMode = SpriteDrawMode.Sliced; pitSr.size = new Vector2(13.5f, 3.2f);
-            pitSr.transform.localScale = Vector3.one;
-            // 半透明压暗：仍读作“缺地板的深坑”，但透出背景楼下的墙与梁，不再是一块死黑色块。
-            pitSr.color = new Color(.12f, .09f, .07f, .82f);
+            CorridorRepairInstaller.ClearPitOverlay(room);
             var floor = room.GetComponentsInChildren<TemporalObject>(true).First(t => t.ObjectId == "L03_floor");
             Reskin(floor.transform.Find("Past/Plank"), Strip("Strip_Wood"));
             var walkway = room.GetComponentsInChildren<TemporalObject>(true).First(t => t.ObjectId == "L03_walkway");
@@ -408,6 +399,7 @@ namespace BorrowTomorrow.EditorTools
             RemoveChild(photo, "ArtSkin");
             PutByBounds(photo, "ArtSkin", Load("Props", "PROP_Photo_CanonicalInFrame"), new Vector2(28.3f, 3.28f), 1.1f, "EraPlatform", 3);
             CorridorRubbleInstaller.Configure(room);
+            CorridorLooseFloorInstaller.Configure(room);
         }
 
         // ---------------------------------------------------------------- L04 阁楼窗外

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using BorrowTomorrow.Core.Data;
@@ -127,6 +127,7 @@ namespace BorrowTomorrow.EditorTools
             LevelLayouts.SetField(exit,"requiredFlagsOverride",new[]{RopeDryingRack.SecuredFlag,"HeightMarksSeen"});
             LevelLayouts.SetField(exit,"lockedHintOverride","先沿晾架走过来，在阳台听完这段回忆。");
             RopePuzzleVisualInstaller.Configure(room);
+            RopeHookInspectionInstaller.Configure(mechanism);
             EditorUtility.SetDirty(mechanism);EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
             // Append all current L01B lines; retain every other level's voice/story data.
             var bootstrap=EditorSceneManager.OpenScene("Assets/Game/Scenes/Bootstrap.scene");

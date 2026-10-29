@@ -20,10 +20,10 @@ MonoBehaviour:
   turnCaption: "\u7FFB\u56DE\u7167\u7247\u6B63\u9762"
   targetRegion:
     serializedVersion: 2
-    x: 0.545
-    y: 0.13
-    width: 0.155
-    height: 0.46
+    x: 0.405
+    y: 0.11
+    width: 0.18
+    height: 0.64
   confirmAfter: 
   seconds: 0.9
   sfxId: sfx_cloth_paper

@@ -68,7 +68,17 @@ namespace BorrowTomorrow.Tests
             Assert.AreEqual("L01B", session.CurrentLevel.levelId);
             Assert.AreEqual("L01B", session.ActiveRoom.RoomId);
             Assert.AreEqual(1, Object.FindObjectsOfType<LevelRoot>(true).Length);
-            Assert.IsNotNull(Object.FindObjectOfType<RopeDryingRack>());
+            var mechanism = Object.FindObjectOfType<RopeDryingRack>();
+            Assert.IsNotNull(mechanism);
+            var hooks = Object.FindObjectsOfType<RopeHookInteractable>(true);
+            Assert.AreEqual(1, hooks.Length, "The migrated hook must exist exactly once in the tree scene.");
+            Assert.AreSame(mechanism, hooks[0].mechanism);
+            Assert.AreEqual(mechanism.rack.transform.Find("Past"), hooks[0].transform.parent);
+            Assert.Less(Vector3.Distance(mechanism.hook.position, hooks[0].transform.position), .001f);
+            var hookTrigger = hooks[0].GetComponent<BoxCollider2D>();
+            Assert.IsNotNull(hookTrigger);
+            Assert.IsTrue(hookTrigger.isTrigger);
+            Assert.AreEqual(new Vector2(.9f, 1f), hookTrigger.size);
             Assert.AreEqual(40f, ServiceRegistry.Get<IBoundaryContext>().RangeMin);
             Assert.AreEqual(69f, ServiceRegistry.Get<IBoundaryContext>().RangeMax);
             Assert.Greater(ServiceRegistry.Get<IPlayerContext>().Position.x, 40f);

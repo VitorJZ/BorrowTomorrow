@@ -1,4 +1,4 @@
-using BorrowTomorrow.Core;
+﻿using BorrowTomorrow.Core;
 using BorrowTomorrow.Core.Data;
 using BorrowTomorrow.Core.Interfaces;
 using BorrowTomorrow.TimeBoundary;
@@ -70,6 +70,14 @@ namespace BorrowTomorrow.Level
         public string InteractId => "L01B_rope_v7";
         public string InteractPrompt => string.Empty;
         public bool CanInteract => false; // The nearby knot owns E; this root is not an extra interactable.
+        public bool CanInspectHook => !Released && rack.CurrentEra == Era.Past && Ready(out _);
+        public bool TryInspectHook()
+        {
+            if (!CanInspectHook) return false;
+            hintTime = 0;
+            Say("找根绳子，或许能把这段木梯吊起来。");
+            return true;
+        }
         public bool CanReleaseKnot => !Released && tree.CurrentEra == Era.Past && Ready(out _);
         private bool Flag(string id) => GameSession.Instance != null && GameSession.Instance.StoryFlags.HasFlag(id);
         private void Mark(string id) { GameSession.Instance.StoryFlags.SetFlag(id); }
@@ -259,6 +267,8 @@ namespace BorrowTomorrow.Level
                 if (!Released && tree.CurrentEra == Era.Past && PrimaryPressed
                     && OverKnot(PointerPosition))
                     ReleaseKnot();
+                else if (CanInspectHook && PrimaryPressed && OverPoint(PointerPosition, hook.position))
+                    TryInspectHook();
                 else if (!Secured && Released && rack.CurrentEra == Era.Past && unlockTime <= 0 && routeSlideRemaining <= 0 && PrimaryPressed
                     && OverPoint(PointerPosition, tailImage.transform.position))
                 {
