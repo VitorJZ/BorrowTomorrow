@@ -65,6 +65,27 @@ namespace BorrowTomorrow.Tests
             Assert.AreEqual(position, boundary.CommittedBoundary, .01f);
         }
 
+        private static void AssertClothesRestOnFloor(ClothTidyInteractable tidy)
+        {
+            var renderer=tidy.cloth.GetComponent<SpriteRenderer>();
+            Assert.IsNotNull(renderer.sprite, "Completed clothes must have visible art, not a missing reference.");
+            Assert.IsTrue(renderer.enabled, "Pickup animation must restore the clothes renderer.");
+            Assert.AreEqual(tidy.cloth.localScale.x,tidy.cloth.localScale.y,.0001f, "Clothes must retain their aspect ratio.");
+            Assert.That(renderer.bounds.min.y,Is.InRange(0f,.055f), "Completed clothes must rest on the floor.");
+        }
+
+        private static void AssertClothesHung(ClothTidyInteractable tidy)
+        {
+            Assert.IsNotNull(tidy.clothesRack);
+            Assert.IsNotNull(tidy.completedSprite);
+            Assert.AreEqual(tidy.completedSprite,tidy.clothesRack.sprite);
+            Assert.IsTrue(tidy.clothesRack.enabled);
+            Assert.IsTrue(tidy.clothesRack.gameObject.activeInHierarchy);
+            Assert.IsFalse(tidy.cloth.gameObject.activeSelf,"Ground pile must disappear after hanging.");
+            Assert.That(tidy.clothesRack.bounds.min.y,Is.InRange(0f,.055f));
+            Assert.AreEqual(tidy.clothesRack.transform.localScale.x,tidy.clothesRack.transform.localScale.y,.0001f);
+        }
+
         [UnityTest]
         public IEnumerator ExteriorDoorLoadsIndependentInterior_PastOnlyObjectsRevealAtTheirAnchors()
         {
@@ -96,18 +117,26 @@ namespace BorrowTomorrow.Tests
             yield return null;
             Assert.IsTrue(ledger.CanInteract);
             Assert.IsTrue(tidy.CanInteract);
+            var emptySprite=tidy.clothesRack.sprite;
+            var rackBounds=tidy.clothesRack.bounds;
+            Assert.IsNotNull(emptySprite);
+            Assert.AreNotEqual(emptySprite,tidy.completedSprite);
+            Assert.IsTrue(tidy.cloth.gameObject.activeInHierarchy);
             Assert.IsTrue(tidy.Interact());
             yield return new WaitForSeconds(1.3f);
             Assert.IsTrue(session.StoryFlags.HasFlag("ClothTidyDone"));
-            Assert.AreEqual(tidy.chairPosition, tidy.cloth.position);
+            AssertClothesHung(tidy);
             DragTo(0f);
             yield return null;
             Assert.IsFalse(tidy.cloth.gameObject.activeInHierarchy);
+            Assert.IsFalse(tidy.clothesRack.gameObject.activeInHierarchy);
             Assert.IsFalse(uniform.CanInteract);
             DragTo(18f);
             yield return null;
-            Assert.IsTrue(tidy.cloth.gameObject.activeInHierarchy);
-            Assert.AreEqual(tidy.completedSprite, tidy.cloth.GetComponent<SpriteRenderer>().sprite);
+            Assert.IsTrue(tidy.clothesRack.gameObject.activeInHierarchy);
+            AssertClothesHung(tidy);
+            Assert.That(Vector3.Distance(rackBounds.size,tidy.clothesRack.bounds.size),Is.LessThan(.0001f));
+            Assert.That(Vector3.Distance(rackBounds.center,tidy.clothesRack.bounds.center),Is.LessThan(.0001f));
             Assert.IsFalse(tidy.CanInteract, "Returning to the past must not reset tidied clothing.");
 
             ServiceRegistry.Get<ICheckpointService>().Capture("cp_L02_indoor");
@@ -117,12 +146,33 @@ namespace BorrowTomorrow.Tests
             Assert.AreEqual("L02Indoor", session.ActiveRoom.RoomId);
             Assert.AreEqual(18f, ServiceRegistry.Get<IBoundaryContext>().CommittedBoundary, .01f);
             tidy = Object.FindObjectOfType<ClothTidyInteractable>(true);
-            Assert.AreEqual(tidy.chairPosition, tidy.cloth.position);
+            AssertClothesHung(tidy);
             Assert.IsFalse(tidy.CanInteract);
             session.StoryFlags.SetFlag("UniformRead");
             Assert.IsTrue(Object.FindObjectOfType<ExitDoor>().Interact());
             yield return WaitForPlaying();
             Assert.AreEqual("L03", session.CurrentLevel.levelId);
+        }
+
+        [UnityTest]
+        public IEnumerator MissingCompletionArtKeepsGroundedClothesVisible()
+        {
+            session.LoadLevel(session.FindLevel("L02Indoor"));
+            yield return WaitForPlaying();
+            DragTo(18f);
+            yield return null;
+            var tidy=Object.FindObjectOfType<ClothTidyInteractable>(true);
+            tidy.completedSprite=null;
+            var renderer=tidy.cloth.GetComponent<SpriteRenderer>();
+            var original=renderer.sprite;
+            var scale=tidy.cloth.localScale;
+            Assert.IsNotNull(original);
+            Assert.IsTrue(tidy.Interact());
+            yield return new WaitForSeconds(1.3f);
+            Assert.IsTrue(session.StoryFlags.HasFlag("ClothTidyDone"));
+            Assert.AreEqual(original,renderer.sprite);
+            Assert.AreEqual(scale,tidy.cloth.localScale);
+            AssertClothesRestOnFloor(tidy);
         }
 
         [UnityTest]

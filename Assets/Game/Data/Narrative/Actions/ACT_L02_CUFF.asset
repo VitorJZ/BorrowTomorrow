@@ -138,5 +138,5 @@ MonoBehaviour:
     height: 0.23
   coverColor: {r: 0.95, g: 0.94, b: 0.9, a: 1}
   coverSlide: {x: 0.03, y: -0.04}
-  zoom: 1.2
-  focus: {x: 0.56, y: 0.5}
+  zoom: 1
+  focus: {x: 0.5, y: 0.5}

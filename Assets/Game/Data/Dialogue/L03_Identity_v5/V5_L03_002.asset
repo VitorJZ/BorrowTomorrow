@@ -17,12 +17,17 @@ MonoBehaviour:
   subtitle: "1994\u5E74\u79CB\u3002\u6653\u6653\u4E03\u5C81\uFF0C\u548C\u5916\u5A46\u5728\u65B0\u79CD\u7684\u6842\u82B1\u6811\u65C1\u3002"
   voiceClip: {fileID: 0}
   illustration: {fileID: 2800000, guid: 1f36fa4ec535d0f4c8f20bdb401ea888, type: 3}
+  documentMode: 0
   blackBackground: 0
+  memoryEcho: 0
   nextId: V5_L03_003
   requiredFlags: []
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.1
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Note
   eventId: EVT_L03_PHOTO_REVEAL_V5
   completionFlags: []

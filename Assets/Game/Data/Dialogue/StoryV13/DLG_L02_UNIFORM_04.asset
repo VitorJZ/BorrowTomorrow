@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entryId: DLG_L02_UNIFORM_04
   speakerLabel: "\u6211"
-  subtitle: "\u2026\u2026\u5979\u6700\u559C\u6B22\u7684\u7EA2\u788E\u82B1\uFF0C\u8FD8\u6709\u90A3\u5757\u84DD\u683C\u5B50\u3002\u6211\u62FC\u6210\u4E86\u4E00\u5E8A\u5C0F\u88AB\u9762\uFF0C\u6536\u8FDB\u84DD\u94C1\u76D2\u91CC\u4E86\u3002"
-  voiceClip: {fileID: 8300000, guid: 413baec5e73ae6d4bbb04bef25510d85, type: 3}
+  subtitle: "\u2026\u2026\u7EA2\u788E\u82B1\uFF0C\u8FD8\u6709\u90A3\u5757\u84DD\u683C\u5B50\u3002\u90A3\u5E8A\u5C0F\u88AB\u9762\uFF0C\u7528\u7684\u5C31\u662F\u8FD9\u4E24\u5757\u5E03\u3002\u8FD8\u6536\u5728\u84DD\u94C1\u76D2\u91CC\u5462\u3002"
+  voiceClip: {fileID: 0}
   illustration: {fileID: 2800000, guid: c3cab964b0f9ef443a5d8f2d49b20037, type: 3}
   documentMode: 0
   blackBackground: 0
+  memoryEcho: 0
   nextId: 
   requiredFlags: []
   setFlags: []

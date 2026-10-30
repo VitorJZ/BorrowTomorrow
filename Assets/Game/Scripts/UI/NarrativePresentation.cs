@@ -49,6 +49,18 @@ namespace BorrowTomorrow.UI
         private bool credits;
         private bool wasPaused;
         private DialogueEntry displayed;
+        // 记忆回放：黑底上叠暖色旧照调、暗角、胶片颗粒与扫描线，画面轻微呼吸。
+        private RawImage echoPaper;
+        private RawImage echoVignette;
+        private RawImage echoGrain;
+        private RawImage echoScanlines;
+        private Text echoTag;
+        private Texture2D echoVignetteTexture;
+        private Texture2D echoGrainTexture;
+        private Texture2D echoScanlineTexture;
+        private Texture2D echoPaperTexture;
+        private float echoAmount;
+        private readonly System.Random echoRandom = new System.Random(20261030);
         private void Awake()
         {
             ServiceRegistry.Register<INarrativePresentation>(this);
@@ -81,6 +93,26 @@ namespace BorrowTomorrow.UI
             cover = Node<Image>("ActionCover", picture.transform, Vector2.zero, Vector2.zero);
             cover.raycastTarget = false;
             cover.gameObject.SetActive(false);
+            echoPaper = Node<RawImage>("EchoPaper", frame.transform, Vector2.zero, Vector2.zero, true);
+            echoPaper.texture = echoPaperTexture = MakePaperTexture();
+            echoPaper.raycastTarget = false;
+            echoPaper.gameObject.SetActive(false);
+            echoVignette = Node<RawImage>("EchoVignette", frame.transform, Vector2.zero, Vector2.zero, true);
+            echoVignette.texture = echoVignetteTexture = MakeVignetteTexture();
+            echoVignette.raycastTarget = false;
+            echoGrain = Node<RawImage>("EchoGrain", frame.transform, Vector2.zero, Vector2.zero, true);
+            echoGrain.texture = echoGrainTexture = MakeGrainTexture();
+            echoGrain.raycastTarget = false;
+            echoScanlines = Node<RawImage>("EchoScanlines", frame.transform, Vector2.zero, Vector2.zero, true);
+            echoScanlines.texture = echoScanlineTexture = MakeScanlineTexture();
+            echoScanlines.raycastTarget = false;
+            echoVignette.gameObject.SetActive(false);
+            echoGrain.gameObject.SetActive(false);
+            echoScanlines.gameObject.SetActive(false);
+            echoTag = Label("EchoTag", panel.transform, new Vector2(-820, 500), new Vector2(220, 36), 22, TextAnchor.MiddleLeft);
+            echoTag.text = "记忆回放";
+            echoTag.color = new Color(1f, .93f, .8f, 0f);
+            echoTag.gameObject.SetActive(false);
             title = Label("Title",panel.transform,Vector2.zero,new Vector2(1200,160),52,TextAnchor.MiddleCenter);
             // The dock keeps 1080p-relative coordinates but sticks to the bottom edge on taller screens.
             dock = (RectTransform)new GameObject("DialogDock", typeof(RectTransform)).transform;
@@ -116,6 +148,10 @@ namespace BorrowTomorrow.UI
             if (canvas != null) Destroy(canvas.gameObject);
             if (patchMaterial != null) Destroy(patchMaterial);
             if(focusMaterial!=null)Destroy(focusMaterial);
+            if (echoVignetteTexture != null) Destroy(echoVignetteTexture);
+            if (echoGrainTexture != null) Destroy(echoGrainTexture);
+            if (echoScanlineTexture != null) Destroy(echoScanlineTexture);
+            if (echoPaperTexture != null) Destroy(echoPaperTexture);
         }
         private void Update()
         {
@@ -143,6 +179,65 @@ namespace BorrowTomorrow.UI
                 title.text = "借一点明天\n\n谢谢你陪外婆走过这段回忆。";
             }
             else if (credits && session.State.Phase != GamePhase.Credits) { credits = false; Close(); }
+            UpdateMemoryEcho();
+        }
+        /// <summary>
+        /// 记忆回放层的显隐与质感。黑底和暖色让它与病房现实明确分开，
+        /// 颗粒/扫描线/轻微呼吸只做很轻的量，避免压过手绘插画。
+        /// </summary>
+        private void UpdateMemoryEcho()
+        {
+            if (credits)
+            {
+                echoAmount = 0f;
+                echoVignette.gameObject.SetActive(false);
+                echoGrain.gameObject.SetActive(false);
+                echoScanlines.gameObject.SetActive(false);
+                echoTag.gameObject.SetActive(false);
+                return;
+            }
+            bool show = displayed != null && displayed.memoryEcho;
+            echoAmount = Mathf.MoveTowards(echoAmount, show ? 1f : 0f, Time.unscaledDeltaTime * 3.2f);
+            bool active = echoAmount > .002f;
+            echoVignette.gameObject.SetActive(active);
+            echoGrain.gameObject.SetActive(active);
+            echoScanlines.gameObject.SetActive(active);
+            echoTag.gameObject.SetActive(active);
+            picture.color = Color.Lerp(Color.white, new Color(1f, .93f, .8f), echoAmount * .9f);
+            if (!active)
+            {
+                if (displayed == null)
+                {
+                    FrameRect.anchoredPosition = PictureCenter;
+                    FrameRect.localRotation = Quaternion.identity;
+                }
+                return;
+            }
+            float a = echoAmount;
+            echoVignette.color = new Color(1f, 1f, 1f, a);
+            echoGrain.color = new Color(1f, 1f, 1f, a * .28f);
+            echoScanlines.color = new Color(1f, 1f, 1f, a * .4f);
+            echoTag.color = new Color(.96f, .87f, .7f, a * .62f);
+            if (show)
+            {
+                echoTag.text = (displayed.source == "Note" ? "记忆 · 账本" : "记忆回放")
+                    + (Mathf.Repeat(Time.unscaledTime, 1.15f) < .62f ? " |" : "  ");
+            }
+            echoGrain.uvRect = new Rect((float)echoRandom.NextDouble() * 12f, (float)echoRandom.NextDouble() * 7f, 12f, 7f);
+            echoScanlines.uvRect = new Rect(0f, (Time.unscaledTime * .045f) % 1f, 1f, Mathf.Max(1f, FrameRect.rect.height / 4f));
+            if (displayed != null && displayed.memoryEcho && frame.gameObject.activeSelf)
+            {
+                float t = Time.unscaledTime;
+                float sx = (Mathf.PerlinNoise(t * 2.3f, .17f) - .5f) * 2.6f * a;
+                float sy = (Mathf.PerlinNoise(.41f, t * 2.9f) - .5f) * 1.8f * a;
+                FrameRect.anchoredPosition = PictureCenter + new Vector2(sx, sy);
+                FrameRect.localRotation = Quaternion.Euler(0f, 0f, (Mathf.PerlinNoise(t * 1.7f, 1.31f) - .5f) * .14f * a);
+            }
+            else
+            {
+                FrameRect.anchoredPosition = PictureCenter;
+                FrameRect.localRotation = Quaternion.identity;
+            }
         }
         public void Present(DialogueEntry entry, string text, bool locksControl, int page, int pages)
         {
@@ -152,10 +247,23 @@ namespace BorrowTomorrow.UI
             blocking = locksControl;
             panel.SetActive(true);
             bool image = entry.illustration != null;
-            backdrop.color = new Color(0.025f,0.022f,0.02f,(image || entry.blackBackground || entry.centeredTitle) ? 1f : 0f);
+            // 账本句没有配图，用一张程序生成的旧纸承接颗粒与暗角，避免回声段中间出现纯黑空屏。
+            bool echoPaperLine = entry.memoryEcho && !image;
+            backdrop.color = entry.memoryEcho
+                ? new Color(.012f, .01f, .008f, 1f)
+                : new Color(0.025f,0.022f,0.02f,(image || entry.blackBackground || entry.centeredTitle) ? 1f : 0f);
             // Blocking background clicks also avoids dragging the time handle underneath an illustration.
             backdrop.raycastTarget = locksControl;
-            frame.gameObject.SetActive(image);
+            frame.gameObject.SetActive(image || echoPaperLine);
+            echoPaper.gameObject.SetActive(echoPaperLine);
+            if (echoPaperLine)
+            {
+                FrameRect.anchoredPosition = PictureCenter;
+                FrameRect.localRotation = Quaternion.identity;
+                FrameRect.sizeDelta = new Vector2(900, 580);
+                picture.texture = null;
+                picture.color = Color.clear;
+            }
             if (entry.documentMode && image)
             {
                 // 整页文书：只显示居中的通知图片和一行收起提示，不套对话框。
@@ -200,10 +308,12 @@ namespace BorrowTomorrow.UI
                 title.color = cinematic ? new Color(.98f, .95f, .88f) : Color.white;
             }
             speaker.text = entry.speakerLabel;
-            speaker.color = entry.source == "Reality" ? new Color(.1f,.25f,.29f) : new Color(.3f,.17f,.07f);
+            speaker.color = entry.memoryEcho ? new Color(.52f,.38f,.19f)
+                : entry.source == "Reality" ? new Color(.1f,.25f,.29f) : new Color(.3f,.17f,.07f);
             ShowSpeaker(!isTitle); body.gameObject.SetActive(!isTitle);
             readingPanel.SetActive(!isTitle);
             body.text = text;
+            body.color = entry.memoryEcho ? new Color(1f,.95f,.85f) : new Color(.98f,.94f,.86f);
             help.gameObject.SetActive(!cinematic);
             help.text = (locksControl ? "E / 鼠标左键继续" : "E / 继续按钮") + (pages > 1 ? "    " + page + " / " + pages : "");
             next.SetActive(!cinematic);
@@ -217,6 +327,7 @@ namespace BorrowTomorrow.UI
             heldAction = action;
             blocking = locksControl;
             panel.SetActive(true);
+            echoPaper.gameObject.SetActive(false);
             backdrop.color = new Color(0.025f,0.022f,0.02f,1f);
             backdrop.raycastTarget = locksControl;
             float t = Mathf.SmoothStep(0f, 1f, progress);
@@ -360,6 +471,84 @@ namespace BorrowTomorrow.UI
             displayed = null;
             if (documentHint != null) documentHint.gameObject.SetActive(false);
             if (panel != null) panel.SetActive(false);
+        }
+        /// <summary>径向暗角：中心透明、四角压暗，让插画像从黑里浮出来。</summary>
+        private static Texture2D MakeVignetteTexture()
+        {
+            const int size = 256;
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false, true) { name = "EchoVignette" };
+            texture.wrapMode = TextureWrapMode.Clamp;
+            texture.filterMode = FilterMode.Bilinear;
+            var pixels = new Color32[size * size];
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                float dx = x / (size - 1f) * 2f - 1f;
+                float dy = y / (size - 1f) * 2f - 1f;
+                float d = Mathf.Sqrt(dx * dx + dy * dy) * .70710678f;
+                float a = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.42f, 1f, d)) * .78f;
+                pixels[y * size + x] = new Color32(0, 0, 0, (byte)(a * 255f));
+            }
+            texture.SetPixels32(pixels);
+            texture.Apply(false, true);
+            return texture;
+        }
+        /// <summary>可平铺的细颗粒，每帧随机偏移形成胶片噪点。</summary>
+        private static Texture2D MakeGrainTexture()
+        {
+            const int size = 128;
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false, true) { name = "EchoGrain" };
+            texture.wrapMode = TextureWrapMode.Repeat;
+            texture.filterMode = FilterMode.Point;
+            var pixels = new Color32[size * size];
+            var random = new System.Random(20261030);
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                byte v = (byte)random.Next(0, 256);
+                byte a = (byte)random.Next(30, 90);
+                pixels[i] = new Color32(v, v, v, a);
+            }
+            texture.SetPixels32(pixels);
+            texture.Apply(false, true);
+            return texture;
+        }
+        /// <summary>四像素一循环的扫描线，缓慢上滚。</summary>
+        private static Texture2D MakeScanlineTexture()
+        {
+            const int height = 4;
+            var texture = new Texture2D(1, height, TextureFormat.RGBA32, false, true) { name = "EchoScanline" };
+            texture.wrapMode = TextureWrapMode.Repeat;
+            texture.filterMode = FilterMode.Point;
+            texture.SetPixels32(new[]
+            {
+                new Color32(0, 0, 0, 96),
+                new Color32(0, 0, 0, 0),
+                new Color32(0, 0, 0, 0),
+                new Color32(0, 0, 0, 0),
+            });
+            texture.Apply(false, true);
+            return texture;
+        }
+        /// <summary>程序生成的旧账本纸：暗褐底、横向格线与轻微纤维噪点，不含任何文字。</summary>
+        private static Texture2D MakePaperTexture()
+        {
+            const int size = 512;
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false, true) { name = "EchoLedgerPaper" };
+            texture.wrapMode = TextureWrapMode.Clamp;
+            texture.filterMode = FilterMode.Bilinear;
+            var pixels = new Color32[size * size];
+            var random = new System.Random(1994);
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                int n = random.Next(-6, 7);
+                int r = 58 + n, g = 49 + n, b = 36 + n;
+                if ((y + 8) % 48 < 2) { r = 30; g = 24; b = 16; }
+                pixels[y * size + x] = new Color32((byte)r, (byte)g, (byte)b, 255);
+            }
+            texture.SetPixels32(pixels);
+            texture.Apply(false, true);
+            return texture;
         }
         private T Node<T>(string name, Transform parent, Vector2 position, Vector2 size, bool stretch=false) where T : Component
         {

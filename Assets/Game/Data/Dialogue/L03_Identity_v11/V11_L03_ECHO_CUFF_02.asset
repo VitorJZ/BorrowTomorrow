@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f993672bdb89944b81673ee9b42134, type: 3}
+  m_Name: V11_L03_ECHO_CUFF_02
+  m_EditorClassIdentifier: 
+  entryId: V11_L03_ECHO_CUFF_02
+  speakerLabel: "\u78C1\u5E26\xB7\u5E74\u8F7B\u5916\u5A46"
+  subtitle: "\u4E0D\u77E5\u9053\u5440\u3002\u5148\u66FF\u4F60\u7559\u4E00\u70B9\u3002"
+  voiceClip: {fileID: 8300000, guid: 4cd089bf0e84d9c4c98e23dbdec5db74, type: 3}
+  illustration: {fileID: 2800000, guid: c3cab964b0f9ef443a5d8f2d49b20037, type: 3}
+  documentMode: 0
+  blackBackground: 0
+  memoryEcho: 1
+  nextId: V11_L03_ECHO_LEDGER_01
+  requiredFlags: []
+  setFlags: []
+  holdForConfirm: 0
+  minDurationSeconds: 0.5
+  autoAdvance: 1
+  autoAdvanceDelay: 0.2
+  fadeInOnStart: 0
+  source: Tape
+  eventId: EVT_L03_PHOTO_REVEAL_V11
+  completionFlags: []
+  objectiveAfter: 
+  centeredTitle: 0
+  delayBefore: 0
+  sfxId: 
+  endHoldSeconds: 0

@@ -17,7 +17,9 @@ MonoBehaviour:
   subtitle: "\u4E0D\u7740\u6025\uFF0C\u4F60\u6162\u6162\u60F3\u3002"
   voiceClip: {fileID: 8300000, guid: 82d45cfac6c0b784eaa1bcb4af3c7a7e, type: 3}
   illustration: {fileID: 2800000, guid: c847bad3c0eff1c4db883ce68bc27e75, type: 3}
+  documentMode: 0
   blackBackground: 0
+  memoryEcho: 0
   nextId: 
   requiredFlags: []
   setFlags:
@@ -25,6 +27,9 @@ MonoBehaviour:
   - IdentityKnown
   holdForConfirm: 1
   minDurationSeconds: 0.1
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Reality
   eventId: EVT_L03_PHOTO_REVEAL_V5
   completionFlags: []

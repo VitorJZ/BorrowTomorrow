@@ -2140,6 +2140,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   font: {fileID: 12800000, guid: 46a1c3c97f9aba843a72651235ce10d0, type: 3}
   journalSkin: {fileID: 21300000, guid: fc5c01a6f19d83f439e2830da74c966a, type: 2}
+  canvas: {fileID: 0}
+  panel: {fileID: 0}
+  text: {fileID: 0}
+  hint: {fileID: 0}
+  scroll: {fileID: 0}
 --- !u!114 &662466220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2542,6 +2547,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e42a1c2cc6669394aa87fa81080970a3, type: 2}
   - {fileID: 11400000, guid: eae7eaa6201aef24e86a0a1d8a0af3b9, type: 2}
   - {fileID: 11400000, guid: d938ea46d8f635840a3dcd22f640181f, type: 2}
+  - {fileID: 11400000, guid: f3b0a3230f77940d9be1d18c0a3172bb, type: 2}
+  - {fileID: 11400000, guid: 2ead49c2f10504f378008f72ca84ea5f, type: 2}
+  - {fileID: 11400000, guid: cd029b7971311438986ab8c6e9ae3116, type: 2}
+  - {fileID: 11400000, guid: e2654926ecc994dabb03cba7d0ae3acd, type: 2}
   - {fileID: 11400000, guid: 3426425a8665c184494137e171ace889, type: 2}
   - {fileID: 11400000, guid: 575e69933f822714c9d3e6c74f5280fc, type: 2}
   - {fileID: 11400000, guid: 96085786833f1ee4c8ccca884f62a7e5, type: 2}
@@ -2560,10 +2569,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 511033275da52244982195ab185c0976, type: 2}
   - {fileID: 11400000, guid: bfc9a118496475c45be1042b492bf6c1, type: 2}
   - {fileID: 11400000, guid: 089f9cdaf4202844bb7f2af28fc07cf0, type: 2}
-  - {fileID: 11400000, guid: f3b0a3230f77940d9be1d18c0a3172bb, type: 2}
-  - {fileID: 11400000, guid: 2ead49c2f10504f378008f72ca84ea5f, type: 2}
-  - {fileID: 11400000, guid: cd029b7971311438986ab8c6e9ae3116, type: 2}
-  - {fileID: 11400000, guid: e2654926ecc994dabb03cba7d0ae3acd, type: 2}
+  - {fileID: 11400000, guid: 205ede286f0b14e8b96572cf673e9924, type: 2}
+  - {fileID: 11400000, guid: 6c35b7ce6bdc24a2ebe48be7d5b2069a, type: 2}
+  - {fileID: 11400000, guid: 06348bbf5c8484da4b0829d17e53b3e4, type: 2}
+  - {fileID: 11400000, guid: d0820b373968e464a870b4067bbf68cc, type: 2}
+  - {fileID: 11400000, guid: f10f75126057644bf9c11aa9563dc698, type: 2}
+  - {fileID: 11400000, guid: 5b56ea56daf4c4a099dd32635cd96abe, type: 2}
   actions:
   - {fileID: 11400000, guid: f05fc714b75e64367bfd069a92cdd26f, type: 2}
   - {fileID: 11400000, guid: c29e22fdf67a84fecbf64c5bb6822eb8, type: 2}

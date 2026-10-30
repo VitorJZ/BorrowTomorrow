@@ -135,6 +135,8 @@ namespace BorrowTomorrow.EditorTools
         }
         private static Texture2D Illustration(string id)
         {
+            if(id=="DLG_L02_LEDGER_01")
+                return AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Game/Art/Story/L03_Identity_v11/ILL_L03_Ledger_Note.png");
             string key=null;
             if(id.StartsWith("DLG_L02_UNIFORM"))key="ILL_UNIFORM_CUFF";
             if(id=="DLG_L03_REVEAL_01")key="ILL_PHOTO_BACK";

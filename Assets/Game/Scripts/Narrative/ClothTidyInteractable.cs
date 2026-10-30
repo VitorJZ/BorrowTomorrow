@@ -9,21 +9,32 @@ namespace BorrowTomorrow.Narrative
         public Transform cloth;
         public Vector3 chairPosition;
         public Sprite completedSprite;
+        public SpriteRenderer clothesRack;
         private bool busy;
         public string InteractId => "tidy_clothes";
         public string InteractPrompt => "整理衣物";
         public bool CanInteract => isActiveAndEnabled && !busy && GameSession.Instance != null && !GameSession.Instance.StoryFlags.HasFlag("ClothTidyDone");
-        private void Start() { if (!CanInteract && cloth != null) ShowCompleted(); }
+        private void Start() { if (GameSession.Instance != null && GameSession.Instance.StoryFlags.HasFlag("ClothTidyDone")) ShowCompleted(); }
         private void ShowCompleted()
         {
             if(cloth==null)return;
+            if(clothesRack!=null && completedSprite!=null)
+            {
+                // Matched canvas/pivot keeps the frame stationary when clothes are hung.
+                clothesRack.sprite=completedSprite;
+                cloth.gameObject.SetActive(false);
+                return;
+            }
             cloth.position=chairPosition;
             var renderer=cloth.GetComponent<SpriteRenderer>();
             if(renderer!=null && completedSprite!=null)
             {
-                renderer.sprite=completedSprite;renderer.enabled=true;
-                cloth.localScale=new Vector3(.9f/completedSprite.bounds.size.x,1.4f/completedSprite.bounds.size.y,1);
+                renderer.sprite=completedSprite;
+                float scale=.9f/completedSprite.bounds.size.x;
+                cloth.localScale=new Vector3(scale,scale,1);
             }
+            // The pickup animation hides the sprite; restore it even with no replacement art.
+            if(renderer!=null)renderer.enabled=true;
         }
         public bool Interact() { if (!CanInteract) return false; StartCoroutine(Tidy()); return true; }
         private IEnumerator Tidy()

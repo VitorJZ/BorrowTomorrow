@@ -67,6 +67,9 @@ namespace BorrowTomorrow.EditorTools
         {
             var bridge=room.GetComponentsInChildren<TemporalObject>(true).Single(o=>o.ObjectId=="L01A_plank_bridge");
             var past=bridge.transform.Find("Past");var present=bridge.transform.Find("Present");
+            // 清理旧场景中的装饰残片，重新接入美术时也保持水渠缺口干净。
+            foreach(var name in new[]{"StubL","StubR"})
+            {var stub=present.Find(name);if(stub!=null)UnityEngine.Object.DestroyImmediate(stub.gameObject);}
             foreach(var parent in new[]{past,present,room.transform.Find("Content")})
                 foreach(var name in new[]{"CanalWinchArt","CanalBridgePivot","CanalWinchMechanism"})
                 {var old=parent.Find(name);if(old!=null)UnityEngine.Object.DestroyImmediate(old.gameObject);}

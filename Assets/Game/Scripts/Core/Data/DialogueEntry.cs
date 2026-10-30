@@ -33,6 +33,9 @@ namespace BorrowTomorrow.Core.Data
 
         public bool blackBackground;
 
+        [Tooltip("记忆回放段：黑底、暖色旧照调、暗角颗粒扫描线与轻微晃动，用于磁带/回忆 callback")]
+        public bool memoryEcho;
+
         [Header("流转")]
         [Tooltip("下一条对白 id；为空表示本条结束")]
         public string nextId;
