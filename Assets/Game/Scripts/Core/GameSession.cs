@@ -36,6 +36,9 @@ namespace BorrowTomorrow.Core
         /// <summary>当前活动房间根。</summary>
         public ILevelRoot ActiveRoom { get; private set; }
 
+        /// <summary>按通关顺序排列的关卡目录（只读，供选关/调试界面使用）。</summary>
+        public System.Collections.Generic.IReadOnlyList<LevelDefinition> LevelCatalog => levelCatalog;
+
         private readonly System.Collections.Generic.List<string> readDialogueIds = new System.Collections.Generic.List<string>();
         public System.Collections.Generic.IReadOnlyList<string> ReadDialogueIds => readDialogueIds;
 
@@ -586,6 +589,19 @@ namespace BorrowTomorrow.Core
                 }
             }
             return null;
+        }
+
+        /// <summary>按稳定 levelId 加载关卡；找不到时返回 false。供选关/调试入口使用。</summary>
+        public bool TryLoadLevel(string levelId)
+        {
+            LevelDefinition definition = FindLevel(levelId);
+            if (definition == null)
+            {
+                Debug.LogWarning($"[GameSession] 未知关卡 id：{levelId}");
+                return false;
+            }
+            LoadLevel(definition);
+            return true;
         }
 
         private LevelDefinition FindNextLevel(LevelDefinition current)
