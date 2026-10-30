@@ -15,7 +15,7 @@ MonoBehaviour:
   entryId: DLG_L00_CRATE_01
   speakerLabel: "\u6211"
   subtitle: "\u8FD9\u645E\u65E7\u6728\u7BB1\uFF0C\u628A\u8DEF\u6321\u6B7B\u4E86\u3002"
-  voiceClip: {fileID: 0}
+  voiceClip: {fileID: 8300000, guid: 92527dd4762504649a777869aa1307f0, type: 3}
   illustration: {fileID: 0}
   documentMode: 0
   blackBackground: 0
