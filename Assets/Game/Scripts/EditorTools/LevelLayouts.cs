@@ -410,10 +410,7 @@ namespace BorrowTomorrow.EditorTools
             BoxChild(ctx, past.transform, "PlankPast", new Vector2(12f, -0.175f), new Vector2(4.4f, 0.35f), PastColor);
             GameObject present = EraChild(ctx, plank, "Present");
             present.transform.localPosition = Vector3.zero;
-            BoxChild(ctx, present.transform, "StubL", new Vector2(10.8f, 0.1f), new Vector2(1.1f, 0.28f),
-                new Color(PresentColor.r, PresentColor.g, PresentColor.b, 0.6f), solid: false, angle: 12f);
-            BoxChild(ctx, present.transform, "StubR", new Vector2(13.1f, 0.02f), new Vector2(1.1f, 0.28f),
-                new Color(PresentColor.r, PresentColor.g, PresentColor.b, 0.6f), solid: false, angle: -18f);
+            // 现在态直接露出水渠缺口，不再放置悬空的断桥残片。
             SetObject(plank, "pastRoot", past);
             SetObject(plank, "presentRoot", present);
 
