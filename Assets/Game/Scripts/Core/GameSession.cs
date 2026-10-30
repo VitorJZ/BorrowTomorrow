@@ -275,6 +275,9 @@ namespace BorrowTomorrow.Core
             // 新游戏第一次进入 L00：黑屏播放两句磁带开场，等第三句开始时再淡入画面。
             bool openingTape = definition != null && definition.levelId == "L00"
                 && !StoryFlags.HasFlag(StoryFlagIds.IntroPlayed);
+            bool epilogueTitle = definition != null && definition.levelId == "Epilogue"
+                && StoryFlags.HasFlag(StoryFlagIds.BoxLocated)
+                && !StoryFlags.HasFlag(StoryFlagIds.EpilogueSeen);
 
             // 从主菜单出发时给渐黑留足时间；关内转场保持原来的轻快节奏。
             float fadeOutSeconds = CurrentLevel == null ? 0.8f : 0.35f;
@@ -344,11 +347,23 @@ namespace BorrowTomorrow.Core
             }
             else
             {
+                State.SetPhase(GamePhase.Playing);
+                if (epilogueTitle)
+                {
+                    // NarrativeAutoEvent waits for 0.65 seconds and a grounded player.
+                    // Keep the ward covered until its black title has taken over.
+                    float titleTimeout = 5f;
+                    while (State.Phase == GamePhase.Playing && titleTimeout > 0f
+                        && (!ServiceRegistry.TryGet<IDialogueService>(out var dialogue) || !dialogue.IsPlaying))
+                    {
+                        if (!State.IsPaused) titleTimeout -= Time.unscaledDeltaTime;
+                        yield return null;
+                    }
+                }
                 if (ServiceRegistry.TryGet<IHudService>(out var fadeInHud))
                 {
                     fadeInHud.FadeIn(0.5f);
                 }
-                State.SetPhase(GamePhase.Playing);
             }
             loadRoutineRunning = false;
         }
