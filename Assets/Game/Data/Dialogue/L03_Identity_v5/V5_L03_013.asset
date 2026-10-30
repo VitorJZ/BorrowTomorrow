@@ -16,13 +16,18 @@ MonoBehaviour:
   speakerLabel: "\u6211\uFF08\u5916\u5A46\uFF09"
   subtitle: "\u90A3\u5757\u88AB\u9762\uFF0C\u662F\u6211\u7ED9\u4F60\u505A\u7684\uFF0C\u8FD8\u6CA1\u62FF\u7ED9\u4F60\u5462\u3002"
   voiceClip: {fileID: 8300000, guid: ba158c9bfdf62b5448922462b3e1eb30, type: 3}
-  illustration: {fileID: 2800000, guid: c847bad3c0eff1c4db883ce68bc27e75, type: 3}
+  illustration: {fileID: 2800000, guid: 98bb55782afb57048a27d572d80c04e2, type: 3}
+  documentMode: 0
   blackBackground: 0
+  memoryEcho: 0
   nextId: V5_L03_014
   requiredFlags: []
   setFlags: []
   holdForConfirm: 1
   minDurationSeconds: 0.1
+  autoAdvance: 0
+  autoAdvanceDelay: 0.75
+  fadeInOnStart: 0
   source: Reality
   eventId: EVT_L03_PHOTO_REVEAL_V5
   completionFlags: []
