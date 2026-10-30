@@ -58,3 +58,14 @@ Docs/test-results-*.xml
 
 # Local integration runs: backups, isolated test saves, logs and captures
 /work/drying-rack/
+
+# 美术重生成工作目录（过程产物，交付图会另行放入 Assets）
+/ArtRegen_*/
+
+# Unity Test Framework 运行时自动生成的临时场景
+/Assets/InitTestScene*.unity
+/Assets/InitTestScene*.unity.meta
+
+# 本机截图输出
+/Assets/Screenshots/
+/Assets/Screenshots.meta
