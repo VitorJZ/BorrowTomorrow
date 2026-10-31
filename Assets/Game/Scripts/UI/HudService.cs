@@ -147,7 +147,13 @@ namespace BorrowTomorrow.UI
         {
             ServiceRegistry.Register<IHudService>(this);
             session = GameSession.Instance;
-            if (session != null) session.State.PhaseChanged += HandlePhaseChanged;
+            if (session != null)
+            {
+                var memories = GetComponent<FallMemoryFlash>();
+                if (memories == null) memories = gameObject.AddComponent<FallMemoryFlash>();
+                memories.Initialize(session);
+                session.State.PhaseChanged += HandlePhaseChanged;
+            }
             HideSubtitle();
             HideBlockedToast();
         }

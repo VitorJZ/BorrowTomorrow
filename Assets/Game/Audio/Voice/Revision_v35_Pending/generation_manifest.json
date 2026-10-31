@@ -1,7 +1,7 @@
 {
   "version": 35,
   "model": "FunAudioLLM/Fun-CosyVoice3-0.5B-2512",
-  "status": "standalone_pending_review_not_integrated",
+  "status": "two_user_approved_bound_one_candidate_retained",
   "lines": [
     {
       "id": "DLG_L02_UNIFORM_01",
@@ -24,7 +24,7 @@
       },
       "reference_original_sha256": "e330f7d87ed19f0b89586b5f454b8047c8af03c976fc5635a5ccfffe5315174d",
       "reference_origin_commit": "63815845cfaf454d24fb2e1b86135cc276fa8081",
-      "status": "pending_review_not_bound"
+      "status": "user_approved_bound_v41"
     },
     {
       "id": "DLG_L02_UNIFORM_04",
@@ -47,7 +47,7 @@
       },
       "reference_original_sha256": "e330f7d87ed19f0b89586b5f454b8047c8af03c976fc5635a5ccfffe5315174d",
       "reference_origin_commit": "63815845cfaf454d24fb2e1b86135cc276fa8081",
-      "status": "pending_review_not_bound"
+      "status": "user_approved_bound_v42"
     },
     {
       "id": "V11_L03_CUFF_HOSPITAL_01",

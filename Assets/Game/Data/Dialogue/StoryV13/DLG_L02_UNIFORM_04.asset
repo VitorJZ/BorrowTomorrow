@@ -15,7 +15,7 @@ MonoBehaviour:
   entryId: DLG_L02_UNIFORM_04
   speakerLabel: "\u6211"
   subtitle: "\u2026\u2026\u7EA2\u788E\u82B1\uFF0C\u8FD8\u6709\u90A3\u5757\u84DD\u683C\u5B50\u3002\u90A3\u5E8A\u5C0F\u88AB\u9762\uFF0C\u7528\u7684\u5C31\u662F\u8FD9\u4E24\u5757\u5E03\u3002\u8FD8\u6536\u5728\u84DD\u94C1\u76D2\u91CC\u5462\u3002"
-  voiceClip: {fileID: 0}
+  voiceClip: {fileID: 8300000, guid: fc68b5f50c908dc49beb1cf22e44695c, type: 3}
   illustration: {fileID: 2800000, guid: c3cab964b0f9ef443a5d8f2d49b20037, type: 3}
   documentMode: 0
   blackBackground: 0
@@ -36,3 +36,19 @@ MonoBehaviour:
   delayBefore: 1.2
   sfxId: 
   endHoldSeconds: 0
+  sceneLeadHold: 0
+  sceneBlendSeconds: 0
+  scenePhotoRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  scenePreviousPhotoCrop:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  scenePhotoRotation: 0
+  sceneImageHold: 0

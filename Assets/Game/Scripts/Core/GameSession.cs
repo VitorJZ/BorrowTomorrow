@@ -511,16 +511,31 @@ namespace BorrowTomorrow.Core
         /// <summary>跌落恢复请求（KillZone 调用）。策划 4.6：淡出约 0.3 秒回到最近检查点。</summary>
         public void RequestRespawnFromFall()
         {
-            if (State.Phase != GamePhase.Playing || State.SubState == PlayingSubState.Respawning)
+            if (State.Phase != GamePhase.Playing || State.IsPaused || State.SubState == PlayingSubState.Respawning)
             {
                 return;
             }
-            StartCoroutine(RespawnRoutine());
+            StartCoroutine(RespawnRoutine(true));
         }
 
-        private IEnumerator RespawnRoutine()
+        private IEnumerator RespawnRoutine(bool fromFall = false)
         {
             State.SetSubState(PlayingSubState.Respawning);
+            if (fromFall && ServiceRegistry.TryGet<IFallMemoryService>(out var memories) && memories.HasNext)
+            {
+                if (ServiceRegistry.TryGet<IHudService>(out var memoryHud))
+                {
+                    memoryHud.HideSubtitle();
+                    memoryHud.SetInteractionPrompt(false);
+                    memoryHud.FadeIn(0f);
+                }
+                yield return memories.Play(() =>
+                {
+                    if (ServiceRegistry.TryGet<ICheckpointService>(out var checkpoint)) checkpoint.RestoreLatest();
+                });
+                if (State.Phase == GamePhase.Playing && !State.IsPaused) State.SetSubState(PlayingSubState.Free);
+                yield break;
+            }
             if (ServiceRegistry.TryGet<IHudService>(out var hud))
             {
                 hud.HideSubtitle();
