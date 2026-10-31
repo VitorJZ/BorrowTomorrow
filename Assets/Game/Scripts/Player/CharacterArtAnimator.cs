@@ -39,6 +39,17 @@ namespace BorrowTomorrow.Player
         private Vector3 baseVisualPosition;
         private Vector3 baseVisualScale=Vector3.one;
         private bool hasVisualTransform;
+        private float entranceOffsetX;
+        private bool entranceWalking;
+
+        public float EntranceRightExtent => visual != null
+            ? visual.bounds.max.x - transform.position.x - entranceOffsetX : 1f;
+
+        public void SetEntranceOffset(float worldOffsetX, bool walking)
+        {
+            entranceOffsetX = worldOffsetX;
+            entranceWalking = walking;
+        }
         private void Awake(){motor=GetComponent<PlayerMotor2D>();body=GetComponent<Rigidbody2D>();CacheVisualTransform();}
         private void CacheVisualTransform()
         {
@@ -132,7 +143,8 @@ namespace BorrowTomorrow.Player
             }
             if(gesture==null&&!motor.IsClimbingLadder)
             {
-                if(s.State.SubState==PlayingSubState.AdjustingBoundary){Set("Interact");time=.42f;}
+                if(entranceWalking){facingLeft=false;Set("Walk");time+=dt;}
+                else if(s.State.SubState==PlayingSubState.AdjustingBoundary){Set("Interact");time=.42f;}
                 else if(motor.IsPreparingJump)
                 {
                     landingElapsed=-1;Phase("JumpPrepare",motor.JumpPreparationProgress);
@@ -164,7 +176,8 @@ namespace BorrowTomorrow.Player
             }
             else index=Mathf.Clamp(Mathf.FloorToInt(sampleTime*current.fps),0,current.frames.Length-1);
             visual.sprite=current.frames[index];
-            visual.transform.localPosition=baseVisualPosition+(Vector3)current.visualOffset;
+            visual.transform.localPosition=baseVisualPosition+(Vector3)current.visualOffset
+                +visual.transform.parent.InverseTransformVector(Vector3.right*entranceOffsetX);
             visual.transform.localScale=baseVisualScale*(current.visualScale>0f?current.visualScale:1f);
             // The ladder is a rear view; horizontal facing belongs to side-view
             // movement and must be restored only when leaving the ladder.

@@ -8,11 +8,15 @@ using UnityEngine.UI;
 namespace BorrowTomorrow.UI
 {
     // Builds its own responsive overlay; the existing gameplay HUD remains intact.
-    public sealed class NarrativePresentation : MonoBehaviour, INarrativePresentation, INarrativeActionView, INarrativeTargetView
+    public sealed class NarrativePresentation : MonoBehaviour, INarrativePresentation, INarrativeActionView, INarrativeTargetView, INarrativeSceneTransitionView
     {
         private static readonly Vector2 PictureCenter = new Vector2(0, 110);
         private static readonly Vector2 PictureMax = new Vector2(1380, 720);
         private RectMask2D frame;
+        private CanvasGroup frameOpacity;
+        private CanvasGroup pictureOpacity;
+        private RawImage transitionPhoto;
+        private bool sceneTransitionVisual;
         private RectTransform FrameRect => (RectTransform)frame.transform;
         private Image cover;
         private RectTransform layerRoot;
@@ -80,7 +84,9 @@ namespace BorrowTomorrow.UI
             backdrop = Node<Image>("Backdrop", panel.transform, Vector2.zero, Vector2.zero, true);
             // The frame masks action push-ins so a zoomed illustration never covers the reading panel.
             frame = Node<RectMask2D>("IllustrationFrame", panel.transform, PictureCenter, PictureMax);
+            frameOpacity = frame.gameObject.AddComponent<CanvasGroup>();
             picture = Node<RawImage>("Illustration", frame.transform, Vector2.zero, Vector2.zero, true);
+            pictureOpacity = picture.gameObject.AddComponent<CanvasGroup>();
             picture.raycastTarget = false;
             focusGlow=Node<RawImage>("PhotoPersonFocus",frame.transform,Vector2.zero,Vector2.zero,true);focusGlow.raycastTarget=false;
             if(photoFocusMaterial!=null){focusMaterial=new Material(photoFocusMaterial);focusGlow.material=focusMaterial;}
@@ -113,6 +119,9 @@ namespace BorrowTomorrow.UI
             echoTag.text = "记忆回放";
             echoTag.color = new Color(1f, .93f, .8f, 0f);
             echoTag.gameObject.SetActive(false);
+            transitionPhoto = Node<RawImage>("SharedPhotoTransition", frame.transform, Vector2.zero, Vector2.zero);
+            transitionPhoto.raycastTarget = false;
+            transitionPhoto.gameObject.SetActive(false);
             title = Label("Title",panel.transform,Vector2.zero,new Vector2(1200,160),52,TextAnchor.MiddleCenter);
             // The dock keeps 1080p-relative coordinates but sticks to the bottom edge on taller screens.
             dock = (RectTransform)new GameObject("DialogDock", typeof(RectTransform)).transform;
@@ -241,6 +250,11 @@ namespace BorrowTomorrow.UI
         }
         public void Present(DialogueEntry entry, string text, bool locksControl, int page, int pages)
         {
+            sceneTransitionVisual = false;
+            dock.gameObject.SetActive(true);
+            frameOpacity.alpha = 1f;
+            pictureOpacity.alpha = 1f;
+            transitionPhoto.gameObject.SetActive(false);
             focusGlow.gameObject.SetActive(false);
             documentHint.gameObject.SetActive(false);
             displayed = entry;
@@ -320,8 +334,38 @@ namespace BorrowTomorrow.UI
             skip.SetActive(locksControl && !isTitle);
             ApplySubtitleSettings();
         }
+        public void PresentSceneTransition(DialogueEntry previous, DialogueEntry incoming, float elapsed, bool locksControl)
+        {
+            if (!sceneTransitionVisual || displayed != incoming)
+            {
+                Present(incoming, string.Empty, locksControl, 1, 1);
+                sceneTransitionVisual = true;
+                transitionPhoto.gameObject.SetActive(true);
+            }
+            dock.gameObject.SetActive(false);
+            title.gameObject.SetActive(false);
+            documentHint.gameObject.SetActive(false);
+            float t = Mathf.Clamp01((elapsed - incoming.sceneLeadHold) / Mathf.Max(.001f, incoming.sceneBlendSeconds));
+            float motion = Mathf.SmoothStep(0f, 1f, t);
+            pictureOpacity.alpha = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.15f, .95f, t));
+            transitionPhoto.gameObject.SetActive(t < 1f);
+            transitionPhoto.texture = previous.illustration;
+            var crop = incoming.scenePreviousPhotoCrop;
+            transitionPhoto.uvRect = new Rect(Mathf.Lerp(0f,crop.x,motion),Mathf.Lerp(0f,crop.y,motion),Mathf.Lerp(1f,crop.width,motion),Mathf.Lerp(1f,crop.height,motion));
+            var target = incoming.scenePhotoRect;
+            var rect = transitionPhoto.rectTransform;
+            rect.sizeDelta = Vector2.Lerp(FrameRect.sizeDelta, Vector2.Scale(FrameRect.sizeDelta,target.size), motion);
+            rect.anchoredPosition = Vector2.Scale(target.center - new Vector2(.5f,.5f), FrameRect.sizeDelta) * motion;
+            rect.localRotation = Quaternion.Euler(0f,0f,incoming.scenePhotoRotation * motion);
+            // Dissolve only near the end, where the shared photograph has reached the hands.
+            transitionPhoto.color = new Color(1f,1f,1f,1f-Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(.6f,1f,t)));
+        }
         public void PresentAction(NarrativeAction action, float progress, string prompt, bool locksControl)
         {
+            dock.gameObject.SetActive(true);
+            frameOpacity.alpha = 1f;
+            pictureOpacity.alpha = 1f;
+            transitionPhoto.gameObject.SetActive(false);
             displayed = null;
             documentHint.gameObject.SetActive(false);
             heldAction = action;

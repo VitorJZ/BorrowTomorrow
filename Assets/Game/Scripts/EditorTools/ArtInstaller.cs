@@ -159,6 +159,8 @@ namespace BorrowTomorrow.EditorTools
                     // L00 的挡路物已改为 2024 年木箱，由 L00ObstacleInstaller 负责贴图，不能再套栅栏皮。
                     if(id=="L00_fence_gate")continue;
                     else if(id=="L01A_plank_bridge")asset=past?"PROP_BridgePlank_1994":"PROP_BridgePlank_2024";
+                    else if(id=="L02_plank"){ if(!past){original.enabled=false;continue;} asset="PROP_Plank_1994"; }
+                    else if(id=="L02_maintenance"&&original.transform.parent!=null&&original.transform.parent.name=="GapBoard")asset="PROP_Plank_1994";
                     else if(id=="L02_maintenance")asset="PROP_MetalWalkway_2024";
                     else if(id=="L03_floor")asset="PROP_WoodFloor_1994";
                     else if(id=="L03_walkway")asset="PROP_MetalWalkway_2024";

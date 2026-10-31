@@ -71,5 +71,13 @@ namespace BorrowTomorrow.Core.Data
         public float delayBefore;
         public string sfxId;
         public float endHoldSeconds;
+        [Header("进入本句前的场景转场（0 为直接衔接）")]
+        [Min(0f)] public float sceneLeadHold;
+        [Min(0f)] public float sceneBlendSeconds;
+        public Rect scenePhotoRect;
+        public Rect scenePreviousPhotoCrop = new Rect(0f, 0f, 1f, 1f);
+        public float scenePhotoRotation;
+        [Min(0f)] public float sceneImageHold;
+        public float SceneTransitionDuration => sceneLeadHold + sceneBlendSeconds + sceneImageHold;
     }
 }

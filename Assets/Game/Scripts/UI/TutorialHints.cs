@@ -75,9 +75,9 @@ namespace BorrowTomorrow.UI
             Color primary = paperCard ? InkColor : PaperColor;
             Color secondary = paperCard ? SoftInkColor : new Color(PaperColor.r, PaperColor.g, PaperColor.b, .78f);
 
-            // 底部：基础移动/跳跃。旧纸吊牌自带左侧绳扣，内容从绳扣右侧开始。
-            controlsRect = Card("ControlsHint", new Vector2(.5f, 0f), new Vector2(0f, 172f),
-                new Vector2(760f, 168f), new Vector2(.5f, 0f), out controlsGroup);
+            // 顶部：与时间边界提示使用相同锚点、边距和高度。基础移动/跳跃。旧纸吊牌自带左侧绳扣，内容从绳扣右侧开始。
+            controlsRect = Card("ControlsHint", new Vector2(.5f, 1f), new Vector2(0f, -104f),
+                new Vector2(760f, 168f), new Vector2(.5f, 1f), out controlsGroup);
             controlsBase = controlsRect.anchoredPosition;
             Keycap(controlsRect, "A", new Vector2(-272f, 26f), new Vector2(56f, 56f), skin != null ? skin.keycap : null,
                 primary, 26);
@@ -164,7 +164,7 @@ namespace BorrowTomorrow.UI
             }
             controlsVisible = true;
             if (controlsRoutine != null) StopCoroutine(controlsRoutine);
-            controlsRoutine = StartCoroutine(Fade(controlsGroup, controlsRect, controlsBase, true, -14f, 0.4f));
+            controlsRoutine = StartCoroutine(Fade(controlsGroup, controlsRect, controlsBase, true, 12f, 0.4f));
         }
 
         public void HideControls()
@@ -175,7 +175,7 @@ namespace BorrowTomorrow.UI
             }
             controlsVisible = false;
             if (controlsRoutine != null) StopCoroutine(controlsRoutine);
-            controlsRoutine = StartCoroutine(Fade(controlsGroup, controlsRect, controlsBase, false, -10f, 0.28f));
+            controlsRoutine = StartCoroutine(Fade(controlsGroup, controlsRect, controlsBase, false, 8f, 0.28f));
         }
 
         public void ShowTimeline()

@@ -114,6 +114,33 @@ namespace BorrowTomorrow.Tests
             typeof(DialogueLibrary).GetField("actions", BindingFlags.Instance | BindingFlags.NonPublic)
                 .SetValue(library, actions);
         }
+        [TestCase("EVT_L03_PHOTO_REVEAL_V5")]
+        [TestCase("EVT_L03_PHOTO_REVEAL")]
+        public void PhotoReveal_SilencesMusicAcrossActionAndLines_UntilEnd(string eventId)
+        {
+            var first = Entry("photo"); first.eventId = eventId;
+            var second = Entry("identity"); first.nextId = second.entryId;
+            Register(Action(first.entryId, confirmBefore: "翻看照片"));
+            dialogue.Play(first, DialoguePriority.Reveal);
+            Assert.IsTrue(dialogue.SuppressesBackgroundMusic, "动作等待期间也要静音");
+            Invoke(dialogue, "FinishAction");
+            typeof(DialoguePlayer).GetMethod("BeginLine", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(dialogue, new object[] { second });
+            Assert.IsTrue(dialogue.SuppressesBackgroundMusic, "后续台词仍属于同一揭晓事件");
+            typeof(DialoguePlayer).GetMethod("End", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(dialogue, new object[] { true });
+            Assert.IsFalse(dialogue.SuppressesBackgroundMusic);
+        }
+        [Test] public void PhotoReveal_ReplayAndSkip_RestoreMusicWithoutAffectingOtherDialogue()
+        {
+            var photo = Entry("photo"); photo.eventId = "EVT_L03_PHOTO_REVEAL_V5";
+            dialogue.PlayReadOnly(photo, true);
+            Assert.IsTrue(dialogue.SuppressesBackgroundMusic);
+            dialogue.SkipCurrent();
+            Assert.IsFalse(dialogue.SuppressesBackgroundMusic);
+            dialogue.Play(Entry("ordinary"), DialoguePriority.Reveal);
+            Assert.IsFalse(dialogue.SuppressesBackgroundMusic);
+        }
         private NarrativeAction Action(string beforeEntryId, string confirmBefore = "", string confirmAfter = "")
         {
             var action = ScriptableObject.CreateInstance<NarrativeAction>();

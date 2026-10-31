@@ -9,7 +9,7 @@ using UnityEngine;
 namespace BorrowTomorrow.Narrative
 {
     [DefaultExecutionOrder(-60)]
-    public sealed class DialoguePlayer : MonoBehaviour, IDialogueService, IBootInitializable
+    public sealed class DialoguePlayer : MonoBehaviour, IDialogueService, IBootInitializable, IBackgroundMusicSuppression
     {
         [SerializeField, Range(0f, 1f)] private float voiceVolume = 1f;
         [SerializeField] private AudioClip tapeHiss;
@@ -47,11 +47,17 @@ namespace BorrowTomorrow.Narrative
         private ActionPhase actionPhase;
         private NarrativeAction action;
         private DialogueEntry actionTarget;
+        private DialogueEntry sceneTransitionTarget;
+        private float sceneTransitionTimer;
+        public bool IsTransitioningScene => sceneTransitionTarget != null;
         private float actionTimer;
         private float stageTime;
         private int stageFrame;
         private int pointerReleasedFrame;
         public bool IsPlaying { get; private set; }
+        // Keep the whole reveal silent, including action gates and history replay.
+        public bool SuppressesBackgroundMusic => IsPlaying && first != null
+            && (first.eventId == "EVT_L03_PHOTO_REVEAL_V5" || first.eventId == "EVT_L03_PHOTO_REVEAL");
         public bool IsWaitingForAction => actionPhase == ActionPhase.WaitBefore || actionPhase == ActionPhase.WaitAfter;
         public IReadOnlyList<DialogueEntry> History => history;
         public int InitializeOrder => -20;
@@ -135,6 +141,23 @@ namespace BorrowTomorrow.Narrative
         }
         // An action stage belongs to the same event: it gates the line without adding entries or flags.
         private void EnterLine(DialogueEntry entry)
+        {
+            if (current != null && entry.SceneTransitionDuration > 0f
+                && ServiceRegistry.TryGet<INarrativePresentation>(out var presentation)
+                && presentation is INarrativeSceneTransitionView transitionView)
+            {
+                sceneTransitionTarget = entry;
+                sceneTransitionTimer = 0f;
+                pendingManualAdvance = false;
+                voiceSource.Stop();
+                StopTapeHiss();
+                if (ServiceRegistry.TryGet<IHudService>(out var transitionHud)) transitionHud.HideSubtitle();
+                transitionView.PresentSceneTransition(current, entry, 0f, ownsControl);
+                return;
+            }
+            EnterLineAfterTransition(entry);
+        }
+        private void EnterLineAfterTransition(DialogueEntry entry)
         {
             NarrativeAction gate = !ServiceRegistry.TryGet<DialogueLibrary>(out var lib) ? null : lib.FindAction(entry.entryId);
             if(readOnly && gate!=null && !gate.requireTargetClick && !gate.turnPhoto)gate=null;
@@ -295,6 +318,24 @@ namespace BorrowTomorrow.Narrative
                 tapeSource.volume = tapeTargetVolume;
                 voiceSource.UnPause(); tapeSource.UnPause(); voicePaused = false;
             }
+            if (sceneTransitionTarget != null)
+            {
+                // Discard input during the transition so it cannot skip the incoming line.
+                if (ServiceRegistry.TryGet<IInputSource>(out var transitionInput)) transitionInput.ConsumeInteract();
+                sceneTransitionTimer += Time.deltaTime;
+                if (ServiceRegistry.TryGet<INarrativePresentation>(out var transitionPresentation)
+                    && transitionPresentation is INarrativeSceneTransitionView transitionView)
+                    transitionView.PresentSceneTransition(current, sceneTransitionTarget, sceneTransitionTimer, ownsControl);
+                if (sceneTransitionTimer >= sceneTransitionTarget.SceneTransitionDuration)
+                {
+                    var target = sceneTransitionTarget;
+                    sceneTransitionTarget = null;
+                    pendingManualAdvance = false;
+                    lastAdvanceFrame = Time.frameCount;
+                    EnterLineAfterTransition(target);
+                }
+                return;
+            }
             if (actionPhase != ActionPhase.None) { UpdateAction(); return; }
             timer += Time.deltaTime;
             if (endingTimer >= 0f)
@@ -336,6 +377,7 @@ namespace BorrowTomorrow.Narrative
         }
         public void Advance()
         {
+            if (sceneTransitionTarget != null) return;
             if (IsPlaying && actionPhase != ActionPhase.None) { if(actionPhase!=ActionPhase.WaitBefore || !action.requireTargetClick)ConfirmAction(); return; }
             if (!IsPlaying || endingTimer >= 0f || GameSession.Instance.State.IsPaused
                 || lastAdvanceFrame == Time.frameCount || Time.frameCount==dialogueBeginFrame) return;
@@ -389,6 +431,7 @@ namespace BorrowTomorrow.Narrative
         }
         private void End(bool completed)
         {
+            sceneTransitionTarget = null;
             voiceSource.Stop();
             StopTapeHiss();
             voicePaused = false;

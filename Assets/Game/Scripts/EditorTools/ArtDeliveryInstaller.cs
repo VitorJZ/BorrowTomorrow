@@ -339,7 +339,9 @@ namespace BorrowTomorrow.EditorTools
             SetSkinEnabled(room, "Content/Ground", true);
             FixLadders(room);
             var maintenance = room.GetComponentsInChildren<TemporalObject>(true).First(t => t.ObjectId == "L02_maintenance");
-            Reskin(maintenance.transform.Find("Present/Platform"), Strip("Strip_Metal"));
+            var platform = maintenance.transform.Find("Present/PlatformLeft") ?? maintenance.transform.Find("Present/Platform");
+            Reskin(platform, Strip("Strip_Metal"));
+            // 缺口补板与墙边木板由 L02BoardPatchInstaller 配置；这里只保证重建后维修架左段有金属皮。
         }
 
         private static void L02Indoor(LevelRoot room)

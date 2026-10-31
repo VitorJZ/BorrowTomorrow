@@ -482,8 +482,11 @@ namespace BorrowTomorrow.EditorTools
         }
 
         /// <summary>
-        /// L02 缝纫间外台（策划 7.4）：维修踏台 x=6、恒定砖台 x=8.5~13.2、旧木梯 x=13、地面起点 x=23。
-        /// 初始全现在（木梯断裂、踏台悬空不可达）→ 必须先右移边界修梯上砖台，再左移边界放踏台。
+        /// L02 缝纫间外台（策划 7.4）：恒定砖台 x=8.5~13.2、旧木梯 x=13、维修架 x=1~8.5、地面起点 x=23。
+        /// 初始全现在（木梯断裂、维修架缺板）→ 右移边界修梯上砖台 → 边界停在 9~12，
+        /// 过去的旧木板与现在的维修架同时存在 → 按 E 搭板补上缺口 → 走到左侧出口。
+        /// 锚点：木板 9、维修架 12、木梯 13（见对应 TemporalObjectDefinition）。
+        /// 场景重建后需运行 EditorTools/L02BoardPatchInstaller 挂接补板交互与美术。
         /// </summary>
         internal static List<SpawnPoint> BuildL02(RoomContext ctx)
         {
@@ -507,16 +510,47 @@ namespace BorrowTomorrow.EditorTools
             SetObject(ladder, "pastRoot", past);
             SetObject(ladder, "presentRoot", present);
 
-            // 现在维修踏台（过去完全不存在；现在形成砖台通向左侧出口的路径，策划 7.4）。
-            TemporalObject maintenance = Temporal(ctx, "L02_maintenance", new Vector2(6f, 0f));
+            // 现在维修架（过去完全不存在；现在形成砖台通向左侧出口的路径，右端缺一段踏板）。
+            TemporalObject maintenance = Temporal(ctx, "L02_maintenance", new Vector2(12f, 0f));
             GameObject maintenancePast = EraChild(ctx, maintenance, "Past");
             maintenancePast.transform.localPosition = Vector3.zero;
             GameObject maintenancePresent = EraChild(ctx, maintenance, "Present");
             maintenancePresent.transform.localPosition = Vector3.zero;
-            BoxChild(ctx, maintenancePresent.transform, "Platform", new Vector2(4.75f, 2.75f), new Vector2(7.5f, 0.5f),
+            BoxChild(ctx, maintenancePresent.transform, "PlatformLeft", new Vector2(3.15f, 2.75f), new Vector2(4.3f, 0.5f),
                 PresentColor);
+            // 缺口 5.3~8.5：搭板前不可通行；L02BoardPatch 交互后激活。
+            GameObject gap = BoxChild(ctx, maintenancePresent.transform, "GapBoard", new Vector2(6.9f, 2.75f),
+                new Vector2(3.2f, 0.5f), PresentColor);
+            gap.SetActive(false);
             SetObject(maintenance, "pastRoot", maintenancePast);
             SetObject(maintenance, "presentRoot", maintenancePresent);
+
+            // 旧木板（锚点 9）：1994 年斜靠在砖台左侧墙边，现在不存在。
+            // 边界停在 9~12 之间时木板仍为过去、维修架已为现在，才能把两者搭在一起。
+            TemporalObject plank = Temporal(ctx, "L02_plank", new Vector2(8.4f, 1.5f));
+            GameObject plankPast = EraChild(ctx, plank, "Past");
+            plankPast.transform.localPosition = Vector3.zero;
+            BoxChild(ctx, plankPast.transform, "ArtSkin", new Vector2(8.4f, 1.5f), new Vector2(3.1f, 0.32f),
+                new Color(0.52f, 0.42f, 0.3f), solid: false, angle: 75f);
+            GameObject plankPresent = EraChild(ctx, plank, "Present");
+            plankPresent.transform.localPosition = Vector3.zero;
+            SetObject(plank, "pastRoot", plankPast);
+            SetObject(plank, "presentRoot", plankPresent);
+
+            // 砖台上的旧木板：1994 年从墙边搬上来，2024 年它仍在这里（旗标控制，普通物体）。
+            var benchBoard = BoxChild(ctx, ctx.Content, "BenchBoard", new Vector2(9.6f, 3.2f),
+                new Vector2(3.6f, 0.32f), new Color(0.52f, 0.42f, 0.3f), solid: false);
+            benchBoard.SetActive(false);
+
+            // 交互点覆盖砖台左半段：玩家走上砖台、靠近缺口即可按 E。
+            var boardInteract = new GameObject("InteractPoint");
+            boardInteract.transform.SetParent(plank.transform, false);
+            boardInteract.transform.position = new Vector3(9.2f, 3.3f, 0f);
+            int interactableLayer = LayerMask.NameToLayer("Interactable");
+            boardInteract.layer = interactableLayer >= 0 ? interactableLayer : plank.gameObject.layer;
+            var boardCollider = boardInteract.AddComponent<BoxCollider2D>();
+            boardCollider.size = new Vector2(3.0f, 1.6f);
+            boardCollider.isTrigger = true;
 
             var spawns = new List<SpawnPoint>
             {
@@ -661,7 +695,7 @@ namespace BorrowTomorrow.EditorTools
 
         // ------------------------------------------------------------ 子物体盒子/斜坡（挂在年代状态子物体下）
 
-        private static void BoxChild(RoomContext ctx, Transform parent, string name, Vector2 center, Vector2 size,
+        private static GameObject BoxChild(RoomContext ctx, Transform parent, string name, Vector2 center, Vector2 size,
             Color color, bool solid = true, float angle = 0f)
         {
             var box = new GameObject(name);
@@ -681,6 +715,7 @@ namespace BorrowTomorrow.EditorTools
                 collider.size = size;
                 collider.sharedMaterial = ctx.Friction;
             }
+            return box;
         }
 
         private static void SlopeChild(RoomContext ctx, Transform parent, string name, Vector2 p1, Vector2 p2,

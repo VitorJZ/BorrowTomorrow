@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: L02_maintenance
   m_EditorClassIdentifier: 
   objectId: L02_maintenance
-  anchorX: 6
+  anchorX: 12
   pastState:
     stateId: absent
     sprite: {fileID: 0}

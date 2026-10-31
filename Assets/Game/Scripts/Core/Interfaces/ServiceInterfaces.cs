@@ -25,6 +25,12 @@ namespace BorrowTomorrow.Core.Interfaces
         void HideIllustration();
     }
 
+    /// <summary>剧情演出对背景音乐的临时静音请求，不影响对白与音效。</summary>
+    public interface IBackgroundMusicSuppression
+    {
+        bool SuppressesBackgroundMusic { get; }
+    }
+
     /// <summary>对白播放服务。文字停留由玩家确认，配音可跳过（策划 5.5）。</summary>
     public interface IDialogueService
     {

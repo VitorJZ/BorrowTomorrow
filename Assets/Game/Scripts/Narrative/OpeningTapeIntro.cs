@@ -7,7 +7,7 @@ using UnityEngine;
 namespace BorrowTomorrow.Narrative
 {
     /// <summary>
-    /// 开场磁带（新游戏进入 L00）：黑屏下播放两句童年录音，播完再淡入院门。
+    /// 开场磁带（新游戏进入 L00）：黑屏下播放两句童年录音，播完再淡入院门、空场停留、人物走入，最后交还操作。
     /// 黑屏不使用 UI 黑图，而是让主相机直接清屏为黑色，避免画布缩放取整后
     /// 屏幕边缘露出游戏画面；淡入使用相机空间的黑幕，同样覆盖整个视口。
     /// 对白内容、配音与进度标记仍由 DialoguePlayer 与 DialogueEntry 驱动；
@@ -18,6 +18,14 @@ namespace BorrowTomorrow.Narrative
         [Tooltip("开场第一句（下一句通过 nextId 串联）")]
         [SerializeField] private DialogueEntry firstLine;
 
+        [SerializeField, Min(0f)] private float sceneHoldSeconds = 1f;
+        [SerializeField, Min(.1f)] private float entranceSpeed = 2.4f;
+        [SerializeField, Min(0f)] private float arrivalHoldSeconds = .45f;
+
+        public bool EntranceComplete { get; private set; }
+        private bool entranceStarted;
+        private float entranceOffset;
+        private ICharacterArt entranceArt;
         private bool started;
         private bool revealStarted;
 
@@ -57,6 +65,8 @@ namespace BorrowTomorrow.Narrative
             if (session.StoryFlags.HasFlag(StoryFlags.IntroPlayed))
             {
                 started = true;
+                revealStarted = true;
+                EntranceComplete = true;
                 return;
             }
             if (!ServiceRegistry.TryGet<IDialogueService>(out var dialogue) || dialogue.IsPlaying)
@@ -71,7 +81,8 @@ namespace BorrowTomorrow.Narrative
                 return;
             }
             BlackoutCamera();
-            dialogue.Play(firstLine, DialoguePriority.Story);
+            PrepareEntrance();
+            dialogue.Play(firstLine, DialoguePriority.Story, () => BeginReveal(0.6f, session));
             if (!dialogue.IsPlaying)
             {
                 // 前置标记等原因导致未播放时不要把人锁在黑屏里。
@@ -96,11 +107,7 @@ namespace BorrowTomorrow.Narrative
                 BeginReveal(0.6f, session);
                 return;
             }
-            // 第三句开始时淡入关卡（该句在数据里标记 fadeInOnStart）。
-            if (dialogue is DialoguePlayer player && player.Current != null && player.Current.fadeInOnStart)
-            {
-                BeginReveal(player.SceneRevealFadeSeconds, session);
-            }
+
         }
 
         private void BlackoutCamera()
@@ -143,6 +150,8 @@ namespace BorrowTomorrow.Narrative
                 return;
             }
             revealStarted = true;
+            PrepareEntrance(true);
+            if (session != null) session.State.SetSubState(PlayingSubState.Cutscene);
 
             if (cameraBlackedOut)
             {
@@ -162,11 +171,52 @@ namespace BorrowTomorrow.Narrative
                 hud.FadeIn(0.6f);
             }
 
-            // 第三句仍在播放时继续保持过场锁定；只有开场失败/提前结束时才放开操作。
-            bool dialogueStillPlaying = ServiceRegistry.TryGet<IDialogueService>(out var playing) && playing.IsPlaying;
-            if (!dialogueStillPlaying && session != null && session.State.SubState == PlayingSubState.Cutscene)
+            if (!entranceStarted)
             {
+                entranceStarted = true;
+                StartCoroutine(StageEntrance(Mathf.Max(.01f, seconds), session));
+            }
+        }
+
+        private void PrepareEntrance(bool refresh = false)
+        {
+            if (entranceArt != null && !refresh) return;
+            if (!ServiceRegistry.TryGet<ICharacterArt>(out entranceArt)) return;
+            if (!ServiceRegistry.TryGet<IPlayerContext>(out var player) || !player.IsPresent) return;
+            Camera cam = Camera.main;
+            float left = cam != null ? cam.ViewportToWorldPoint(new Vector3(0f, .5f,
+                Mathf.Abs(cam.transform.position.z))).x : player.Position.x - 5f;
+            // 留足人物宽度：第一帧淡入时整个人都在屏幕外。
+            entranceOffset = Mathf.Min(-2f, left - player.Position.x - Mathf.Max(1f, entranceArt.EntranceRightExtent) - .5f);
+            entranceArt.SetEntranceOffset(entranceOffset, false);
+        }
+
+        private IEnumerator StageEntrance(float revealSeconds, GameSession session)
+        {
+            yield return HoldStage(revealSeconds + sceneHoldSeconds, session);
+            while (entranceArt != null && entranceOffset < 0f)
+            {
+                if (session == null || session.State.Phase != GamePhase.Playing) yield break;
+                if (!session.State.IsPaused)
+                {
+                    entranceOffset = Mathf.MoveTowards(entranceOffset, 0f, entranceSpeed * Time.deltaTime);
+                    entranceArt.SetEntranceOffset(entranceOffset, entranceOffset < 0f);
+                }
+                yield return null;
+            }
+            entranceArt?.SetEntranceOffset(0f, false);
+            yield return HoldStage(arrivalHoldSeconds, session);
+            EntranceComplete = true;
+            if (session != null && session.State.SubState == PlayingSubState.Cutscene)
                 session.State.SetSubState(PlayingSubState.Free);
+        }
+
+        private static IEnumerator HoldStage(float seconds, GameSession session)
+        {
+            while (seconds > 0f && session != null && session.State.Phase == GamePhase.Playing)
+            {
+                if (!session.State.IsPaused) seconds -= Time.deltaTime;
+                yield return null;
             }
         }
 
@@ -212,7 +262,12 @@ namespace BorrowTomorrow.Narrative
             Color color = blackoutRenderer != null ? blackoutRenderer.color : Color.clear;
             while (t < seconds)
             {
-                t += Time.unscaledDeltaTime;
+                if (GameSession.Instance != null && GameSession.Instance.State.IsPaused)
+                {
+                    yield return null;
+                    continue;
+                }
+                t += Time.deltaTime;
                 if (blackoutRenderer == null)
                 {
                     break;
@@ -247,6 +302,7 @@ namespace BorrowTomorrow.Narrative
 
         private void OnDestroy()
         {
+            entranceArt?.SetEntranceOffset(0f, false);
             // 组件比相机先销毁时也要还原清屏设置，避免相机停留在黑屏状态。
             RestoreCamera();
             if (blackoutSprite != null)
