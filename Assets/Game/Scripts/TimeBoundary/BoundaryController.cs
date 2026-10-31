@@ -330,6 +330,13 @@ namespace BorrowTomorrow.TimeBoundary
         {
             committedB = value;
             OnBoundaryCommitted?.Invoke(committedB);
+            SyncAudioMix();
+        }
+
+        private void SyncAudioMix()
+        {
+            // Inactive rooms can be configured/restored without owning the global mix.
+            if (!ServiceRegistry.TryGet<IBoundaryContext>(out var active) || !ReferenceEquals(active, this)) return;
             // 按过去面积比例驱动双年代配乐混合（策划 09：音乐混合参考过去面积比例，平滑过渡由 AudioService 负责）。
             if (ServiceRegistry.TryGet<IAudioService>(out var audio))
             {
@@ -395,12 +402,14 @@ namespace BorrowTomorrow.TimeBoundary
                 registry.ResetToBoundary(committedB, immediate: true);
             }
             OnBoundaryCommitted?.Invoke(committedB);
+            SyncAudioMix();
         }
 
         /// <summary>激活本房间：注册为全局边界服务。</summary>
         public void RegisterAsActive()
         {
             ServiceRegistry.Register<IBoundaryContext>(this);
+            SyncAudioMix();
         }
 
         /// <summary>存档恢复用：直接设置已提交边界并立即应用年代状态（跳过安全校验，策划 12.2）。</summary>
@@ -412,6 +421,7 @@ namespace BorrowTomorrow.TimeBoundary
                 registry.ResetToBoundary(committedB, immediate: true);
             }
             OnBoundaryCommitted?.Invoke(committedB);
+            SyncAudioMix();
         }
 
         public Era EraAtAnchor(float anchorX)

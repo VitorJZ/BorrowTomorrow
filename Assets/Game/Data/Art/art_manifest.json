@@ -641,6 +641,16 @@
       ]
     },
     {
+      "name": "PROP_Plank_1994",
+      "path": "Assets/Game/Art/Props/Temporal/PROP_Plank_1994.png",
+      "rect": [
+        16,
+        16,
+        1189,
+        148
+      ]
+    },
+    {
       "name": "PROP_MetalWalkway_2024",
       "path": "Assets/Game/Art/Props/Temporal/PROP_MetalWalkway_2024.png",
       "rect": [

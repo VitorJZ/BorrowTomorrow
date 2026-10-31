@@ -54,6 +54,8 @@ public static class CorridorIdentityStoryInstaller {
  e.entryId=l.entryId;e.speakerLabel=l.speakerLabel;e.subtitle=l.subtitle;e.source=l.source;e.illustration=AssetDatabase.LoadAssetAtPath<Texture2D>(l.illustration);if(e.illustration==null)throw new Exception("Missing CG "+l.illustration);
  e.nextId=i+1<entries.Length?doc.lines[i+1].entryId:"";e.eventId="EVT_L03_PHOTO_REVEAL_V5";e.holdForConfirm=true;e.delayBefore=0;e.endHoldSeconds=0;e.voiceClip=string.IsNullOrEmpty(l.voice)?null:AssetDatabase.LoadAssetAtPath<AudioClip>(l.voice);if(!string.IsNullOrEmpty(l.voice)&&e.voiceClip==null)throw new Exception("Missing voice "+l.voice);e.minDurationSeconds=.1f;e.requiredFlags=i==0?new[]{"!IdentityKnown"}:Array.Empty<string>();e.completionFlags=i==0?new[]{"PhotoRevealed","IdentityKnown"}:Array.Empty<string>();e.setFlags=i==entries.Length-1?new[]{"PhotoRevealed","IdentityKnown"}:Array.Empty<string>();e.objectiveAfter=i==0?"找到铁盒的位置，告诉晓晓。":"";EditorUtility.SetDirty(e);entries[i]=e;
  }
+ var reality=entries.Single(e=>e.entryId=="V5_L03_005");
+ reality.sceneLeadHold=.35f;reality.sceneBlendSeconds=1.45f;reality.sceneImageHold=1.2f;reality.scenePhotoRect=new Rect(.19f,.265f,.625f,.605f);reality.scenePreviousPhotoCrop=new Rect(.06f,.05f,.885f,.85f);reality.scenePhotoRotation=1.4f;EditorUtility.SetDirty(reality);
  var byId=entries.ToDictionary(e=>e.entryId);var echo=BuildMemoryEchoEntries();
  Link(byId["V5_L03_003"],echo[0].entryId);
  for(int i=0;i<4;i++)Link(echo[i],echo[i+1].entryId);

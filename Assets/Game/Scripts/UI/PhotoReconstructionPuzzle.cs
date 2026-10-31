@@ -8,9 +8,11 @@ namespace BorrowTomorrow.UI
 {
     // Direct manipulation: a click turns paper; a drag moves one fragment.
     // Placed fragments share ONE transform and turn as one incomplete photograph.
-    public sealed class PhotoReconstructionPuzzle : NarrativeInteractionGate
+    public sealed class PhotoReconstructionPuzzle : NarrativeInteractionGate, IBackgroundMusicSuppression
     {
         public const string CompletionFlag="L03_PhotoReconstructed_v10";
+        public const float RevealTransitionSeconds = .8f;
+        public const float RevealHoldSeconds = 1.4f;
         public Texture2D workbench,originalFront,originalBack,comparisonFront,comparisonBack;
         public Font font;
         [HideInInspector] public Sprite buttonSkin;
@@ -24,6 +26,7 @@ namespace BorrowTomorrow.UI
         private Canvas canvas;
         private RectTransform stage,assemblyRoot,looseRoot;
         private RawImage completedImage;
+        private Image revealBackdrop;
         private Text message,flipHint,title;
         private Action continueStory;
         private int pressed=-1,oldSlot=-1,beginFrame,hintLevel,flipPiece=-2;
@@ -31,6 +34,7 @@ namespace BorrowTomorrow.UI
         private Vector2 pressPoint,pressCenter,dragCenter;
         private float pressTime,finishTimer,flipTimer,solvedTimer,messageTimer,titleTimer;
         public bool IsOpen=>opened;
+        public bool SuppressesBackgroundMusic => opened && finishing;
         public bool IsBack=>boardBack;
         public bool IsFlipping=>flipPiece!=-2;
         public bool IsDragging=>dragging;
@@ -55,6 +59,9 @@ namespace BorrowTomorrow.UI
             finishing=dragging=completeAfterFlip=false;finishTimer=solvedTimer=0;pressed=-1;flipPiece=-2;
             assemblyRoot.localScale=Vector3.one;assemblyRoot.localRotation=Quaternion.identity;
             completedImage.rectTransform.localScale=Vector3.one;completedImage.rectTransform.localRotation=Quaternion.identity;
+            SetRect(completedImage.rectTransform,PhotoRect.center,PhotoRect.size);
+            completedImage.uvRect=new Rect(.06f,.06f,.88f,.84f);
+            revealBackdrop.gameObject.SetActive(false);
             completedImage.gameObject.SetActive(completed);canvas.gameObject.SetActive(true);
             title.text=completed?"旧合照":"把这张旧照片拼回去";
             titleTimer=5;title.enabled=true;flipHint.enabled=false;
@@ -74,7 +81,7 @@ namespace BorrowTomorrow.UI
             if(s.State.IsPaused){CancelPointer();needsRelease=true;return;}
             messageTimer-=Time.deltaTime;message.enabled=messageTimer>0;
             titleTimer-=Time.deltaTime;title.enabled=titleTimer>0;
-            if(finishing){finishTimer+=Time.deltaTime;if(finishTimer>=.5f)Close(true);return;}
+            if(finishing){UpdateReveal();return;}
             if(IsFlipping){UpdateFlip();return;}
             ServiceRegistry.TryGet<IInputSource>(out var input);var pointer=input as IPointerInputSource;
             bool held=pointer!=null?pointer.PrimaryHeld:Input.GetMouseButton(0);
@@ -182,15 +189,35 @@ namespace BorrowTomorrow.UI
         private void BeginComplete()
         {
             finishing=true;pressed=-1;dragging=false;flipHint.enabled=false;
+            finishTimer=0f;
+            ServiceRegistry.Register<IBackgroundMusicSuppression>(this);
             GameSession.Instance.StoryFlags.SetFlag(CompletionFlag);
+            revealBackdrop.color=new Color(.025f,.022f,.02f,0f);
+            revealBackdrop.gameObject.SetActive(true);revealBackdrop.transform.SetAsLastSibling();
             completedImage.texture=originalFront;completedImage.gameObject.SetActive(true);completedImage.transform.SetAsLastSibling();
-            foreach(var g in graphics)g.gameObject.SetActive(false);SetMessage("拼好了。",2);PlayPaper();
+            foreach(var g in graphics)g.gameObject.SetActive(false);
+            // No success label: let the image and sudden silence carry the reveal.
+            messageTimer=titleTimer=0f;message.enabled=title.enabled=false;PlayPaper();
+        }
+        private void UpdateReveal()
+        {
+            finishTimer+=Time.deltaTime;
+            float progress=Mathf.SmoothStep(0f,1f,Mathf.Clamp01(finishTimer/RevealTransitionSeconds));
+            revealBackdrop.color=new Color(.025f,.022f,.02f,progress);
+            // Match NarrativePresentation's photo frame exactly for a seamless handoff.
+            float ratio=(float)originalFront.width/originalFront.height;
+            Vector2 targetSize=ratio>1380f/720f?new Vector2(1380f,1380f/ratio):new Vector2(720f*ratio,720f);
+            SetRect(completedImage.rectTransform,Vector2.Lerp(PhotoRect.center,new Vector2(960f,430f),progress),Vector2.Lerp(PhotoRect.size,targetSize,progress));
+            completedImage.uvRect=new Rect(Mathf.Lerp(.06f,0f,progress),Mathf.Lerp(.06f,0f,progress),Mathf.Lerp(.88f,1f,progress),Mathf.Lerp(.84f,1f,progress));
+            if(finishTimer>=RevealTransitionSeconds+RevealHoldSeconds)Close(true);
         }
         private void Close(bool advance)
         {
             if(!opened)return;
             opened=false;pressed=-1;dragging=false;flipPiece=-2;if(canvas!=null)canvas.gameObject.SetActive(false);
             var callback=continueStory;continueStory=null;bool controlled=ownsControl;ownsControl=false;if(advance)callback?.Invoke();
+            // The callback starts dialogue suppression before the puzzle releases its request.
+            ServiceRegistry.Unregister<IBackgroundMusicSuppression>(this);
             if(controlled&&GameSession.Instance!=null&&GameSession.Instance.State.Phase==GamePhase.Playing&&GameSession.Instance.State.SubState==PlayingSubState.Cutscene
                 &&(!ServiceRegistry.TryGet<IDialogueService>(out var d)||!d.IsPlaying))GameSession.Instance.State.SetSubState(PlayingSubState.Free);
         }
@@ -297,6 +324,7 @@ namespace BorrowTomorrow.UI
                 var fibers=graphics[i].gameObject.AddComponent<Outline>();fibers.effectColor=new Color(.94f,.87f,.73f,.65f);fibers.effectDistance=new Vector2(.65f,-.65f);
                 if(i<5){outlines[i]=graphics[i].gameObject.AddComponent<Outline>();outlines[i].effectColor=new Color(.98f,.79f,.38f,.7f);outlines[i].effectDistance=new Vector2(1,-1);outlines[i].enabled=false;}
             }
+            revealBackdrop=Node<Image>(stage,"RevealBackdrop",new Vector2(960,540),new Vector2(10000,10000));revealBackdrop.raycastTarget=true;revealBackdrop.gameObject.SetActive(false);
             completedImage=Node<RawImage>(stage,"RestoredPhoto",PhotoRect.center,PhotoRect.size);completedImage.raycastTarget=false;completedImage.uvRect=new Rect(.06f,.06f,.88f,.84f);completedImage.gameObject.SetActive(false);
             message=Label(stage,"ContextHint","",new Vector2(960,1020),new Vector2(1600,48),25);
             Label(stage,"NavigationBack","‹",BackRect.center,BackRect.size,62);

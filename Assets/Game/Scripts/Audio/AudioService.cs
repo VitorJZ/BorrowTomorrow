@@ -109,18 +109,25 @@ namespace BorrowTomorrow.Audio
                     if (musicPresent != null) musicPresentSource.Play();
                 }
             }
-            if (epilogueMusic) pastMixTarget = 1f;
+            // Epilogue uses the past source, but must not overwrite the room's era mix.
+            float mix = epilogueMusic ? 1f : pastMixTarget;
             // 平滑过渡双年代配器（策划 09）。
             float duckScale = ducking ? duckedVolumeScale : 1f;
-            float pastTarget = pastMixTarget * settings.volumeMusic * duckScale;
-            float presentTarget = (1f - pastMixTarget) * settings.volumeMusic * duckScale;
+            float pastTarget = mix * settings.volumeMusic * duckScale;
+            float presentTarget = (1f - mix) * settings.volumeMusic * duckScale;
+            bool silenceMusic = ServiceRegistry.TryGet<IDialogueService>(out var dialogue)
+                && dialogue is IBackgroundMusicSuppression suppression && suppression.SuppressesBackgroundMusic;
+            silenceMusic |= ServiceRegistry.TryGet<IBackgroundMusicSuppression>(out var transition)
+                && transition.SuppressesBackgroundMusic;
             if (musicPastSource != null)
             {
-                musicPastSource.volume = Mathf.MoveTowards(musicPastSource.volume, pastTarget, crossfadeSpeed * Time.deltaTime);
+                musicPastSource.volume = silenceMusic ? 0f
+                    : Mathf.MoveTowards(musicPastSource.volume, pastTarget, crossfadeSpeed * Time.deltaTime);
             }
             if (musicPresentSource != null)
             {
-                musicPresentSource.volume = Mathf.MoveTowards(musicPresentSource.volume, presentTarget, crossfadeSpeed * Time.deltaTime);
+                musicPresentSource.volume = silenceMusic ? 0f
+                    : Mathf.MoveTowards(musicPresentSource.volume, presentTarget, crossfadeSpeed * Time.deltaTime);
             }
         }
 
@@ -187,7 +194,6 @@ namespace BorrowTomorrow.Audio
             {
                 musicPresentSource.Stop();
             }
-            pastMixTarget = 1f;
         }
     }
 }

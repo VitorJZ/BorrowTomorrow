@@ -93,6 +93,61 @@ namespace BorrowTomorrow.Tests
                 "边界调整前置条件（落地且非攀爬）应成立");
         }
 
+        private static IEnumerator WaitForEntrance()
+        {
+            var opening = Object.FindObjectOfType<OpeningTapeIntro>();
+            float deadline = Time.realtimeSinceStartup + 12f;
+            while (opening != null && !opening.EntranceComplete && Time.realtimeSinceStartup < deadline)
+                yield return null;
+            Assert.IsTrue(opening == null || opening.EntranceComplete, "入场应按时结束");
+        }
+
+        [UnityTest]
+        public IEnumerator L00_OpeningHoldsSceneWalksInThenShowsTopControls()
+        {
+            SceneManager.LoadScene("Bootstrap");
+            yield return new WaitForSeconds(2f);
+            var session = GameSession.Instance;
+            IsolateSave();
+            session.StartNewGame();
+            yield return WaitForPlaying(session);
+            var dialogue = ServiceRegistry.Get<IDialogueService>();
+            float deadline = Time.realtimeSinceStartup + 5f;
+            while (!dialogue.IsPlaying && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.IsTrue(dialogue.IsPlaying);
+            var opening = Object.FindObjectOfType<OpeningTapeIntro>();
+            var art = Object.FindObjectOfType<CharacterArtAnimator>();
+            var hints = Object.FindObjectOfType<BorrowTomorrow.UI.TutorialHints>();
+            var controls = (RectTransform)hints.transform.Find("ControlsHint");
+            var timeline = (RectTransform)hints.transform.Find("TimelineHint");
+            Assert.AreEqual(timeline.anchorMin, controls.anchorMin);
+            Assert.AreEqual(timeline.pivot, controls.pivot);
+            Assert.AreEqual(timeline.anchoredPosition, controls.anchoredPosition);
+            dialogue.SkipCurrent();
+            yield return new WaitForEndOfFrame();
+            Assert.AreEqual(PlayingSubState.Cutscene, session.State.SubState);
+            Assert.IsFalse(controls.gameObject.activeSelf);
+            Assert.Less(Camera.main.WorldToViewportPoint(art.visual.bounds.max).x, 0f,
+                "磁带结束后人物应完整处于屏幕左侧外");
+            float startX = art.visual.transform.position.x;
+            yield return new WaitForSeconds(.8f);
+            Assert.AreEqual(startX, art.visual.transform.position.x, .01f, "先只展示场景");
+            yield return new WaitForSeconds(1.1f);
+            Assert.Greater(art.visual.transform.position.x, startX, "人物随后步行入场");
+            Assert.IsFalse(controls.gameObject.activeSelf);
+            session.State.EnterPause();
+            float pausedX = art.visual.transform.position.x;
+            yield return new WaitForSecondsRealtime(.3f);
+            Assert.AreEqual(pausedX, art.visual.transform.position.x, .01f);
+            session.State.ExitPause();
+            yield return WaitForEntrance();
+            yield return new WaitForSeconds(.5f);
+            Assert.AreEqual(PlayingSubState.Free, session.State.SubState);
+            Assert.IsTrue(controls.gameObject.activeSelf);
+            Assert.AreEqual(1f, controls.GetComponent<CanvasGroup>().alpha, .01f);
+            Assert.IsTrue(ServiceRegistry.Get<IPlayerContext>().IsGrounded);
+        }
+
         private sealed class WalkInput : IInputSource
         {
             public float MoveAxis { get; set; }
@@ -122,7 +177,7 @@ namespace BorrowTomorrow.Tests
             while (!dialogue.IsPlaying && Time.realtimeSinceStartup < introDeadline) yield return null;
             Assert.IsTrue(dialogue.IsPlaying, "应先等待开场对白实际开始");
             dialogue.SkipCurrent();
-            yield return null;
+            yield return WaitForEntrance();
             yield return null;
 
             var boundary = (BoundaryController)ServiceRegistry.Get<IBoundaryContext>();
@@ -185,6 +240,7 @@ namespace BorrowTomorrow.Tests
             while (!dialogue.IsPlaying && Time.realtimeSinceStartup < introDeadline) yield return null;
             Assert.IsTrue(dialogue.IsPlaying);
             dialogue.SkipCurrent();
+            yield return WaitForEntrance();
 
             var boundary = (BoundaryController)ServiceRegistry.Get<IBoundaryContext>();
             var dog = Object.FindObjectOfType<NarrativeDogEcho>();
@@ -474,7 +530,7 @@ namespace BorrowTomorrow.Tests
                 dialogue.SkipCurrent();
                 yield return null;
                 Assert.AreEqual(id, session.CurrentLevel.levelId);
-                Assert.IsTrue(ServiceRegistry.Get<IPlayerContext>().IsPresent);
+                Assert.IsTrue(ServiceRegistry.Get<IPlayerContext>().IsPresent, "玩家应在 " + id + " 保持激活");
                 Assert.AreEqual(1, Object.FindObjectsOfType<BorrowTomorrow.UI.HudService>().Length);
                 Assert.AreEqual(1, Object.FindObjectsOfType<UnityEngine.EventSystems.EventSystem>().Length);
             }

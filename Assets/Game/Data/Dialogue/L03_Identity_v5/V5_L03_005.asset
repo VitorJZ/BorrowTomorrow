@@ -36,3 +36,19 @@ MonoBehaviour:
   delayBefore: 0
   sfxId: 
   endHoldSeconds: 0
+  sceneLeadHold: 0.35
+  sceneBlendSeconds: 1.45
+  scenePhotoRect:
+    serializedVersion: 2
+    x: 0.19
+    y: 0.265
+    width: 0.625
+    height: 0.605
+  scenePreviousPhotoCrop:
+    serializedVersion: 2
+    x: 0.06
+    y: 0.05
+    width: 0.885
+    height: 0.85
+  scenePhotoRotation: 1.4
+  sceneImageHold: 1.2

@@ -1,6 +1,7 @@
 using System.Reflection;
 using BorrowTomorrow.Core;
 using BorrowTomorrow.Core.Interfaces;
+using BorrowTomorrow.Core.Data;
 using BorrowTomorrow.TimeBoundary;
 using NUnit.Framework;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace BorrowTomorrow.Tests
         private BoundaryController boundary;
         private readonly TestInput input = new TestInput();
         private readonly TestPlayer player = new TestPlayer();
+        private TestAudio audio;
 
         [SetUp]
         public void SetUp()
@@ -27,6 +29,8 @@ namespace BorrowTomorrow.Tests
             session.State.SetPhase(GamePhase.Playing);
             ServiceRegistry.Register<IPlayerContext>(player);
             ServiceRegistry.Register<IInputSource>(input);
+            audio = new TestAudio();
+            ServiceRegistry.Register<IAudioService>(audio);
             roomObject = new GameObject("TestRoom");
             roomObject.AddComponent<TemporalObjectRegistry>();
             boundary = roomObject.AddComponent<BoundaryController>();
@@ -42,8 +46,46 @@ namespace BorrowTomorrow.Tests
         {
             ServiceRegistry.Unregister<IInputSource>(input);
             ServiceRegistry.Unregister<IPlayerContext>(player);
+            ServiceRegistry.Unregister<IAudioService>(audio);
             Object.DestroyImmediate(roomObject);
             Object.DestroyImmediate(sessionObject);
+        }
+
+        [Test]
+        public void ConfigureRoom_SynchronizesInitialEraMix()
+        {
+            boundary.ConfigureRoom(0f, 20f, 0f, "present_room");
+            Assert.AreEqual(0f, audio.PastMix, "进入全 2024 房间应切换到现在配乐");
+            boundary.ConfigureRoom(0f, 20f, 20f, "past_room");
+            Assert.AreEqual(1f, audio.PastMix);
+        }
+
+        [Test]
+        public void RestoreBoundary_SynchronizesSavedMixWithoutDragging()
+        {
+            boundary.RestoreBoundary(2.5f);
+            Assert.AreEqual(.25f, audio.PastMix);
+        }
+
+        [Test]
+        public void InactiveRoomRestore_DoesNotChangeMusic_UntilActivated()
+        {
+            var otherObject = new GameObject("InactiveRoom");
+            try
+            {
+                otherObject.AddComponent<TemporalObjectRegistry>();
+                var other = otherObject.AddComponent<BoundaryController>();
+                Invoke(other, "Awake");
+                other.ConfigureRoom(0f, 10f, 10f, "other");
+                other.RestoreBoundary(0f);
+                Assert.AreEqual(.5f, audio.PastMix, "非活动房间不能覆盖当前 BGM");
+                other.RegisterAsActive();
+                Assert.AreEqual(0f, audio.PastMix, "激活已有房间也要同步 BGM");
+            }
+            finally
+            {
+                Object.DestroyImmediate(otherObject);
+            }
         }
 
         [Test]
@@ -91,6 +133,15 @@ namespace BorrowTomorrow.Tests
         {
             target.GetType().GetMethod(method, BindingFlags.Instance | BindingFlags.NonPublic)
                 .Invoke(target, null);
+        }
+
+        private sealed class TestAudio : IAudioService
+        {
+            public float PastMix = -1f;
+            public void SetEraMix(float pastAreaRatio) { PastMix = pastAreaRatio; }
+            public void PlaySfx(string sfxId, Vector2? atWorldPosition = null) { }
+            public void SetDialogueDucking(bool active) { }
+            public void ApplyVolumeSettings(SaveSettings settings) { }
         }
 
         private sealed class TestPlayer : IPlayerContext

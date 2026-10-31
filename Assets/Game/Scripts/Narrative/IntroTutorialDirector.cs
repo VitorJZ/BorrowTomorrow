@@ -6,7 +6,7 @@ namespace BorrowTomorrow.Narrative
 {
     /// <summary>
     /// L00 操作教学节奏：
-    /// 1. 磁带结束、恢复操控后先给 A/D 与空格提示，不弹剧情台词；
+    /// 1. 磁带结束、人物从屏外走到起点并站稳后，再给 A/D 与空格提示，不弹剧情台词；
     /// 2. 读完通知独白后，玩家继续向前撞上 2024 年木箱，再给拖动时间边界提示；
     /// 3. 玩家把边界拖过木箱后收起提示，不打断后续探索。
     /// 只负责提示的显示时机，对白与旗帜仍由 NarrativeAutoEvent / DialoguePlayer 驱动。
@@ -19,6 +19,10 @@ namespace BorrowTomorrow.Narrative
         private const float MinimumControlsSeconds = 2.5f;
         private const float MaximumControlsSeconds = 10f;
         private const float MovementToDismiss = 0.9f;
+
+        private OpeningTapeIntro opening;
+
+        private void Start() => opening = FindObjectOfType<OpeningTapeIntro>();
 
         private bool controlsShown;
         private bool controlsHidden;
@@ -56,7 +60,7 @@ namespace BorrowTomorrow.Narrative
             bool noticeRead = session.StoryFlags.HasFlag(StoryFlags.NoticeRead);
             bool crateBlocked = session.StoryFlags.HasFlag(StoryFlags.CrateBlocked);
 
-            if (!controlsShown && introPlayed && !noticeRead && !crateBlocked
+            if (!controlsShown && (opening == null || opening.EntranceComplete) && introPlayed && !noticeRead && !crateBlocked
                 && session.State.SubState == PlayingSubState.Free)
             {
                 hud.ShowControlsHint();
