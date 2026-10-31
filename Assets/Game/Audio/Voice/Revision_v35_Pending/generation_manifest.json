@@ -1,0 +1,76 @@
+{
+  "version": 35,
+  "model": "FunAudioLLM/Fun-CosyVoice3-0.5B-2512",
+  "status": "standalone_pending_review_not_integrated",
+  "lines": [
+    {
+      "id": "DLG_L02_UNIFORM_01",
+      "subtitle": "袖口留了一寸。明年还能穿。",
+      "speaker": "我",
+      "role_era": "记忆自语／外婆",
+      "asset": "Assets/Game/Audio/Voice/Revision_v35_Pending/vo_v35_l02_uniform_01.wav",
+      "entry": "Assets/Game/Data/Dialogue/StoryV13/DLG_L02_UNIFORM_01.asset",
+      "sha256": "0ad36d0b4245090b469de3be8477a19f74163b76f858346998b0a89fe7be9da2",
+      "seconds": 2.56,
+      "sample_rate": 24000,
+      "direction": "像想起做衣服的一件小事，平常地自言自语，吐字清楚。",
+      "synthesis_text": "秀口留了一<strong>寸</strong>。明年还能穿。",
+      "instruction": "You are a helpful assistant. 像想起做衣服的一件小事，平常地自言自语，吐字清楚。<|endofprompt|>",
+      "seed": 1995,
+      "reference_profile": {
+        "prompt": "牵着她的……是我。我是她外婆啊。",
+        "voice_id": "minimax:Chinese (Mandarin)_Wise_Women",
+        "audio_format": "mp3"
+      },
+      "reference_original_sha256": "e330f7d87ed19f0b89586b5f454b8047c8af03c976fc5635a5ccfffe5315174d",
+      "reference_origin_commit": "63815845cfaf454d24fb2e1b86135cc276fa8081",
+      "status": "pending_review_not_bound"
+    },
+    {
+      "id": "DLG_L02_UNIFORM_04",
+      "subtitle": "……红碎花，还有那块蓝格子。那床小被面，用的就是这两块布。还收在蓝铁盒里呢。",
+      "speaker": "我",
+      "role_era": "记忆自语／外婆",
+      "asset": "Assets/Game/Audio/Voice/Revision_v35_Pending/vo_v35_l02_uniform_04.wav",
+      "entry": "Assets/Game/Data/Dialogue/StoryV13/DLG_L02_UNIFORM_04.asset",
+      "sha256": "9556fb0c70b8f15a15efca13233696c67291fca0df440c5f7f814ff94287190d",
+      "seconds": 10.44,
+      "sample_rate": 24000,
+      "direction": "先认出两块布，慢慢想起被面和蓝铁盒，语气从迟疑变得确定，带熟悉感。",
+      "synthesis_text": "……红碎花，还有那块蓝格子。那床小被面，用的就是这两块布。还收在<strong>蓝铁盒</strong>里呢。",
+      "instruction": "You are a helpful assistant. 先认出两块布，慢慢想起被面和蓝铁盒，语气从迟疑变得确定，带熟悉感。<|endofprompt|>",
+      "seed": 1986,
+      "reference_profile": {
+        "prompt": "牵着她的……是我。我是她外婆啊。",
+        "voice_id": "minimax:Chinese (Mandarin)_Wise_Women",
+        "audio_format": "mp3"
+      },
+      "reference_original_sha256": "e330f7d87ed19f0b89586b5f454b8047c8af03c976fc5635a5ccfffe5315174d",
+      "reference_origin_commit": "63815845cfaf454d24fb2e1b86135cc276fa8081",
+      "status": "pending_review_not_bound"
+    },
+    {
+      "id": "V11_L03_CUFF_HOSPITAL_01",
+      "subtitle": "外婆，你又在摸袖口了。是我，晓晓。我都三十七了，不用再给我留袖口啦。",
+      "speaker": "林晓（现实）",
+      "role_era": "2024／成年晓晓",
+      "asset": "Assets/Game/Audio/Voice/Revision_v35_Pending/vo_v35_l03_cuff_hospital_01.wav",
+      "entry": "Assets/Game/Data/Dialogue/L03_Identity_v11/V11_L03_CUFF_HOSPITAL_01.asset",
+      "sha256": "10d9e8fd06d5140ed52a9cf53ad3910a043adcaa3bca01450ab4b751e3cb3310",
+      "seconds": 7.28,
+      "sample_rate": 24000,
+      "direction": "亲昵地提醒外婆，带一点笑意，温柔地逗她，像家人在床边交谈。",
+      "synthesis_text": "外婆，你又在摸袖口了。是我，晓晓。我<strong>都</strong>三十七了，不用再给我留袖口啦。",
+      "instruction": "You are a helpful assistant. 亲昵地提醒外婆，带一点笑意，温柔地逗她，像家人在床边交谈。<|endofprompt|>",
+      "seed": 1986,
+      "reference_profile": {
+        "name": "成年晓晓／2024现实",
+        "voice_id": "minimax:Chinese (Mandarin)_Gentle_Senior",
+        "label": "温柔学姐"
+      },
+      "reference_original_sha256": "ad019dd03fa522bec1455cc25eb731445f3bc3bdbbd4bb690dfe08e85f7baf3c",
+      "reference_origin_commit": "63815845cfaf454d24fb2e1b86135cc276fa8081",
+      "status": "pending_review_not_bound"
+    }
+  ]
+}
