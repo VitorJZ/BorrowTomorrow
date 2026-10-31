@@ -243,6 +243,20 @@ namespace BorrowTomorrow.Core
                 StartNewGame();
                 return;
             }
+            // A completed save has no playable ward checkpoint to resume. Replay the
+            // ending from its title, retaining earlier story progress and the journal.
+            if (target.levelId == "Epilogue" && StoryFlags.HasFlag(StoryFlagIds.EpilogueSeen))
+            {
+                var replayFlags = new System.Collections.Generic.List<string>(StoryFlags.AllFlags);
+                replayFlags.Remove(StoryFlagIds.EpilogueSeen);
+                StoryFlags.RestoreFrom(replayFlags);
+                data.checkpointId = null;
+                data.checkpointRoomId = null;
+                data.hasCheckpointPosition = false;
+                data.roomBoundaries.Clear();
+                data.mechanismStates.Clear();
+                data.currentObjective = null;
+            }
             if (ServiceRegistry.TryGet<ICheckpointService>(out var checkpoints))
             {
                 checkpoints.RestoreFrom(data);
