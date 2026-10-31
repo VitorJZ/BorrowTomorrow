@@ -13,7 +13,7 @@ namespace BorrowTomorrow.Narrative
             if (session == null || session.State.Phase != GamePhase.Playing
                 || !ServiceRegistry.TryGet<ILevelRoot>(out var room)) return;
             var f = session.StoryFlags;
-            if (room.RoomId != "Epilogue") finished = false;
+            if (room.RoomId != "Epilogue" || !f.HasFlag("EpilogueSeen")) finished = false;
             // Objectives are rebuilt from completed story flags first (spec 1.4 §4.4/§6.1):
             // returning to an earlier room never rolls the goal back behind the reveal.
             string text = session.CurrentObjective;

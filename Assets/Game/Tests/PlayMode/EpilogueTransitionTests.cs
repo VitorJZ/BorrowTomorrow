@@ -2,6 +2,7 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using BorrowTomorrow.Core;
+using BorrowTomorrow.Core.Data;
 using BorrowTomorrow.Core.Interfaces;
 using BorrowTomorrow.Narrative;
 using BorrowTomorrow.Save;
@@ -79,6 +80,61 @@ namespace BorrowTomorrow.Tests
                 yield return null;
             Assert.AreEqual("DLG_EPI_02", dialogue.Current?.entryId);
             Assert.IsNotNull(dialogue.Current.illustration, "时间字幕后正常进入尾声插图");
+        }
+
+        [UnityTest]
+        public IEnumerator CompletedSave_ContinueReplaysEnding_AndCanFinishAgainInSameSession()
+        {
+            var save = ServiceRegistry.Get<ISaveService>();
+            var data = new SaveData
+            {
+                currentLevelId = "Epilogue",
+                checkpointId = "spawn_epilogue",
+                checkpointRoomId = "Epilogue",
+                hasCheckpointPosition = true,
+                checkpointPosition = new Vector2(15f, .05f),
+            };
+            data.triggeredStoryIds.AddRange(new[] { StoryFlags.BoxLocated, StoryFlags.EpilogueSeen, StoryFlags.IdentityKnown });
+            data.readDialogueIds.Add("DLG_EPI_08");
+            Assert.IsTrue(save.SaveProgress(data));
+
+            // Exercise both a fresh continue and the persistent StoryRoomFlow after
+            // returning from credits, when its previous completion latch is still set.
+            for (int attempt = 0; attempt < 2; attempt++)
+            {
+                Object.FindObjectOfType<MainMenuUi>().OnContinue();
+                var dialogue = (DialoguePlayer)ServiceRegistry.Get<IDialogueService>();
+                var fade = Object.FindObjectOfType<FadeScreen>().GetComponent<Image>();
+                float deadline = Time.realtimeSinceStartup + 15f;
+                while (dialogue.Current == null && Time.realtimeSinceStartup < deadline)
+                {
+                    yield return new WaitForEndOfFrame();
+                    if (SceneManager.GetActiveScene().name == "Epilogue" && dialogue.Current == null)
+                    {
+                        Assert.IsTrue(fade.enabled);
+                        Assert.GreaterOrEqual(fade.color.a, .999f, "继续通关存档时不能露出空病房");
+                    }
+                }
+                Assert.AreEqual("DLG_EPI_01", dialogue.Current?.entryId);
+                Assert.IsFalse(session.StoryFlags.HasFlag(StoryFlags.EpilogueSeen));
+                Assert.IsTrue(session.StoryFlags.HasFlag(StoryFlags.IdentityKnown));
+                CollectionAssert.Contains(session.ReadDialogueIds, "DLG_EPI_08");
+                Assert.Less(ServiceRegistry.Get<IPlayerContext>().Position.x, 5f,
+                    "回顾结局使用入口位置，不恢复旧病房坐标");
+                yield return new WaitForSeconds(.8f);
+                dialogue.SkipCurrent();
+                deadline = Time.realtimeSinceStartup + 5f;
+                while (session.State.Phase != GamePhase.Credits && Time.realtimeSinceStartup < deadline)
+                    yield return null;
+                Assert.AreEqual(GamePhase.Credits, session.State.Phase);
+                Assert.AreEqual(SaveLoadResult.Loaded, save.TryLoadProgress(out var completed));
+                CollectionAssert.Contains(completed.triggeredStoryIds, StoryFlags.EpilogueSeen);
+                deadline = Time.realtimeSinceStartup + 8f;
+                while (SceneManager.GetActiveScene().name != "MainMenu" && Time.realtimeSinceStartup < deadline)
+                    yield return null;
+                Assert.AreEqual("MainMenu", SceneManager.GetActiveScene().name);
+                yield return null;
+            }
         }
 
         [UnityTest]
