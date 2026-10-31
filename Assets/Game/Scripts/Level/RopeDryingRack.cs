@@ -32,7 +32,7 @@ namespace BorrowTomorrow.Level
         private AudioSource audioSource;
         private bool dragging, ownsControl;
         private float lift, unlockTime, hintTime;
-        private Vector3 tail, freeEnd;
+        private Vector3 tail, freeEnd, dragPointerOffset;
         private Vector3 guideContact, routeSlideFrom;
         private float routeSlideRemaining, tailLabelUntil;
         private bool hookAttempted;
@@ -142,6 +142,43 @@ namespace BorrowTomorrow.Level
             Vector2 extent = Camera.main.WorldToScreenPoint(point + Vector3.right * .65f);
             return Vector2.Distance(screen, centre) <= Mathf.Max(22f, Vector2.Distance(centre, extent));
         }
+        private Rect TailLabelRect()
+        {
+            Vector3 p = Camera.main.WorldToScreenPoint(tailImage.transform.position);
+            return new Rect(Mathf.Clamp(p.x + 22, 8, Mathf.Max(8, Screen.width - 155)),
+                Screen.height - p.y - 18, 150, 36);
+        }
+        private bool TailLabelVisible(Vector2 screen)
+        {
+            if (room == null || !room.IsActiveRoom || GameSession.Instance == null || Camera.main == null
+                || GameSession.Instance.State.Phase != GamePhase.Playing || GameSession.Instance.State.IsPaused
+                || GameSession.Instance.State.SubState != PlayingSubState.Free || dragging || !Released || Secured
+                || rack.CurrentEra != Era.Past || unlockTime > 0 || routeSlideRemaining > 0 || tailImage == null)
+                return false;
+            // Keep the label visible when the pointer travels from the rope onto the words.
+            return !Routed || Time.time <= tailLabelUntil || OverPoint(screen, tailImage.transform.position)
+                || TailLabelRect().Contains(new Vector2(screen.x, Screen.height - screen.y));
+        }
+        private bool OverTailHandle(Vector2 screen)
+        {
+            return tailImage != null && (OverPoint(screen, tailImage.transform.position)
+                || (TailLabelVisible(screen)
+                    && TailLabelRect().Contains(new Vector2(screen.x, Screen.height - screen.y))));
+        }
+        private bool RopeEndOverPoint(Vector3 point)
+        {
+            return Camera.main != null && OverPoint(Camera.main.WorldToScreenPoint(tail), point);
+        }
+        private bool TryRopePoleContact(out Vector3 contact)
+        {
+            contact = fork.position;
+            return Camera.main != null && TryPoleContact(Camera.main.WorldToScreenPoint(tail), out contact);
+        }
+        private bool CanSecureTail()
+        {
+            return Released && Routed && !Secured && Combination
+                && Vector2.Distance(tail, hook.position) < .5f && lift > .95f;
+        }
         private void ReleaseKnot()
         {
             Debug.Log("[L01B Rope] Knot released; a free rope end is now draggable.");
@@ -154,15 +191,21 @@ namespace BorrowTomorrow.Level
         {
             Debug.Log("[L01B Rope] Grabbed rope end with pointer.");
             hookAttempted=false;
+            // The label and the padded rope hit area are handles for the same visible end.
+            // Preserve the grab offset: starting on the words must not teleport the rope.
+            tail = tailImage.transform.position;
+            Vector3 pointer = Camera.main != null ? Camera.main.ScreenToWorldPoint(PointerPosition) : tail;
+            pointer.z = 0;
+            dragPointerOffset = tail - pointer;
+            dragPointerOffset.z = 0;
             dragging = ownsControl = true;
             GameSession.Instance.State.SetSubState(PlayingSubState.Interacting);
             if (ServiceRegistry.TryGet<ICameraRig>(out var camera)) camera.SetFollowFrozen(true);
-            if (!Routed) tail = freeEnd;
             Play(pullSound);
         }
         private void StopDrag()
         {
-            dragging = false; hookAttempted=false;
+            dragging = false; hookAttempted=false; dragPointerOffset = Vector3.zero;
             if (ownsControl && GameSession.Instance != null && GameSession.Instance.State.IsPaused)
             { releaseAfterPause = true; return; }
             if (ownsControl && GameSession.Instance != null && GameSession.Instance.State.SubState == PlayingSubState.Interacting)
@@ -249,7 +292,7 @@ namespace BorrowTomorrow.Level
             {
                 string[] hints = !Released ? new[]{"观察绳子两端。","小树上绕着一圈绳子。","切到过去，点击小树上露出的绳结。"}
                     : !Routed ? new[]{"找找高处能绕过绳子的地方。","过去的晾架完好，现在树上多了一根晾衣杆。","保留过去的晾架，把绳尾搭到现在的晾衣杆上。"}
-                    : !Secured ? new[]{"拉动垂下的绳尾，看看架子怎样变化。","墙上完好的绕绳钩能留住绳尾。","把绳尾向左拉到墙钩处，架子升平后挂住；松手前别离开墙钩。"}
+                    : !Secured ? new[]{"拉动垂下的绳尾，看看架子怎样变化。","墙上完好的绕绳钩能留住绳尾。","把绳尾向左拉到墙钩处，架子升平后就能挂住。"}
                     : new[]{"架子已经固定，可以往右走了。","保留过去的晾架与现在的树枝。","沿架面走到成年树枝，再登上右侧阳台。"};
                 hintTime=0;Say(hints[Mathf.Min(hintLevel++,2)]);
             }
@@ -270,7 +313,7 @@ namespace BorrowTomorrow.Level
                 else if (CanInspectHook && PrimaryPressed && OverPoint(PointerPosition, hook.position))
                     TryInspectHook();
                 else if (!Secured && Released && rack.CurrentEra == Era.Past && unlockTime <= 0 && routeSlideRemaining <= 0 && PrimaryPressed
-                    && OverPoint(PointerPosition, tailImage.transform.position))
+                    && OverTailHandle(PointerPosition))
                 {
                     BeginDrag();
                 }
@@ -281,21 +324,22 @@ namespace BorrowTomorrow.Level
                 else if (!Routed || !Combination)
                 {
                     // Loose stock remains in a visible sag; the end cannot stretch past its real material length.
-                    bool overHook=OverPoint(PointerPosition,hook.position);
+                    Vector3 target = mouse + dragPointerOffset;
+                    tail = eye.position + Vector3.ClampMagnitude(target-eye.position, RopeLength);
+                    bool overHook=RopeEndOverPoint(hook.position);
                     if(overHook && !hookAttempted)
                     {
                         Say("架子抬不起来，得先把绳子绕到高处。");
                         Play(creakSound);
                     }
                     hookAttempted=overHook;
-                    tail = eye.position + Vector3.ClampMagnitude(mouse-eye.position, RopeLength);
-                    if (Combination && TryPoleContact(PointerPosition,out var contact)) { Route(contact); }
+                    if (Combination && TryRopePoleContact(out var contact)) { Route(contact); }
                     if (!PrimaryHeld) StopDrag();
                 }
                 else if (Combination)
                 {
-                    PullTo(mouse);
-                    if (Vector2.Distance(mouse, hook.position) < .5f && lift > .95f) Secure();
+                    PullTo(mouse + dragPointerOffset);
+                    if (CanSecureTail()) Secure();
                     else if (!PrimaryHeld) StopDrag();
                 }
             }
@@ -369,29 +413,23 @@ namespace BorrowTomorrow.Level
             }
             if(slackCoil!=null)slackCoil.gameObject.SetActive(Released&&(!Routed||!Combination)&&!Secured&&rack.CurrentEra==Era.Past);
             if(cleatWrap!=null)cleatWrap.enabled=Secured&&rack.CurrentEra==Era.Past;
-            Vector3 pointer = Camera.main!=null ? Camera.main.ScreenToWorldPoint(PointerPosition) : Vector3.zero;
-            pointer.z=0;
             bool hoverKnot=!Released&&tree.CurrentEra==Era.Past&&OverKnot(PointerPosition);
             if(youngTreeImage!=null)youngTreeImage.color=hoverKnot?new Color(1f,.95f,.81f):Color.white;
-            bool hoverTail=Released&&!Secured&&OverPoint(PointerPosition,tailImage.transform.position);
+            bool hoverTail=Released&&!Secured&&OverTailHandle(PointerPosition);
             tailImage.color=hoverTail?new Color(1f,.94f,.72f):Color.white;
             knotImage.transform.localScale=knotScale*(hoverKnot?1.06f:1f);
             tailImage.transform.localScale=tailScale*(hoverTail?1.12f:1f);
-            if(forkImage!=null)forkImage.color=dragging&&!Routed&&Combination&&Vector2.Distance(pointer,fork.position)<1.1f
+            if(forkImage!=null)forkImage.color=dragging&&!Routed&&Combination&&TryRopePoleContact(out _)
                 ? new Color(1f,.91f,.72f) : Color.white;
-            hookImage.color=dragging&&(!Routed||!Combination)&&OverPoint(PointerPosition,hook.position)
+            hookImage.color=dragging&&(!Routed||!Combination)&&RopeEndOverPoint(hook.position)
                 ? new Color(1f,.72f,.55f)
-                : dragging&&Routed&&Combination&&Vector2.Distance(pointer,hook.position)<.9f
+                : dragging&&CanSecureTail()
                     ? new Color(1f,.91f,.72f) : Color.white;
         }
         // A local affordance beside the loose end, never a puzzle-solution panel.
         private void OnGUI()
         {
-            if (room == null || !room.IsActiveRoom || GameSession.Instance == null || Camera.main == null
-                || GameSession.Instance.State.Phase != GamePhase.Playing || GameSession.Instance.State.IsPaused
-                || GameSession.Instance.State.SubState != PlayingSubState.Free || dragging || !Released || Secured
-                || rack.CurrentEra != Era.Past || unlockTime > 0 || routeSlideRemaining > 0 || tailImage == null) return;
-            if (Routed && Time.time>tailLabelUntil && !OverPoint(PointerPosition, tailImage.transform.position)) return;
+            if (!TailLabelVisible(PointerPosition)) return;
             if (ropeLabelStyle == null)
             {
                 ropeLabelStyle = new GUIStyle(GUI.skin.label) { font=labelFont, fontSize=20, alignment=TextAnchor.MiddleLeft };
@@ -399,8 +437,7 @@ namespace BorrowTomorrow.Level
                 ropeLabelShadow = new GUIStyle(ropeLabelStyle);
                 ropeLabelShadow.normal.textColor = new Color(.16f,.10f,.055f,.95f);
             }
-            Vector3 p=Camera.main.WorldToScreenPoint(tailImage.transform.position);
-            Rect area=new Rect(Mathf.Clamp(p.x+22,8,Screen.width-155),Screen.height-p.y-18,150,36);
+            Rect area=TailLabelRect();
             GUI.Label(new Rect(area.x+1,area.y+1,area.width,area.height),"拖动绳尾",ropeLabelShadow);
             GUI.Label(area,"拖动绳尾",ropeLabelStyle);
         }
